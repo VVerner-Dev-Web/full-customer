@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Full - Customer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-07 17:02+0000\n"
+"PO-Revision-Date: 2022-06-07 17:03+0000\n"
+"Last-Translator: \n"
+"Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.2; wp-6.0\n"
+"X-Domain: full-customer"
+
+#. Name of the plugin
+msgid "FULL - Customer"
+msgstr "FULL - Cliente"
+
+#. Author of the plugin
+msgid "FULL."
+msgstr "FULL."
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://fullstackagency.club/"
+msgstr "https://fullstackagency.club/"
+
+#. Description of the plugin
+msgid ""
+"This plugin allows automatic installation and activation of plugins "
+"purchased from FULL."
+msgstr ""
+"Este plugin permite a instalação e ativação automática de plugin comprados "
+"na FULL."
