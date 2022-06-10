@@ -5,6 +5,8 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
     private const NAMESPACE         = 'full-customer';
     private const TEMPORARY_DIR     = WP_CONTENT_DIR . '/full-temp';
 
+    private $pluginDir = null;
+
     public static function registerRoutes(): void
     {
         $api = new self();
@@ -97,24 +99,30 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
             return false;
         endif;
 
+        if ( is_dir( $this->getPluginActivationDir() ) ) : 
+            $this->removePreviousPlugin( $this->getPluginActivationDir() );
+        endif;
+
         return rename( 
             self::TEMPORARY_DIR . '/' . $dirname, 
-            WP_PLUGIN_DIR . '/' . $dirname
+            $this->getPluginActivationDir()
         );
     }
 
     private function getUnzippedDirname(): ?string
     {
-        $scan = scandir( self::TEMPORARY_DIR );
-        $scan = array_diff($scan, ['.', '..']);
-        $dir = array_pop($scan);
+        if (!$this->pluginDir) : 
+            $scan = scandir( self::TEMPORARY_DIR );
+            $scan = array_diff($scan, ['.', '..']);
+            $this->pluginDir = array_pop($scan);
+        endif;
 
-        return $dir ? $dir : null;
+        return $this->pluginDir;
     }
 
     private function activatePlugin(string $dirname): bool
     {
-        $completePluginPath = WP_PLUGIN_DIR . '/' . $dirname . '/' . $dirname . '.php';
+        $completePluginPath = $this->getPluginActivationDir() . '/' . $dirname . '.php';
         $activate           = activate_plugin( $completePluginPath );
 
         return is_wp_error($activate);
@@ -132,5 +140,21 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
         if (!is_dir(self::TEMPORARY_DIR)) : 
             mkdir(self::TEMPORARY_DIR);
         endif;
+    }
+
+    private function getPluginActivationDir(): string
+    {
+        return WP_PLUGIN_DIR . '/' . $this->getUnzippedDirname();
+    }
+
+    private function removePreviousPlugin(string $path): void
+    {
+        $files = glob($path . '/*');
+
+        foreach ($files as $file) :
+            is_dir($file) ? $this->removePreviousPlugin($file) : unlink($file);
+        endforeach;
+
+        rmdir($path);
     }
 }
