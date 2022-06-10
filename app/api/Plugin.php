@@ -31,7 +31,7 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
         $file   = isset($data['file']) ? $data['file'] : null;
 
         if (!$file) : 
-            return new WP_REST_Response(-1, 400);
+            return new WP_REST_Response(['code' => -1]);
         endif;
 
         $this->createTemporaryDir();
@@ -39,25 +39,36 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
         $copied = $this->copyZipFile( $file );
         if (!$copied)  : 
             $this->removeTemporaryDir();
-            return new WP_REST_Response(-2, 400);
+            return new WP_REST_Response(['code' => -2]);
         endif;
 
-        $dirname = $this->getUnzippedDirname();
+        $this->getUnzippedDirname();
+
         $moved   = $this->movePluginFiles();
         if (!$moved)  : 
             $this->removeTemporaryDir();
-            return new WP_REST_Response(-3, 400);
+            return new WP_REST_Response(['code' => -3]);
         endif;
 
-        $activated = $this->activatePlugin( $dirname );
-        if (!$activated)  : 
+        $activated = $this->activatePlugin();
+        if (is_wp_error($activated))  : 
+            $this->deactivatePlugin();
             $this->removeTemporaryDir();
-            return new WP_REST_Response(-4, 400);
+            return new WP_REST_Response([
+                'code'      => -4,
+                'message'   => $activated->get_error_message()
+            ]);
+        endif;
+
+        if (!$this->isSuccessfulActivation()) : 
+            $this->deactivatePlugin();
+            $this->removeTemporaryDir();
+            return new WP_REST_Response(['code' => -5]);
         endif;
         
         $this->removeTemporaryDir();
 
-        return new WP_REST_Response(null, 200);
+        return new WP_REST_Response(['code' => 1]);
     }
 
     private function copyZipFile(string $source): bool
@@ -120,12 +131,25 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
         return $this->pluginDir;
     }
 
-    private function activatePlugin(string $dirname): bool
+    private function activatePlugin(): ?WP_Error
     {
-        $completePluginPath = $this->getPluginActivationDir() . '/' . $dirname . '.php';
-        $activate           = activate_plugin( $completePluginPath );
+        $completePluginPath = $this->getPluginActivationDir() . '/' . $this->getUnzippedDirname() . '.php';
 
-        return is_wp_error($activate);
+        ob_start();
+        plugin_sandbox_scrape( plugin_basename( $completePluginPath ) );
+
+        if ( ob_get_length() > 0 ) :
+            $output = ob_get_clean();
+            return new WP_Error( 'unexpected_output', __( 'The plugin generated unexpected output.' ), $output );
+        endif;
+    
+        return activate_plugin( $completePluginPath );
+    }
+
+    private function deactivatePlugin(): void
+    {
+        $completePluginPath = $this->getPluginActivationDir() . '/' . $this->getUnzippedDirname() . '.php';
+        deactivate_plugins( $completePluginPath, true );
     }
 
     private function removeTemporaryDir(): void
@@ -156,5 +180,13 @@ class FULL_CUSTOMER_Plugin extends WP_REST_Controller
         endforeach;
 
         rmdir($path);
+    }
+
+    private function isSuccessfulActivation(): bool
+    {
+        $test       = wp_remote_get( home_url(), ['sslverify' => false] );
+        $statusCode = (int) wp_remote_retrieve_response_code($test);
+
+        return $statusCode === 200;
     }
 }
