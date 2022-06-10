@@ -5,7 +5,6 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
     private const NAMESPACE         = 'full-customer';
     private const TOKEN_KEY         = '_full-remote-login';
     private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
-    private const FULL_ENDPOINT     = 'http://somosafull.com.br/wp-json/full/v1/validate-token/';
 
     public static function registerRoutes(): void
     {
@@ -89,16 +88,24 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
         $site   = home_url();
         $site   = parse_url($site);
 
-        $request = wp_remote_post(self::FULL_ENDPOINT, [
-            'headers' => [
+        $request = wp_remote_post($this->getFullAuthenticationEndpoint(), [
+            'sslverify' => false,
+            'headers'   => [
                 'Content-Type' => 'application/json'
             ],
-            'body'    => json_encode([
+            'body'      => json_encode([
                 'token'     => $fullToken,
                 'domain'    => isset($site['host']) ? $site['host'] : ''
             ])
         ]);
 
         return wp_remote_retrieve_response_code($request) === 200;
+    }
+
+    private function getFullAuthenticationEndpoint(): string
+    {
+        return strpos( home_url(), 'dev' ) ?
+            'https://full.dev/wp-json/full/v1/validate-token/' :
+            'https://somosafull.com.br/wp-json/full/v1/validate-token/' ;
     }
 }
