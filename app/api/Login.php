@@ -104,8 +104,17 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
 
     private function getFullAuthenticationEndpoint(): string
     {
-        return strpos( home_url(), 'dev' ) ?
-            'https://full.dev/wp-json/full/v1/validate-token/' :
-            'https://somosafull.com.br/wp-json/full/v1/validate-token/' ;
+        switch( $this->getCurrentEnv() ) : 
+            case 'DEV': $uri = 'https://full.dev/wp-json/full/v1/validate-token/'; break;
+            case 'STG': $uri = 'https://somosafull.com.br/wp-json/full/v1/validate-token/'; break;
+            default: $uri = 'https://painel.fullstackagency.club/wp-json/full/v1/validate-token/';
+        endswitch;
+
+        return $uri;
+    }
+
+    private function getCurrentEnv(): string
+    {
+        return defined('FULL_CUSTOMER_ENV') ? FULL_CUSTOMER_ENV : 'PRD';
     }
 }
