@@ -3,7 +3,7 @@
 /**
  * Plugin Name:         FULL - Customer
  * Description:         This plugin allows automatic installation and activation of plugins purchased from FULL.
- * Version:             0.0.1
+ * Version:             0.0.2
  * Requires at least:   5.6
  * Requires PHP:        7.2
  * Author:              FULL.
