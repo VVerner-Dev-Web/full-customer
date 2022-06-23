@@ -30,8 +30,10 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
     public function processAuthTokenRequest( WP_REST_Request $request ): WP_REST_Response
     {
         $fullToken = $request->get_header('x-full');
+        $fullTokenEnv = $request->get_header('x-env') ? $request->get_header('x-env') : 'prd';
+        $fullTokenEnv = strtoupper( $fullTokenEnv );
 
-        if (!$fullToken || !$this->validateReceivedFullToken($fullToken)) : 
+        if (!$fullToken || !$this->validateReceivedFullToken($fullToken, $fullTokenEnv)) : 
             return new WP_REST_Response([], 401);  
         endif;
 
@@ -83,12 +85,12 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
         return $token ? $token : null;
     }
 
-    private function validateReceivedFullToken(string $fullToken): bool
+    private function validateReceivedFullToken(string $fullToken, string $env = null): bool
     {
         $site   = home_url();
         $site   = parse_url($site);
 
-        $request = wp_remote_post($this->getFullAuthenticationEndpoint(), [
+        $request = wp_remote_post($this->getFullAuthenticationEndpoint( $env ), [
             'sslverify' => false,
             'headers'   => [
                 'Content-Type' => 'application/json'
@@ -102,9 +104,10 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
         return wp_remote_retrieve_response_code($request) === 200;
     }
 
-    private function getFullAuthenticationEndpoint(): string
+    private function getFullAuthenticationEndpoint( string $env = null ): string
     {
-        switch( $this->getCurrentEnv() ) : 
+        $env = $env ? strtoupper( $env ) : $this->getCurrentEnv();
+        switch( $env ) : 
             case 'DEV': $uri = 'https://full.dev/wp-json/full/v1/validate-token/'; break;
             case 'STG': $uri = 'https://somosafull.com.br/wp-json/full/v1/validate-token/'; break;
             default: $uri = 'https://painel.fullstackagency.club/wp-json/full/v1/validate-token/';
