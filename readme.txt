@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 5.6
 Tested up to: 6.0
 Requires PHP: 7.2
-Stable tag: 0.0.6
+Stable tag: 0.0.7
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 

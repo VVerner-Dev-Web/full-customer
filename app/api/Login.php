@@ -63,7 +63,7 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
         wp_clear_auth_cookie();
         wp_set_current_user( $uid );
         wp_set_auth_cookie( $uid );
-        wp_redirect( home_url() );
+        wp_redirect( admin_url() );
         return null;        
     }
 
