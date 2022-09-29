@@ -2,122 +2,120 @@
 
 class FULL_CUSTOMER_Login extends WP_REST_Controller
 {
-    private const NAMESPACE         = 'full-customer';
-    private const TOKEN_KEY         = '_full-remote-login';
-    private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
+  private const NAMESPACE         = 'full-customer';
+  private const TOKEN_KEY         = '_full-remote-login';
+  private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
 
-    public static function registerRoutes(): void
-    {
-        $api = new self();
+  private $env;
 
-        register_rest_route(self::NAMESPACE, '/auth-token', [
-            [
-                'methods'             => WP_REST_Server::CREATABLE,
-                'callback'            => [$api, 'processAuthTokenRequest'],
-                'permission_callback' => 'is_user_logged_in',
-            ]
-        ]);        
-        
-        register_rest_route(self::NAMESPACE, '/login/(?P<token>[A-Z0-9]+)', [
-            [
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => [$api, 'processLogin'],
-                'permission_callback' => '__return_true',
-            ]
-        ]);
-    }
+  public function __construct()
+  {
+    $this->env = new FULL_CUSTOMER_Env();
+  }
 
-    public function processAuthTokenRequest( WP_REST_Request $request ): WP_REST_Response
-    {
-        $fullToken = $request->get_header('x-full');
-        $fullTokenEnv = $request->get_header('x-env') ? $request->get_header('x-env') : 'prd';
-        $fullTokenEnv = strtoupper( $fullTokenEnv );
+  public static function registerRoutes(): void
+  {
+    $api = new self();
 
-        if (!$fullToken || !$this->validateReceivedFullToken($fullToken, $fullTokenEnv)) : 
-            return new WP_REST_Response([], 401);  
-        endif;
+    register_rest_route(self::NAMESPACE, '/auth-token', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'processAuthTokenRequest'],
+        'permission_callback' => 'is_user_logged_in',
+      ]
+    ]);
 
-        $this->deleteAuthToken();
+    register_rest_route(self::NAMESPACE, '/login/(?P<token>[A-Z0-9]+)', [
+      [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'processLogin'],
+        'permission_callback' => '__return_true',
+      ]
+    ]);
+  }
 
-        return new WP_REST_Response([
-            'token' => $this->createAuthToken(),
-        ]);
-    }
+  public function processAuthTokenRequest(WP_REST_Request $request): WP_REST_Response
+  {
+    $fullToken = $request->get_header('x-full');
+    $fullTokenEnv = $request->get_header('x-env') ? $request->get_header('x-env') : 'prd';
+    $fullTokenEnv = strtoupper($fullTokenEnv);
 
-    public function processLogin( WP_REST_Request $request ): ?WP_REST_Response
-    {
-        $token = $request->get_param('token');
+    if (!$fullToken || !$this->validateReceivedFullToken($fullToken, $fullTokenEnv)) :
+      return new WP_REST_Response([], 401);
+    endif;
 
-        if ($token !== $this->getAuthToken()) : 
-            return new WP_REST_Response([], 401);
-        endif;
+    $this->deleteAuthToken();
 
-        $users = get_users([
-            'role'      => 'administrator',
-            'fields'    => 'ID',
-            'number'    => 1
-        ]);
+    return new WP_REST_Response([
+      'token' => $this->createAuthToken(),
+    ]);
+  }
 
-        $uid  = array_shift($users);
+  public function processLogin(WP_REST_Request $request): ?WP_REST_Response
+  {
+    $token = $request->get_param('token');
 
-        wp_clear_auth_cookie();
-        wp_set_current_user( $uid );
-        wp_set_auth_cookie( $uid );
-        wp_redirect( admin_url() );
-        return null;        
-    }
+    if ($token !== $this->getAuthToken()) :
+      return new WP_REST_Response([], 401);
+    endif;
 
-    private function deleteAuthToken(): void
-    {
-        delete_transient(self::TOKEN_KEY);
-    }
+    $users = get_users([
+      'role'      => 'administrator',
+      'fields'    => 'ID',
+      'number'    => 1
+    ]);
 
-    private function createAuthToken(): string
-    {
-        $token = strtoupper( bin2hex( random_bytes(12) ) );
-        set_transient(self::TOKEN_KEY, $token, self::TOKEN_EXPIRATION);
-        return $token;
-    }
+    $uid  = array_shift($users);
 
-    private function getAuthToken(): ?string
-    {
-        $token = get_transient(self::TOKEN_KEY);
-        return $token ? $token : null;
-    }
+    wp_clear_auth_cookie();
+    wp_set_current_user($uid);
+    wp_set_auth_cookie($uid);
+    wp_redirect(admin_url());
+    return null;
+  }
 
-    private function validateReceivedFullToken(string $fullToken, string $env = null): bool
-    {
-        $site   = home_url();
-        $site   = parse_url($site);
+  private function deleteAuthToken(): void
+  {
+    delete_transient(self::TOKEN_KEY);
+  }
 
-        $request = wp_remote_post($this->getFullAuthenticationEndpoint( $env ), [
-            'sslverify' => false,
-            'headers'   => [
-                'Content-Type' => 'application/json'
-            ],
-            'body'      => json_encode([
-                'token'     => $fullToken,
-                'domain'    => isset($site['host']) ? $site['host'] : ''
-            ])
-        ]);
+  private function createAuthToken(): string
+  {
+    $token = strtoupper(bin2hex(random_bytes(12)));
+    set_transient(self::TOKEN_KEY, $token, self::TOKEN_EXPIRATION);
+    return $token;
+  }
 
-        return wp_remote_retrieve_response_code($request) === 200;
-    }
+  private function getAuthToken(): ?string
+  {
+    $token = get_transient(self::TOKEN_KEY);
+    return $token ? $token : null;
+  }
 
-    private function getFullAuthenticationEndpoint( string $env = null ): string
-    {
-        $env = $env ? strtoupper( $env ) : $this->getCurrentEnv();
-        switch( $env ) : 
-            case 'DEV': $uri = 'https://full.dev/wp-json/full/v1/validate-token/'; break;
-            case 'STG': $uri = 'https://somosafull.com.br/wp-json/full/v1/validate-token/'; break;
-            default: $uri = 'https://painel.fullstackagency.club/wp-json/full/v1/validate-token/';
-        endswitch;
+  private function validateReceivedFullToken(string $fullToken, string $env = null): bool
+  {
+    $site   = home_url();
+    $site   = parse_url($site);
 
-        return $uri;
-    }
+    $request = wp_remote_post($this->getFullAuthenticationEndpoint($env), [
+      'sslverify' => false,
+      'headers'   => [
+        'Content-Type' => 'application/json'
+      ],
+      'body'      => json_encode([
+        'token'     => $fullToken,
+        'domain'    => isset($site['host']) ? $site['host'] : ''
+      ])
+    ]);
 
-    private function getCurrentEnv(): string
-    {
-        return defined('FULL_CUSTOMER_ENV') ? FULL_CUSTOMER_ENV : 'PRD';
-    }
+    return wp_remote_retrieve_response_code($request) === 200;
+  }
+
+  private function getFullAuthenticationEndpoint(string $env = null): string
+  {
+    $uri   = $this->env->getFullDashboardApiUrl($env);
+    $uri  .= '/v1/validate-token/';
+
+    return $uri;
+  }
 }

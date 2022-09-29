@@ -1,0 +1,207 @@
+#wpbody-content {
+  padding-bottom: 0;
+}
+
+.full-customer-page {
+  margin: 0;
+  margin-left: -20px;
+}
+
+.full-customer-page * {
+  box-sizing: border-box;
+}
+
+.full-customer-page .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.full-customer-page .login-container > div {
+  flex: 1;
+  flex-basis: 50%;
+  min-width: 50%;
+  padding: 30px;
+  height: 100%;
+}
+
+.full-customer-page .logo-img img {
+  width: 7rem;
+  height: auto;
+}
+
+.full-customer-page .wordpress-img {
+  max-width: 12rem;
+  display: block;
+  margin: 12rem auto 2rem;
+}
+
+.full-customer-page .col-instructions {
+  background: #f9fafc;
+  min-height: 100vh;
+}
+
+#fc-settings {
+  background: #f1f5fb;
+}
+
+.full-customer-page .col-instructions h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+.full-customer-page .checkmark-list {
+  margin: 0;
+  font-size: 15px;
+}
+
+.full-customer-page .checkmark-list li {
+  margin-bottom: 1.5em;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.full-customer-page .checkmark-list li::before {
+  content: "";
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAnIGhlaWdodD0nOScgdmlld0JveD0nMCAwIDEwMCA5MCcgZmlsbD0nIzM3N2RmZicgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cGF0aCBkPSdNOTguMSwxNi4yYy0yLjUtMi4zLTYuNC0yLjItOC43LDAuMkwzNi43LDcwLjFsLTEzLTE1LjVjLTIuOS0zLjUtNy45LTQuMS0xMS4xLTEuNGMtMi45LDIuNC0zLjUsNi42LTEuNCwxMC4xbDE2LjUsMjhjMy4yLDUuNCwxMC44LDUuOCwxNC41LDAuOGw1Ni41LTY3LjNDMTAwLjcsMjIuMSwxMDAuNCwxOC41LDk4LjEsMTYuMnonLz48L3N2Zz4K);
+  width: 1.25rem;
+  height: 1.25rem;
+  background-size: 1.25rem 1.25rem;
+  margin-top: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.full-customer-page .checkmark-list li strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.full-customer-page .checkmark-list li:last-child {
+  margin-bottom: 0;
+}
+
+.full-customer-page .instructions-text {
+  max-width: 23rem;
+  margin: auto;
+}
+
+.full-customer-page .col-login h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+.full-customer-page #full-connect {
+  max-width: 30em;
+  margin: 0 auto;
+}
+
+.full-customer-page #full-connect input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 1.875rem);
+  padding: 0.875rem 1.09375rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1e2022;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 0.0625rem solid #e7eaf3;
+  border-radius: 0.3125rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.full-customer-page #full-connect span {
+  display: block;
+  color: #1e2022;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.full-customer-page .full-primary-button {
+  display: block;
+  width: 100%;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 0.0625rem solid transparent;
+  padding: 0.875rem 1.09375rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.3125rem;
+  transition: all 0.2s ease-in-out;
+  background-color: #377dff;
+  border-color: #377dff;
+  margin-top: 1.25rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.full-primary-button.loading {
+  color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  position: relative;
+}
+
+.full-primary-button.loading::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  border: solid 2px #fff;
+  border-top-color: transparent;
+  -webkit-animation: full_spin 800ms linear infinite;
+  animation: full_spin 800ms linear infinite;
+}
+
+@-webkit-keyframes full_spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes full_spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (max-width: 48em) {
+  .full-customer-page .login-container {
+    flex-flow: column;
+  }
+
+  .full-customer-page .login-container > div {
+    flex-basis: 100%;
+    min-height: unset;
+  }
+
+  .full-customer-page .wordpress-img {
+    margin: 3rem auto 1.5rem;
+  }
+}
