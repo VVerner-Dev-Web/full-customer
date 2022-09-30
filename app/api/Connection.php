@@ -43,6 +43,7 @@ class FULL_CUSTOMER_Connection extends WP_REST_Controller
 
   public function disconnectSite(): WP_REST_Response
   {
+    error_log('nova request de desconexão');
     $this->env->set('connection_email', '');
     $this->env->set('dashboard_url', '');
 

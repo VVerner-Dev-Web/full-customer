@@ -16,7 +16,7 @@ add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 
-add_filter('wp_is_application_passwords_available', '__return_false', PHP_INT_MAX);
-add_filter('wp_is_application_passwords_available_for_user', '__return_false', PHP_INT_MAX);
+add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
+add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
 
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
