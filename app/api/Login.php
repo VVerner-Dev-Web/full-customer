@@ -10,7 +10,7 @@ class FULL_CUSTOMER_Login extends WP_REST_Controller
 
   public function __construct()
   {
-    $this->env = new FULL_CUSTOMER_Env();
+    $this->env = new FULL_CUSTOMER();
   }
 
   public static function registerRoutes(): void

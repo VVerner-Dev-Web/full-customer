@@ -1,4 +1,4 @@
-<?php $full = new FULL_CUSTOMER_Env(); ?>
+<?php $full = new FULL_CUSTOMER(); ?>
 
 <div class="login-container">
   <div class="col-instructions">
@@ -26,10 +26,13 @@
   </div>
 
   <div class="col-login">
-    <?php if ($full->isConnected()) : ?>
+    <?php if ($full->hasDashboardUrl()) : ?>
 
       <div id="full-connect">
-        <h2>Site conectado!</h2>
+        <h2>
+          <span class="connection-dot connected"></span>
+          Site conectado!
+        </h2>
 
         <p>Você está conectado com os dados abaixo:</p>
 

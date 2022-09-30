@@ -7,7 +7,7 @@ class FULL_CUSTOMER_Connection extends WP_REST_Controller
 
   public function __construct()
   {
-    $this->env = new FULL_CUSTOMER_Env();
+    $this->env = new FULL_CUSTOMER();
   }
 
   public static function registerRoutes(): void
@@ -35,7 +35,7 @@ class FULL_CUSTOMER_Connection extends WP_REST_Controller
   {
     $params = $request->get_json_params();
 
-    $this->env->set('connection_email', sanitize_email($params['email']));
+    $this->env->set('connection_email', sanitize_email($params['connection_email']));
     $this->env->set('dashboard_url', esc_url($params['dashboard_url']));
 
     return new WP_REST_Response(['connected' => true]);
@@ -43,7 +43,6 @@ class FULL_CUSTOMER_Connection extends WP_REST_Controller
 
   public function disconnectSite(): WP_REST_Response
   {
-    error_log('nova request de desconexão');
     $this->env->set('connection_email', '');
     $this->env->set('dashboard_url', '');
 

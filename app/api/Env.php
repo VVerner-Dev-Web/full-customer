@@ -1,6 +1,6 @@
 <?php defined('ABSPATH') || exit;
 
-class FULL_CUSTOMER_Env
+class FULL_CUSTOMER
 {
   private const PREFIX = '_full_customer-';
 
@@ -14,9 +14,14 @@ class FULL_CUSTOMER_Env
     return get_option(self::PREFIX . $prop, null);
   }
 
-  public function isConnected(): bool
+  public function hasDashboardUrl(): bool
   {
     return $this->get('dashboard_url') ? true : false;
+  }
+
+  public function isConnected(): bool
+  {
+    return false;
   }
 
   public function getFullDashboardApiUrl(string $env = null): string
@@ -38,6 +43,6 @@ class FULL_CUSTOMER_Env
 
   public function getCurrentEnv(): string
   {
-    return defined('FULL_CUSTOMER_ENV') ? FULL_CUSTOMER_ENV : 'PRD';
+    return defined('FULL_CUSTOMER') ? FULL_CUSTOMER : 'PRD';
   }
 }

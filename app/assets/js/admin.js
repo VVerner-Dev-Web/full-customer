@@ -14,7 +14,7 @@
     $connectForm.find('button').addClass('loading');
 
     if (wpUserPassword) {
-      connectSite(dashboardEmail, FULL.user_login, wpUserPassword, 'user_password')
+      connectSite(dashboardEmail, wpUserPassword, 'user_password')
       .then(response => response.json())
       .then(response => {
         $connectForm.find('button').removeClass('loading');
@@ -35,7 +35,7 @@
 
           const {password} = response;
 
-          connectSite(dashboardEmail, FULL.user_login, password, 'application_password')
+          connectSite(dashboardEmail, password, 'application_password')
           .then(response => response.json())
           .then(response => {
             $connectForm.find('button').removeClass('loading');
@@ -67,7 +67,7 @@
     return fetch(FULL.rest_url + endpoint, request);
   }
 
-  const connectSite = (dashboardEmail, user, password, password_origin) => {
+  const connectSite = (dashboardEmail, password, password_origin) => {
     const endpoint = 'connect-site';
     const request   = {
       method: 'POST',
@@ -75,7 +75,8 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user: user,
+        user: FULL.user_login,
+        site_url: FULL.site_url,
         password: password,
         password_origin: password_origin,
         email: dashboardEmail
@@ -96,7 +97,7 @@
           'X-WP-Nonce': FULL.auth
         },
         body: JSON.stringify({
-          email: response.connection_email,
+          connection_email: response.connection_email,
           dashboard_url: response.dashboard_url
         })
       }

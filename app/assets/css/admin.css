@@ -2,6 +2,11 @@
   padding-bottom: 0;
 }
 
+.full-customer-page .notice,
+.full-customer-page .woocommerce-message {
+  display: none !important;
+}
+
 .full-customer-page {
   margin: 0;
   margin-left: -20px;
@@ -97,6 +102,27 @@
   line-height: 1.4;
   margin-bottom: 2rem;
   margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.full-customer-page #full-connect h2 .connection-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0;
+  margin-right: 10px;
+  background: currentColor;
+  border-radius: 100%;
+  box-shadow: 0 0 3px, 0 0 8px, 0 0 10px;
+}
+
+.full-customer-page #full-connect h2 .connection-dot.connected {
+  color: #13a64e;
+}
+
+.full-customer-page #full-connect h2 .connection-dot.disconnected {
+  color: #d41f25;
 }
 
 .full-customer-page #full-connect {
