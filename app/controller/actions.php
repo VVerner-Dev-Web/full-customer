@@ -8,8 +8,22 @@ defined('ABSPATH') || exit;
 
 function insertFooterNote(): void
 {
-  require_once FULL_CUSTOMER_APP . '/views/footer/note.php';
+  $full = new FULL_CUSTOMER();
+
+  if ($full->get('allow_backlink')) :
+    require_once FULL_CUSTOMER_APP . '/views/footer/note.php';
+  endif;
 }
+
+function insertAdminNotice(): void
+{
+  $full = new FULL_CUSTOMER();
+
+  if (!$full->hasDashboardUrl()) :
+    require_once FULL_CUSTOMER_APP . '/views/admin/notice.php';
+  endif;
+}
+
 
 function verifySiteConnection(): void
 {
@@ -56,6 +70,8 @@ function activationAnalyticsHook(): void
       'plugin_status' => 'active'
     ])
   ]);
+
+  $full->set('allow_backlink', true);
 }
 
 function deactivationAnalyticsHook(): void
@@ -80,9 +96,18 @@ function addMenuPage(): void
     'FULL.',
     'FULL.',
     'manage_options',
-    'full-settings',
+    'full-connection',
     'fullGetAdminPageView',
     fullGetImageUrl('icon.png')
+  );
+
+  add_submenu_page(
+    'full-connection',
+    'Configurações',
+    'Configurações',
+    'manage_options',
+    'full-settings',
+    'fullGetAdminPageView'
   );
 }
 
@@ -125,9 +150,4 @@ function upgradePlugin(): void
 
     $env->set('version', FULL_CUSTOMER_VERSION);
   endif;
-}
-
-function insertAdminNotice(): void
-{
-  require_once FULL_CUSTOMER_APP . '/views/admin/notice.php';
 }

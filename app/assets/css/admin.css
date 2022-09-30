@@ -2,8 +2,8 @@
   padding-bottom: 0;
 }
 
-.full-customer-page .notice,
-.full-customer-page .woocommerce-message {
+.notice,
+.woocommerce-message {
   display: none !important;
 }
 
@@ -46,7 +46,7 @@
   min-height: 100vh;
 }
 
-#fc-settings {
+#fc-connection {
   background: #f1f5fb;
 }
 
@@ -153,27 +153,36 @@
   margin-bottom: 0.5rem;
 }
 
-.full-customer-page .full-primary-button {
-  display: block;
-  width: 100%;
+.full-primary-button {
+  display: inline-block;
   font-weight: 400;
   color: #fff;
   text-align: center;
+  vertical-align: middle;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: transparent;
   border: 0.0625rem solid transparent;
-  padding: 0.875rem 1.09375rem;
-  font-size: 1rem;
-  line-height: 1.5;
+  padding: 0.54688rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
   border-radius: 0.3125rem;
   transition: all 0.2s ease-in-out;
   background-color: #377dff;
-  border-color: #377dff;
-  margin-top: 1.25rem;
   cursor: pointer;
   text-decoration: none;
+}
+
+#full-connect .full-primary-button {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1.09375rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-color: #377dff;
+  margin-top: 1.25rem;
 }
 
 .full-primary-button.loading {
@@ -230,4 +239,60 @@
   .full-customer-page .wordpress-img {
     margin: 3rem auto 1.5rem;
   }
+}
+
+#full-settings {
+  margin-top: 5rem;
+}
+
+.toggle-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-switch-input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.toggle-switch-label {
+  position: relative;
+  display: block;
+  width: 3rem;
+  height: 2rem;
+  background-color: #e7eaf3;
+  background-clip: content-box;
+  border: 0.125rem solid transparent;
+  border-radius: 6.1875rem;
+  transition: 0.3s;
+}
+
+.toggle-switch-indicator {
+  position: absolute;
+  left: 0.125rem;
+  bottom: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #fff;
+  transform: initial;
+  box-shadow: 0 3px 6px 0 rgb(140 152 164 / 25%);
+  border-radius: 50%;
+  transform: translate3d(0, 50%, 0);
+  transition: 0.3s;
+}
+
+.toggle-switch-input:checked + .toggle-switch-label {
+  background-color: #377dff;
+}
+
+.toggle-switch-input:checked + .toggle-switch-label .toggle-switch-indicator {
+  transform: translate3d(1.025rem, 50%, 0);
+}
+
+.toggle-switch-content {
+  flex: 1;
+  margin-left: 0.5rem;
 }

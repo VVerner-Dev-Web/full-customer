@@ -1,4 +1,13 @@
-<?php $full = new FULL_CUSTOMER(); ?>
+<?php
+$full = new FULL_CUSTOMER();
+
+if (isset($_POST['action']) && $_POST['action'] === 'full') :
+  $allowBacklink = isset($_POST['allow_backlink']) && $_POST['allow_backlink'];
+  $full->set('allow_backlink', $allowBacklink);
+endif;
+
+?>
+
 
 <div class="login-container">
   <div class="col-instructions">
@@ -6,61 +15,26 @@
       <img src="<?= fullGetImageUrl('logo-dark.png') ?>" alt="FULL.">
     </a>
 
-    <img src="<?= fullGetImageUrl('wordpress.svg') ?>" alt="WordPress" class="wordpress-img">
+    <form id="full-settings" method="POST">
+      <input type="hidden" name="action" value="full" readonly>
 
-    <div class="instructions-text">
-      <h2>Facilite a gestão do seu WordPress</h2>
+      <h2>Configurações gerais</h2>
 
-      <ul class="checkmark-list">
-        <li>
-          <strong>Plugins e temas</strong>
-          <span>Atualize, remova e ative plugins e temas premium</span>
-        </li>
-        <li>
-          <strong>Segurança e performance</strong>
-          <span>Controle o uptime e segurança do seu site diretamente do dashboard</span>
-        </li>
-      </ul>
-    </div>
+      <label class="toggle-switch" for="allow_backlink">
+        <input type="checkbox" name="allow_backlink" value="1" class="toggle-switch-input" id="allow_backlink" <?php checked($full->get('allow_backlink')) ?>>
+        <span class="toggle-switch-label">
+          <span class="toggle-switch-indicator"></span>
+        </span>
+        <span class="toggle-switch-content">
+          <span style="display: block;">Permitir backlink</span>
+          <small class="d-block text-muted">📢 Ao permitir, será inserido um link invisível para o site da FULL em seu site.</small>
+        </span>
+      </label>
+
+      <button class="full-primary-button" style="margin-top: 2rem;">Salvar configurações</button>
+    </form>
 
   </div>
 
-  <div class="col-login">
-    <?php if ($full->hasDashboardUrl()) : ?>
-
-      <div id="full-connect">
-        <h2>
-          <span class="connection-dot connected"></span>
-          Site conectado!
-        </h2>
-
-        <p>Você está conectado com os dados abaixo:</p>
-
-        <ul class="checkmark-list">
-          <li>
-            <strong>Usuário no painel</strong>
-            <span><?= $full->get('connection_email') ?></span>
-          </li>
-        </ul>
-
-        <a href="<?= $full->get('dashboard_url') ?>" class="full-primary-button" target="_blank" rel="noopener noreferrer">Acessar painel</a>
-      </div>
-
-    <?php else : ?>
-      <form id="full-connect">
-        <h2>Conectar</h2>
-        <label for="customer-email">
-          <span>Seu e-mail no painel</span>
-          <input placeholder="Insira seu e-mail de acesso" type="email" name="email" id="customer-email" required>
-        </label>
-
-        <label for="customer-password" style="display: none; margin-top: 1rem">
-          <span>Sua senha</span>
-          <input placeholder="Insira a senha de acesso ao painel WP" type="password" name="password" id="customer-password">
-        </label>
-
-        <button class="full-primary-button">Realizar conexão</button>
-      </form>
-    <?php endif; ?>
-  </div>
+</div>
 </div>
