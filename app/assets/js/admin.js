@@ -3,10 +3,14 @@
 
   const FULL = full_localize;
 
+  const $registerForm = $('#full-register');
   const $connectForm = $('#full-connect');
+  const $navLinks = $('#form-nav .nav-link');
 
   $connectForm.on('submit', function(e){
     e.preventDefault();
+
+    focusForm( '#' + $connectForm.attr('id') );
 
     const dashboardEmail = $connectForm.find('#customer-email').val();
     const wpUserPassword = $connectForm.find('#customer-password').val();
@@ -43,7 +47,84 @@
           })
         })
     }
+  });
+
+  $registerForm.on('submit', function(e){
+    e.preventDefault();
+
+    focusForm( '#' + $registerForm.attr('id') );
+
+    const name = $registerForm.find('#register-name').val();
+    const email = $registerForm.find('#register-email').val();
+    const password = $registerForm.find('#register-password').val();
+    const tryConnect = $registerForm.find('#register-try_connect').is(':checked')
+
+    $registerForm.find('button').addClass('loading');
+
+    createUser(name, email, password)
+      .then(response => response.json())
+      .then(response => {
+        $registerForm.find('button').removeClass('loading');
+
+        if (tryConnect && response.success) {
+          fireAlert('success', 'Cadastro feito com sucesso! Iremos tentar realizar a conexão do seu site.')
+          .then(() => {
+            $connectForm.find('#customer-email').val( email )
+            $connectForm.trigger('submit');
+          });
+          return;
+        }
+
+        if (response.success) {
+          fireAlert('success', 'Cadastro feito com sucesso!')
+          return;
+        }
+
+        if (response.code === 'existing_user_login' || response.code === 'existing_user_email') {
+          fireAlert('error', 'O e-mail informado já está em uso na FULL.');
+          return;
+        }
+
+        fireAlert('error', response.message)
+      })
   })
+
+  $navLinks.on('click',function(e){
+    e.preventDefault();
+
+    const $clickedItem = $(this);
+
+    $navLinks.removeClass('active');
+    $clickedItem.addClass('active');
+
+    const target = $(this).attr('href');
+
+    $registerForm.hide();
+    $connectForm.hide();
+    $(target).show();
+
+  })
+
+  const focusForm = formSelector => {
+    $navLinks.filter('[href="'+ formSelector +'"]').trigger('click')
+  }
+
+  const createUser = (name, email, password) => {
+    const endpoint = 'register-user';
+    const request   = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password
+      })
+    }
+
+    return fetch(FULL.dashboard_url + endpoint, request);
+  }
 
   const showCustomerPasswordInput = () => {
     $('label[for="customer-password"]').css('display', 'block');
