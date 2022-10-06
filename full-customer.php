@@ -14,7 +14,9 @@
  * Domain Path:         /app/i18n
  */
 
-define('FULL_CUSTOMER_VERSION', '0.1.2');
-define('FULL_CUSTOMER_FILE', __FILE__);
-define('FULL_CUSTOMER_APP', __DIR__ . '/app');
-require_once FULL_CUSTOMER_APP . '/init.php';
+if (!defined('FULL_CUSTOMER_VERSION')) :
+  define('FULL_CUSTOMER_VERSION', '0.1.2');
+  define('FULL_CUSTOMER_FILE', __FILE__);
+  define('FULL_CUSTOMER_APP', __DIR__ . '/app');
+  require_once FULL_CUSTOMER_APP . '/init.php';
+endif;
