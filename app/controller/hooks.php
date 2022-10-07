@@ -24,3 +24,4 @@ add_filter('wp_is_application_passwords_available_for_user', '__return_true', PH
 
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
+add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);

@@ -39,6 +39,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 0.2.1 ###
+
+- Removido o link de "ver detalhes" quando configurado o nome do autor nas definições de whitelabel do painel
+
 ### 0.2.0 ###
 
 - Whitelabel

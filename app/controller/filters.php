@@ -34,3 +34,26 @@ function setPluginBranding(array $plugins): array
 
   return $plugins;
 }
+
+function pluginRowMeta(array $meta, string $plugin): array
+{
+  if ($plugin !== plugin_basename(FULL_CUSTOMER_FILE)) :
+    return $meta;
+  endif;
+
+  $full = new FullCustomer();
+
+  error_log($full->getBranding('plugin-author'));
+
+  if ($full->getBranding('plugin-author', '') === '') :
+    return $meta;
+  endif;
+
+  foreach ($meta as $key => $action) :
+    if (strpos($action, 'open-plugin-details-modal') !== false) :
+      unset($meta[$key]);
+    endif;
+  endforeach;
+
+  return $meta;
+}
