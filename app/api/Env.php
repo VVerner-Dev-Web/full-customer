@@ -1,6 +1,6 @@
 <?php defined('ABSPATH') || exit;
 
-class FULL_CUSTOMER
+class FullCustomer
 {
   private const PREFIX = '_full_customer-';
 
@@ -14,14 +14,17 @@ class FULL_CUSTOMER
     return get_option(self::PREFIX . $prop, null);
   }
 
+  public function getBranding(string $prop, string $default = ''): ?string
+  {
+    $branding = $this->get('whitelabel_settings');
+    $prop = str_replace('-', '_', $prop);
+
+    return isset($branding[$prop]) && $branding[$prop] ? $branding[$prop] : $default;
+  }
+
   public function hasDashboardUrl(): bool
   {
     return $this->get('dashboard_url') ? true : false;
-  }
-
-  public function isConnected(): bool
-  {
-    return false;
   }
 
   public function getFullDashboardApiUrl(string $env = null): string

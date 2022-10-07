@@ -8,9 +8,10 @@ register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\verifySiteC
 register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\activationAnalyticsHook');
 register_deactivation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\deactivationAnalyticsHook');
 
-add_action('rest_api_init', ['\FULL_CUSTOMER_Login', 'registerRoutes']);
-add_action('rest_api_init', ['\FULL_CUSTOMER_Plugin', 'registerRoutes']);
-add_action('rest_api_init', ['\FULL_CUSTOMER_Connection', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\Login', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\Plugin', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\Connection', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
 
 add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
@@ -22,3 +23,4 @@ add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
 
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
+add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');

@@ -1,0 +1,6 @@
+.toplevel_page_full-connection .wp-menu-image img {
+  width: 17px;
+  height: 17px;
+  -o-object-fit: contain;
+  object-fit: contain;
+}

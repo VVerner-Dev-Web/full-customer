@@ -1,12 +1,25 @@
-<?php defined('ABSPATH') || exit;
+<?php
 
-class FULL_CUSTOMER_Plugin extends WP_REST_Controller
+namespace Full\Customer\Api;
+
+use \FULL_CUSTOMER_Controller;
+use \WP_REST_Server;
+use \WP_REST_Request;
+use \WP_REST_Response;
+
+defined('ABSPATH') || exit;
+
+class Plugin extends FULL_CUSTOMER_Controller
 {
-  private const NAMESPACE         = 'full-customer';
-  private const TEMPORARY_DIR     = WP_CONTENT_DIR . '/full-temp';
+  private const TEMPORARY_DIR = WP_CONTENT_DIR . '/full-temp';
 
   private $pluginDir = null;
   private $pluginFile = null;
+
+  public function __construct()
+  {
+    parent::__construct();
+  }
 
   public static function registerRoutes(): void
   {

@@ -1,16 +1,22 @@
-<?php defined('ABSPATH') || exit;
+<?php
 
-class FULL_CUSTOMER_Login extends WP_REST_Controller
+namespace Full\Customer\Api;
+
+use \FULL_CUSTOMER_Controller;
+use \WP_REST_Server;
+use \WP_REST_Request;
+use \WP_REST_Response;
+
+defined('ABSPATH') || exit;
+
+class Login extends FULL_CUSTOMER_Controller
 {
-  private const NAMESPACE         = 'full-customer';
   private const TOKEN_KEY         = '_full-remote-login';
   private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
 
-  private $env;
-
   public function __construct()
   {
-    $this->env = new FULL_CUSTOMER();
+    parent::__construct();
   }
 
   public static function registerRoutes(): void

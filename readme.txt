@@ -38,6 +38,17 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
-### 0.0.1 ###
 
-Initial release
+### 0.2.0 ###
+
+- Whitelabel
+
+### Versões anteriores a 0.2.0 ###
+
+- Login remoto
+- Instalação de plugin adquirido na FULL.
+- Configurações de privacidade e backlink
+- Assets para repositório do WordPress
+- Confirmação de chaves de aplicação disponível (resolver conflito com plugins de segurança)
+- Conexão ao painel via plugin
+- Criação de conta no painel via plugin

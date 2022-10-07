@@ -1,14 +1,15 @@
-<?php $full = new FULL_CUSTOMER(); ?>
+<?php $full = new FullCustomer(); ?>
 
 <div class="login-container">
   <div class="col-instructions">
-    <a href="https://painel.fullstackagency.club/login/" target="_blank" rel="noopener noreferrer" class="logo-img">
-      <img src="<?= fullGetImageUrl('logo-dark.png') ?>" alt="FULL.">
+    <a href="<?= $full->getBranding('plugin-author-url', 'https://painel.fullstackagency.club/login/') ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
+      <img src="<?= $full->getBranding('admin-page-logo-url', fullGetImageUrl('logo-dark.png')) ?>" alt="<?= $full->getBranding('plugin-author', 'FULL.') ?>">
     </a>
 
     <img src="<?= fullGetImageUrl('wordpress.svg') ?>" alt="WordPress" class="wordpress-img">
 
     <div class="instructions-text">
+      <?php ob_start(); ?>
       <h2>Facilite a gestão do seu WordPress</h2>
 
       <ul class="checkmark-list">
@@ -21,6 +22,7 @@
           <span>Controle o uptime e segurança do seu site diretamente do dashboard</span>
         </li>
       </ul>
+      <?= $full->getBranding('admin-page-content', ob_get_clean()); ?>
     </div>
 
   </div>

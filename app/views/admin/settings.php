@@ -1,18 +1,17 @@
 <?php
-$full = new FULL_CUSTOMER();
+$full = new FullCustomer();
 
 if (isset($_POST['action']) && $_POST['action'] === 'full') :
   $allowBacklink = isset($_POST['allow_backlink']) && $_POST['allow_backlink'];
   $full->set('allow_backlink', $allowBacklink);
 endif;
-
 ?>
 
 
 <div class="login-container">
   <div class="col-instructions">
-    <a href="https://painel.fullstackagency.club/login/" target="_blank" rel="noopener noreferrer" class="logo-img">
-      <img src="<?= fullGetImageUrl('logo-dark.png') ?>" alt="FULL.">
+    <a href="<?= $full->getBranding('plugin-author-url', 'https://painel.fullstackagency.club/login/') ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
+      <img src="<?= $full->getBranding('admin-page-logo-url', fullGetImageUrl('logo-dark.png')) ?>" alt="<?= $full->getBranding('plugin-author', 'FULL.') ?>">
     </a>
 
     <form id="full-settings" method="POST">
@@ -27,7 +26,7 @@ endif;
         </span>
         <span class="toggle-switch-content">
           <span style="display: block;">Permitir backlink</span>
-          <small class="d-block text-muted">📢 Ao permitir, será inserido um link invisível para o site da FULL em seu site.</small>
+          <small class="d-block text-muted">📢 Ao permitir, será inserido um link invisível para o site <?= $full->getBranding('plugin_author', 'FULL.') ?> em seu site.</small>
         </span>
       </label>
 

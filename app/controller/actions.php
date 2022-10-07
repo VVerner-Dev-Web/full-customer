@@ -2,13 +2,13 @@
 
 namespace Full\Customer\Actions;
 
-use \FULL_CUSTOMER;
+use \FullCustomer;
 
 defined('ABSPATH') || exit;
 
 function insertFooterNote(): void
 {
-  $full = new FULL_CUSTOMER();
+  $full = new FullCustomer();
 
   if ($full->get('allow_backlink')) :
     require_once FULL_CUSTOMER_APP . '/views/footer/note.php';
@@ -17,18 +17,17 @@ function insertFooterNote(): void
 
 function insertAdminNotice(): void
 {
-  $full = new FULL_CUSTOMER();
+  $full = new FullCustomer();
 
   if (!$full->hasDashboardUrl()) :
     require_once FULL_CUSTOMER_APP . '/views/admin/notice.php';
   endif;
 }
 
-
 function verifySiteConnection(): void
 {
   $flag = 'previous-connect-site-check';
-  $full = new FULL_CUSTOMER();
+  $full = new FullCustomer();
 
   if ($full->get($flag) || $full->hasDashboardUrl()) :
     return;
@@ -58,7 +57,7 @@ function verifySiteConnection(): void
 
 function activationAnalyticsHook(): void
 {
-  $full  = new FULL_CUSTOMER();
+  $full  = new FullCustomer();
   $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
 
   wp_remote_post($url, [
@@ -76,7 +75,7 @@ function activationAnalyticsHook(): void
 
 function deactivationAnalyticsHook(): void
 {
-  $full  = new FULL_CUSTOMER();
+  $full  = new FullCustomer();
   $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
 
   wp_remote_post($url, [
@@ -92,13 +91,15 @@ function deactivationAnalyticsHook(): void
 
 function addMenuPage(): void
 {
+  $full = new FullCustomer();
+
   add_menu_page(
-    'FULL.',
-    'FULL.',
+    $full->getBranding('admin-page-name', 'FULL.'),
+    $full->getBranding('admin-page-name', 'FULL.'),
     'manage_options',
     'full-connection',
     'fullGetAdminPageView',
-    fullGetImageUrl('icon.png')
+    $full->getBranding('admin-page-icon-url', fullGetImageUrl('icon.png'))
   );
 
   add_submenu_page(
@@ -113,9 +114,11 @@ function addMenuPage(): void
 
 function adminEnqueueScripts(): void
 {
+  $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
+  wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], FULL_CUSTOMER_VERSION);
+
   if (isFullsAdminPage()) :
-    $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
-    $env     = new FULL_CUSTOMER();
+    $env     = new FullCustomer();
 
     wp_enqueue_style('full-swal', $baseUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
     wp_enqueue_script('full-swal', $baseUrl . 'vendor/sweetalert/sweetalert2.min.js', ['jquery'], '11.4.35', true);
@@ -134,7 +137,7 @@ function adminEnqueueScripts(): void
 
 function upgradePlugin(): void
 {
-  $env = new FULL_CUSTOMER();
+  $env = new FullCustomer();
   $siteVersion = $env->get('version') ? $env->get('version') : '0.0.0';
 
   if (version_compare(FULL_CUSTOMER_VERSION, $siteVersion, '>') && !get_transient('full-upgrading')) :
