@@ -43,8 +43,6 @@ function pluginRowMeta(array $meta, string $plugin): array
 
   $full = new FullCustomer();
 
-  error_log($full->getBranding('plugin-author'));
-
   if ($full->getBranding('plugin-author', '') === '') :
     return $meta;
   endif;
