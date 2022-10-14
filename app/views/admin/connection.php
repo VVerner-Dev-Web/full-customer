@@ -1,4 +1,10 @@
-<?php $full = new FullCustomer(); ?>
+<?php
+
+$full = new FullCustomer();
+$connectionTest = fullGetSiteConnectionData();
+$connectionOk   = $full->hasDashboardUrl() && $connectionTest && $connectionTest->success;
+
+?>
 
 <div class="login-container">
   <div class="col-instructions">
@@ -28,11 +34,10 @@
   </div>
 
   <div class="col-login">
-    <?php if ($full->hasDashboardUrl()) : ?>
+    <?php if ($connectionOk) : ?>
 
       <div id="full-connect">
         <h2>
-          <span class="connection-dot connected"></span>
           Site conectado!
         </h2>
 
@@ -49,6 +54,13 @@
       </div>
 
     <?php else : ?>
+
+      <?php if ($full->hasDashboardUrl()) : ?>
+        <div class="full-disconnected-notice">
+          📢 Site desconectado, conecte-o novamente abaixo.
+        </div>
+        <?php $full->set('dashboard_url', null); ?>
+      <?php endif; ?>
 
       <ul id="form-nav" role="tablist">
         <li class="nav-item">
@@ -68,7 +80,7 @@
 
         <label for="customer-password" style="display: none; margin-top: 1rem">
           <span>Sua senha no WordPress</span>
-          <input placeholder="Insira a senha de acesso ao painel WP" type="password" name="password" id="customer-password">
+          <input placeholder="Insira a senha de acesso ao painel WP" type="password" name="password" id="customer-password" autocomplete="off">
         </label>
 
         <button class="full-primary-button full-button-block">Realizar conexão</button>

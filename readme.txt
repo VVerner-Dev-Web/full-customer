@@ -39,6 +39,11 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 0.2.2 ###
+
+- Corrigido o fluxo de conexão onde em alguns casos o navegador autocompletava a senha incorretamente
+- Inserida validação da conexão atual do site ao painel sempre que acessar a página de conexão do plugin
+
 ### 0.2.1 ###
 
 - Removido o link de "ver detalhes" quando configurado o nome do autor nas definições de whitelabel do painel

@@ -7,6 +7,8 @@
   const $connectForm = $('#full-connect');
   const $navLinks = $('#form-nav .nav-link');
 
+  var failedApplicationPassword = false;
+
   $connectForm.on('submit', function(e){
     e.preventDefault();
 
@@ -17,7 +19,7 @@
 
     $connectForm.find('button').addClass('loading');
 
-    if (wpUserPassword) {
+    if (wpUserPassword && failedApplicationPassword) {
       connectSite(dashboardEmail, wpUserPassword, 'user_password')
       .then(response => response.json())
       .then(response => {
@@ -34,6 +36,7 @@
             showCustomerPasswordInput();
 
             $connectForm.find('button').removeClass('loading');
+            failedApplicationPassword = true;
             return;
           }
 

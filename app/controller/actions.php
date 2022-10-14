@@ -33,19 +33,7 @@ function verifySiteConnection(): void
     return;
   endif;
 
-  $url = $full->getFullDashboardApiUrl() . '-customer/v1/connect-site';
-
-  $request  = wp_remote_get($url, [
-    'sslverify' => false,
-    'headers'   => [
-      'Content-type' => 'application/json'
-    ],
-    'body'      => [
-      'site_url' => site_url()
-    ]
-  ]);
-  $response = wp_remote_retrieve_body($request);
-  $response = json_decode($response);
+  $response = fullGetSiteConnectionData();
 
   if ($response && $response->success) :
     $full->set('connection_email', sanitize_email($response->connection_email));
