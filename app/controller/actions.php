@@ -81,21 +81,12 @@ function addMenuPage(): void
 {
   $full = new FullCustomer();
 
-  add_menu_page(
-    $full->getBranding('admin-page-name', 'FULL.'),
-    $full->getBranding('admin-page-name', 'FULL.'),
-    'manage_options',
-    'full-connection',
-    'fullGetAdminPageView',
-    $full->getBranding('admin-page-icon-url', fullGetImageUrl('icon.png'))
-  );
-
   add_submenu_page(
-    'full-connection',
-    'Configurações',
-    'Configurações',
+    'options-general.php',
+    $full->getBranding('admin-page-name', 'FULL.'),
+    $full->getBranding('admin-page-name', 'FULL.'),
     'manage_options',
-    'full-settings',
+    'full-connection',
     'fullGetAdminPageView'
   );
 }

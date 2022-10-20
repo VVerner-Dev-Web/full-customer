@@ -39,6 +39,11 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 0.2.3 ###
+
+- Nesta atualização movemos a página de configuração do plugin para dentro do menu "Configurações" do WordPress
+- A tela consentimento de backlink foi removida e agora esta opção deve ser configurada dentro do painel da FULL.
+
 ### 0.2.2 ###
 
 - Corrigido o fluxo de conexão onde em alguns casos o navegador autocompletava a senha incorretamente
