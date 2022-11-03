@@ -31,7 +31,7 @@ class Login extends FULL_CUSTOMER_Controller
       ]
     ]);
 
-    register_rest_route(self::NAMESPACE, '/login/(?P<token>[A-Z0-9]+)', [
+    register_rest_route(self::NAMESPACE, '/login/(?P<hash>[A-Z0-9]+)', [
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'processLogin'],
@@ -59,24 +59,31 @@ class Login extends FULL_CUSTOMER_Controller
 
   public function processLogin(WP_REST_Request $request): ?WP_REST_Response
   {
-    $token = $request->get_param('token');
+    $hash   = $request->get_param('hash');
+    $hash   = explode(':', base64_decode($hash));
+
+    $token  = array_shift($hash);
+    $user   = array_shift($hash);
 
     if ($token !== $this->getAuthToken()) :
       return new WP_REST_Response([], 401);
     endif;
 
-    $users = get_users([
-      'role'      => 'administrator',
-      'fields'    => 'ID',
-      'number'    => 1
-    ]);
+    $this->deleteAuthToken();
 
-    $uid  = array_shift($users);
+    $isEmail  = strpos('@', $user) !== false;
+    $getBy    = $isEmail ? 'email' : 'login';
+    $user     = get_user_by($getBy, $user);
+
+    if (!$user) :
+      return new WP_REST_Response(['error' => 'user ' . $user . ' not found'], 401);
+    endif;
 
     wp_clear_auth_cookie();
-    wp_set_current_user($uid);
-    wp_set_auth_cookie($uid);
+    wp_set_current_user($user->ID);
+    wp_set_auth_cookie($user->ID);
     wp_redirect(admin_url());
+
     return null;
   }
 

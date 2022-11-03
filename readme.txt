@@ -39,6 +39,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.1 ##
+
+- Atualizado forma de conexão no "Acessa fácil" para condizer com usuário conectado ao painel
+
 ### 1.0.0 ###
 
 - Atualizado a URL dos serviços da FULL. para full.services, essa atualização causará incompatibilidade com as versões anteriores do plugin
