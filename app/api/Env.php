@@ -38,7 +38,7 @@ class FullCustomer
         $uri = 'https://somosafull.com.br/wp-json/full';
         break;
       default:
-        $uri = 'https://painel.fullstackagency.club/wp-json/full';
+        $uri = 'https://painel.full.services/wp-json/full';
     endswitch;
 
     return $uri;

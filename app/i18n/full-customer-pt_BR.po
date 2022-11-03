@@ -25,8 +25,8 @@ msgstr "FULL."
 
 #. URI of the plugin
 #. Author URI of the plugin
-msgid "https://fullstackagency.club/"
-msgstr "https://fullstackagency.club/"
+msgid "https://full.services/"
+msgstr "https://full.services/"
 
 #. Description of the plugin
 msgid ""

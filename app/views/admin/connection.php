@@ -7,7 +7,7 @@ $connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
 
 <div class="login-container">
   <div class="col-instructions">
-    <a href="<?= $full->getBranding('plugin-author-url', 'https://painel.fullstackagency.club/login/') ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
+    <a href="<?= $full->getBranding('plugin-author-url', 'https://painel.full.services/login/') ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
       <img src="<?= $full->getBranding('admin-page-logo-url', fullGetImageUrl('logo-dark.png')) ?>" alt="<?= $full->getBranding('plugin-author', 'FULL.') ?>">
     </a>
 

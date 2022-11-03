@@ -3,11 +3,11 @@
 /**
  * Plugin Name:         FULL - Customer
  * Description:         This plugin allows automatic installation and activation of plugins purchased from FULL.
- * Version:             0.2.4
+ * Version:             1.0.0
  * Requires at least:   5.6
  * Requires PHP:        7.2
  * Author:              FULL.
- * Author URI:          https://fullstackagency.club/
+ * Author URI:          https://full.services/
  * License:             GPL v3 or later
  * License URI:         https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:         full-customer
@@ -15,7 +15,7 @@
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) :
-  define('FULL_CUSTOMER_VERSION', '0.2.4');
+  define('FULL_CUSTOMER_VERSION', '1.0.0');
   define('FULL_CUSTOMER_FILE', __FILE__);
   define('FULL_CUSTOMER_APP', __DIR__ . '/app');
   require_once FULL_CUSTOMER_APP . '/init.php';

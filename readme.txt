@@ -16,7 +16,7 @@ The FULL - Customers plugin is intended to automate the process of installing an
 
 Subsequently, the plugin will also allow the FULL support team to make necessary corrections to use the purchased plugins and also extract automatic reports from your website for use in your FULL dashboard.
 
-[FULL customer support](https://fullstackagency.club/)
+[FULL customer support](https://full.services/)
 
 == Installation ==
 Once your site is integrated into the FULL dashboard, this plugin will be automatically installed on the connected WordPress site.
@@ -38,6 +38,10 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+### 1.0.0 ###
+
+- Atualizado a URL dos serviços da FULL. para full.services, essa atualização causará incompatibilidade com as versões anteriores do plugin
 
 ### 0.2.4 ###
 
