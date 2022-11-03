@@ -25,7 +25,6 @@ function isFullsAdminPage(): bool
   return strpos($endpoint, 'full-') === 0;
 }
 
-
 function fullGetSiteConnectionData()
 {
   $full = new FullCustomer();
@@ -45,4 +44,10 @@ function fullGetSiteConnectionData()
   $response = json_decode($response);
 
   return $response;
+}
+
+function isSiteConnectedOnFull(): bool
+{
+  $connectionTest = fullGetSiteConnectionData();
+  return $connectionTest && $connectionTest->success;
 }

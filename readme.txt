@@ -39,6 +39,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 0.2.4 ###
+
+- Inserido link de conexão na listagem de plugins do WordPress
+
 ### 0.2.3 ###
 
 - Nesta atualização movemos a página de configuração do plugin para dentro do menu "Configurações" do WordPress

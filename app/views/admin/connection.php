@@ -1,8 +1,7 @@
 <?php
 
 $full = new FullCustomer();
-$connectionTest = fullGetSiteConnectionData();
-$connectionOk   = $full->hasDashboardUrl() && $connectionTest && $connectionTest->success;
+$connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
 
 ?>
 
