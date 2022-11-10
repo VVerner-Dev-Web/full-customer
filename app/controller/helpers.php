@@ -4,7 +4,8 @@ defined('ABSPATH') || exit;
 
 function fullGetAdminPageView(): void
 {
-  $endpoint = isset($_GET['page']) && $_GET['page'] ? str_replace('full-', '', $_GET['page']) : '';
+  $page     = filter_input(INPUT_GET, 'page');
+  $endpoint = $page ? str_replace('full-', '', $page) : '';
   $file     = FULL_CUSTOMER_APP . '/views/admin/' . $endpoint . '.php';
 
   if (file_exists($file)) :
@@ -21,10 +22,13 @@ function fullGetImageUrl(string $image): string
 
 function isFullsAdminPage(): bool
 {
-  $endpoint = isset($_GET['page']) && $_GET['page'] ? $_GET['page'] : '';
-  return strpos($endpoint, 'full-') === 0;
+  $page = filter_input(INPUT_GET, 'page');
+  return strpos($page, 'full-') === 0;
 }
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 function fullGetSiteConnectionData()
 {
   $full = new FullCustomer();

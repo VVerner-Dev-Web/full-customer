@@ -2,14 +2,14 @@
 
 namespace Full\Customer\Api;
 
-use \FULL_CUSTOMER_Controller;
+use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
-class Login extends FULL_CUSTOMER_Controller
+class Login extends FullCustomerController
 {
   private const TOKEN_KEY         = '_full-remote-login';
   private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;

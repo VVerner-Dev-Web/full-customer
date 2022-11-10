@@ -2,14 +2,14 @@
 
 namespace Full\Customer\Api;
 
-use \FULL_CUSTOMER_Controller;
+use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
-class Connection extends FULL_CUSTOMER_Controller
+class Connection extends FullCustomerController
 {
   public function __construct()
   {

@@ -2,14 +2,16 @@
 
 namespace Full\Customer\Api;
 
-use \FULL_CUSTOMER_Controller;
+use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
+use ZipArchive;
+use WP_Error;
 
 defined('ABSPATH') || exit;
 
-class Plugin extends FULL_CUSTOMER_Controller
+class Plugin extends FullCustomerController
 {
   private const TEMPORARY_DIR = WP_CONTENT_DIR . '/full-temp';
 
@@ -85,6 +87,9 @@ class Plugin extends FULL_CUSTOMER_Controller
     return new WP_REST_Response(['code' => 1]);
   }
 
+  /**
+   * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+   */
   private function copyZipFile(string $source): bool
   {
     global $wp_filesystem;

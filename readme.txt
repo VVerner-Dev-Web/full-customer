@@ -39,6 +39,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.2 ###
+
+- Atualizado namespaces e integração com PHPMD
+
 ### 1.0.1 ##
 
 - Atualizado forma de conexão no "Acessa fácil" para condizer com usuário conectado ao painel

@@ -1,6 +1,9 @@
 <?php defined('ABSPATH') || exit;
 
-abstract class FULL_CUSTOMER_Controller extends WP_REST_Controller
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
+abstract class FullCustomerController extends WP_REST_Controller
 {
   protected const NAMESPACE = 'full-customer';
   protected $env;
