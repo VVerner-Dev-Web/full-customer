@@ -29,27 +29,6 @@ class FileSystem
     return self::TEMPORARY_DIR;
   }
 
-  public function deleteDirectory(string $path, $debug = false): void
-  {
-    $files = glob($path . '{,.}[!.,!..]*', GLOB_MARK | GLOB_BRACE);
-
-    if ($debug) {
-      error_log($path);
-      error_log(print_r($files, true));
-    }
-
-    foreach ($files as $file) :
-      is_dir($file) ? $this->deleteDirectory($file) : $this->deleteFile($file);
-    endforeach;
-
-    @rmdir($path);
-  }
-
-  public function deleteFile(string $path): void
-  {
-    unlink(realpath($path));
-  }
-
   public function extractZip(string $zipFilePath, string $destinationPath): bool
   {
     $worker = new ZipArchive;
@@ -66,5 +45,41 @@ class FileSystem
     unlink($zipFilePath);
 
     return true;
+  }
+
+  public function moveFile(string $originPath, string $destinationPath, bool $deleteIfExists = true): bool
+  {
+    $exists = is_dir($destinationPath);
+
+    if ($exists && !$deleteIfExists) :
+      return false;
+
+    elseif ($exists) :
+      $this->deleteDirectory($destinationPath);
+
+    endif;
+
+    return rename(
+      $originPath,
+      $destinationPath
+    );
+  }
+
+  private function deleteDirectory(string $path): void
+  {
+    $path  = trailingslashit(realpath($path));
+    $path  = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+    $files = glob($path . '{,.}[!.,!..]*', GLOB_MARK | GLOB_BRACE);
+
+    foreach ($files as $file) :
+      is_dir($file) ? $this->deleteDirectory($file) : $this->deleteFile($file);
+    endforeach;
+
+    @rmdir($path);
+  }
+
+  private function deleteFile(string $path): void
+  {
+    @unlink(realpath($path));
   }
 }

@@ -7,15 +7,12 @@ use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
-use ZipArchive;
 use WP_Error;
 
 defined('ABSPATH') || exit;
 
 class Plugin extends FullCustomerController
 {
-  private const TEMPORARY_DIR = WP_CONTENT_DIR . '/full-temporary';
-
   private $pluginDir = null;
   private $pluginFile = null;
   private $fs;
@@ -35,23 +32,16 @@ class Plugin extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'installPlugin'],
-        // 'permission_callback' => 'is_user_logged_in',
-        'permission_callback' => '__return_true',
+        'permission_callback' => 'is_user_logged_in',
       ]
     ]);
   }
 
   public function installPlugin(WP_REST_Request $request): WP_REST_Response
   {
-    if (!function_exists('activate_plugin')) :
-      require_once ABSPATH . 'wp-admin/includes/plugin.php';
-    endif;
-
     $data               = $request->get_json_params();
     $file               = isset($data['file']) ? $data['file'] : null;
     $this->pluginFile   = isset($data['activationFile']) ? $data['activationFile'] : null;
-
-    error_log(json_encode($data, true));
 
     if (!$file) :
       return new WP_REST_Response(['code' => -1]);
@@ -120,32 +110,29 @@ class Plugin extends FullCustomerController
 
   private function movePluginFiles(): bool
   {
-    error_log($this->pluginDir);
-
     if (!$this->pluginDir) :
       return false;
     endif;
 
-    if (is_dir($this->getPluginActivationDir())) :
-      error_log('é dir');
-      $this->fs->deleteDirectory($this->getPluginActivationDir(), true);
-    endif;
+    $origin      = $this->fs->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $this->pluginDir;
+    $destination = $this->getPluginActivationDir();
 
-    return rename(
-      self::TEMPORARY_DIR . DIRECTORY_SEPARATOR . $this->pluginDir,
-      $this->getPluginActivationDir()
-    );
+    $this->fs->moveFile($origin, $destination);
   }
 
   private function setPluginDir(): void
   {
-    $scan = scandir(self::TEMPORARY_DIR);
+    $scan = scandir($this->fs->getTemporaryDirectoryPath());
     $scan = array_diff($scan, ['.', '..', '__MACOSX']);
     $this->pluginDir = array_pop($scan);
   }
 
   private function activatePlugin(): ?WP_Error
   {
+    if (!function_exists('activate_plugin')) :
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    endif;
+
     $completePluginPath = $this->getPluginActivationDir() . '/' . $this->pluginFile;
 
     ob_start();
@@ -161,6 +148,10 @@ class Plugin extends FullCustomerController
 
   private function deactivatePlugin(): void
   {
+    if (!function_exists('deactivate_plugins')) :
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    endif;
+
     $completePluginPath = $this->getPluginActivationDir() . '/' . $this->pluginFile;
     deactivate_plugins($completePluginPath, true);
   }
@@ -175,6 +166,6 @@ class Plugin extends FullCustomerController
     $test       = wp_remote_get(home_url(), ['sslverify' => false]);
     $statusCode = (int) wp_remote_retrieve_response_code($test);
 
-    return $statusCode === 200;
+    return $statusCode === 200 || $statusCode === 201;
   }
 }

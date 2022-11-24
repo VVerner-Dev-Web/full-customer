@@ -39,6 +39,12 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.3 ###
+
+- Criada classe FileSystem para auxiliar na manipulação de arquivos
+- Corrigido problema em que alguns casos o FC não conseguia copiar ou mover os arquivos de instalação
+- Atualizada formato de download de arquivo remoto
+
 ### 1.0.2 ###
 
 - Atualizado namespaces e integração com PHPMD
