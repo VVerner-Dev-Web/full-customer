@@ -2,6 +2,7 @@
 
 namespace Full\Customer\Api;
 
+use Full\Customer\FileSystem;
 use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
@@ -13,14 +14,17 @@ defined('ABSPATH') || exit;
 
 class Plugin extends FullCustomerController
 {
-  private const TEMPORARY_DIR = WP_CONTENT_DIR . '/full-temp';
+  private const TEMPORARY_DIR = WP_CONTENT_DIR . '/full-temporary';
 
   private $pluginDir = null;
   private $pluginFile = null;
+  private $fs;
 
   public function __construct()
   {
     parent::__construct();
+
+    $this->fs = new FileSystem();
   }
 
   public static function registerRoutes(): void
@@ -31,7 +35,8 @@ class Plugin extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'installPlugin'],
-        'permission_callback' => 'is_user_logged_in',
+        // 'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => '__return_true',
       ]
     ]);
   }
@@ -46,15 +51,17 @@ class Plugin extends FullCustomerController
     $file               = isset($data['file']) ? $data['file'] : null;
     $this->pluginFile   = isset($data['activationFile']) ? $data['activationFile'] : null;
 
+    error_log(json_encode($data, true));
+
     if (!$file) :
       return new WP_REST_Response(['code' => -1]);
     endif;
 
-    $this->createTemporaryDir();
+    $this->fs->createTemporaryDirectory();
 
     $copied = $this->copyZipFile($file);
     if (!$copied) :
-      $this->removeTemporaryDir();
+      $this->fs->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -2]);
     endif;
 
@@ -62,14 +69,14 @@ class Plugin extends FullCustomerController
 
     $moved   = $this->movePluginFiles();
     if (!$moved) :
-      $this->removeTemporaryDir();
+      $this->fs->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -3]);
     endif;
 
     $activated = $this->activatePlugin();
     if (is_wp_error($activated)) :
       $this->deactivatePlugin();
-      $this->removeTemporaryDir();
+      $this->fs->deleteTemporaryDirectory();
       return new WP_REST_Response([
         'code'      => -4,
         'message'   => $activated->get_error_message()
@@ -78,61 +85,54 @@ class Plugin extends FullCustomerController
 
     if (!$this->isSuccessfulActivation()) :
       $this->deactivatePlugin();
-      $this->removeTemporaryDir();
+      $this->fs->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -5]);
     endif;
 
-    $this->removeTemporaryDir();
+    $this->fs->deleteTemporaryDirectory();
 
     return new WP_REST_Response(['code' => 1]);
   }
 
-  /**
-   * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-   */
   private function copyZipFile(string $source): bool
   {
-    global $wp_filesystem;
+    $zip  = $this->downloadPluginZip($source);
+    return $this->fs->extractZip($zip, $this->fs->getTemporaryDirectoryPath());
+  }
 
-    if (!$wp_filesystem) :
-      require_once ABSPATH . '/wp-admin/includes/file.php';
-      WP_Filesystem();
+  private function downloadPluginZip(string $source): string
+  {
+    $path = $this->fs->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . 'plugin.zip';
+
+    if (!file_exists($path)) :
+      $file = fopen($path, 'a');
+      fclose($file);
     endif;
 
-    $pluginRequest = wp_remote_get($source, ['sslverify' => false]);
-    $zipContent    = wp_remote_retrieve_body($pluginRequest);
-    $zipPath       = self::TEMPORARY_DIR . '/plugin.zip';
+    wp_remote_get($source, [
+      'sslverify' => false,
+      'stream'    => true,
+      'filename'  => $path
+    ]);
 
-    $wp_filesystem->put_contents($zipPath, $zipContent);
-
-    $worker = new ZipArchive;
-    $res    = $worker->open($zipPath);
-
-    if ($res !== true) :
-      unlink($zipPath);
-      return false;
-    endif;
-
-    $worker->extractTo(self::TEMPORARY_DIR);
-    $worker->close();
-
-    unlink($zipPath);
-
-    return true;
+    return $path;
   }
 
   private function movePluginFiles(): bool
   {
+    error_log($this->pluginDir);
+
     if (!$this->pluginDir) :
       return false;
     endif;
 
     if (is_dir($this->getPluginActivationDir())) :
-      $this->removeDirCompletely($this->getPluginActivationDir());
+      error_log('é dir');
+      $this->fs->deleteDirectory($this->getPluginActivationDir(), true);
     endif;
 
     return rename(
-      self::TEMPORARY_DIR . '/' . $this->pluginDir,
+      self::TEMPORARY_DIR . DIRECTORY_SEPARATOR . $this->pluginDir,
       $this->getPluginActivationDir()
     );
   }
@@ -165,32 +165,9 @@ class Plugin extends FullCustomerController
     deactivate_plugins($completePluginPath, true);
   }
 
-  private function removeTemporaryDir(): void
-  {
-    $this->removeDirCompletely(self::TEMPORARY_DIR);
-  }
-
-  private function createTemporaryDir(): void
-  {
-    if (!is_dir(self::TEMPORARY_DIR)) :
-      mkdir(self::TEMPORARY_DIR);
-    endif;
-  }
-
   private function getPluginActivationDir(): string
   {
-    return WP_PLUGIN_DIR . '/' . $this->pluginDir;
-  }
-
-  private function removeDirCompletely(string $path): void
-  {
-    $files = glob($path . '/*');
-
-    foreach ($files as $file) :
-      is_dir($file) ? $this->removeDirCompletely($file) : unlink($file);
-    endforeach;
-
-    rmdir($path);
+    return WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->pluginDir;
   }
 
   private function isSuccessfulActivation(): bool
