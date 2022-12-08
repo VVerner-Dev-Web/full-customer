@@ -18,5 +18,6 @@ if (!defined('FULL_CUSTOMER_VERSION')) :
   define('FULL_CUSTOMER_VERSION', '1.0.3');
   define('FULL_CUSTOMER_FILE', __FILE__);
   define('FULL_CUSTOMER_APP', __DIR__ . '/app');
+  define('FULL_BACKUP_TIME_LIMIT', 900);
   require_once FULL_CUSTOMER_APP . '/init.php';
 endif;
