@@ -80,7 +80,8 @@ class Backup extends FullCustomerController
   public function getCronSchedule(): WP_REST_Response
   {
     return new WP_REST_Response([
-      'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null
+      'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null,
+      'interval'      => $this->cron->getCronInterval()
     ]);
   }
 

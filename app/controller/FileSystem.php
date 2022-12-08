@@ -12,7 +12,7 @@ class FileSystem
 
   public function getHumanReadableFileSize(int $fileSize): string
   {
-    $sz     = 'BKMGTP';
+    $sz     = ['b', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb'];
     $factor = floor((strlen($fileSize) - 1) / 3);
     return sprintf('%.0f', $fileSize / pow(1024, $factor)) . @$sz[$factor];
   }
