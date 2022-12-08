@@ -6,10 +6,6 @@ class MysqlDump
 {
   private $file;
 
-  public function __construct()
-  {
-  }
-
   public function dump(): void
   {
     $this->insertInitialComments();

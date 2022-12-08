@@ -4,10 +4,6 @@ namespace Full\Customer\Backup;
 
 use Full\Customer\FileSystem;
 
-/**
- * @SuppressWarnings(PHPMD.ShortVariable)
- * @SuppressWarnings(PHPMD.StaticAccess)
- */
 class Controller
 {
   private $instanceId = null;
@@ -274,7 +270,6 @@ class Controller
 
   private function getBackupFile(string $backupId): ?string
   {
-    $file = $this->getBackupDirectory() . $backupId . '.zip';
-    return $file;
+    return $this->getBackupDirectory() . $backupId . '.zip';
   }
 }

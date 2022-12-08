@@ -14,11 +14,6 @@ class Login extends FullCustomerController
   private const TOKEN_KEY         = '_full-remote-login';
   private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
 
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
   public static function registerRoutes(): void
   {
     $api = new self();

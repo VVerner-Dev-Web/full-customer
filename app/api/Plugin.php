@@ -117,7 +117,7 @@ class Plugin extends FullCustomerController
     $origin      = $this->fs->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $this->pluginDir;
     $destination = $this->getPluginActivationDir();
 
-    $this->fs->moveFile($origin, $destination);
+    return $this->fs->moveFile($origin, $destination);
   }
 
   private function setPluginDir(): void

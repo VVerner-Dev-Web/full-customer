@@ -11,11 +11,6 @@ defined('ABSPATH') || exit;
 
 class Connection extends FullCustomerController
 {
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
   public static function registerRoutes(): void
   {
     $api = new self();
