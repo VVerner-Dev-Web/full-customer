@@ -12,6 +12,7 @@ require_once FULL_CUSTOMER_APP . '/api/Backup.php';
 
 require_once FULL_CUSTOMER_APP . '/backup/Controller.php';
 require_once FULL_CUSTOMER_APP . '/backup/MysqlDump.php';
+require_once FULL_CUSTOMER_APP . '/backup/Cron.php';
 
 require_once FULL_CUSTOMER_APP . '/controller/hooks.php';
 require_once FULL_CUSTOMER_APP . '/controller/actions.php';

@@ -2,6 +2,8 @@
 
 namespace Full\Customer\Hooks;
 
+use Full\Customer\Backup\Cron;
+
 defined('ABSPATH') || exit;
 
 register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\verifySiteConnection');
@@ -19,6 +21,9 @@ add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
+
+add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueHook']);
+add_action(Cron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);

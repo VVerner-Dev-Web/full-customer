@@ -2,7 +2,8 @@
 
 namespace Full\Customer\Actions;
 
-use \FullCustomer;
+use Full\Customer\Backup\Controller;
+use FullCustomer;
 
 defined('ABSPATH') || exit;
 
@@ -132,4 +133,14 @@ function upgradePlugin(): void
 
     $env->set('version', FULL_CUSTOMER_VERSION);
   endif;
+}
+
+function createCronBackup(): bool
+{
+  if (!wp_doing_cron()) :
+    return false;
+  endif;
+
+  $controller = new Controller;
+  $controller->createBackup();
 }

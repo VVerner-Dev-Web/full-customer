@@ -10,6 +10,13 @@ class FileSystem
 {
   private const TEMPORARY_DIR = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'full-temporary';
 
+  public function getHumanReadableFileSize(int $fileSize): string
+  {
+    $sz     = 'BKMGTP';
+    $factor = floor((strlen($fileSize) - 1) / 3);
+    return sprintf('%.0f', $fileSize / pow(1024, $factor)) . @$sz[$factor];
+  }
+
   public function scanDir(string $path): array
   {
     $path  = trailingslashit(realpath($path));

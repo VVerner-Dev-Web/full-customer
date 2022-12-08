@@ -60,8 +60,13 @@ class Controller
         continue;
       endif;
 
+      $size = filesize($file);
+
       $backups[] = [
-        'backup_id'   => (int) preg_replace('/\D/', '', $file)
+        'id'         => (int) preg_replace('/\D/', '', basename($file)),
+        'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
+        'size'       => $size,
+        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file))
       ];
     endforeach;
 

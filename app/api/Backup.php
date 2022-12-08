@@ -8,6 +8,7 @@ use \WP_REST_Request;
 use \WP_REST_Response;
 
 use Full\Customer\Backup\Controller;
+use Full\Customer\Backup\Cron;
 
 defined('ABSPATH') || exit;
 
@@ -18,6 +19,7 @@ class Backup extends FullCustomerController
   public function __construct()
   {
     $this->backup = new Controller();
+    $this->cron   = new Cron();
 
     parent::__construct();
   }
@@ -25,17 +27,31 @@ class Backup extends FullCustomerController
   public static function registerRoutes(): void
   {
     $api = new self();
+    $permissionCallback = $api->env->getCurrentEnv() === 'DEV' ? '__return_true' : 'is_user_logged_id';
 
     register_rest_route(self::NAMESPACE, '/backup', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'createBackup'],
-        'permission_callback' => [$api, 'validateToken'],
+        'permission_callback' => $permissionCallback,
       ],
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'getBackups'],
-        'permission_callback' => [$api, 'validateToken'],
+        'permission_callback' => $permissionCallback,
+      ]
+    ]);
+
+    register_rest_route(self::NAMESPACE, '/backup/cron', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'setCronSchedule'],
+        'permission_callback' => $permissionCallback,
+      ],
+      [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'getCronSchedule'],
+        'permission_callback' => $permissionCallback,
       ]
     ]);
 
@@ -43,19 +59,29 @@ class Backup extends FullCustomerController
       [
         'methods'             => WP_REST_Server::EDITABLE,
         'callback'            => [$api, 'restoreBackup'],
-        'permission_callback' => [$api, 'validateToken'],
+        'permission_callback' => $permissionCallback,
       ],
       [
         'methods'             => WP_REST_Server::DELETABLE,
         'callback'            => [$api, 'deleteBackup'],
-        'permission_callback' => [$api, 'validateToken'],
+        'permission_callback' => $permissionCallback,
       ]
     ]);
   }
 
-  public function validateToken(): bool
+  public function setCronSchedule(WP_REST_Request $request): WP_REST_Response
   {
-    return true;
+    return new WP_REST_Response([
+      'updated'       => $this->cron->setCronInterval($request->get_param('interval')),
+      'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null
+    ]);
+  }
+
+  public function getCronSchedule(): WP_REST_Response
+  {
+    return new WP_REST_Response([
+      'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null
+    ]);
   }
 
   public function createBackup(): WP_REST_Response
