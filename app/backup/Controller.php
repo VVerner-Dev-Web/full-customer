@@ -32,22 +32,38 @@ class Controller
     $zipDir   = trailingslashit($this->fs->getTemporaryDirectoryPath());
     $zipFile  = $this->getBackupFile($backupId);
 
+    error_log('iniciando backup');
+    error_log(print_r($dirs, true));
+
     foreach ($dirs as $dir) :
+      error_log('fazendo backup de ' . $dir);
       if (is_dir($dir)) :
+        error_log('--- é um dir');
         $this->fs->createZip($dir, $zipDir . basename($dir) . '.zip');
       else :
+        error_log('--- é um file');
         $this->fs->copyFile(basename($dir), $zipDir . basename($dir));
       endif;
     endforeach;
+
+    error_log('iniciando backup do banco');
 
     $mysqlFile = $zipDir . 'db.sql';
     $mysql     = new MysqlDump();
 
     $mysql->export($mysqlFile);
 
+    error_log('--- ok');
+
+    error_log('inicnando comapctação zip');
+
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
 
+    error_log('compactação ok, limpando dir tepoarairo');
+
     $this->fs->deleteTemporaryDirectory();
+
+    error_log('--- finalziado opreação');
 
     return (int) preg_replace('/\D/', '', $backupId);
   }
