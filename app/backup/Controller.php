@@ -7,9 +7,8 @@ use Full\Customer\FileSystem;
 class Controller
 {
   private $instanceId = null;
-  private $db;
 
-  private const STOP_WORDS           = ['cache', 'backup', 'upgrade', 'temp', '-old', 'backups', 'log', '-restore-'];
+  private const STOP_WORDS  = ['cache', 'backup', 'upgrade', 'temp', '-old', 'backups', 'log', '-restore-'];
 
   public function __construct()
   {
