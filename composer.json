@@ -1,5 +1,6 @@
 {
     "require": {
-        "nelexa/zip": "^4.0"
+        "nelexa/zip": "^4.0",
+        "rah/danpu": "^2.7"
     }
 }

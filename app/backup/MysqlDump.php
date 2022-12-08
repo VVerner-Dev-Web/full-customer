@@ -2,214 +2,61 @@
 
 namespace Full\Customer\Backup;
 
+use Rah\Danpu\Dump;
+use Rah\Danpu\Export;
+use Rah\Danpu\Import;
+use Exception;
+
 class MysqlDump
 {
-  private $file;
-
-  public function dump(): void
+  public function export(string $file): void
   {
-    $this->insertInitialComments();
+    error_reporting(error_reporting() & ~E_NOTICE);
 
-    $this->insertEmptyLine();
-    $this->write('SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";');
-    $this->write('START TRANSACTION;');
-    $this->write('SET time_zone = "+00:00";');
-    $this->insertEmptyLine();
+    try {
+      $dump = new Dump;
+      $dump
+        ->file($file)
+        ->dsn('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME)
+        ->user(DB_USER)
+        ->pass(DB_PASSWORD)
+        ->disableUniqueKeyChecks(true)
+        ->disableForeignKeyChecks(true);
 
-    $this->insertComment();
-    $this->insertComment('Banco de dados `' . DB_NAME . '`');
-    $this->insertComment();
+      new Export($dump);
 
-    $this->dumpTables();
+      $this->updateZeroDates($file);
+    } catch (Exception $e) {
+      error_log('Export failed with message: ' . $e->getMessage());
+    }
   }
 
-  public function openFile(string $filename): void
+  public function import(string $file): void
   {
-    $this->file = fopen($filename, 'w+');
+    error_reporting(error_reporting() & ~E_NOTICE);
+
+    try {
+      $dump = new Dump;
+      $dump
+        ->file($file)
+        ->dsn('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME)
+        ->user(DB_USER)
+        ->pass(DB_PASSWORD)
+        ->disableUniqueKeyChecks(true)
+        ->disableForeignKeyChecks(true);
+
+      new Import($dump);
+    } catch (Exception $e) {
+      error_log('Import failed with message: ' . $e->getMessage());
+    }
   }
 
-  public function closeFile(): void
+  private function updateZeroDates($file): void
   {
-    fclose($this->file);
-  }
+    $content = file_get_contents($file);
 
-  private function dumpTables(): void
-  {
-    global $wpdb;
-    $tables = $wpdb->get_col("SHOW TABLES");
+    $content = str_replace('0000-00-00', '1970-01-01', $content);
 
-    foreach ($tables as $table) :
-      $this->dumpTable($table);
-      $this->insertEmptyLine();
-    endforeach;
-  }
-
-  private function dumpTable(string $table): void
-  {
-    $this->dumpCreateTable($table);
-
-    $this->insertEmptyLine();
-
-    $this->dumpTableValues($table);
-  }
-
-  private function dumpCreateTable(string $table): void
-  {
-    global $wpdb;
-
-    $create = "SHOW CREATE TABLE $table";
-    $create = $wpdb->get_results($create, ARRAY_A);
-    $create = $create[0]['Create Table'];
-
-    $create = preg_replace('/\/\*(.+?)\*\//s', '', $create);
-    $pattern = array(
-      '/\s+CONSTRAINT(.+)REFERENCES(.+),/i',
-      '/,\s+CONSTRAINT(.+)REFERENCES(.+)/i',
-    );
-
-    $create = preg_replace($pattern, '', $create);
-
-    $pattern = array(
-      '/\s+CONSTRAINT(.+)REFERENCES(.+),/i',
-      '/,\s+CONSTRAINT(.+)REFERENCES(.+)/i',
-    );
-
-    $create = preg_replace($pattern, '', $create);
-
-    $search = array(
-      'TYPE=InnoDB',
-      'TYPE=MyISAM',
-      'ENGINE=Aria',
-      'TRANSACTIONAL=0',
-      'TRANSACTIONAL=1',
-      'PAGE_CHECKSUM=0',
-      'PAGE_CHECKSUM=1',
-      'TABLE_CHECKSUM=0',
-      'TABLE_CHECKSUM=1',
-      'ROW_FORMAT=PAGE',
-      'ROW_FORMAT=FIXED',
-      'ROW_FORMAT=DYNAMIC',
-    );
-    $replace = array(
-      'ENGINE=InnoDB',
-      'ENGINE=MyISAM',
-      'ENGINE=MyISAM',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-    );
-
-    $create = str_ireplace($search, $replace, $create);
-
-    $this->insertComment();
-    $this->insertComment('Estrutura da tabela `' . $table . '`');
-    $this->insertComment();
-
-    $this->insertEmptyLine();
-
-    $this->write("DROP TABLE IF EXISTS `{$table}`;");
-    $this->write($create . ';');
-  }
-
-  private function dumpTableValues(string $table): void
-  {
-    global $wpdb;
-
-    $this->insertComment();
-    $this->insertComment('Extraindo dados da tabela `' . $table . '`');
-    $this->insertComment();
-
-    $this->insertEmptyLine();
-
-    $insertInto = "INSERT INTO `$table` ";
-
-    $columns = $wpdb->get_results("SHOW COLUMNS FROM `$table`;");
-    $columnsNames = [];
-    $nullColumns = [];
-    $numericColumns = [];
-
-    foreach ($columns as $column) :
-      $columnsNames[] = $column->Field;
-
-      if (strtoupper($column->Null) === 'YES') :
-        $nullColumns[] = $column->Field;
-      endif;
-
-      if (strpos($column->Type, 'int') !== false) :
-        $numericColumns[] = $column->Field;
-      endif;
-
-    endforeach;
-
-    $rows = $wpdb->get_results("SELECT * FROM $table", ARRAY_A);
-    $values = [];
-
-    foreach ($rows as $row) :
-      $values[] = $this->formatRowValuesSqlQuery($row, $nullColumns, $numericColumns);
-    endforeach;
-
-    if ($values) :
-      $insertInto .= '(`' . implode('`, `', $columnsNames) . '`) VALUES ';
-      $values = implode(', ' . PHP_EOL, $values);
-      $values .= ';';
-
-      $this->write($insertInto);
-      $this->write($values);
-    endif;
-  }
-
-  private function formatRowValuesSqlQuery(array $row, array $nullColumns, array $numericColumns): string
-  {
-    global $wpdb;
-    $value    = [];
-
-    foreach ($row as $col => $colValue) :
-      $colValue = mysqli_real_escape_string($wpdb->dbh, $colValue);
-
-      if (in_array($col, $nullColumns) && $colValue === '' || $colValue === null) :
-        $value[] = "NULL";
-        continue;
-
-      elseif (in_array($col, $numericColumns)) :
-        $value[] = $colValue;
-        continue;
-
-      endif;
-
-      $value[] = "'$colValue'";
-
-    endforeach;
-
-    return '(' . implode(', ', $value) . ')';
-  }
-
-  private function insertInitialComments(): void
-  {
-    $this->insertComment('FULL SQL Dump');
-    $this->insertComment('Version 1.0.0');
-    $this->insertEmptyLine();
-    $this->insertComment('Host: ' . DB_HOST);
-    $this->insertComment('Data e hora do backup: ' . current_time('d/m/Y \à\s H:i:s'));
-  }
-
-  private function insertComment(string $text = ''): void
-  {
-    $this->write('-- ' . $text);
-  }
-
-  private function insertEmptyLine(): void
-  {
-    $this->write('');
-  }
-
-  private function write(string $text): void
-  {
-    fwrite($this->file, $text . PHP_EOL);
+    file_put_contents($file, $content);
   }
 }

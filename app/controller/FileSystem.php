@@ -70,6 +70,7 @@ class FileSystem
     endif;
 
     $zipFile = new ZipFile();
+
     $zipFile->openFile($zipFilePath)->extractTo($destinationPath)->close();
 
     if ($deleteAfterExtract) :

@@ -44,9 +44,7 @@ class Controller
     $mysqlFile = $zipDir . 'db.sql';
     $mysql     = new MysqlDump();
 
-    $mysql->openFile($mysqlFile);
-    $mysql->dump();
-    $mysql->closeFile();
+    $mysql->export($mysqlFile);
 
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
 
@@ -91,9 +89,10 @@ class Controller
       return false;
     endif;
 
+    $this->fs->createTemporaryDirectory();
     $restoreDirectory = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $backupId . DIRECTORY_SEPARATOR;
 
-    if (!$this->fs->extractZip($backupFile, WP_CONTENT_DIR, false)) :
+    if (!$this->fs->extractZip($backupFile, $this->fs->getTemporaryDirectoryPath(), false)) :
       return false;
     endif;
 
@@ -106,7 +105,7 @@ class Controller
 
     foreach ($backupArchives as $item) :
       if (substr($item, -4) === '.sql') :
-        $this->restoreDatabase($backupFile);
+        $this->restoreDatabase($item);
 
       elseif (substr($item, -4) === '.zip') :
         $this->restoreDirectory($item);
@@ -175,67 +174,8 @@ class Controller
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
-    $this->setSqlMode();
-
-    $file     = fopen($sqlFile, 'r');
-    $command  = '';
-
-    $ignoredCommands = [
-      'SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";',
-      'START TRANSACTION;',
-      'SET time_zone = "+00:00";'
-    ];
-
-    while (($line = fgets($file)) !== false) :
-      $line = trim($line);
-
-      if (in_array($line, $ignoredCommands)) :
-        continue;
-      endif;
-
-      if (substr($line, 0, 2) === '--') :
-        if ($command) :
-          $this->db->query($command);
-        endif;
-
-        $command = '';
-        continue;
-      endif;
-
-      if (substr($line, -1) === ';') :
-        $this->db->query($command . $line);
-
-        $command = '';
-        continue;
-      endif;
-
-      $command .= $line;
-    endwhile;
-  }
-
-  private function setSqlMode(): void
-  {
-    $modesStr = $this->db->get_var('SELECT @@SESSION.sql_mode');
-    $modes    = ['NO_AUTO_VALUE_ON_ZERO'];
-
-    $incompatibleModes = [
-      'NO_ZERO_DATE',
-      'ONLY_FULL_GROUP_BY',
-      'TRADITIONAL',
-      'STRICT_TRANS_TABLES',
-      'STRICT_ALL_TABLES'
-    ];
-
-    $modes = array_unique(array_merge($modes, array_change_key_case(explode(',', $modesStr), CASE_UPPER)));
-
-    foreach ($modes as $i => $mode) :
-      if (in_array($mode, $incompatibleModes)) :
-        unset($modes[$i]);
-      endif;
-    endforeach;
-
-    $modesStr = implode(',', $modes);
-    $this->db->query($this->db->prepare("SET SESSION sql_mode = %s", $modesStr));
+    $mysql  = new MysqlDump();
+    $mysql->import($sqlFile);
   }
 
   private function getDirectoriesToBackup(): array

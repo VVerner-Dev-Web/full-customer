@@ -12,6 +12,7 @@ add_action('rest_api_init', ['\Full\Customer\Api\Login', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Plugin', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Connection', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\Backup', 'registerRoutes']);
 
 add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
