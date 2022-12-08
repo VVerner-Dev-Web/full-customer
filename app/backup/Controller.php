@@ -26,44 +26,27 @@ class Controller
 
     $this->fs->createTemporaryDirectory();
 
-    $dirs     = $this->getDirectoriesToBackup();
+    $items    = $this->getItemsToBackup();
 
     $backupId = 'backup-' . current_time('YmdHis');
     $zipDir   = trailingslashit($this->fs->getTemporaryDirectoryPath());
     $zipFile  = $this->getBackupFile($backupId);
 
-    error_log('iniciando backup');
-    error_log(print_r($dirs, true));
-
-    foreach ($dirs as $dir) :
-      error_log('fazendo backup de ' . $dir);
-      if (is_dir($dir)) :
-        error_log('--- é um dir');
-        $this->fs->createZip($dir, $zipDir . basename($dir) . '.zip');
+    foreach ($items as $item) :
+      if (is_dir($item)) :
+        $this->fs->createZip($item, $zipDir . basename($item) . '.zip');
       else :
-        error_log('--- é um file');
-        $this->fs->copyFile(basename($dir), $zipDir . basename($dir));
+        $this->fs->copyFile($item, $zipDir . basename($item));
       endif;
     endforeach;
-
-    error_log('iniciando backup do banco');
 
     $mysqlFile = $zipDir . 'db.sql';
     $mysql     = new MysqlDump();
 
     $mysql->export($mysqlFile);
 
-    error_log('--- ok');
-
-    error_log('inicnando comapctação zip');
-
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
-
-    error_log('compactação ok, limpando dir tepoarairo');
-
     $this->fs->deleteTemporaryDirectory();
-
-    error_log('--- finalziado opreação');
 
     return (int) preg_replace('/\D/', '', $backupId);
   }
@@ -193,15 +176,13 @@ class Controller
     $mysql->import($sqlFile);
   }
 
-  private function getDirectoriesToBackup(): array
+  private function getItemsToBackup(): array
   {
     $dirs = [];
 
-    $items = $this->fs->scanDir(WP_CONTENT_DIR);
-
-    foreach ($items as $path) :
+    foreach ($this->fs->scanDir(WP_CONTENT_DIR) as $path) :
       foreach (self::STOP_WORDS as $word) :
-        if (strpos($path, $word) !== false) :
+        if (strpos(basename($path), $word) !== false) :
           continue 2;
         endif;
       endforeach;

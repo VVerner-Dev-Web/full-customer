@@ -6,6 +6,7 @@ use Rah\Danpu\Dump;
 use Rah\Danpu\Export;
 use Rah\Danpu\Import;
 use Exception;
+use PDO;
 
 class MysqlDump
 {
@@ -20,12 +21,11 @@ class MysqlDump
         ->dsn('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME)
         ->user(DB_USER)
         ->pass(DB_PASSWORD)
+        ->prefix('bkp_')
         ->disableUniqueKeyChecks(true)
         ->disableForeignKeyChecks(true);
 
       new Export($dump);
-
-      $this->updateZeroDates($file);
     } catch (Exception $e) {
       error_log('Export failed with message: ' . $e->getMessage());
     }
@@ -43,20 +43,18 @@ class MysqlDump
         ->user(DB_USER)
         ->pass(DB_PASSWORD)
         ->disableUniqueKeyChecks(true)
-        ->disableForeignKeyChecks(true);
+        ->disableForeignKeyChecks(true)
+        ->attributes([
+          PDO::ATTR_ORACLE_NULLS             => PDO::NULL_NATURAL,
+          PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
+          PDO::ATTR_ERRMODE                  => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_EMULATE_PREPARES         => false,
+          PDO::ATTR_STRINGIFY_FETCHES        => false,
+        ]);
 
       new Import($dump);
     } catch (Exception $e) {
       error_log('Import failed with message: ' . $e->getMessage());
     }
-  }
-
-  private function updateZeroDates($file): void
-  {
-    $content = file_get_contents($file);
-
-    $content = str_replace('0000-00-00', '1970-01-01', $content);
-
-    file_put_contents($file, $content);
   }
 }
