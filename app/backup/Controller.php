@@ -182,8 +182,6 @@ class Controller
     $directory        = str_replace('.zip', '', basename($backupFile));
     $wpDirectory      = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $directory;
 
-    error_log(print_r(compact('restoreDirectory', 'directory', 'wpDirectory'), true));
-
     if ($this->fs->extractZip($backupFile, $restoreDirectory)) :
       if (is_dir($wpDirectory)) :
         $this->moveToRestoreBackup($wpDirectory, $directory);
