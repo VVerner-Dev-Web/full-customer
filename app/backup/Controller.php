@@ -114,10 +114,11 @@ class Controller
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
-    $this->instanceId = 'restore-' . current_time('Ymdhis');
+    $this->instanceId = '-restore-' . current_time('Ymdhis');
     $backupFile       = $this->getBackupFile($backupId);
 
     if (!file_exists($backupFile)) :
+      $this->unlockClass();
       return false;
     endif;
 
@@ -125,6 +126,7 @@ class Controller
     $restoreDirectory = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $backupId . DIRECTORY_SEPARATOR;
 
     if (!$this->fs->extractZip($backupFile, $this->fs->getTemporaryDirectoryPath(), false)) :
+      $this->unlockClass();
       return false;
     endif;
 
@@ -133,9 +135,7 @@ class Controller
       $restoreDirectory
     );
 
-    $backupArchives   = $this->fs->scanDir($restoreDirectory);
-
-    foreach ($backupArchives as $item) :
+    foreach ($this->fs->scanDir($restoreDirectory) as $item) :
       if (substr($item, -4) === '.sql') :
         $this->restoreDatabase($item);
 
@@ -152,7 +152,6 @@ class Controller
     $this->fs->deleteTemporaryDirectory();
 
     $this->unlockClass();
-
     return true;
   }
 
@@ -173,7 +172,6 @@ class Controller
 
   private function restoreDirectory(string $backupFile): void
   {
-    // TODO: FIX
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
@@ -190,7 +188,7 @@ class Controller
       endif;
 
       $this->fs->moveFile(
-        $restoreDirectory . DIRECTORY_SEPARATOR . $directory,
+        $restoreDirectory,
         $wpDirectory
       );
     endif;
@@ -200,7 +198,8 @@ class Controller
   {
     $this->fs->moveFile(
       $directoryToBackup,
-      untrailingslashit($directoryToBackup) . '-' . $this->instanceId
+      untrailingslashit($directoryToBackup) . $this->instanceId,
+      false
     );
   }
 

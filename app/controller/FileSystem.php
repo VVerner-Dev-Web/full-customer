@@ -42,7 +42,6 @@ class FileSystem
 
   public function deleteTemporaryDirectory(): void
   {
-    error_log('-- apagando temp');
     $this->deleteDirectory($this->getTemporaryDirectoryPath());
   }
 
@@ -106,8 +105,6 @@ class FileSystem
 
   public function deleteDirectory(string $path): bool
   {
-    error_log('---- apagando ' .  $path);
-
     $files = $this->scanDir($path);
 
     foreach ($files as $file) :
@@ -119,6 +116,6 @@ class FileSystem
 
   public function deleteFile(string $path): bool
   {
-    return @unlink(realpath($path));
+    return @unlink($path);
   }
 }
