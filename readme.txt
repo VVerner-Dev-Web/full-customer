@@ -1,3 +1,4 @@
+
 === FULL - Customer ===
 Contributors: fullservices, vverner
 Requires at least: 5.6
@@ -38,6 +39,13 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+### 1.0.4 ###
+
+**VERSÃO BETA**
+
+- Fluxo de criação, restauração e exclusão de backups internos do site
+- Integração do fluxo de backup com o painel FULL.
 
 ### 1.0.3 ###
 
