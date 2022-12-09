@@ -85,14 +85,16 @@ class Backup extends FullCustomerController
     ]);
   }
 
-  public function createBackup(): WP_REST_Response
+  public function createBackup(WP_REST_Request $request): WP_REST_Response
   {
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
+    $asyncRequest = $request->get_param('async') ? true : false;
+
     return new WP_REST_Response([
-      'backup_id' => $this->backup->createBackup()
+      'backup_id' => $asyncRequest ? $this->backup->createAsyncBackup() : $this->backup->createBackup()
     ]);
   }
 
@@ -118,10 +120,11 @@ class Backup extends FullCustomerController
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
-    $backupId = 'backup-' . $request->get_param('backup_id');
+    $backupId     = 'backup-' . $request->get_param('backup_id');
+    $asyncRequest = $request->get_param('async') ? true : false;
 
     return new WP_REST_Response([
-      'retored' => $this->backup->restoreBackup($backupId)
+      'restored' => $asyncRequest ? $this->backup->restoreAsyncBackup($backupId) : $this->backup->restoreBackup($backupId)
     ]);
   }
 }

@@ -143,4 +143,45 @@ function createCronBackup(): bool
 
   $controller = new Controller;
   $controller->createBackup();
+
+  return true;
+}
+
+function createAsyncCronBackup(): bool
+{
+  createCronBackup();
+
+  $full  = new FullCustomer();
+  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/backup-webhook';
+
+  wp_remote_post($url, [
+    'sslverify' => false,
+    'headers'   => [
+      'Content-Type'  => 'application/json',
+    ],
+    'body'      => json_encode([
+      'site_url'      => home_url()
+    ])
+  ]);
+
+  return true;
+}
+
+function restoreAsyncBackup(string $backupId): void
+{
+  $controller = new Controller;
+  $controller->restoreBackup($backupId);
+
+  $full  = new FullCustomer();
+  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/restore-webhook';
+
+  wp_remote_post($url, [
+    'sslverify' => false,
+    'headers'   => [
+      'Content-Type'  => 'application/json',
+    ],
+    'body'      => json_encode([
+      'site_url'      => home_url()
+    ])
+  ]);
 }

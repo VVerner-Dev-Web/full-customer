@@ -9,6 +9,7 @@ class Controller
   private $instanceId = null;
 
   private const STOP_WORDS  = ['cache', 'backup', 'upgrade', 'temp', '-old', 'backups', 'log', '-restore-'];
+  private const LOCK_OPTION = '_full_backup_class_locked';
 
   public function __construct()
   {
@@ -18,8 +19,21 @@ class Controller
     $this->fs = new FileSystem();
   }
 
+  public function createAsyncBackup(): int
+  {
+    $cron = new Cron();
+    $cron->enqueueAsyncCreateHook();
+    return 0;
+  }
+
   public function createBackup(): int
   {
+    if ($this->isLocked()) :
+      return 0;
+    endif;
+
+    $this->lockClass();
+
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
@@ -48,6 +62,8 @@ class Controller
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
     $this->fs->deleteTemporaryDirectory();
 
+    $this->unlockClass();
+
     return (int) preg_replace('/\D/', '', $backupId);
   }
 
@@ -66,7 +82,7 @@ class Controller
         'id'         => (int) preg_replace('/\D/', '', basename($file)),
         'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
         'size'       => $size,
-        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file))
+        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3)
       ];
     endforeach;
 
@@ -79,8 +95,21 @@ class Controller
     return file_exists($file) ? $this->fs->deleteFile($file) : false;
   }
 
+  public function restoreAsyncBackup(string $backupId): bool
+  {
+    $cron = new Cron();
+    $cron->enqueueAsyncRestoreHook($backupId);
+    return true;
+  }
+
   public function restoreBackup(string $backupId): bool
   {
+    if ($this->isLocked()) :
+      return false;
+    endif;
+
+    $this->lockClass();
+
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
@@ -120,6 +149,8 @@ class Controller
     endforeach;
 
     $this->fs->deleteDirectory($restoreDirectory);
+
+    $this->unlockClass();
 
     return true;
   }
@@ -212,5 +243,20 @@ class Controller
   private function getBackupFile(string $backupId): ?string
   {
     return $this->getBackupDirectory() . $backupId . '.zip';
+  }
+
+  private function lockClass(): void
+  {
+    set_transient(self::LOCK_OPTION, true, HOUR_IN_SECONDS * 6);
+  }
+
+  private function unlockClass(): void
+  {
+    delete_transient(self::LOCK_OPTION);
+  }
+
+  private function isLocked(): bool
+  {
+    return get_transient(self::LOCK_OPTION) ? true : false;
   }
 }

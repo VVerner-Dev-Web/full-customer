@@ -56,7 +56,7 @@ class FileSystem
 
     endif;
 
-    return rename(
+    return @rename(
       $originPath,
       $destinationPath
     );

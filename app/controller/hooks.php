@@ -22,8 +22,10 @@ add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts'
 add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 
-add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueHook']);
+add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);
 add_action(Cron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
+add_action(Cron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
+add_action(Cron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup');
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
