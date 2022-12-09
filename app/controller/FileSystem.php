@@ -2,6 +2,7 @@
 
 namespace Full\Customer;
 
+use Exception;
 use PhpZip\ZipFile;
 
 defined('ABSPATH') || exit;
@@ -27,16 +28,22 @@ class FileSystem
 
   public function createTemporaryDirectory(): void
   {
-    if (is_dir(self::TEMPORARY_DIR)) :
-      $this->deleteDirectory(self::TEMPORARY_DIR, true);
+    if (is_dir($this->getTemporaryDirectoryPath())) :
+      error_log('é dir o temp');
+      $this->deleteTemporaryDirectory();
     endif;
 
-    mkdir(self::TEMPORARY_DIR);
+    if (is_dir($this->getTemporaryDirectoryPath())) :
+      throw new Exception('Não foi possível apagar todo o temp dir');
+    endif;
+
+    mkdir($this->getTemporaryDirectoryPath());
   }
 
   public function deleteTemporaryDirectory(): void
   {
-    $this->deleteDirectory(self::TEMPORARY_DIR);
+    error_log('-- apagando temp');
+    $this->deleteDirectory($this->getTemporaryDirectoryPath());
   }
 
   public function getTemporaryDirectoryPath(): string
@@ -99,6 +106,8 @@ class FileSystem
 
   public function deleteDirectory(string $path): bool
   {
+    error_log('---- apagando ' .  $path);
+
     $files = $this->scanDir($path);
 
     foreach ($files as $file) :

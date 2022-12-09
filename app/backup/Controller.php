@@ -149,6 +149,7 @@ class Controller
     endforeach;
 
     $this->fs->deleteDirectory($restoreDirectory);
+    $this->fs->deleteTemporaryDirectory();
 
     $this->unlockClass();
 
@@ -172,6 +173,7 @@ class Controller
 
   private function restoreDirectory(string $backupFile): void
   {
+    // TODO: FIX
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
