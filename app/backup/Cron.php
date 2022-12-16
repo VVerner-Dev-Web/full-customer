@@ -24,12 +24,12 @@ class Cron
 
   public function enqueueAsyncCreateHook(): void
   {
-    wp_schedule_single_event(time(), self::ASYNC_JOB_NAME);
+    wp_schedule_single_event(time() + MINUTE_IN_SECONDS, self::ASYNC_JOB_NAME);
   }
 
   public function enqueueAsyncRestoreHook(string $backupId): void
   {
-    wp_schedule_single_event(time(), self::ASYNC_RESTORE_JOB_NAME, [$backupId]);
+    wp_schedule_single_event(time() + MINUTE_IN_SECONDS, self::ASYNC_RESTORE_JOB_NAME, [$backupId]);
   }
 
   public function getNextScheduleDate(): ?DateTime

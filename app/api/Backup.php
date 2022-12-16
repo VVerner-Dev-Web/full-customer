@@ -27,7 +27,7 @@ class Backup extends FullCustomerController
   public static function registerRoutes(): void
   {
     $api = new self();
-    $permissionCallback = $api->env->getCurrentEnv() === 'DEV' ? '__return_true' : 'is_user_logged_id';
+    $permissionCallback = $api->env->getCurrentEnv() === 'DEV' ? '__return_true' : 'is_user_logged_in';
 
     register_rest_route(self::NAMESPACE, '/backup', [
       [

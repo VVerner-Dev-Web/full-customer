@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.6
+
+- Foi adicionado um timeout de 60 segundos para a criação de backups solicitados pelo painel para corrigir o conflito com o plugin WP Rocket
+
 ### 1.0.5
 
 - A biblioteca que gera o zip para backup foi revertida para a versão 3.3.3 para maior compatibilidade com o php
