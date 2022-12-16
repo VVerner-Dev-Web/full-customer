@@ -1,4 +1,3 @@
-
 === FULL - Customer ===
 Contributors: fullservices, vverner
 Requires at least: 5.6
@@ -23,6 +22,7 @@ Subsequently, the plugin will also allow the FULL support team to make necessary
 Once your site is integrated into the FULL dashboard, this plugin will be automatically installed on the connected WordPress site.
 
 == Frequently Asked Questions ==
+
 ### Why was this plugin installed?
 
 After connecting a site to the FULL dashboard, this plugin is automatically installed and activated to manage your licenses
@@ -36,64 +36,65 @@ He can! Your already activated licenses will not be affected, however the panel 
 They remain active for the acquired time.
 
 == Screenshots ==
+
 1. FULL website homepage
 
 == Changelog ==
 
-### 1.0.5 ###
+### 1.0.5
 
 - A biblioteca que gera o zip para backup foi revertida para a versão 3.3.3 para maior compatibilidade com o php
 - Aberto endpoint para consumo das informações de health
 - FS melhorada para limpeza de diretórios
 
-### 1.0.4 ###
+### 1.0.4
 
 **VERSÃO BETA**
 
 - Fluxo de criação, restauração e exclusão de backups internos do site
 - Integração do fluxo de backup com o painel FULL.
 
-### 1.0.3 ###
+### 1.0.3
 
 - Criada classe FileSystem para auxiliar na manipulação de arquivos
 - Corrigido problema em que alguns casos o FC não conseguia copiar ou mover os arquivos de instalação
 - Atualizada formato de download de arquivo remoto
 
-### 1.0.2 ###
+### 1.0.2
 
 - Atualizado namespaces e integração com PHPMD
 
-### 1.0.1 ##
+### 1.0.1
 
 - Atualizado forma de conexão no "Acessa fácil" para condizer com usuário conectado ao painel
 
-### 1.0.0 ###
+### 1.0.0
 
 - Atualizado a URL dos serviços da FULL. para full.services, essa atualização causará incompatibilidade com as versões anteriores do plugin
 
-### 0.2.4 ###
+### 0.2.4
 
 - Inserido link de conexão na listagem de plugins do WordPress
 
-### 0.2.3 ###
+### 0.2.3
 
 - Nesta atualização movemos a página de configuração do plugin para dentro do menu "Configurações" do WordPress
 - A tela consentimento de backlink foi removida e agora esta opção deve ser configurada dentro do painel da FULL.
 
-### 0.2.2 ###
+### 0.2.2
 
 - Corrigido o fluxo de conexão onde em alguns casos o navegador autocompletava a senha incorretamente
 - Inserida validação da conexão atual do site ao painel sempre que acessar a página de conexão do plugin
 
-### 0.2.1 ###
+### 0.2.1
 
 - Removido o link de "ver detalhes" quando configurado o nome do autor nas definições de whitelabel do painel
 
-### 0.2.0 ###
+### 0.2.0
 
 - Whitelabel
 
-### Versões anteriores a 0.2.0 ###
+### Versões anteriores a 0.2.0
 
 - Login remoto
 - Instalação de plugin adquirido na FULL.
