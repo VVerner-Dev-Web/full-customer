@@ -49,7 +49,7 @@ class Controller
     foreach ($items as $item) :
       if (is_dir($item)) :
         $this->fs->createZip($item, $zipDir . basename($item) . '.zip');
-      else :
+      elseif (is_file($item)) :
         $this->fs->copyFile($item, $zipDir . basename($item));
       endif;
     endforeach;

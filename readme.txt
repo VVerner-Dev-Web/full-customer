@@ -40,6 +40,12 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.5 ###
+
+- A biblioteca que gera o zip para backup foi revertida para a versão 3.3.3 para maior compatibilidade com o php
+- Aberto endpoint para consumo das informações de health
+- FS melhorada para limpeza de diretórios
+
 ### 1.0.4 ###
 
 **VERSÃO BETA**
