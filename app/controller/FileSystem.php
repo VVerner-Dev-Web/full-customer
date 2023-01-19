@@ -29,7 +29,6 @@ class FileSystem
   public function createTemporaryDirectory(): void
   {
     if (is_dir($this->getTemporaryDirectoryPath())) :
-      error_log('é dir o temp');
       $this->deleteTemporaryDirectory();
     endif;
 
