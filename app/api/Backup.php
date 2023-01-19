@@ -15,6 +15,7 @@ defined('ABSPATH') || exit;
 class Backup extends FullCustomerController
 {
   private $backup;
+  private $cron;
 
   public function __construct()
   {
@@ -45,12 +46,12 @@ class Backup extends FullCustomerController
     register_rest_route(self::NAMESPACE, '/backup/cron', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
-        'callback'            => [$api, 'setCronSchedule'],
+        'callback'            => [$api, 'setCronSettings'],
         'permission_callback' => $permissionCallback,
       ],
       [
         'methods'             => WP_REST_Server::READABLE,
-        'callback'            => [$api, 'getCronSchedule'],
+        'callback'            => [$api, 'getCronSettings'],
         'permission_callback' => $permissionCallback,
       ]
     ]);
@@ -69,19 +70,23 @@ class Backup extends FullCustomerController
     ]);
   }
 
-  public function setCronSchedule(WP_REST_Request $request): WP_REST_Response
+  public function setCronSettings(WP_REST_Request $request): WP_REST_Response
   {
+    $interval = $this->cron->setCronInterval($request->get_param('interval'));
+    $quantity = $this->cron->setBackupsQuantityToMaintain((int) $request->get_param('quantity'));
+
     return new WP_REST_Response([
-      'updated'       => $this->cron->setCronInterval($request->get_param('interval')),
+      'updated'       => $interval && $quantity,
       'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null
     ]);
   }
 
-  public function getCronSchedule(): WP_REST_Response
+  public function getCronSettings(): WP_REST_Response
   {
     return new WP_REST_Response([
       'schedule_date' => $this->cron->getNextScheduleDate() ? $this->cron->getNextScheduleDate()->format('Y-m-d H:i:s') : null,
-      'interval'      => $this->cron->getCronInterval()
+      'interval'      => $this->cron->getCronInterval(),
+      'quantity'      => $this->cron->getBackupsQuantityToMaintain()
     ]);
   }
 

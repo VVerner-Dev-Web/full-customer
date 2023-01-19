@@ -41,6 +41,11 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.7
+
+- Backups: Adicionada possibilidade de definir quantos backups manter salvos
+- Backups: Modificado retorno da busca de backups para ordem cronologica
+
 ### 1.0.6
 
 - Foi adicionado um timeout de 60 segundos para a criação de backups solicitados pelo painel para corrigir o conflito com o plugin WP Rocket

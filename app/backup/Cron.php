@@ -11,6 +11,7 @@ class Cron
   public const ASYNC_RESTORE_JOB_NAME = 'full-customer/async-restore';
 
   private const INTERVAL_OPTION  = 'full-customer/backup/interval';
+  private const QUANTITY_OPTION  = 'full-customer/backup/maintain-quantity';
   private const DISABLED_CRON    = 'off';
 
   public static function enqueueCreateHook(): void
@@ -35,7 +36,7 @@ class Cron
   public function getNextScheduleDate(): ?DateTime
   {
     $time = wp_next_scheduled(self::JOB_NAME);
-    return $time ? new DateTime(strtotime($time)) : null;
+    return $time ? new DateTime(date('Y-m-d H:i:s', $time)) : null;
   }
 
   public function setCronInterval(string $interval): bool
@@ -58,5 +59,16 @@ class Cron
   public function getCronInterval(): string
   {
     return get_option(self::INTERVAL_OPTION, self::DISABLED_CRON);
+  }
+
+  public function setBackupsQuantityToMaintain(int $quantity): bool
+  {
+    update_option(self::QUANTITY_OPTION, $quantity, false);
+    return true;
+  }
+
+  public function getBackupsQuantityToMaintain(): string
+  {
+    return get_option(self::QUANTITY_OPTION, 0);
   }
 }

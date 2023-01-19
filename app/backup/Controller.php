@@ -7,15 +7,13 @@ use Full\Customer\FileSystem;
 class Controller
 {
   private $instanceId = null;
+  private $fs;
 
   private const STOP_WORDS  = ['cache', 'backup', 'upgrade', 'temp', '-old', 'backups', 'log', '-restore-'];
   private const LOCK_OPTION = '_full_backup_class_locked';
 
   public function __construct()
   {
-    global $wpdb;
-
-    $this->db = $wpdb;
     $this->fs = new FileSystem();
   }
 
@@ -62,6 +60,8 @@ class Controller
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
     $this->fs->deleteTemporaryDirectory();
 
+    $this->deleteOldBackups();
+
     $this->unlockClass();
 
     return (int) preg_replace('/\D/', '', $backupId);
@@ -82,9 +82,14 @@ class Controller
         'id'         => (int) preg_replace('/\D/', '', basename($file)),
         'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
         'size'       => $size,
-        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3)
+        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3),
+        'dateU'      => filemtime($file)
       ];
     endforeach;
+
+    usort($backups, function ($a, $b) {
+      return $b['dateU'] <=> $a['dateU'];
+    });
 
     return $backups;
   }
@@ -259,5 +264,23 @@ class Controller
   private function isLocked(): bool
   {
     return get_transient(self::LOCK_OPTION) ? true : false;
+  }
+
+  public function deleteOldBackups()
+  {
+    $cron     = new Cron();
+    $backups  = $this->getBackups();
+    $deletableBackups = $cron->getBackupsQuantityToMaintain() > 0 ? count($backups) - $cron->getBackupsQuantityToMaintain() : 0;
+
+    if (0 >= $deletableBackups) :
+      return;
+    endif;
+
+    for ($i = 0; $i < $deletableBackups; $i++) :
+      $item = array_pop($backups);
+      $file = $this->getBackupFile('backup-' . $item['id']);
+
+      $this->fs->deleteFile($file);
+    endfor;
   }
 }
