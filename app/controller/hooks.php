@@ -22,6 +22,7 @@ add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
+add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 
 add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);
 add_action(Cron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
@@ -34,3 +35,4 @@ add_filter('wp_is_application_passwords_available_for_user', '__return_true', PH
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
 add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
+add_filter('wp_php_error_args', '\Full\Customer\Filters\wpPhpErrorArgs', PHP_INT_MAX, 2);

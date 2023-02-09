@@ -60,3 +60,16 @@ function pluginRowMeta(array $meta, string $plugin): array
 
   return $meta;
 }
+
+function wpPhpErrorArgs(array $args, array $error): array
+{
+  if (strpos($error['file'], dirname(FULL_CUSTOMER_FILE)) === false) :
+    return $args;
+  endif;
+
+  $error['date'] = current_time('Y-m-d H:i:s');
+
+  update_option('full_customer_last_error', $error, false);
+
+  return $args;
+}

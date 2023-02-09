@@ -135,9 +135,9 @@ function upgradePlugin(): void
   endif;
 }
 
-function createCronBackup(): bool
+function createCronBackup(bool $forceBackup = false): bool
 {
-  if (!wp_doing_cron()) :
+  if (!wp_doing_cron() && !$forceBackup) :
     return false;
   endif;
 
@@ -149,39 +149,37 @@ function createCronBackup(): bool
 
 function createAsyncCronBackup(): bool
 {
-  createCronBackup();
-
-  $full  = new FullCustomer();
-  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/backup-webhook';
-
-  wp_remote_post($url, [
-    'sslverify' => false,
-    'headers'   => [
-      'Content-Type'  => 'application/json',
-    ],
-    'body'      => json_encode([
-      'site_url'      => home_url()
-    ])
-  ]);
-
-  return true;
+  return createCronBackup(true);
 }
 
 function restoreAsyncBackup(string $backupId): void
 {
   $controller = new Controller;
   $controller->restoreBackup($backupId);
+}
 
-  $full  = new FullCustomer();
-  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/restore-webhook';
+function notifyPluginError(): bool
+{
+  $error = get_option('full_customer_last_error');
+
+  if (!$error) :
+    return false;
+  endif;
+
+  $full = new FullCustomer();
+  $url  = $full->getFullDashboardApiUrl() . '-customer/v1/error';
 
   wp_remote_post($url, [
     'sslverify' => false,
     'headers'   => [
       'Content-Type'  => 'application/json',
     ],
-    'body'      => json_encode([
-      'site_url'      => home_url()
+    'body'  => json_encode([
+      'site_url'  => home_url(),
+      'error'     => $error
     ])
   ]);
+
+  delete_option('full_customer_last_error');
+  return true;
 }

@@ -41,6 +41,11 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.0.8
+
+- Foi implementado um novo evento para que possamos mensurar erros que ocorram que o plugin causa em seu site
+- Adicionado webhook para caso de falha da criação de um backup
+
 ### 1.0.7
 
 - Backups: Adicionada possibilidade de definir quantos backups manter salvos

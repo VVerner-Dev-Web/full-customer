@@ -3,6 +3,7 @@
 namespace Full\Customer\Backup;
 
 use Full\Customer\FileSystem;
+use FullCustomer;
 
 class Controller
 {
@@ -52,10 +53,8 @@ class Controller
       endif;
     endforeach;
 
-    $mysqlFile = $zipDir . 'db.sql';
     $mysql     = new MysqlDump();
-
-    $mysql->export($mysqlFile);
+    $mysql->export($zipDir . 'db.sql');
 
     $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
     $this->fs->deleteTemporaryDirectory();
@@ -63,6 +62,8 @@ class Controller
     $this->deleteOldBackups();
 
     $this->unlockClass();
+
+    $this->triggerWebhookEvent('backup:created-success');
 
     return (int) preg_replace('/\D/', '', $backupId);
   }
@@ -156,8 +157,27 @@ class Controller
     $this->fs->deleteDirectory($restoreDirectory);
     $this->fs->deleteTemporaryDirectory();
 
+    $this->triggerWebhookEvent('backup:restore-success');
+
     $this->unlockClass();
     return true;
+  }
+
+  private function triggerWebhookEvent(string $event): void
+  {
+    $full     = new FullCustomer();
+    $endpoint = 'backup:created-success' === $event ? 'backup-webhook' : 'restore-webhook';
+    $url      = $full->getFullDashboardApiUrl() . '-customer/v1/' . $endpoint;
+
+    wp_remote_post($url, [
+      'sslverify' => false,
+      'headers'   => [
+        'Content-Type'  => 'application/json',
+      ],
+      'body'      => json_encode([
+        'site_url'      => home_url()
+      ])
+    ]);
   }
 
   private function restoreFile(string $backupFile): void
