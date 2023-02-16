@@ -117,4 +117,26 @@ class FileSystem
   {
     return @unlink($path);
   }
+
+  public function downloadExternalResource(string $source, string $filename)
+  {
+    $this->createTemporaryDirectory();
+
+    $path = $this->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $filename;
+
+    if (file_exists($path)) :
+      $this->deleteFile($path);
+    endif;
+
+    $file = fopen($path, 'a');
+    fclose($file);
+
+    wp_remote_get($source, [
+      'sslverify' => false,
+      'stream'    => true,
+      'filename'  => $path
+    ]);
+
+    return $path;
+  }
 }

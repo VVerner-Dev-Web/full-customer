@@ -27,7 +27,7 @@ add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);
 add_action(Cron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
 add_action(Cron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
-add_action(Cron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup');
+add_action(Cron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup', 10, 3);
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
@@ -36,3 +36,4 @@ add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
 add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
 add_filter('wp_php_error_args', '\Full\Customer\Filters\wpPhpErrorArgs', PHP_INT_MAX, 2);
+add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest', 0, 2);

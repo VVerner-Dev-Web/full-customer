@@ -63,8 +63,21 @@ class Backup extends FullCustomerController
         'permission_callback' => $permissionCallback,
       ],
       [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'getBackup'],
+        'permission_callback' => $permissionCallback,
+      ],
+      [
         'methods'             => WP_REST_Server::DELETABLE,
         'callback'            => [$api, 'deleteBackup'],
+        'permission_callback' => $permissionCallback,
+      ]
+    ]);
+
+    register_rest_route(self::NAMESPACE, '/backup/(?P<backup_id>[0-9\-]+).zip', [
+      [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'downloadBackup'],
         'permission_callback' => $permissionCallback,
       ]
     ]);
@@ -88,6 +101,39 @@ class Backup extends FullCustomerController
       'interval'      => $this->cron->getCronInterval(),
       'quantity'      => $this->cron->getBackupsQuantityToMaintain()
     ]);
+  }
+
+  public function getBackup(WP_REST_Request $request): WP_REST_Response
+  {
+    $backupId = 'backup-' . $request->get_param('backup_id');
+    $backup   = $this->backup->getBackup($backupId);
+
+    return new WP_REST_Response([
+      'backup' => $backup ? $backup : false
+    ]);
+  }
+
+  public function downloadBackup(WP_REST_Request $request): WP_REST_Response
+  {
+    $backupId = 'backup-' . $request->get_param('backup_id');
+    $backup   = $this->backup->getBackup($backupId);
+
+    if (!$backup) :
+      return new WP_REST_Response([], 404);
+    endif;
+
+    $response = new WP_REST_Response;
+    $path     = $this->backup->getBackupFile($backupId);
+    $info     = wp_check_filetype($path);
+
+    $response->set_data(file_get_contents($path));
+    $response->set_headers([
+      'Content-Type'   => $info['type'],
+      'Content-Length' => $backup['size'],
+      'X-Full'         => 'download'
+    ]);
+
+    return $response;
   }
 
   public function createBackup(WP_REST_Request $request): WP_REST_Response
@@ -127,9 +173,11 @@ class Backup extends FullCustomerController
 
     $backupId     = 'backup-' . $request->get_param('backup_id');
     $asyncRequest = $request->get_param('async') ? true : false;
+    $backupFile   = $request->get_param('backupFile');
+    $remoteBackupId = $request->get_param('remoteBackupId') ? sanitize_text_field($request->get_param('remoteBackupId')) : '';
 
     return new WP_REST_Response([
-      'restored' => $asyncRequest ? $this->backup->restoreAsyncBackup($backupId) : $this->backup->restoreBackup($backupId)
+      'restored'       => $asyncRequest ? $this->backup->restoreAsyncBackup($backupId, $backupFile, $remoteBackupId) : $this->backup->restoreBackup($backupId, $backupFile, $remoteBackupId)
     ]);
   }
 }

@@ -28,9 +28,9 @@ class Cron
     wp_schedule_single_event(time() + MINUTE_IN_SECONDS, self::ASYNC_JOB_NAME);
   }
 
-  public function enqueueAsyncRestoreHook(string $backupId): void
+  public function enqueueAsyncRestoreHook(string $backupId, string $remoteBackupFile, string $remoteBackupId): void
   {
-    wp_schedule_single_event(time() + MINUTE_IN_SECONDS, self::ASYNC_RESTORE_JOB_NAME, [$backupId]);
+    wp_schedule_single_event(time() + MINUTE_IN_SECONDS, self::ASYNC_RESTORE_JOB_NAME, [$backupId, $remoteBackupFile, $remoteBackupId]);
   }
 
   public function getNextScheduleDate(): ?DateTime

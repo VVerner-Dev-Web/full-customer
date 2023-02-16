@@ -63,9 +63,11 @@ class Controller
 
     $this->unlockClass();
 
-    $this->triggerWebhookEvent('backup:created-success');
+    $backup = (int) preg_replace('/\D/', '', $backupId);
 
-    return (int) preg_replace('/\D/', '', $backupId);
+    $this->triggerWebhookEvent('backup:created-success', ['backup' => $backup]);
+
+    return $backup;
   }
 
   public function getBackups(): array
@@ -77,15 +79,7 @@ class Controller
         continue;
       endif;
 
-      $size = filesize($file);
-
-      $backups[] = [
-        'id'         => (int) preg_replace('/\D/', '', basename($file)),
-        'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
-        'size'       => $size,
-        'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3),
-        'dateU'      => filemtime($file)
-      ];
+      $backups[] = $this->normalizeBackupData($file);
     endforeach;
 
     usort($backups, function ($a, $b) {
@@ -95,26 +89,62 @@ class Controller
     return $backups;
   }
 
+  private function normalizeBackupData(string $file): ?array
+  {
+    if (!file_exists($file)) :
+      return null;
+    endif;
+
+    $size = filesize($file);
+
+    return [
+      'id'         => (int) preg_replace('/\D/', '', basename($file)),
+      'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
+      'size'       => $size,
+      'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3),
+      'dateU'      => filemtime($file)
+    ];
+  }
+
+  public function getBackup(string $backupId): ?array
+  {
+    $file = $this->getBackupFile($backupId);
+    return $file ? $this->normalizeBackupData($file) : null;
+  }
+
   public function deleteBackup(string $backupId): bool
   {
     $file = $this->getBackupFile($backupId);
     return file_exists($file) ? $this->fs->deleteFile($file) : false;
   }
 
-  public function restoreAsyncBackup(string $backupId): bool
+  public function restoreAsyncBackup(string $backupId, string $remoteBackupFile, string $remoteBackupId): bool
   {
     $cron = new Cron();
-    $cron->enqueueAsyncRestoreHook($backupId);
+    $cron->enqueueAsyncRestoreHook($backupId, $remoteBackupFile, $remoteBackupId);
     return true;
   }
 
-  public function restoreBackup(string $backupId): bool
+  public function restoreBackup(string $backupId, string $remoteBackupFile, string $remoteBackupId): bool
   {
+    $this->unlockClass();
+
     if ($this->isLocked()) :
       return false;
     endif;
 
     $this->lockClass();
+
+    if ($remoteBackupFile && $remoteBackupId) :
+      $backupFile = $this->fs->downloadExternalResource($remoteBackupFile, $backupId);
+
+      $this->fs->moveFile(
+        $backupFile,
+        $this->getBackupDirectory() . $remoteBackupId
+      );
+
+      $backupId = str_replace('.zip', '', $remoteBackupId);
+    endif;
 
     if (function_exists('set_time_limit')) :
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
@@ -163,7 +193,12 @@ class Controller
     return true;
   }
 
-  private function triggerWebhookEvent(string $event): void
+  public function getBackupFile(string $backupId): ?string
+  {
+    return $this->getBackupDirectory() . $backupId . '.zip';
+  }
+
+  private function triggerWebhookEvent(string $event, array $data = []): void
   {
     $full     = new FullCustomer();
     $endpoint = 'backup:created-success' === $event ? 'backup-webhook' : 'restore-webhook';
@@ -174,9 +209,7 @@ class Controller
       'headers'   => [
         'Content-Type'  => 'application/json',
       ],
-      'body'      => json_encode([
-        'site_url'      => home_url()
-      ])
+      'body'      => json_encode(array_merge(['site_url' => home_url()], $data))
     ]);
   }
 
@@ -264,11 +297,6 @@ class Controller
     endif;
 
     return $dir;
-  }
-
-  private function getBackupFile(string $backupId): ?string
-  {
-    return $this->getBackupDirectory() . $backupId . '.zip';
   }
 
   private function lockClass(): void

@@ -3,6 +3,7 @@
 namespace Full\Customer\Filters;
 
 use FullCustomer;
+use WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
@@ -72,4 +73,29 @@ function wpPhpErrorArgs(array $args, array $error): array
   update_option('full_customer_last_error', $error, false);
 
   return $args;
+}
+
+function restPreServeRequest(bool $served, WP_REST_Response $response)
+{
+  if ($served) :
+    return $served;
+  endif;
+
+  $buffer   = null;
+
+  foreach ($response->get_headers() as $header => $value) :
+    if ('x-full' !== strtolower($header)) :
+      continue;
+    endif;
+
+    $buffer   = $response->get_data();
+    break;
+  endforeach;
+
+  if (!is_string($buffer)) :
+    return $served;
+  endif;
+
+  echo $buffer;
+  return true;
 }

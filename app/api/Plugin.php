@@ -86,26 +86,8 @@ class Plugin extends FullCustomerController
 
   private function copyZipFile(string $source): bool
   {
-    $zip  = $this->downloadPluginZip($source);
+    $zip  = $this->fs->downloadExternalResource($source, 'plugin.zip');
     return $this->fs->extractZip($zip, $this->fs->getTemporaryDirectoryPath());
-  }
-
-  private function downloadPluginZip(string $source): string
-  {
-    $path = $this->fs->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . 'plugin.zip';
-
-    if (!file_exists($path)) :
-      $file = fopen($path, 'a');
-      fclose($file);
-    endif;
-
-    wp_remote_get($source, [
-      'sslverify' => false,
-      'stream'    => true,
-      'filename'  => $path
-    ]);
-
-    return $path;
   }
 
   private function movePluginFiles(): bool

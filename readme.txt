@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 1.1.0
+
+- Nesta versão foi adicionado a possibilidade de restaurar backups armazenados no Google Drive
+
 ### 1.0.8
 
 - Foi implementado um novo evento para que possamos mensurar erros que ocorram que o plugin causa em seu site

@@ -152,10 +152,10 @@ function createAsyncCronBackup(): bool
   return createCronBackup(true);
 }
 
-function restoreAsyncBackup(string $backupId): void
+function restoreAsyncBackup(string $backupId, string $remoteBackupFile, string $remoteBackupId): void
 {
   $controller = new Controller;
-  $controller->restoreBackup($backupId);
+  $controller->restoreBackup($backupId, $remoteBackupFile, $remoteBackupId);
 }
 
 function notifyPluginError(): bool
