@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.2
 Requires PHP: 7.4
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,12 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+### 1.2.1
+
+- Esc de todos os echos no plugin
+- Removido filtro que modificava o retorno do rest quando encontrava um cabeçalho full "restPreServeRequest"
+- Alterada versão da lib SweetAlert2 para 11.4.8
 
 ### 1.2.0
 

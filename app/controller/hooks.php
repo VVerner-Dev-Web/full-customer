@@ -36,4 +36,3 @@ add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
 add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
 add_filter('wp_php_error_args', '\Full\Customer\Filters\wpPhpErrorArgs', PHP_INT_MAX, 2);
-add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest', 0, 2);

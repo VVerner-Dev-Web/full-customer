@@ -9,9 +9,7 @@ function fullGetAdminPageView(): void
   $file     = FULL_CUSTOMER_APP . '/views/admin/' . $endpoint . '.php';
 
   if (file_exists($file)) :
-    echo '<div class="wrap full-customer-page" id="fc-' . $endpoint . '">';
     include $file;
-    echo '</div>';
   endif;
 }
 
