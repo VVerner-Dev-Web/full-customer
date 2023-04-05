@@ -15,13 +15,13 @@ class Plugin extends FullCustomerController
 {
   private $pluginDir = null;
   private $pluginFile = null;
-  private $fs;
+  private $fileSystem;
 
   public function __construct()
   {
     parent::__construct();
 
-    $this->fs = new FileSystem();
+    $this->fileSystem = new FileSystem();
   }
 
   public static function registerRoutes(): void
@@ -47,11 +47,11 @@ class Plugin extends FullCustomerController
       return new WP_REST_Response(['code' => -1]);
     endif;
 
-    $this->fs->createTemporaryDirectory();
+    $this->fileSystem->createTemporaryDirectory();
 
     $copied = $this->copyZipFile($file);
     if (!$copied) :
-      $this->fs->deleteTemporaryDirectory();
+      $this->fileSystem->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -2]);
     endif;
 
@@ -59,14 +59,14 @@ class Plugin extends FullCustomerController
 
     $moved   = $this->movePluginFiles();
     if (!$moved) :
-      $this->fs->deleteTemporaryDirectory();
+      $this->fileSystem->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -3]);
     endif;
 
     $activated = $this->activatePlugin();
     if (is_wp_error($activated)) :
       $this->deactivatePlugin();
-      $this->fs->deleteTemporaryDirectory();
+      $this->fileSystem->deleteTemporaryDirectory();
       return new WP_REST_Response([
         'code'      => -4,
         'message'   => $activated->get_error_message()
@@ -75,19 +75,19 @@ class Plugin extends FullCustomerController
 
     if (!$this->isSuccessfulActivation()) :
       $this->deactivatePlugin();
-      $this->fs->deleteTemporaryDirectory();
+      $this->fileSystem->deleteTemporaryDirectory();
       return new WP_REST_Response(['code' => -5]);
     endif;
 
-    $this->fs->deleteTemporaryDirectory();
+    $this->fileSystem->deleteTemporaryDirectory();
 
     return new WP_REST_Response(['code' => 1]);
   }
 
   private function copyZipFile(string $source): bool
   {
-    $zip  = $this->fs->downloadExternalResource($source, 'plugin.zip');
-    return $this->fs->extractZip($zip, $this->fs->getTemporaryDirectoryPath());
+    $zip  = $this->fileSystem->downloadExternalResource($source, 'plugin.zip');
+    return $this->fileSystem->extractZip($zip, $this->fileSystem->getTemporaryDirectoryPath());
   }
 
   private function movePluginFiles(): bool
@@ -96,15 +96,15 @@ class Plugin extends FullCustomerController
       return false;
     endif;
 
-    $origin      = $this->fs->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $this->pluginDir;
+    $origin      = $this->fileSystem->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $this->pluginDir;
     $destination = $this->getPluginActivationDir();
 
-    return $this->fs->moveFile($origin, $destination);
+    return $this->fileSystem->moveFile($origin, $destination);
   }
 
   private function setPluginDir(): void
   {
-    $scan = scandir($this->fs->getTemporaryDirectoryPath());
+    $scan = scandir($this->fileSystem->getTemporaryDirectoryPath());
     $scan = array_diff($scan, ['.', '..', '__MACOSX']);
     $this->pluginDir = array_pop($scan);
   }

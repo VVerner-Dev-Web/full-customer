@@ -8,14 +8,14 @@ use FullCustomer;
 class Controller
 {
   private $instanceId = null;
-  private $fs;
+  private $fileSystem;
 
   private const STOP_WORDS  = ['cache', 'backup', 'upgrade', 'temp', '-old', 'backups', 'log', '-restore-'];
   private const LOCK_OPTION = '_full_backup_class_locked';
 
   public function __construct()
   {
-    $this->fs = new FileSystem();
+    $this->fileSystem = new FileSystem();
   }
 
   public function createAsyncBackup(): int
@@ -37,27 +37,27 @@ class Controller
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
-    $this->fs->createTemporaryDirectory();
+    $this->fileSystem->createTemporaryDirectory();
 
     $items    = $this->getItemsToBackup();
 
     $backupId = 'backup-' . current_time('YmdHis');
-    $zipDir   = trailingslashit($this->fs->getTemporaryDirectoryPath());
+    $zipDir   = trailingslashit($this->fileSystem->getTemporaryDirectoryPath());
     $zipFile  = $this->getBackupFile($backupId);
 
     foreach ($items as $item) :
       if (is_dir($item)) :
-        $this->fs->createZip($item, $zipDir . basename($item) . '.zip');
+        $this->fileSystem->createZip($item, $zipDir . basename($item) . '.zip');
       elseif (is_file($item)) :
-        $this->fs->copyFile($item, $zipDir . basename($item));
+        $this->fileSystem->copyFile($item, $zipDir . basename($item));
       endif;
     endforeach;
 
     $mysql     = new MysqlDump();
     $mysql->export($zipDir . 'db.sql');
 
-    $this->fs->createZip(untrailingslashit($zipDir), $zipFile);
-    $this->fs->deleteTemporaryDirectory();
+    $this->fileSystem->createZip(untrailingslashit($zipDir), $zipFile);
+    $this->fileSystem->deleteTemporaryDirectory();
 
     $this->deleteOldBackups();
 
@@ -74,7 +74,7 @@ class Controller
   {
     $backups = [];
 
-    foreach ($this->fs->scanDir($this->getBackupDirectory()) as $file) :
+    foreach ($this->fileSystem->scanDir($this->getBackupDirectory()) as $file) :
       if (substr($file, -4) !== '.zip') :
         continue;
       endif;
@@ -82,8 +82,8 @@ class Controller
       $backups[] = $this->normalizeBackupData($file);
     endforeach;
 
-    usort($backups, function ($a, $b) {
-      return $b['dateU'] <=> $a['dateU'];
+    usort($backups, function ($itemA, $itemB) {
+      return $itemA['dateU'] <=> $itemB['dateU'];
     });
 
     return $backups;
@@ -99,7 +99,7 @@ class Controller
 
     return [
       'id'         => (int) preg_replace('/\D/', '', basename($file)),
-      'sizeLegend' => $this->fs->getHumanReadableFileSize($size),
+      'sizeLegend' => $this->fileSystem->getHumanReadableFileSize($size),
       'size'       => $size,
       'dateGtm'    => date('Y-m-d H:i:s', filemtime($file) - HOUR_IN_SECONDS * 3),
       'dateU'      => filemtime($file)
@@ -115,7 +115,7 @@ class Controller
   public function deleteBackup(string $backupId): bool
   {
     $file = $this->getBackupFile($backupId);
-    return file_exists($file) ? $this->fs->deleteFile($file) : false;
+    return file_exists($file) ? $this->fileSystem->deleteFile($file) : false;
   }
 
   public function restoreAsyncBackup(string $backupId, string $remoteBackupFile, string $remoteBackupId): bool
@@ -136,9 +136,9 @@ class Controller
     $this->lockClass();
 
     if ($remoteBackupFile && $remoteBackupId) :
-      $backupFile = $this->fs->downloadExternalResource($remoteBackupFile, $backupId);
+      $backupFile = $this->fileSystem->downloadExternalResource($remoteBackupFile, $backupId);
 
-      $this->fs->moveFile(
+      $this->fileSystem->moveFile(
         $backupFile,
         $this->getBackupDirectory() . $remoteBackupId
       );
@@ -158,20 +158,20 @@ class Controller
       return false;
     endif;
 
-    $this->fs->createTemporaryDirectory();
+    $this->fileSystem->createTemporaryDirectory();
     $restoreDirectory = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $backupId . DIRECTORY_SEPARATOR;
 
-    if (!$this->fs->extractZip($backupFile, $this->fs->getTemporaryDirectoryPath(), false)) :
+    if (!$this->fileSystem->extractZip($backupFile, $this->fileSystem->getTemporaryDirectoryPath(), false)) :
       $this->unlockClass();
       return false;
     endif;
 
-    $this->fs->moveFile(
+    $this->fileSystem->moveFile(
       WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'full-temporary',
       $restoreDirectory
     );
 
-    foreach ($this->fs->scanDir($restoreDirectory) as $item) :
+    foreach ($this->fileSystem->scanDir($restoreDirectory) as $item) :
       if (substr($item, -4) === '.sql') :
         $this->restoreDatabase($item);
 
@@ -184,8 +184,8 @@ class Controller
       endif;
     endforeach;
 
-    $this->fs->deleteDirectory($restoreDirectory);
-    $this->fs->deleteTemporaryDirectory();
+    $this->fileSystem->deleteDirectory($restoreDirectory);
+    $this->fileSystem->deleteTemporaryDirectory();
 
     $this->triggerWebhookEvent('backup:restore-success');
 
@@ -222,7 +222,7 @@ class Controller
       $this->moveToRestoreBackup($wpFile);
     endif;
 
-    $this->fs->moveFile(
+    $this->fileSystem->moveFile(
       $backupFile,
       $wpFile
     );
@@ -234,18 +234,18 @@ class Controller
       set_time_limit(FULL_BACKUP_TIME_LIMIT);
     endif;
 
-    $this->fs->createTemporaryDirectory();
+    $this->fileSystem->createTemporaryDirectory();
 
-    $restoreDirectory = $this->fs->getTemporaryDirectoryPath();
+    $restoreDirectory = $this->fileSystem->getTemporaryDirectoryPath();
     $directory        = str_replace('.zip', '', basename($backupFile));
     $wpDirectory      = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $directory;
 
-    if ($this->fs->extractZip($backupFile, $restoreDirectory)) :
+    if ($this->fileSystem->extractZip($backupFile, $restoreDirectory)) :
       if (is_dir($wpDirectory)) :
         $this->moveToRestoreBackup($wpDirectory, $directory);
       endif;
 
-      $this->fs->moveFile(
+      $this->fileSystem->moveFile(
         $restoreDirectory,
         $wpDirectory
       );
@@ -254,7 +254,7 @@ class Controller
 
   private function moveToRestoreBackup(string $directoryToBackup): void
   {
-    $this->fs->moveFile(
+    $this->fileSystem->moveFile(
       $directoryToBackup,
       untrailingslashit($directoryToBackup) . $this->instanceId,
       false
@@ -275,7 +275,7 @@ class Controller
   {
     $dirs = [];
 
-    foreach ($this->fs->scanDir(WP_CONTENT_DIR) as $path) :
+    foreach ($this->fileSystem->scanDir(WP_CONTENT_DIR) as $path) :
       foreach (self::STOP_WORDS as $word) :
         if (strpos(basename($path), $word) !== false) :
           continue 2;
@@ -328,7 +328,7 @@ class Controller
       $item = array_pop($backups);
       $file = $this->getBackupFile('backup-' . $item['id']);
 
-      $this->fs->deleteFile($file);
+      $this->fileSystem->deleteFile($file);
     endfor;
   }
 }

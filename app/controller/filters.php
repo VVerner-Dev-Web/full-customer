@@ -83,7 +83,7 @@ function restPreServeRequest(bool $served, WP_REST_Response $response)
 
   $buffer   = null;
 
-  foreach ($response->get_headers() as $header => $value) :
+  foreach (array_keys($response->get_headers()) as $header) :
     if ('x-full' !== strtolower($header)) :
       continue;
     endif;

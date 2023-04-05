@@ -3,9 +3,10 @@
 /**
  * Plugin Name:         FULL - Customer
  * Description:         This plugin allows automatic installation and activation of plugins purchased from FULL.
- * Version:             1.1.0
- * Requires at least:   5.6
- * Requires PHP:        7.2
+ * Version:             1.2
+ * Requires at least:   6.0
+ * Tested up to:        6.2
+ * Requires PHP:        7.4
  * Author:              FULL.
  * Author URI:          https://full.services/
  * License:             GPL v3 or later
@@ -15,7 +16,7 @@
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) :
-  define('FULL_CUSTOMER_VERSION', '1.1.0');
+  define('FULL_CUSTOMER_VERSION', '1.2');
   define('FULL_CUSTOMER_FILE', __FILE__);
   define('FULL_CUSTOMER_APP', __DIR__ . '/app');
   define('FULL_BACKUP_TIME_LIMIT', 900);
