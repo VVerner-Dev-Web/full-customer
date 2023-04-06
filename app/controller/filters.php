@@ -74,3 +74,28 @@ function wpPhpErrorArgs(array $args, array $error): array
 
   return $args;
 }
+
+function restPreServeRequest(bool $served, WP_REST_Response $response)
+{
+  if ($served) :
+    return $served;
+  endif;
+
+  $buffer   = null;
+
+  foreach (array_keys($response->get_headers()) as $header) :
+    if ('x-full' !== strtolower($header)) :
+      continue;
+    endif;
+
+    $buffer   = $response->get_data();
+    break;
+  endforeach;
+
+  if (!is_string($buffer)) :
+    return $served;
+  endif;
+
+  echo $buffer;
+  return true;
+}
