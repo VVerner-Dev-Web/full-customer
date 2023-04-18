@@ -6,6 +6,7 @@ require_once FULL_CUSTOMER_APP . '/api/Controller.php';
 
 require_once FULL_CUSTOMER_APP . '/api/Backup.php';
 require_once FULL_CUSTOMER_APP . '/api/Connection.php';
+require_once FULL_CUSTOMER_APP . '/api/Elementor.php';
 require_once FULL_CUSTOMER_APP . '/api/Env.php';
 require_once FULL_CUSTOMER_APP . '/api/Health.php';
 require_once FULL_CUSTOMER_APP . '/api/Login.php';

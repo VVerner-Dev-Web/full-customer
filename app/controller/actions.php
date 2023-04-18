@@ -183,3 +183,15 @@ function notifyPluginError(): bool
   delete_option('full_customer_last_error');
   return true;
 }
+
+function initFullElementorTemplates(): void
+{
+  if (class_exists('\Elementor\Plugin')) :
+    require_once FULL_CUSTOMER_APP . '/elementor/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/elementor/actions.php';
+    require_once FULL_CUSTOMER_APP . '/elementor/filters.php';
+
+    require_once FULL_CUSTOMER_APP . '/elementor/TemplateManager.php';
+    require_once FULL_CUSTOMER_APP . '/elementor/Importer.php';
+  endif;
+}

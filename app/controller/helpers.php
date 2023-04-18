@@ -53,3 +53,11 @@ function isSiteConnectedOnFull(): bool
   $connectionTest = fullGetSiteConnectionData();
   return $connectionTest && $connectionTest->success;
 }
+
+function fullGetTemplatesUrl(string $endpoint = ''): string
+{
+  return add_query_arg([
+    'page'      => 'full-templates',
+    'endpoint'  => $endpoint
+  ], admin_url('admin.php'));
+}

@@ -308,6 +308,11 @@
   transition: 0.3s;
 }
 
+.toggle-switch-sm .toggle-switch-label {
+  width: 2.5rem;
+  height: 1.6125rem;
+}
+
 .toggle-switch-indicator {
   position: absolute;
   left: 0.125rem;
@@ -322,12 +327,24 @@
   margin: 0 !important;
 }
 
+.toggle-switch-sm .toggle-switch-indicator {
+  width: 1.20938rem;
+  height: 1.20938rem;
+}
+
 .toggle-switch-input:checked + .toggle-switch-label {
   background-color: #377dff;
 }
 
 .toggle-switch-input:checked + .toggle-switch-label .toggle-switch-indicator {
   transform: translate3d(1.025rem, 50%, 0);
+}
+
+.toggle-switch-sm
+  .toggle-switch-input:checked
+  + .toggle-switch-label
+  .toggle-switch-indicator {
+  transform: translate3d(0.81094rem, 50%, 0);
 }
 
 .toggle-switch-content {

@@ -1,0 +1,8 @@
+.elementor-add-new-section
+  .elementor-add-section-area-button.elementor-add-full-button {
+  background-color: #212121;
+  background-image: url(../img/icon.png);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  margin-left: 5px;
+}
