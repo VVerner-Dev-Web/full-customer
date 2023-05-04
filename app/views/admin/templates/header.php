@@ -14,16 +14,6 @@
           Seções
         </a>
       </li>
-      <li class="tn-item templately-nav-item <?= 'packs' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('packs') ?>">
-          Packs
-        </a>
-      </li>
-      <li class="tn-item templately-nav-item <?= 'templates' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('templates') ?>">
-          Modelos
-        </a>
-      </li>
       <li class="tn-item templately-nav-item <?= 'cloud' === $endpoint ? 'templately-nav-active' : '' ?>">
         <a href="<?= fullGetTemplatesUrl('cloud') ?>">
           Cloud

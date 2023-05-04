@@ -94,25 +94,28 @@ function addMenuPage(): void
 
 function adminEnqueueScripts(): void
 {
+  $env     = new FullCustomer();
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
   wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], FULL_CUSTOMER_VERSION);
 
   if (isFullsAdminPage()) :
-    $env     = new FullCustomer();
 
+    wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
     wp_enqueue_style('full-swal', $baseUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
     wp_enqueue_script('full-swal', $baseUrl . 'vendor/sweetalert/sweetalert2.min.js', ['jquery'], '11.4.35', true);
 
     wp_enqueue_style('full-admin', $baseUrl . 'css/admin.css', [], FULL_CUSTOMER_VERSION);
-    wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], FULL_CUSTOMER_VERSION, true);
-    wp_localize_script('full-admin', 'full_localize', [
-      'rest_url'      => trailingslashit(rest_url()),
-      'auth'          => wp_create_nonce('wp_rest'),
-      'user_login'    => wp_get_current_user()->user_login,
-      'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
-      'site_url'      => site_url()
-    ]);
   endif;
+
+  wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], FULL_CUSTOMER_VERSION, true);
+  wp_localize_script('full-admin', 'full_localize', [
+    'rest_url'      => trailingslashit(rest_url()),
+    'auth'          => wp_create_nonce('wp_rest'),
+    'user_login'    => wp_get_current_user()->user_login,
+    'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
+    'site_url'      => site_url(),
+    'store_url'     => 'https://full.services'
+  ]);
 }
 
 function upgradePlugin(): void
@@ -193,5 +196,6 @@ function initFullElementorTemplates(): void
 
     require_once FULL_CUSTOMER_APP . '/elementor/TemplateManager.php';
     require_once FULL_CUSTOMER_APP . '/elementor/Importer.php';
+    require_once FULL_CUSTOMER_APP . '/elementor/Exporter.php';
   endif;
 }

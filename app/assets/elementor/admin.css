@@ -40,6 +40,42 @@
   line-height: 2;
 }
 
+.components-button.active {
+  background-color: #5453fd !important;
+  color: #fff !important;
+  cursor: pointer;
+  outline: none;
+}
+
+.cloud-segment {
+  position: relative;
+  background-color: #f8fafd;
+  padding: 0.25rem 0.25rem;
+  border-radius: 0.3125rem;
+  display: inline-flex;
+  margin-bottom: 0;
+  list-style: none;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.cloud-segment .cloud-button {
+  color: #677788;
+  font-size: 0.8125rem;
+  padding: 0.4375rem 0.65625rem;
+  border-radius: 0.3125rem;
+  border: unset;
+  background: transparent;
+  cursor: pointer;
+  transition: 150ms all;
+}
+
+.cloud-segment .cloud-button:hover {
+  color: #1e2022;
+  background-color: #fff;
+  box-shadow: 0 3px 6px 0 rgba(140, 152, 164, 0.25);
+}
+
 /***********************************/
 
 .toplevel_page_full-templates #wpbody,
@@ -6100,6 +6136,7 @@
   justify-content: center;
   padding: 30px 0;
   width: 100%;
+  flex-flow: column;
 }
 
 .templately-wrapper

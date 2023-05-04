@@ -38,3 +38,16 @@ function adminEnqueueScripts(): void
   wp_enqueue_style('full-admin-elementor', $assetsUrl . 'admin.css', [], FULL_CUSTOMER_VERSION);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'admin.js', ['jquery'], FULL_CUSTOMER_VERSION, true);
 }
+
+function manageElementorLibraryPostsCustomColumn(string $column, int $postId)
+{
+  if ('full_templates' !== $column) :
+    return;
+  endif;
+
+  if (get_post_meta($postId, 'full_cloud_id', true)) :
+    echo '<a href="' . fullGetTemplatesUrl('cloud') . '">Gerenciar</a>';
+  else :
+    echo '<a href="#" data-js="send-to-cloud" data-post="' . $postId . '">Enviar para FULL.</a>';
+  endif;
+}
