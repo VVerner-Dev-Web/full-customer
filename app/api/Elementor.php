@@ -65,16 +65,13 @@ class Elementor extends FullCustomerController
   {
     $item   = TemplateManager::instance()->getItem($itemId);
 
-    error_log(print_r($item, true));
-
-    if (!$item?->canBeInstalled) :
+    if (!$item || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
     endif;
 
     $template = $this->downloadJson($item->fileUrl);
     $template['page_title']  = $item->title;
     $template['title']  = $item->title;
-
 
     if (!isset($template['type'])) :
       $template['type']  = 'page';
