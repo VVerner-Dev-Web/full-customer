@@ -28,6 +28,14 @@ class Elementor extends FullCustomerController
       ]
     ]);
 
+    register_rest_route(self::NAMESPACE, '/elementor/sync', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'sync'],
+        'permission_callback' => [$api, 'permissionCallback'],
+      ]
+    ]);
+
     register_rest_route(self::NAMESPACE, '/elementor/send-to-cloud/(?P<post_id>[0-9\-]+)', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
@@ -43,6 +51,16 @@ class Elementor extends FullCustomerController
         'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
+  }
+
+  public function sync(): WP_REST_Response
+  {
+    global $wpdb;
+
+    $sql = "DELETE FROM {$wpdb->options} WHERE option_name LIKE '%_full/cloud/%'";
+    $wpdb->query($sql);
+
+    return new WP_REST_Response();
   }
 
   public function permissionCallback(): bool

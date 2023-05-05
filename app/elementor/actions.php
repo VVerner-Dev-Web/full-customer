@@ -2,6 +2,8 @@
 
 namespace Full\Customer\Elementor\Actions;
 
+use Full\Customer\Elementor\TemplateManager;
+
 defined('ABSPATH') || exit;
 
 function editorBeforeEnqueueStyles(): void
@@ -19,16 +21,13 @@ function editorBeforeEnqueueScripts(): void
 
 function addMenuPages(): void
 {
-  $assetsUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
-
-  add_menu_page(
+  add_submenu_page(
+    'options-general.php',
     'FULL. Templates',
     'FULL. Templates',
     'edit_posts',
     'full-templates',
-    'fullGetAdminPageView',
-    $assetsUrl . 'img/icon.png',
-    5
+    'fullGetAdminPageView'
   );
 }
 
@@ -45,9 +44,12 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId)
     return;
   endif;
 
-  if (get_post_meta($postId, 'full_cloud_id', true)) :
-    echo '<a href="' . fullGetTemplatesUrl('cloud') . '">Gerenciar</a>';
-  else :
-    echo '<a href="#" data-js="send-to-cloud" data-post="' . $postId . '">Enviar para FULL.</a>';
+  $cloudId = (int) get_post_meta($postId, 'full_cloud_id', true);
+  $html    = '<a href="#" data-js="send-to-cloud" data-post="' . $postId . '">Enviar para FULL.</a>';
+
+  if ($cloudId && TemplateManager::instance()->getCloudItem($cloudId)) :
+    $html = '<a href="' . fullGetTemplatesUrl('cloud') . '">Gerenciar</a>';
   endif;
+
+  echo  $html;
 }

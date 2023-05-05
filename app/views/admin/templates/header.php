@@ -4,14 +4,9 @@
   </div>
   <div class="templately-nav-wrapper templately-menu">
     <ul class="templately-nav">
-      <li class="tn-item templately-nav-item <?= 'pages' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('pages') ?>">
-          Páginas
-        </a>
-      </li>
-      <li class="tn-item templately-nav-item <?= 'blocks' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('blocks') ?>">
-          Seções
+      <li class="tn-item templately-nav-item <?= 'templates' === $endpoint ? 'templately-nav-active' : '' ?>">
+        <a href="<?= fullGetTemplatesUrl('templates') ?>">
+          Templates
         </a>
       </li>
       <li class="tn-item templately-nav-item <?= 'cloud' === $endpoint ? 'templately-nav-active' : '' ?>">

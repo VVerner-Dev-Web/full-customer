@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+### 2.0.2
+
+- Novas funcionalidades e correções gerais relacionadas aos templates
+
 ### 2.0.1
 
 - Correção para que o plugin possa ser utilizado em versões 7.4 do PHP

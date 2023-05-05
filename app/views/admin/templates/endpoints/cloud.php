@@ -9,6 +9,12 @@
           Meu Cloud
         </a>
       </li>
+      <li class="tn-item nav-item-clouds">
+        <a href="#!" data-js="sync-cloud-template">
+          <i class="tio-sync"></i>
+          Sincronizar cloud
+        </a>
+      </li>
     </ul>
   </div>
 

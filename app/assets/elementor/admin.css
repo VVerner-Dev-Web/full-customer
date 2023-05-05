@@ -76,6 +76,10 @@
   box-shadow: 0 3px 6px 0 rgba(140, 152, 164, 0.25);
 }
 
+.syncing-full-cloud i {
+  animation: rotation 2s linear infinite reverse;
+}
+
 /***********************************/
 
 .toplevel_page_full-templates #wpbody,

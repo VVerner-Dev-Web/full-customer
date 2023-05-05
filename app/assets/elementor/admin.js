@@ -78,6 +78,37 @@ jQuery(function ($) {
     return categories;
   };
 
+  const deleteCloudItem = (item) => {
+    const endpoint = "full-customer/elementor/delete-from-cloud/" + item.id;
+
+    fetch(FULL.rest_url + endpoint, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-WP-Nonce": FULL.auth,
+      },
+    }).then((response) => {
+      return response.json();
+    });
+  };
+
+  const installTemplateItem = (mode, item) => {
+    const endpoint = "full-customer/elementor/install/";
+
+    return fetch(FULL.rest_url + endpoint, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-WP-Nonce": FULL.auth,
+      },
+      body: JSON.stringify({ mode, item }),
+    }).then((response) => {
+      return response.json();
+    });
+  };
+
   $("#full-template-filter input").on("change", resetAndFetchTemplates);
 
   $(".templately-plan-switcher button").on("click", function (e) {
@@ -105,8 +136,6 @@ jQuery(function ($) {
   if ($templatesListContainer.length) {
     resetAndFetchTemplates();
   }
-
-  /**********************/
 
   $(document).on("click", "[data-js='insert-item']", function (e) {
     e.preventDefault();
@@ -149,8 +178,6 @@ jQuery(function ($) {
       ? $(this).data("href")
       : FULL.store_url;
   });
-
-  /**********************/
 
   $('[data-js="send-to-cloud"]').on("click", function (e) {
     e.preventDefault();
@@ -218,36 +245,37 @@ jQuery(function ($) {
     });
   });
 
-  /**********************/
+  $(document).on(
+    "click",
+    '[data-js="sync-cloud-template"]:not(.syncing-full-cloud)',
+    function (e) {
+      e.preventDefault();
 
-  function deleteCloudItem(item) {
-    const endpoint = "full-customer/elementor/delete-from-cloud/" + item.id;
+      $(this).addClass("syncing-full-cloud");
 
-    fetch(FULL.rest_url + endpoint, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        "X-WP-Nonce": FULL.auth,
-      },
-    }).then((response) => {
-      return response.json();
-    });
-  }
+      const endpoint = "full-customer/elementor/sync";
 
-  function installTemplateItem(mode, item) {
-    const endpoint = "full-customer/elementor/install/";
+      fetch(FULL.rest_url + endpoint, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-WP-Nonce": FULL.auth,
+        },
+      }).then((response) => {
+        $(this).removeClass("syncing-full-cloud");
 
-    return fetch(FULL.rest_url + endpoint, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        "X-WP-Nonce": FULL.auth,
-      },
-      body: JSON.stringify({ mode, item }),
-    }).then((response) => {
-      return response.json();
-    });
-  }
+        Swal.fire({
+          titleText: "Cache excluído",
+          confirmButtonText: "Obrigado",
+          showLoaderOnDeny: true,
+          html: '<p>Pronto! Todos os caches relacionados a biblioteca foram limpos e seus modelos serão verificados na próxima vez que você acessar a página de "Modelos" do Elementor</p>',
+          customClass: {
+            container: "full-template-popup",
+          },
+          preDeny: () => deleteCloudItem($el.data("item")),
+        });
+      });
+    }
+  );
 });

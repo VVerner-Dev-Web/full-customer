@@ -46,42 +46,41 @@ class TemplateManager
 
     $item  = json_decode($response);
 
-    return $item && $item->id ? $item : null;
+    return $item && isset($item->id) ? $item : null;
   }
 
   public function getCloudItem(int $itemId): ?stdClass
   {
-    $full = new FullCustomer();
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud/';
+    $item = get_transient('full/cloud/' . $itemId);
 
-    $payload = [
-      'site'  => site_url(),
-      'id'    => $itemId,
-    ];
+    if (!$item) :
+      $full = new FullCustomer();
+      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud/';
 
-    $request = wp_remote_get($url, ['sslverify' => false, 'body' => $payload]);
-    $response = wp_remote_retrieve_body($request);
+      $payload = [
+        'site'  => site_url(),
+        'id'    => $itemId,
+      ];
 
-    $item  = json_decode($response);
+      $request = wp_remote_get($url, ['sslverify' => false, 'body' => $payload]);
+      $response = wp_remote_retrieve_body($request);
 
-    return $item && $item->id ? $item : null;
+      $item  = json_decode($response);
+      set_transient('full/cloud/' . $itemId, $item, MONTH_IN_SECONDS);
+    endif;
+
+    return $item && isset($item->id) ? $item : null;
   }
 
   public function getCategories(): array
   {
-    $response = get_transient('full-template-categories');
+    $full = new FullCustomer();
+    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-categories';
 
-    if (!$response) :
-      $full = new FullCustomer();
-      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-categories';
+    $request  = wp_remote_get($url, ['sslverify' => false]);
+    $response = wp_remote_retrieve_body($request);
+    $response = json_decode($response);
 
-      $request  = wp_remote_get($url, ['sslverify' => false]);
-      $response = wp_remote_retrieve_body($request);
-      $response = json_decode($response);
-
-      set_transient('full-template-categories', $response, DAY_IN_SECONDS);
-    endif;
-
-    return $response;
+    return $response ? $response : [];
   }
 }

@@ -53,9 +53,6 @@ $item   = TemplateManager::instance()->getItem($itemId);
           <div class="templately-items-sidebar templately-item-widget">
             <ul>
               <li>
-                <span class="label">Tipo:</span> <?= $item->typeLabel ?>
-              </li>
-              <li>
                 <span class="label">Categorias:</span> <?= implode(', ', wp_list_pluck($item->categories, 'name')) ?>
               </li>
               <li class="templately-details-price-wrapper">
@@ -70,16 +67,21 @@ $item   = TemplateManager::instance()->getItem($itemId);
             <br>
 
             <?php if ($item->canBeInstalled) : ?>
-              <a class="templately-button tb-import tb-purchase" data-js="insert-item" data-item='<?= wp_json_encode($item) ?>'>
+              <a class="templately-button tb-import tb-purchase" data-js="insert-item" data-item='<?= wp_json_encode($item) ?>' style="background-color: #eabc32; margin-right: 1em;">
                 <i class="tio-download-from-cloud" style="margin-right: 5px;"></i>
                 Inserir
               </a>
             <?php else : ?>
-              <a target="_blank" href="https://full.services" class="templately-button tb-import tb-purchase">
+              <a target="_blank" href="<?= $item->purchaseUrl ?>" class="templately-button tb-import tb-purchase" style="background-color: #eabc32">
                 <i class="tio-shopping-icon" style="margin-right: 5px;"></i>
                 Comprar
               </a>
             <?php endif; ?>
+
+            <a target="_blank" href="<?= $item->purchaseUrl ?>" class="templately-button tb-import tb-purchase">
+              <i class="tio-visible-outlined" style="margin-right: 5px;"></i>
+              Mais detalhes
+            </a>
           </div>
         </div>
       </div>

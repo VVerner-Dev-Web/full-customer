@@ -74,20 +74,19 @@ use Full\Customer\Elementor\TemplateManager; ?>
         </div>
       </a>
       <div class="templately-item-details">
+        <a class="templately-title" href="<?= fullGetTemplatesUrl('single') ?>&item={id}" style="font-size: 15px; display: block; margin-bottom: 10px;">
+          <h4 style="margin: 0">
+            {title}
+          </h4>
+        </a>
+          
         <div class="templately-item-meta">
           <span class="templately-item-meta-single tb-item-price">
             {formattedPrice}
           </span>
 
-
           {button}
         </div>
-
-        <a class="templately-title" href="<?= fullGetTemplatesUrl('single') ?>&item={id}">
-          <h4>
-            {title}
-          </h4>
-        </a>
       </div>
     </div>
   </div>
