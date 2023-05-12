@@ -10,7 +10,7 @@ endif;
     <?php require __DIR__ . '/templates/header.php' ?>
 
     <div class="templately-container templately-pages-container">
-      <div class="templately-container-row">
+      <div class="templately-container-row" id="endpoint-viewport">
         <?php require __DIR__ . '/templates/endpoints/' . $endpointView . '.php' ?>
       </div>
     </div>

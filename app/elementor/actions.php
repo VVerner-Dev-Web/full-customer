@@ -18,7 +18,7 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
 }
 
-function editorBeforeEnqueueScripts(): void
+function editorAfterEnqueueScripts(): void
 {
   $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
   $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
@@ -27,7 +27,7 @@ function editorBeforeEnqueueScripts(): void
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
 
-  wp_localize_script('full-elementor', 'full_localize', fullGetLocalize());
+  wp_localize_script('full-elementor', 'FULL', fullGetLocalize());
 }
 
 

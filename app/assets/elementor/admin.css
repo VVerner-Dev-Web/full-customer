@@ -80,6 +80,10 @@
   animation: rotation 2s linear infinite reverse;
 }
 
+#wpfooter {
+  display: none;
+}
+
 /***********************************/
 
 .settings_page_full-templates #wpbody,
@@ -2338,7 +2342,7 @@
 }
 
 .templately-wrapper .templately-container {
-  height: calc(100% - 70px);
+  /* height: calc(100% - 70px); */
   position: relative;
 }
 
@@ -3490,6 +3494,7 @@
   padding-top: 30px;
   scrollbar-color: #a79c9c rgba(0, 0, 0, 0.1);
   scrollbar-width: thin;
+  background: #e9eef3;
 }
 
 .templately-wrapper .templately-container .templately-contents a:focus,

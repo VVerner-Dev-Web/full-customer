@@ -9,7 +9,7 @@ add_action('admin_enqueue_scripts', '\Full\Customer\Elementor\Actions\adminEnque
 
 add_action('elementor/editor/before_enqueue_styles', 'Full\Customer\Elementor\Actions\editorBeforeEnqueueStyles');
 add_action('elementor/preview/enqueue_styles', 'Full\Customer\Elementor\Actions\editorBeforeEnqueueStyles');
-add_action('elementor/editor/before_enqueue_scripts', 'Full\Customer\Elementor\Actions\editorBeforeEnqueueScripts');
+add_action('elementor/editor/after_enqueue_scripts', 'Full\Customer\Elementor\Actions\editorAfterEnqueueScripts');
 add_action('elementor/editor/footer', 'Full\Customer\Elementor\Actions\editorFooter');
 
 add_filter('manage_elementor_library_posts_columns', 'Full\Customer\Elementor\Filters\manageElementorLibraryPostsColumns');

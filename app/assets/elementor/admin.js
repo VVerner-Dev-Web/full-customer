@@ -1,7 +1,48 @@
-jQuery(function ($) {
+(function ($) {
+  "use strict";
+
   let canBeLoaded = true;
-  const FULL = full_localize;
   const IN_ELEMENTOR = typeof window.elementor !== "undefined";
+
+  const SWAL_SETTINGS = {
+    elementor: (item) => {
+      return {
+        titleText: item.title,
+        showConfirmButton: true,
+        showDenyButton: true,
+        confirmButtonText: "Inserir na página",
+        denyButtonText: "Cancelar",
+        showLoaderOnConfirm: true,
+        showLoaderOnDeny: true,
+        backdrop: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        html: "<p>Adicione este template na sua página agora mesmo!</p>",
+        customClass: {
+          container: "full-template-popup",
+        },
+        preConfirm: () => installTemplateItem("builder", item),
+      };
+    },
+    admin: (item) => ({
+      titleText: item.title,
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: "Inserir como página",
+      denyButtonText: "Inserir como modelo",
+      showLoaderOnConfirm: true,
+      showLoaderOnDeny: true,
+      backdrop: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      html:
+        "<p>Crie uma nova página a partir deste modelo para disponibilizá-la como uma página de rascunho em sua lista de páginas.</p>" +
+        "<p>Importe este modelo para sua biblioteca para disponibilizá-lo em sua lista de modelos salvos do Elementor para uso futuro.</p>",
+      customClass: {
+        container: "full-template-popup",
+      },
+      preDeny: () => installTemplateItem("template", item),
+      preConfirm: () => installTemplateItem("page", item),
+    }),
+  };
 
   const resetAndFetchTemplates = () => {
     $("#response-container").data("page", 1).html("");
@@ -108,22 +149,41 @@ jQuery(function ($) {
   };
 
   const bindScrollEvent = () => {
-    $(".templately-contents").on("scroll", function () {
-      const offset = 500;
-      const scrollContainer = $(".templately-contents")[0];
+    if (IN_ELEMENTOR) {
+      $(".templately-contents").on("scroll", function () {
+        const scrollContainer = $(".templately-contents")[0];
 
-      const clientHeight = document
-        .querySelector(".full-templates-admin-body")
-        .getBoundingClientRect().height;
+        const clientHeight = document
+          .querySelector(".full-templates-admin-body")
+          .getBoundingClientRect().height;
 
-      const scrollHeight = scrollContainer.scrollHeight;
-      const scrollTop = scrollContainer.scrollTop;
-      const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
+        const scrollHeight = scrollContainer.scrollHeight;
+        const scrollTop = scrollContainer.scrollTop;
 
-      if (reachBottom && canBeLoaded) {
-        fetchTemplates();
-      }
-    });
+        const offset = scrollHeight * 0.15;
+
+        const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
+
+        if (reachBottom && canBeLoaded) {
+          fetchTemplates();
+        }
+      });
+    } else {
+      $(window).on("scroll", function () {
+        const clientHeight = jQuery(window).height();
+
+        const scrollHeight = jQuery(document).height();
+        const scrollTop = jQuery(document).scrollTop();
+
+        const offset = scrollHeight * 0.15;
+
+        const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
+
+        if (reachBottom && canBeLoaded) {
+          fetchTemplates();
+        }
+      });
+    }
   };
 
   const addTemplateToElementorBuilder = (template) => {
@@ -135,44 +195,6 @@ jQuery(function ($) {
     }
 
     $(document).trigger("full-templates/imported");
-  };
-
-  const SWAL_SETTINGS = {
-    elementor: (item) => {
-      return {
-        titleText: item.title,
-        showConfirmButton: true,
-        showDenyButton: true,
-        confirmButtonText: "Inserir na página",
-        denyButtonText: "Cancelar",
-        showLoaderOnConfirm: true,
-        showLoaderOnDeny: true,
-        allowOutsideClick: () => !Swal.isLoading(),
-        html: "<p>Adicione este template na sua página agora mesmo!</p>",
-        customClass: {
-          container: "full-template-popup",
-        },
-        preConfirm: () => installTemplateItem("builder", item),
-      };
-    },
-    admin: (item) => ({
-      titleText: item.title,
-      showConfirmButton: true,
-      showDenyButton: true,
-      confirmButtonText: "Inserir como página",
-      denyButtonText: "Inserir como modelo",
-      showLoaderOnConfirm: true,
-      showLoaderOnDeny: true,
-      allowOutsideClick: () => !Swal.isLoading(),
-      html:
-        "<p>Crie uma nova página a partir deste modelo para disponibilizá-la como uma página de rascunho em sua lista de páginas.</p>" +
-        "<p>Importe este modelo para sua biblioteca para disponibilizá-lo em sua lista de modelos salvos do Elementor para uso futuro.</p>",
-      customClass: {
-        container: "full-template-popup",
-      },
-      preDeny: () => installTemplateItem("template", item),
-      preConfirm: () => installTemplateItem("page", item),
-    }),
   };
 
   $(document).on(
@@ -198,6 +220,10 @@ jQuery(function ($) {
     Swal.fire(
       IN_ELEMENTOR ? SWAL_SETTINGS.elementor(item) : SWAL_SETTINGS.admin(item)
     ).then((response) => {
+      if (response.isDismissed) {
+        return;
+      }
+
       const data = response.value;
 
       if (data.error) {
@@ -224,7 +250,7 @@ jQuery(function ($) {
       : FULL.store_url;
   });
 
-  $('[data-js="send-to-cloud"]').on("click", function (e) {
+  $(document).on("click", '[data-js="send-to-cloud"]', function (e) {
     e.preventDefault();
 
     const $el = $(this);
@@ -260,6 +286,7 @@ jQuery(function ($) {
       confirmButtonText: "Voltar",
       denyButtonText: "Excluir",
       showLoaderOnDeny: true,
+      backdrop: true,
       allowOutsideClick: () => !Swal.isLoading(),
       html:
         "<p>Tem certeza que quer excluir este template?</p>" +
@@ -333,4 +360,4 @@ jQuery(function ($) {
     resetAndFetchTemplates();
     bindScrollEvent();
   }
-});
+})(jQuery);

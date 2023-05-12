@@ -107,7 +107,7 @@ function adminEnqueueScripts(): void
   endif;
 
   wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], $version, true);
-  wp_localize_script('full-admin', 'full_localize', fullGetLocalize());
+  wp_localize_script('full-admin', 'FULL', fullGetLocalize());
 }
 
 function upgradePlugin(): void
