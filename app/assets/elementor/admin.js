@@ -186,11 +186,35 @@
     }
   };
 
+  const getTemplatePositionToInsert = () => {
+    let at = -1;
+
+    const children = elementor
+      .getPreviewContainer()
+      .view.getChildViewContainer()
+      .children();
+
+    for (const child of children) {
+      console.log(child.dataset.view);
+      at++;
+
+      if ("choose-action" === child.dataset.view) {
+        break;
+      }
+    }
+
+    return at;
+  };
+
   const addTemplateToElementorBuilder = (template) => {
     for (let i = 0; i < template.content.length; i++) {
       window.$e.run("document/elements/create", {
         container: window.elementor.getPreviewContainer(),
         model: template.content[i],
+        options: {
+          at: getTemplatePositionToInsert(),
+          withPageSettings: null,
+        },
       });
     }
 
@@ -238,6 +262,8 @@
 
       if (response.isConfirmed) {
         addTemplateToElementorBuilder(data.builder);
+
+        // fechar trqecuino de import
       }
     });
   });

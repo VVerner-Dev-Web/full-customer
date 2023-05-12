@@ -187,7 +187,10 @@ class Elementor extends FullCustomerController
       'site'  => site_url(),
       'title' => $request->get_param('templateName'),
       'type'  => $type,
-      'json'  => json_encode(compact('type', 'content'))
+      'json'  => wp_slash(json_encode(
+        compact('type', 'content'),
+        JSON_UNESCAPED_LINE_TERMINATORS | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+      ))
     ];
 
     $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';

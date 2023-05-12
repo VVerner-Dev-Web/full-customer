@@ -51,7 +51,7 @@ class TemplateManager
 
   public function getCloudItem(int $itemId): ?stdClass
   {
-    $item = get_transient('full/cloud/' . $itemId);
+    $item = get_transient('full/cloud2/' . $itemId);
 
     if (!$item) :
       $full = new FullCustomer();
