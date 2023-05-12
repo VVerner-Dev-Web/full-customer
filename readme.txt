@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.0.3
+
+- Templates integrados diretamente ao construtor do Elementor
+
 ### 2.0.2
 
 - Novas funcionalidades e correções gerais relacionadas aos templates
