@@ -94,7 +94,7 @@ function addMenuPage(): void
 
 function adminEnqueueScripts(): void
 {
-  $version = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+  $version = getFullAssetsVersion();
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
   wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
 

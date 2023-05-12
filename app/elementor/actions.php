@@ -9,7 +9,7 @@ defined('ABSPATH') || exit;
 function editorBeforeEnqueueStyles(): void
 {
   $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
-  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+  $version    = getFullAssetsVersion();
 
   wp_enqueue_style('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
   wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
@@ -21,7 +21,7 @@ function editorBeforeEnqueueStyles(): void
 function editorAfterEnqueueScripts(): void
 {
   $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
-  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+  $version    = getFullAssetsVersion();
 
   wp_enqueue_script('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.js', ['jquery'], '11.4.35', true);
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
@@ -46,7 +46,7 @@ function addMenuPages(): void
 function adminEnqueueScripts(): void
 {
   $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
-  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+  $version    = getFullAssetsVersion();
 
   wp_enqueue_style('full-admin-elementor', $assetsUrl . 'admin.css', [], $version);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'admin.js', ['jquery'], $version, true);

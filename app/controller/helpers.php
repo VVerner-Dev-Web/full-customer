@@ -18,6 +18,11 @@ function fullGetImageUrl(string $image): string
   return trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/img/' . $image;
 }
 
+function getFullAssetsVersion(): string
+{
+  return 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+}
+
 function isFullsAdminPage(): bool
 {
   $page = filter_input(INPUT_GET, 'page');
