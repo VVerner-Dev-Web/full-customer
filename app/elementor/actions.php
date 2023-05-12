@@ -30,7 +30,6 @@ function editorAfterEnqueueScripts(): void
   wp_localize_script('full-elementor', 'FULL', fullGetLocalize());
 }
 
-
 function addMenuPages(): void
 {
   add_submenu_page(
