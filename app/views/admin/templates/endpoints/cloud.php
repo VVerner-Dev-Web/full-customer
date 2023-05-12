@@ -34,7 +34,7 @@
   _SCRIPTS_DIVIDER_
 <?php endif; ?>
 
-<script type="text/template" id="tpl-templately-item">
+<script type="text/template" id="tpl-templately-cloud-item">
   <div class="templately-table-row single-cloud-item">
     <div class="templately-table-column ">
       <div class="templatey-cloud-header">

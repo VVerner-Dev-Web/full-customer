@@ -239,7 +239,9 @@
     buttonHtml = buttonHtml?.replace("{purchaseUrl}", item.purchaseUrl);
     html = html.replace("{button}", buttonHtml);
 
-    let categoriesList = item.categories.map((item) => item.name);
+    let categoriesList = item?.categories
+      ? item.categories.map((item) => item.name)
+      : [];
     categoriesList = categoriesList.length
       ? categoriesList.join(", ")
       : "Sem categoria";

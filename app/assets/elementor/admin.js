@@ -84,7 +84,11 @@
   };
 
   const parseTemplateHtml = (item) => {
-    let html = $("#tpl-templately-item").html();
+    const selector =
+      "cloud" === item.origin
+        ? "#tpl-templately-cloud-item"
+        : "#tpl-templately-item";
+    let html = $(selector).html();
 
     Object.entries(item).forEach((data) => {
       const [key, value] = data;
