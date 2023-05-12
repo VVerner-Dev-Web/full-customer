@@ -2,6 +2,7 @@
   text-align: left;
   font-size: 1.5em;
   line-height: 1;
+  padding: 0;
 }
 
 .full-template-popup .swal2-html-container > p {
@@ -11,7 +12,7 @@
 }
 
 .full-template-popup .swal2-input {
-  margin: 1em 1.4em 0.3em;
+  margin: 1em 0 0.3em;
   background-color: #e8f0f7;
   color: #2c3338;
   border: 0;
@@ -25,7 +26,7 @@
 
 .full-template-popup .swal2-footer {
   border-top: unset;
-  display: block !important;
+  display: none;
   padding-top: 0;
 }
 
@@ -38,6 +39,31 @@
 .full-template-popup .swal2-footer a {
   font-size: 17px;
   line-height: 2;
+}
+
+.full-template-popup .swal2-popup.swal2-modal.swal2-show {
+  padding: 1.3em 1.5em;
+}
+
+.full-template-popup .swal2-styled {
+  margin-bottom: 0;
+}
+
+.full-template-popup .swal2-deny.swal2-styled {
+  background: #dc3741;
+}
+
+.full-template-popup .swal2-confirm.swal2-styled {
+  background: #00c9a7;
+}
+
+.full-template-popup .swal2-actions {
+  justify-content: flex-end;
+}
+
+.full-template-popup #swal2-html-container {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .components-button.active {
