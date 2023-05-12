@@ -4,6 +4,7 @@
   const VIEWS = {
     templates: $('.full-templates[data-endpoint="templates"]').html(),
     cloud: $('.full-templates[data-endpoint="cloud"]').html(),
+    single: $('.full-templates[data-endpoint="single"]').html(),
   };
 
   const insertAddSectionButton = () => {
@@ -220,6 +221,42 @@
       }).then(swalSendToCloudCallback);
     }
   );
+
+  $(document).on("click", ".templately-page-item a", function (e) {
+    e.preventDefault();
+    const item = $(this).parents(".templately-page-item").data("item");
+    let html = VIEWS.single;
+
+    Object.entries(item).forEach((data) => {
+      const [key, value] = data;
+      html = html.replace(new RegExp("{" + key + "}", "g"), value);
+    });
+
+    let buttonHtml = item?.canBeInstalled
+      ? $("#tpl-single-button-insert-item").html()
+      : $("#tpl-single-button-purchase-item").html();
+
+    buttonHtml = buttonHtml?.replace("{purchaseUrl}", item.purchaseUrl);
+    html = html.replace("{button}", buttonHtml);
+
+    let categoriesList = item.categories.map((item) => item.name);
+    categoriesList = categoriesList.length
+      ? categoriesList.join(", ")
+      : "Sem categoria";
+
+    html = html.replace(/{categoriesList}/g, categoriesList);
+    html = html.replace(
+      /{priceTagTitle}/g,
+      parseFloat(item.price) > 0 ? "Premium" : "Grátis"
+    );
+
+    html = html.replace(/{json}/g, JSON.stringify(item));
+
+    const container = window.FullModal.getElements("content");
+    container.get(0).innerHTML = html;
+
+    $(document).trigger("full-templates/ready");
+  });
 
   insertAddSectionButton();
   initFullModal();

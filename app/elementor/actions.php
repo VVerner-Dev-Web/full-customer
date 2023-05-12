@@ -71,14 +71,23 @@ function editorFooter(): void
 {
   $endpoints = [
     'templates',
-    'cloud'
+    'cloud',
+    'single'
   ];
+
+  $templateAsScript = true; // VIEW
 
   foreach ($endpoints as $endpointView) :
     ob_start();
     require FULL_CUSTOMER_APP . '/views/admin/templates.php';
     $content = ob_get_clean();
+    $content = explode('_SCRIPTS_DIVIDER_', $content);
 
-    echo '<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . $content . '</script>';
+    echo '<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . array_shift($content) . '</script>';
+
+    foreach ($content as $script) :
+      echo $script;
+    endforeach;
+
   endforeach;
 }

@@ -60,8 +60,12 @@ use Full\Customer\Elementor\TemplateManager; ?>
   </div>
 </div>
 
+<?php if (isset($templateAsScript)) : ?>
+  _SCRIPTS_DIVIDER_
+<?php endif; ?>
+
 <script type="text/template" id="tpl-templately-item">
-  <div class="templately-item templately-page-item" data-filter="{priceTag}">
+  <div class="templately-item templately-page-item" data-filter="{priceTag}" data-item='{json}'>
     <div class="templately-item-inner">
       <a class="templately-item-image-hover-wrapper " href="<?= fullGetTemplatesUrl('single') ?>&item={id}">
         <div class="templately-item-image-container ">
