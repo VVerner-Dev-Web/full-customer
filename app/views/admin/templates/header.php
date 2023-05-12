@@ -4,13 +4,13 @@
   </div>
   <div class="templately-nav-wrapper templately-menu">
     <ul class="templately-nav">
-      <li class="tn-item templately-nav-item <?= 'templates' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('templates') ?>">
+      <li class="tn-item templately-nav-item <?= 'templates' === $endpointView ? 'templately-nav-active' : '' ?>">
+        <a href="<?= fullGetTemplatesUrl('templates') ?>" data-endpoint="templates">
           Templates
         </a>
       </li>
-      <li class="tn-item templately-nav-item <?= 'cloud' === $endpoint ? 'templately-nav-active' : '' ?>">
-        <a href="<?= fullGetTemplatesUrl('cloud') ?>">
+      <li class="tn-item templately-nav-item <?= 'cloud' === $endpointView ? 'templately-nav-active' : '' ?>">
+        <a href="<?= fullGetTemplatesUrl('cloud') ?>" data-endpoint="cloud">
           Cloud
         </a>
       </li>

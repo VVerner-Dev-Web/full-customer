@@ -1,20 +1,18 @@
 jQuery(function ($) {
   let canBeLoaded = true;
   const FULL = full_localize;
-  const $templatesListContainer = $("#response-container");
-  const $scrollContainer = $(".templately-contents");
+  const IN_ELEMENTOR = typeof window.elementor !== "undefined";
 
   const resetAndFetchTemplates = () => {
-    $templatesListContainer.data("page", 1);
-    $templatesListContainer.html("");
+    $("#response-container").data("page", 1).html("");
     fetchTemplates();
   };
 
   const fetchTemplates = () => {
     canBeLoaded = false;
 
-    const type = $templatesListContainer.data("type");
-    const page = parseInt($templatesListContainer.data("page"));
+    const type = $("#response-container").data("type");
+    const page = parseInt($("#response-container").data("page"));
     const site = FULL.site_url;
     const price = getCurrentPriceFilter();
     const categories = getCurrentCategoriesFilter();
@@ -26,7 +24,7 @@ jQuery(function ($) {
     }
 
     $.getJSON(apiUrl, { type, price, site, categories }, function (response) {
-      $templatesListContainer.data("page", page + 1);
+      $("#response-container").data("page", page + 1);
 
       if (1 === page && !response.items.length) {
         $("#no-items").show();
@@ -37,7 +35,7 @@ jQuery(function ($) {
 
       for (const item of response.items) {
         const html = parseTemplateHtml(item);
-        $templatesListContainer.append(html);
+        $("#response-container").append(html);
       }
 
       canBeLoaded = response.totalPages > response.currentPage;
@@ -109,40 +107,55 @@ jQuery(function ($) {
     });
   };
 
-  $("#full-template-filter input").on("change", resetAndFetchTemplates);
+  const bindScrollEvent = () => {
+    $(".templately-contents").on("scroll", function () {
+      const offset = 500;
+      const scrollContainer = $(".templately-contents")[0];
 
-  $(".templately-plan-switcher button").on("click", function (e) {
-    e.preventDefault();
+      const clientHeight = document
+        .querySelector(".full-templates-admin-body")
+        .getBoundingClientRect().height;
 
-    $(".templately-plan-switcher button").removeClass("active");
-    $(this).addClass("active");
+      const scrollHeight = scrollContainer.scrollHeight;
+      const scrollTop = scrollContainer.scrollTop;
+      const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
 
-    resetAndFetchTemplates();
-  });
+      if (reachBottom && canBeLoaded) {
+        fetchTemplates();
+      }
+    });
+  };
 
-  $scrollContainer.on("scroll", function () {
-    const offset = 500;
-
-    const clientHeight = $scrollContainer[0].clientHeight;
-    const scrollHeight = $scrollContainer[0].scrollHeight;
-    const scrollTop = $scrollContainer[0].scrollTop;
-    const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
-
-    if (reachBottom && canBeLoaded) {
-      fetchTemplates();
+  const addTemplateToElementorBuilder = (template) => {
+    for (let i = 0; i < template.content.length; i++) {
+      window.$e.run("document/elements/create", {
+        container: window.elementor.getPreviewContainer(),
+        model: template.content[i],
+      });
     }
-  });
 
-  if ($templatesListContainer.length) {
-    resetAndFetchTemplates();
-  }
+    $(document).trigger("full-templates/imported");
+  };
 
-  $(document).on("click", "[data-js='insert-item']", function (e) {
-    e.preventDefault();
-
-    const item = $(this).data("item");
-
-    Swal.fire({
+  const SWAL_SETTINGS = {
+    elementor: (item) => {
+      return {
+        titleText: item.title,
+        showConfirmButton: true,
+        showDenyButton: true,
+        confirmButtonText: "Inserir na página",
+        denyButtonText: "Cancelar",
+        showLoaderOnConfirm: true,
+        showLoaderOnDeny: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        html: "<p>Adicione este template na sua página agora mesmo!</p>",
+        customClass: {
+          container: "full-template-popup",
+        },
+        preConfirm: () => installTemplateItem("builder", item),
+      };
+    },
+    admin: (item) => ({
       titleText: item.title,
       showConfirmButton: true,
       showDenyButton: true,
@@ -159,7 +172,32 @@ jQuery(function ($) {
       },
       preDeny: () => installTemplateItem("template", item),
       preConfirm: () => installTemplateItem("page", item),
-    }).then((response) => {
+    }),
+  };
+
+  $(document).on(
+    "change",
+    "#full-template-filter input",
+    resetAndFetchTemplates
+  );
+
+  $(document).on("click", ".templately-plan-switcher button", function (e) {
+    e.preventDefault();
+
+    $(".templately-plan-switcher button").removeClass("active");
+    $(this).addClass("active");
+
+    resetAndFetchTemplates();
+  });
+
+  $(document).on("click", "[data-js='insert-item']", function (e) {
+    e.preventDefault();
+
+    const item = $(this).data("item");
+
+    Swal.fire(
+      IN_ELEMENTOR ? SWAL_SETTINGS.elementor(item) : SWAL_SETTINGS.admin(item)
+    ).then((response) => {
       const data = response.value;
 
       if (data.error) {
@@ -167,7 +205,14 @@ jQuery(function ($) {
         return;
       }
 
-      Swal.fire("Feito", "Template importado com sucesso!", "success");
+      if (!IN_ELEMENTOR) {
+        Swal.fire("Feito", "Template importado com sucesso!", "success");
+        return;
+      }
+
+      if (response.isConfirmed) {
+        addTemplateToElementorBuilder(data.builder);
+      }
     });
   });
 
@@ -278,4 +323,14 @@ jQuery(function ($) {
       });
     }
   );
+
+  $(document).on("full-templates/ready", function () {
+    resetAndFetchTemplates();
+    bindScrollEvent();
+  });
+
+  if ($("#response-container").length) {
+    resetAndFetchTemplates();
+    bindScrollEvent();
+  }
 });

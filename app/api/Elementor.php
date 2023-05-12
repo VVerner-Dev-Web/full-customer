@@ -36,6 +36,14 @@ class Elementor extends FullCustomerController
       ]
     ]);
 
+    register_rest_route(self::NAMESPACE, '/elementor/send-to-cloud', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'builderSendToCloud'],
+        'permission_callback' => [$api, 'permissionCallback'],
+      ]
+    ]);
+
     register_rest_route(self::NAMESPACE, '/elementor/send-to-cloud/(?P<post_id>[0-9\-]+)', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
@@ -73,10 +81,11 @@ class Elementor extends FullCustomerController
     $item   = $request->get_param('item');
     $itemId = (int) $item['id'];
     $origin = sanitize_title($item['origin']);
+    $mode   = sanitize_title($request->get_param('mode'));
 
     return ('template' === $origin) ?
-      $this->installTemplate($itemId, $request->get_param('mode')) :
-      $this->installCloud($itemId, $request->get_param('mode'));
+      $this->installTemplate($itemId, $mode) :
+      $this->installCloud($itemId, $mode);
   }
 
   private function installTemplate(int $itemId, string $mode): WP_REST_Response
@@ -88,6 +97,14 @@ class Elementor extends FullCustomerController
     endif;
 
     $template = $this->downloadJson($item->fileUrl);
+    if (!$template) :
+      return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
+    endif;
+
+    if ('builder' === $mode) :
+      return new WP_REST_Response(['builder' => $template]);
+    endif;
+
     $template['page_title']  = $item->title;
     $template['title']  = $item->title;
 
@@ -117,9 +134,17 @@ class Elementor extends FullCustomerController
 
   private function installCloud(int $itemId, string $mode): WP_REST_Response
   {
-    $item   = TemplateManager::instance()->getCloudItem($itemId);
-
+    $item     = TemplateManager::instance()->getCloudItem($itemId);
     $template = $this->downloadJson($item->fileUrl);
+
+    if (!$template) :
+      return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
+    endif;
+
+    if ('builder' === $mode) :
+      return new WP_REST_Response(['builder' => $template]);
+    endif;
+
     $template['page_title']  = $item->title;
     $template['title']  = $item->title;
 
@@ -145,6 +170,33 @@ class Elementor extends FullCustomerController
       'editUrl'   => get_edit_post_link($postId, 'internal'),
       'visitUrl'  => get_permalink($postId)
     ]);
+  }
+
+  public function builderSendToCloud(WP_REST_Request $request): WP_REST_Response
+  {
+    $full   = new FullCustomer();
+
+    $type    = $request->get_param('templateType') ? $request->get_param('templateType') : 'page';
+    $content = $request->get_param('templateContent');
+
+    if (isset($content['id'])) :
+      $content = [$content];
+    endif;
+
+    $payload = [
+      'site'  => site_url(),
+      'title' => $request->get_param('templateName'),
+      'type'  => $type,
+      'json'  => json_encode(compact('type', 'content'))
+    ];
+
+    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';
+
+    $request  = wp_remote_post($url, ['sslverify' => false, 'body' => $payload]);
+    $response = wp_remote_retrieve_body($request);
+    $response = json_decode($response);
+
+    return new WP_REST_Response($response);
   }
 
   public function sendToCloud(WP_REST_Request $request): WP_REST_Response
@@ -216,7 +268,7 @@ class Elementor extends FullCustomerController
     return class_exists('Full\Customer\Elementor\TemplateManager');
   }
 
-  private function downloadJson(string $url): array
+  private function downloadJson(string $url): ?array
   {
     $request = wp_remote_get($url, ['sslverify' => false]);
     $data    = json_decode(wp_remote_retrieve_body($request), ARRAY_A);

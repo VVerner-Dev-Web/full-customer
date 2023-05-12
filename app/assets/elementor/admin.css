@@ -82,16 +82,16 @@
 
 /***********************************/
 
-.toplevel_page_full-templates #wpbody,
-.toplevel_page_full-templates #wpbody-content,
-.toplevel_page_full-templates #wpcontent,
-.toplevel_page_full-templates #wpwrap,
-.toplevel_page_full-templates .full-templates-admin-body,
-.toplevel_page_full-templates .full-templates-admin-body #templatelyAdmin {
+.settings_page_full-templates #wpbody,
+.settings_page_full-templates #wpbody-content,
+.settings_page_full-templates #wpcontent,
+.settings_page_full-templates #wpwrap,
+.settings_page_full-templates .full-templates-admin-body,
+.settings_page_full-templates .full-templates-admin-body #templatelyAdmin {
   height: 100%;
   padding-bottom: 0;
 }
-.toplevel_page_full-templates .templately-admin-preloader {
+.settings_page_full-templates .templately-admin-preloader {
   align-items: center;
   box-sizing: border-box;
   display: flex;
@@ -100,16 +100,16 @@
   padding: 100px;
   text-align: center;
 }
-.toplevel_page_full-templates .templately-admin-preloader > svg {
+.settings_page_full-templates .templately-admin-preloader > svg {
   margin-right: 10px;
 }
-.toplevel_page_full-templates #wpcontent {
+.settings_page_full-templates #wpcontent {
   padding-left: 0;
 }
-.toplevel_page_full-templates #wpbody-content {
+.settings_page_full-templates #wpbody-content {
   padding-bottom: 0;
 }
-.toplevel_page_full-templates
+.settings_page_full-templates
   #wpbody-content
   > :not(.full-templates-admin-body) {
   display: none;
@@ -119,7 +119,7 @@
     right: 0;
   }
 }
-.toplevel_page_full-templates .full-templates-admin-body {
+.settings_page_full-templates .full-templates-admin-body {
   background-color: #fff;
 }
 @media (max-width: 782px) {
@@ -127,7 +127,7 @@
     padding-left: 190px;
   }
 }
-.toplevel_page_full-templates .full-templates-admin-body #templatelyAdmin {
+.settings_page_full-templates .full-templates-admin-body #templatelyAdmin {
   border-bottom: 1px solid #f2f2f2;
   height: calc(100% - 40px);
 }
@@ -3582,6 +3582,7 @@
   padding: 9px 20px;
   text-transform: uppercase;
   transition: background 0.2s ease 0s;
+  color: #000000;
 }
 
 .templately-wrapper

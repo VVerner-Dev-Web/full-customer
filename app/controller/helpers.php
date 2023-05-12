@@ -24,9 +24,25 @@ function isFullsAdminPage(): bool
   return strpos($page, 'full-') === 0;
 }
 
-/**
- * @SuppressWarnings(PHPMD.MissingImport)
- */
+function fullGetEnv(): string
+{
+  return (new FullCustomer)->getCurrentEnv();
+}
+
+function fullGetLocalize(): array
+{
+  $env     = new FullCustomer();
+
+  return [
+    'rest_url'      => trailingslashit(rest_url()),
+    'auth'          => wp_create_nonce('wp_rest'),
+    'user_login'    => wp_get_current_user()->user_login,
+    'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
+    'site_url'      => site_url(),
+    'store_url'     => 'https://full.services'
+  ];
+}
+
 function fullGetSiteConnectionData()
 {
   $full = new FullCustomer();

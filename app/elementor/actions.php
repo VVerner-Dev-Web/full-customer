@@ -8,14 +8,26 @@ defined('ABSPATH') || exit;
 
 function editorBeforeEnqueueStyles(): void
 {
-  $assetsUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
-  wp_enqueue_style('full-elementor', $assetsUrl . 'editor.css', [], FULL_CUSTOMER_VERSION);
+  $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
+  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+
+  wp_enqueue_style('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
+  wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
+  wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
+  wp_enqueue_style('full-admin-elementor', $assetsUrl . 'elementor/admin.css', [], $version);
+  wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
 }
 
 function editorBeforeEnqueueScripts(): void
 {
-  $assetsUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
-  wp_enqueue_script('full-elementor', $assetsUrl . 'editor.js', ['jquery'], FULL_CUSTOMER_VERSION, true);
+  $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
+  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+
+  wp_enqueue_script('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.js', ['jquery'], '11.4.35', true);
+  wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
+  wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
+
+  wp_localize_script('full-elementor', 'full_localize', fullGetLocalize());
 }
 
 
@@ -33,12 +45,14 @@ function addMenuPages(): void
 
 function adminEnqueueScripts(): void
 {
-  $assetsUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
-  wp_enqueue_style('full-admin-elementor', $assetsUrl . 'admin.css', [], FULL_CUSTOMER_VERSION);
-  wp_enqueue_script('full-admin-elementor', $assetsUrl . 'admin.js', ['jquery'], FULL_CUSTOMER_VERSION, true);
+  $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
+  $version    = 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+
+  wp_enqueue_style('full-admin-elementor', $assetsUrl . 'admin.css', [], $version);
+  wp_enqueue_script('full-admin-elementor', $assetsUrl . 'admin.js', ['jquery'], $version, true);
 }
 
-function manageElementorLibraryPostsCustomColumn(string $column, int $postId)
+function manageElementorLibraryPostsCustomColumn(string $column, int $postId): void
 {
   if ('full_templates' !== $column) :
     return;
@@ -52,4 +66,20 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId)
   endif;
 
   echo  $html;
+}
+
+function editorFooter(): void
+{
+  $endpoints = [
+    'templates',
+    'cloud'
+  ];
+
+  foreach ($endpoints as $endpointView) :
+    ob_start();
+    require FULL_CUSTOMER_APP . '/views/admin/templates.php';
+    $content = ob_get_clean();
+
+    echo '<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . $content . '</script>';
+  endforeach;
 }
