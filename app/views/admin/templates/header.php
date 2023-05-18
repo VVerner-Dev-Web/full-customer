@@ -1,6 +1,6 @@
 <div class="templately-header">
   <div class="templately-logo">
-    <img src="<?= fullGetImageUrl('logo-dark.png') ?>" alt="Logo FULL">
+    <img src="<?= fullGetImageUrl('logo-dark-2.png') ?>" alt="Logo FULL">
   </div>
   <div class="templately-nav-wrapper templately-menu">
     <ul class="templately-nav">

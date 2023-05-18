@@ -60,7 +60,7 @@
         {
           name: "full_loripsum",
           icon: "eicon-cloud-upload",
-          title: "Salvar na FULL.",
+          title: "Salvar seção na FULL.",
           callback: () => contextMenuCallback(element),
         },
       ],
@@ -171,16 +171,20 @@
     window.FullModal.destroy();
   });
 
-  $(document).on("click", ".templately-nav-item a", function (e) {
-    e.preventDefault();
+  $(document).on(
+    "click",
+    ".templately-nav-item a, .endpoint-nav",
+    function (e) {
+      e.preventDefault();
 
-    const endpoint = $(this).data("endpoint");
+      const endpoint = $(this).data("endpoint");
 
-    const container = window.FullModal.getElements("content");
-    container.get(0).innerHTML = VIEWS[endpoint];
+      const container = window.FullModal.getElements("content");
+      container.get(0).innerHTML = VIEWS[endpoint];
 
-    $(document).trigger("full-templates/ready");
-  });
+      $(document).trigger("full-templates/ready");
+    }
+  );
 
   $(document).on(
     "click",

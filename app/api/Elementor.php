@@ -204,14 +204,14 @@ class Elementor extends FullCustomerController
 
   public function sendToCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full   = new FullCustomer();
-    $postId = (int) $request->get_param('post_id');
-
-    $payload = [
+    $full     = new FullCustomer();
+    $postId   = (int) $request->get_param('post_id');
+    $worker   = new Exporter();
+    $payload  = [
       'site'  => site_url(),
       'title' => get_the_title($postId),
-      'type'  => strip_tags(get_the_term_list($postId, 'elementor_library_type')),
-      'json'  => (new Exporter)->export($postId)
+      'type'  => $worker->get_template_type($postId),
+      'json'  => $worker->export($postId)
     ];
 
     $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';

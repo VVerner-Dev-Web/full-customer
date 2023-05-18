@@ -1,6 +1,10 @@
 <?php
 
-use Full\Customer\Elementor\TemplateManager; ?>
+use Full\Customer\Elementor\TemplateManager;
+
+$maxVisibleItens = 4;
+
+?>
 <div class="templately-sidebar templately-templates-sidebar">
   <div class="templately-collapse">
     <div class="tc-panel-item ts-single tc-panel-active">
@@ -9,10 +13,10 @@ use Full\Customer\Elementor\TemplateManager; ?>
       </div>
       <div class="tc-panel-body tc-content-active">
         <div class="templately-template-types">
-          <ul id="full-template-filter">
-            <?php foreach (TemplateManager::instance()->getCategories() as $category) : ?>
-              <li>
-                <label class="toggle-switch toggle-switch-sm" for="category-<?= $category->id ?>" style="margin-top: 1rem">
+          <ul id="full-template-category-filter">
+            <?php foreach (TemplateManager::instance()->getCategories() as $index => $category) : ?>
+              <li class="<?= $index >= $maxVisibleItens ? 'hidden' : '' ?>">
+                <label class="toggle-switch toggle-switch-sm" for="category-<?= $category->id ?>" style="margin-top: .5rem">
                   <input type="checkbox" value="<?= $category->id ?>" class="toggle-switch-input" id="category-<?= $category->id ?>">
                   <span class="toggle-switch-label">
                     <span class="toggle-switch-indicator"></span>
@@ -24,6 +28,37 @@ use Full\Customer\Elementor\TemplateManager; ?>
               </li>
             <?php endforeach; ?>
           </ul>
+          <?php if ($index >= $maxVisibleItens) : ?>
+            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+    <div class="tc-panel-item ts-single tc-panel-active">
+      <div class="tc-panel-header tc-panel-header-active">
+        <h4>Filtrar por tipo</h4>
+      </div>
+      <div class="tc-panel-body tc-content-active">
+        <div class="templately-template-types">
+          <ul id="full-template-type-filter">
+            <?php foreach (TemplateManager::instance()->getTypes() as $index => $type) : ?>
+              <li class="<?= $index > $maxVisibleItens ? 'hidden' : '' ?>">
+                <label class="toggle-switch toggle-switch-sm" for="type-<?= $type->id ?>" style="margin-top: .5rem">
+                  <input type="checkbox" value="<?= $type->id ?>" class="toggle-switch-input" id="type-<?= $type->id ?>">
+                  <span class="toggle-switch-label">
+                    <span class="toggle-switch-indicator"></span>
+                  </span>
+                  <span class="toggle-switch-content">
+                    <span style="display: block;"><?= $type->name ?></span>
+                  </span>
+                </label>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+
+          <?php if ($index > $maxVisibleItens) : ?>
+            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
+          <?php endif; ?>
         </div>
       </div>
     </div>
@@ -49,6 +84,8 @@ use Full\Customer\Elementor\TemplateManager; ?>
   <div class="templately-items" id="response-container" data-page="1" data-type="page">
     <!-- JS -->
   </div>
+
+  <div id="full-templates-loader" style="display: none"></div>
 
   <div class="templately-my-clouds templately-has-no-items" id="no-items">
     <div class="templately-no-items">
@@ -98,7 +135,7 @@ use Full\Customer\Elementor\TemplateManager; ?>
 
 <script type="text/template" id="tpl-button-insert-item">
   <button class="templately-button templately-item-meta-single tt-top tb-item-insert" data-js="insert-item" data-item='{json}'>
-    <i class="tio-download-from-cloud" style="margin-right: 5px;"></i>
+    <i class="tio-download-to" style="margin-right: 5px;"></i>
     <span>Inserir</span>
   </button>
 </script>

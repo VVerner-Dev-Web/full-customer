@@ -2,12 +2,6 @@
 
 namespace Full\Customer\Elementor;
 
-use WP_Error;
-use function wp_parse_args;
-use function current_user_can;
-use Elementor\Core\Settings\Page\Model;
-
-use Elementor\Plugin as ElementorPlugin;
 use Elementor\TemplateLibrary\Source_Local as ElementorLocal;
 
 class Exporter extends ElementorLocal
@@ -15,12 +9,15 @@ class Exporter extends ElementorLocal
   public function export(int $postId): string
   {
     $data = $this->get_data(['template_id' => $postId]);
+    $data = is_array($data) ? $data : [];
 
-    if (!array_key_exists('content', $data)) {
-      $data = [
-        'content' => $data,
-      ];
-    }
+    if (!isset($data['content'])) :
+      $data['content'] = $data;
+    endif;
+
+    if (!isset($data['type'])) :
+      $data['type'] = $this->get_template_type($postId);
+    endif;
 
     return wp_slash(json_encode(
       $data,

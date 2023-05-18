@@ -35,31 +35,42 @@
 <?php endif; ?>
 
 <script type="text/template" id="tpl-templately-cloud-item">
-  <div class="templately-table-row single-cloud-item">
+  <div class="templately-table-row single-cloud-item" data-item='{json}'>
     <div class="templately-table-column ">
       <div class="templatey-cloud-header">
         <p>
           {title}
-          <br>
-          <small style="opacity: .5;">{slug}</small>
         </p>
       </div>
     </div>
     <div class="templately-table-column ">
-      <div class="templately-table-row ">
-        <div class="templately-table-column ">
-          <p>{formattedDate}</p>
-        </div>
-        <div class="templately-table-column ">
-          <div class="cloud-segment">
-            <button class="cloud-button" title="Inserir template" data-js="insert-item" data-item='{json}'>
-              <i class="tio-download-from-cloud"></i>
-            </button>
-            <button class="cloud-button" title="Excluir template" data-js="delete-from-cloud" data-item='{json}'>
-              <i class="tio-delete-outlined"></i>
-            </button>
-          </div>
-        </div>
+      <div class="templatey-cloud-header">
+        <p>
+          {typeLabel}
+        </p>
+      </div>
+    </div>
+    <div class="templately-table-column ">
+      <p>{formattedDate}</p>
+    </div>
+    <div class="templately-table-column">
+      <button class="cloud-button" title="Inserir template" data-js="insert-item">
+        <i class="tio-download-to"></i>
+        Inserir
+      </button>
+      <button class="cloud-button" title="Abrir menu" data-js="toggle-template-dropdown">
+        <i class="tio-menu-hamburger"></i>
+      </button>
+
+      <div class="cloud-segment">
+        <button class="cloud-button" title="Excluir template" data-js="delete-from-cloud">
+          <i class="tio-delete-outlined"></i>
+          Excluir
+        </button>
+        <a href="{fileUrl}" class="cloud-button" title="Exportar template" download="download">
+          <i class="tio-download-from-cloud"></i>
+          Exportar
+        </a>
       </div>
     </div>
   </div>

@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.0.6
+
+- Melhorias na usabilidade dos templates do cloud.
+
 ## 2.0.5
 
 - Corrigido problema em que o  cloud não estava configurado dentro do Elementor

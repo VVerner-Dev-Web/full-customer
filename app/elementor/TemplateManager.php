@@ -51,7 +51,7 @@ class TemplateManager
 
   public function getCloudItem(int $itemId): ?stdClass
   {
-    $item = get_transient('full/cloud2/' . $itemId);
+    $item = get_transient('full/cloud/' . $itemId);
 
     if (!$item) :
       $full = new FullCustomer();
@@ -74,12 +74,34 @@ class TemplateManager
 
   public function getCategories(): array
   {
-    $full = new FullCustomer();
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-categories';
+    $response = get_transient('full/cloud/categories');
 
-    $request  = wp_remote_get($url, ['sslverify' => false]);
-    $response = wp_remote_retrieve_body($request);
-    $response = json_decode($response);
+    if (!$response) :
+      $full = new FullCustomer();
+      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-categories';
+
+      $request  = wp_remote_get($url, ['sslverify' => false]);
+      $response = wp_remote_retrieve_body($request);
+      $response = json_decode($response);
+      set_transient('full/cloud/categories', $response, HOUR_IN_SECONDS);
+    endif;
+
+    return $response ? $response : [];
+  }
+
+  public function getTypes(): array
+  {
+    $response = get_transient('full/cloud/types');
+
+    if (!$response) :
+      $full = new FullCustomer();
+      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-types';
+
+      $request  = wp_remote_get($url, ['sslverify' => false]);
+      $response = wp_remote_retrieve_body($request);
+      $response = json_decode($response);
+      set_transient('full/cloud/types', $response, HOUR_IN_SECONDS);
+    endif;
 
     return $response ? $response : [];
   }

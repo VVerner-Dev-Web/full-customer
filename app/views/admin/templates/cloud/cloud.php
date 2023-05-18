@@ -3,6 +3,14 @@
     <div class="templately-header-title">
       <h3>Meu Cloud</h3>
     </div>
+    <div class="templately-cloud-actions tca-clouds">
+      <div class="templately-search" data-js="search">
+        <input type="search" placeholder="Digite e aperte enter" value="">
+        <button class="templately-button templately-search-button">
+          <i class="tio-search"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 <div class="templately-my-clouds">
@@ -12,19 +20,20 @@
         <p>Nome</p>
       </div>
       <div class="templately-table-column ">
-        <div class="templately-table-row ">
-          <div class="templately-table-column ">
-            <p>Data de criação</p>
-          </div>
-          <div class="templately-table-column ">
-            <p>Ações</p>
-          </div>
-        </div>
+        <p>Tipo</p>
+      </div>
+      <div class="templately-table-column ">
+        <p>Data de criação</p>
+      </div>
+      <div class="templately-table-column ">
+        <p>Ações</p>
       </div>
     </div>
     <div class="templately-table-body tt-view-list" id="response-container" data-page="1" data-type="cloud">
       <!-- JS -->
     </div>
+
+    <div id="full-templates-loader" style="display: none"></div>
 
     <div class="templately-my-clouds templately-has-no-items" id="no-items">
       <div class="templately-no-items">

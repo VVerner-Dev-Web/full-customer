@@ -52,19 +52,26 @@
   const fetchTemplates = () => {
     canBeLoaded = false;
 
-    const type = $("#response-container").data("type");
     const page = parseInt($("#response-container").data("page"));
-    const site = FULL.site_url;
-    const price = getCurrentPriceFilter();
-    const categories = getCurrentCategoriesFilter();
 
-    let apiUrl = FULL.dashboard_url + "templates/" + page;
+    const data = {
+      origin: $("#response-container").data("type"),
+      price: getCurrentPriceFilter(),
+      site: FULL.site_url,
+      categories: getCurrentCategoriesFilter(),
+      search: getCurrentSearch(),
+      types: getCurrentTypesFilter(),
+    };
 
-    if ("cloud" === type) {
-      apiUrl = FULL.dashboard_url + "templates/cloud/" + page;
-    }
+    const endpoint =
+      "cloud" === data.origin ? "templates/cloud/" : "templates/";
+    const apiUrl = FULL.dashboard_url + endpoint + page;
 
-    $.getJSON(apiUrl, { type, price, site, categories }, function (response) {
+    toggleLoader();
+
+    $.getJSON(apiUrl, data, function (response) {
+      toggleLoader();
+
       $("#response-container").data("page", page + 1);
 
       if (1 === page && !response.items.length) {
@@ -82,6 +89,11 @@
       canBeLoaded = response.totalPages > response.currentPage;
     });
   };
+
+  const toggleLoader = () => $("#full-templates-loader").toggle();
+
+  const getCurrentSearch = () =>
+    $(document).find('[data-js="search"] input').val();
 
   const parseTemplateHtml = (item) => {
     const selector =
@@ -114,11 +126,21 @@
   const getCurrentCategoriesFilter = () => {
     const categories = [];
 
-    $("#full-template-filter input:checked").each(function () {
+    $("#full-template-category-filter input:checked").each(function () {
       categories.push($(this).val());
     });
 
     return categories;
+  };
+
+  const getCurrentTypesFilter = () => {
+    const types = [];
+
+    $("#full-template-type-filter input:checked").each(function () {
+      types.push($(this).val());
+    });
+
+    return types;
   };
 
   const deleteCloudItem = (item) => {
@@ -199,7 +221,6 @@
       .children();
 
     for (const child of children) {
-      console.log(child.dataset.view);
       at++;
 
       if ("choose-action" === child.dataset.view) {
@@ -207,27 +228,41 @@
       }
     }
 
-    return at;
+    return Math.max(at, 0);
   };
 
   const addTemplateToElementorBuilder = (template) => {
-    for (let i = 0; i < template.content.length; i++) {
+    let at = getTemplatePositionToInsert();
+    const withPageSettings = null;
+
+    for (const element of template.content) {
+      console.log(at);
+
       window.$e.run("document/elements/create", {
         container: window.elementor.getPreviewContainer(),
-        model: template.content[i],
-        options: {
-          at: getTemplatePositionToInsert(),
-          withPageSettings: null,
-        },
+        model: element,
+        options: { at, withPageSettings },
       });
+
+      at++;
     }
 
     $(document).trigger("full-templates/imported");
   };
 
+  const getTemplateItemFromDOMElement = ($el) => {
+    return $el.parents("[data-item]").first().data("item");
+  };
+
   $(document).on(
     "change",
-    "#full-template-filter input",
+    "#full-template-category-filter input",
+    resetAndFetchTemplates
+  );
+
+  $(document).on(
+    "change",
+    "#full-template-type-filter input",
     resetAndFetchTemplates
   );
 
@@ -243,7 +278,7 @@
   $(document).on("click", "[data-js='insert-item']", function (e) {
     e.preventDefault();
 
-    const item = $(this).data("item");
+    const item = getTemplateItemFromDOMElement($(this));
 
     Swal.fire(
       IN_ELEMENTOR ? SWAL_SETTINGS.elementor(item) : SWAL_SETTINGS.admin(item)
@@ -266,8 +301,6 @@
 
       if (response.isConfirmed) {
         addTemplateToElementorBuilder(data.builder);
-
-        // fechar trqecuino de import
       }
     });
   });
@@ -308,9 +341,10 @@
     e.preventDefault();
 
     const $el = $(this);
+    const item = getTemplateItemFromDOMElement($el);
 
     Swal.fire({
-      titleText: "Excluir template " + $el.data("item").title,
+      titleText: "Excluir template " + item.title,
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: "Voltar",
@@ -324,7 +358,7 @@
       customClass: {
         container: "full-template-popup",
       },
-      preDeny: () => deleteCloudItem($el.data("item")),
+      preDeny: () => deleteCloudItem(item),
     }).then((response) => {
       if (!response.isDenied) {
         return;
@@ -346,6 +380,36 @@
       }
     });
   });
+
+  $(document).on("click", '[data-js="toggle-template-dropdown"]', function (e) {
+    e.preventDefault();
+
+    $(this).next().toggleClass("active");
+  });
+
+  $(document).on("click", function (e) {
+    const $el = $(e.target);
+
+    if (
+      !$el.parents(".cloud-segment").length &&
+      !$el.is('[data-js="toggle-template-dropdown"]') &&
+      !$el.parents('[data-js="toggle-template-dropdown"]').length
+    ) {
+      $(".cloud-segment").removeClass("active");
+    }
+  });
+
+  $(document).on("keypress", '[data-js="search"] input', function (e) {
+    if (e.keyCode !== 13) {
+      return;
+    }
+
+    resetAndFetchTemplates();
+  });
+
+  $(document).on("change", '[data-js="search"] input', resetAndFetchTemplates);
+
+  $(document).on("click", '[data-js="search"] button', resetAndFetchTemplates);
 
   $(document).on(
     "click",
@@ -370,12 +434,10 @@
         Swal.fire({
           titleText: "Cache excluído",
           confirmButtonText: "Obrigado",
-          showLoaderOnDeny: true,
           html: '<p>Pronto! Todos os caches relacionados a biblioteca foram limpos e seus modelos serão verificados na próxima vez que você acessar a página de "Modelos" do Elementor</p>',
           customClass: {
             container: "full-template-popup",
           },
-          preDeny: () => deleteCloudItem($el.data("item")),
         });
       });
     }
@@ -384,6 +446,20 @@
   $(document).on("full-templates/ready", function () {
     resetAndFetchTemplates();
     bindScrollEvent();
+  });
+
+  $(document).on("click", ".view-more-filters", function () {
+    const $trigger = $(this);
+    const $ul = $trigger.prev();
+    const visibleItems = parseInt($trigger.data("visible_items")) - 1;
+
+    if ($trigger.is(".opened")) {
+      $trigger.text("Ver mais").removeClass("opened");
+      $ul.find("li:gt(" + visibleItems + ")").addClass("hidden");
+    } else {
+      $trigger.text("Fechar").addClass("opened");
+      $ul.find("li.hidden").removeClass("hidden");
+    }
   });
 
   if ($("#response-container").length) {
