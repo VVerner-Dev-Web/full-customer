@@ -93,7 +93,7 @@
   border: none;
   background: #fff;
   border-radius: 3px;
-  padding: 0.5em 1.5em;
+  padding: 0.5em 1em;
   cursor: pointer;
   text-decoration: none;
   color: #000;
@@ -181,9 +181,9 @@
   text-decoration: underline;
   cursor: pointer;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /***********************************/

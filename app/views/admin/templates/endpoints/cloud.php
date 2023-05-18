@@ -53,7 +53,7 @@
     <div class="templately-table-column ">
       <p>{formattedDate}</p>
     </div>
-    <div class="templately-table-column">
+    <div class="templately-table-column" style=" display: flex; justify-content: space-between;">
       <button class="cloud-button" title="Inserir template" data-js="insert-item">
         <i class="tio-download-to"></i>
         Inserir
