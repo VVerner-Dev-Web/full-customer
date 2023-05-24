@@ -249,7 +249,9 @@
   };
 
   const getTemplateItemFromDOMElement = ($el) => {
-    return $el.parents("[data-item]").first().data("item");
+    return $el.data("item")
+      ? $el.data("item")
+      : $el.parents("[data-item]").first().data("item");
   };
 
   const initItemGallery = () => {
