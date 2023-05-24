@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.2
 Requires PHP: 7.4
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,12 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.0.8
+
+- Melhorado processo de download de templates para forçar o download
+- Adicionado galeria nos templates
+- Corrigido problema em que não era possível adicionar o template pelo construtor
 
 ## 2.0.7
 
