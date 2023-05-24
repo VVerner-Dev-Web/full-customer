@@ -158,6 +158,7 @@ class Elementor extends FullCustomerController
 
   private function installCloud(int $itemId, string $mode): WP_REST_Response
   {
+    $importer = new Importer;
     $item     = TemplateManager::instance()->getCloudItem($itemId);
     $template = $this->downloadJson($item->fileUrl);
 
@@ -165,8 +166,10 @@ class Elementor extends FullCustomerController
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
+    $data     = $importer->get_data($template);
+
     if ('builder' === $mode) :
-      return new WP_REST_Response(['builder' => $template]);
+      return new WP_REST_Response(['builder' => $data]);
     endif;
 
     $template['page_title']  = $item->title;
@@ -175,9 +178,6 @@ class Elementor extends FullCustomerController
     if (!isset($template['type'])) :
       $template['type']  = 'page';
     endif;
-
-    $importer = new Importer;
-    $data     = $importer->get_data($template);
 
     $postId = ('page' === $mode) ?
       $importer->create_page($data) :
