@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+# 2.0.9
+
+- Ao clicar sobre um item da galeria, abrir em um popup
+
 ## 2.0.8
 
 - Melhorado processo de download de templates para forçar o download

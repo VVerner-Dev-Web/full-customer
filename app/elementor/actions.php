@@ -12,7 +12,8 @@ function editorBeforeEnqueueStyles(): void
   $version    = getFullAssetsVersion();
 
   wp_enqueue_style('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
-  wp_enqueue_style('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.css', [], '2.3.0');
+  wp_enqueue_style('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.css', [], '3.0.0');
+  wp_enqueue_style('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.css', [], '1.0.0');
   wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
   wp_enqueue_style('full-admin-elementor', $assetsUrl . 'elementor/admin.css', [], $version);
@@ -25,7 +26,8 @@ function editorAfterEnqueueScripts(): void
   $version    = getFullAssetsVersion();
 
   wp_enqueue_script('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.js', ['jquery'], '11.4.35', true);
-  wp_enqueue_script('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.js', ['jquery'], '2.3.0', true);
+  wp_enqueue_script('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.js', ['jquery'], '3.0.0', true);
+  wp_enqueue_script('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.js', ['jquery'], '1.0.0', true);
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
 

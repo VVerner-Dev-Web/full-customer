@@ -263,6 +263,8 @@
       prevNextButtons: false,
       imagesLoaded: IN_ELEMENTOR,
     });
+
+    $(".full-template-carousel a").magnificPopup({ type: "image" });
   };
 
   $(document).on(

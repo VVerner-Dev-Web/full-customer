@@ -22,3 +22,8 @@
 .swal2-container.swal2-center.swal2-backdrop-show {
   z-index: 9999999999999;
 }
+
+.mfp-wrap,
+.mfp-bg.mfp-ready {
+  z-index: 9699999;
+}
