@@ -186,6 +186,35 @@
   user-select: none;
 }
 
+.templately-layouts-in-packs-item {
+  width: 35%;
+  height: 160px;
+  overflow: hidden;
+  border: 0.0625rem solid rgba(231, 234, 243, 0.7);
+  border-radius: 0.75rem !important;
+}
+
+.elementor-editor-active .templately-layouts-in-packs-item {
+  width: 45%;
+}
+
+.templately-layouts-in-packs-item-image img {
+  width: 100%;
+  height: 160px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  -o-object-position: center;
+  object-position: center;
+}
+
+.templately-layouts-in-packs-item-image {
+  margin-top: 0 !important;
+}
+
+.carousel.is-fullscreen .carousel-cell {
+  height: 100%;
+}
+
 /***********************************/
 
 .settings_page_full-templates #wpbody,

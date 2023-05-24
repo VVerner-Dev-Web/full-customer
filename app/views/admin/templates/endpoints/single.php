@@ -97,6 +97,31 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
 
           </div>
         </div>
+
+        <?php if ($templateAsScript) : ?>
+          {galleryContainer}
+        <?php elseif ($item?->gallery) : ?>
+
+          <div class="templately-item-widget templately-layouts-in-packs" id="template-gallery" style="text-align: left">
+            <h3>Galeria do template</h3>
+            <div class="templately-carousel-wrapper">
+              <div class="full-template-carousel">
+                <?php foreach ($item->gallery as $src) : ?>
+                  <div class="templately-layouts-in-packs-item">
+                    <a href="<?= $src ?>">
+                      <div class="templately-layouts-in-packs-item-image">
+                        <img src="<?= $src ?>" alt="Imagem do template">
+                      </div>
+                    </a>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          </div>
+
+        <?php endif; ?>
+
+
       </div>
     </div>
   </div>
@@ -118,5 +143,27 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
       Comprar
     </a>
   </script>
+
+  <script type="text/template" id="tpl-gallery-container">
+    <div class="templately-item-widget templately-layouts-in-packs" id="template-gallery" style="text-align: left">
+      <h3>Galeria do template</h3>
+      <div class="templately-carousel-wrapper">
+        <div class="full-template-carousel">
+          {galleryItems}
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="tpl-single-gallery-item">
+    <div class="templately-layouts-in-packs-item ">
+      <a href="{src}">
+        <div class="templately-layouts-in-packs-item-image">
+          <img src="{src}" alt="Imagem do template">
+        </div>
+      </a>
+    </div>
+  </script>
+
 
 <?php endif; ?>

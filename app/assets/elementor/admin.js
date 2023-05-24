@@ -254,6 +254,17 @@
     return $el.parents("[data-item]").first().data("item");
   };
 
+  const initItemGallery = () => {
+    $(".full-template-carousel").flickity({
+      draggable: ">1",
+      freeScroll: true,
+      fullscreen: true,
+      cellAlign: "left",
+      prevNextButtons: false,
+      imagesLoaded: IN_ELEMENTOR,
+    });
+  };
+
   $(document).on(
     "change",
     "#full-template-category-filter input",
@@ -462,6 +473,9 @@
     }
   });
 
+  $(document).on("full-templates/ready", initItemGallery);
+
+  initItemGallery();
   if ($("#response-container").length) {
     resetAndFetchTemplates();
     bindScrollEvent();

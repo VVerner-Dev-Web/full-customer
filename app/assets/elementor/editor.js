@@ -256,6 +256,23 @@
       parseFloat(item.price) > 0 ? "Premium" : "Grátis"
     );
 
+    if (item.gallery.length) {
+      let galleryItemsHtml = "";
+      const template = $("#tpl-single-gallery-item").html();
+
+      for (const src of item.gallery) {
+        galleryItemsHtml += template.replace(/{src}/g, src);
+      }
+
+      html = html.replace(
+        /{galleryContainer}/g,
+        $("#tpl-gallery-container").html()
+      );
+      html = html.replace(/{galleryItems}/g, galleryItemsHtml);
+    } else {
+      html = html.replace("{galleryContainer}", "");
+    }
+
     html = html.replace(/{json}/g, JSON.stringify(item));
 
     const container = window.FullModal.getElements("content");
