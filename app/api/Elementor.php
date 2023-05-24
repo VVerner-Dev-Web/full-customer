@@ -90,7 +90,8 @@ class Elementor extends FullCustomerController
 
   private function installTemplate(int $itemId, string $mode): WP_REST_Response
   {
-    $item   = TemplateManager::instance()->getItem($itemId);
+    $item     = TemplateManager::instance()->getItem($itemId);
+    $importer = new Importer;
 
     if (!$item || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
@@ -101,8 +102,10 @@ class Elementor extends FullCustomerController
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
+    $data     = $importer->get_data($template);
+
     if ('builder' === $mode) :
-      return new WP_REST_Response(['builder' => $template]);
+      return new WP_REST_Response(['builder' => $data]);
     endif;
 
     $template['page_title']  = $item->title;
@@ -111,9 +114,6 @@ class Elementor extends FullCustomerController
     if (!isset($template['type'])) :
       $template['type']  = 'page';
     endif;
-
-    $importer = new Importer;
-    $data     = $importer->get_data($template);
 
     $postId = ('page' === $mode) ?
       $importer->create_page($data) :
