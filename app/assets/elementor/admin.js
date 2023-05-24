@@ -236,8 +236,6 @@
     const withPageSettings = null;
 
     for (const element of template.content) {
-      console.log(at);
-
       window.$e.run("document/elements/create", {
         container: window.elementor.getPreviewContainer(),
         model: element,

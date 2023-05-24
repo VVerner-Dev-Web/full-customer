@@ -28,11 +28,6 @@ class Importer extends ElementorLocal
     $args['content'] = $this->replace_elements_ids($args['content']);
     $args['content'] = $this->process_export_import_content($args['content'], 'on_import');
 
-    //		$post_id  = false; // FIXME: need to check later on.
-    //		$document = ElementorPlugin::$instance->documents->get( $post_id );
-    //		if ( $document ) {
-    //			$args['content'] = $document->get_elements_raw_data( $args['content'], true );
-    //		}
     return $args;
   }
 
