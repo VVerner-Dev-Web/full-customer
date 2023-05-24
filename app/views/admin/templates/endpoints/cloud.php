@@ -67,7 +67,7 @@
           <i class="tio-delete-outlined"></i>
           Excluir
         </button>
-        <a href="{fileUrl}" class="cloud-button" title="Exportar template" download="download">
+        <a href="{fileUrl}" class="cloud-button" title="Exportar template" data-js="export-template">
           <i class="tio-download-from-cloud"></i>
           Exportar
         </a>

@@ -475,6 +475,16 @@
 
   $(document).on("full-templates/ready", initItemGallery);
 
+  $(document).on("click", '[data-js="export-template"]', function (e) {
+    e.preventDefault();
+
+    const id = getTemplateItemFromDOMElement($(this)).id;
+
+    window.location.replace(
+      FULL.rest_url + "full-customer/elementor/download/?id=" + id
+    );
+  });
+
   initItemGallery();
   if ($("#response-container").length) {
     resetAndFetchTemplates();

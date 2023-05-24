@@ -19,9 +19,6 @@ class Exporter extends ElementorLocal
       $data['type'] = $this->get_template_type($postId);
     endif;
 
-    return wp_slash(json_encode(
-      $data,
-      JSON_UNESCAPED_LINE_TERMINATORS | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
-    ));
+    return fullJsonEncode($data);
   }
 }

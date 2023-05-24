@@ -82,3 +82,11 @@ function fullGetTemplatesUrl(string $endpoint = ''): string
     'endpoint'  => $endpoint
   ], admin_url('admin.php'));
 }
+
+function fullJsonEncode($data): string
+{
+  return wp_slash(json_encode(
+    $data,
+    JSON_UNESCAPED_LINE_TERMINATORS | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+  ));
+}

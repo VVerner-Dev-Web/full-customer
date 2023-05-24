@@ -28,6 +28,14 @@ class Elementor extends FullCustomerController
       ]
     ]);
 
+    register_rest_route(self::NAMESPACE, '/elementor/download', [
+      [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'download'],
+        'permission_callback' => '__return_true',
+      ]
+    ]);
+
     register_rest_route(self::NAMESPACE, '/elementor/sync', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
@@ -59,6 +67,22 @@ class Elementor extends FullCustomerController
         'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
+  }
+
+  public function download(WP_REST_Request $request): void
+  {
+    $itemId = (int) $request->get_param('id');
+
+    header("Content-type: application/vnd.ms-excel");
+    header("Content-Type: application/force-download");
+    header("Content-Type: application/download");
+    header("Content-disposition: teste.json");
+    header("Content-disposition: filename=teste.json");
+
+    $item     = TemplateManager::instance()->getCloudItem($itemId);
+    $template = $this->downloadJson($item->fileUrl);
+
+    exit(fullJsonEncode($template));
   }
 
   public function sync(): WP_REST_Response
@@ -187,10 +211,7 @@ class Elementor extends FullCustomerController
       'site'  => site_url(),
       'title' => $request->get_param('templateName'),
       'type'  => $type,
-      'json'  => wp_slash(json_encode(
-        compact('type', 'content'),
-        JSON_UNESCAPED_LINE_TERMINATORS | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
-      ))
+      'json'  => fullJsonEncode(compact('type', 'content'))
     ];
 
     $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';
