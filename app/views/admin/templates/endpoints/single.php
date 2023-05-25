@@ -100,7 +100,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
 
         <?php if ($templateAsScript) : ?>
           {galleryContainer}
-        <?php elseif ($item?->gallery) : ?>
+        <?php elseif ($item && isset($item->gallery) && $item->gallery) : ?>
 
           <div class="templately-item-widget templately-layouts-in-packs" id="template-gallery" style="text-align: left">
             <h3>Galeria do template</h3>
