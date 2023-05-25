@@ -2,7 +2,8 @@
 
 namespace Full\Customer\Hooks;
 
-use Full\Customer\Backup\Cron;
+use Full\Customer\Backup\Cron as BackupCron;
+use Full\Customer\Proxy;
 
 defined('ABSPATH') || exit;
 
@@ -27,9 +28,13 @@ add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 
 add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);
-add_action(Cron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
-add_action(Cron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
-add_action(Cron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup', 10, 3);
+add_action(BackupCron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
+add_action(BackupCron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
+add_action(BackupCron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup', 10, 3);
+
+add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
+add_action(Proxy::CRON_JOB_NAME, ['\Full\Customer\Proxy', 'cronJob']);
+
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);

@@ -19,10 +19,11 @@ require_once FULL_CUSTOMER_APP . '/backup/Cron.php';
 
 require_once FULL_CUSTOMER_APP . '/health/Controller.php';
 
+require_once FULL_CUSTOMER_APP . '/controller/Proxy.php';
+require_once FULL_CUSTOMER_APP . '/controller/FileSystem.php';
+
 require_once FULL_CUSTOMER_APP . '/controller/hooks.php';
 require_once FULL_CUSTOMER_APP . '/controller/actions.php';
 require_once FULL_CUSTOMER_APP . '/controller/filters.php';
 require_once FULL_CUSTOMER_APP . '/controller/helpers.php';
 require_once FULL_CUSTOMER_APP . '/controller/upgrade.php';
-
-require_once FULL_CUSTOMER_APP . '/controller/FileSystem.php';
