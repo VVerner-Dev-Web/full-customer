@@ -10,7 +10,8 @@ require_once FULL_CUSTOMER_APP . '/api/Elementor.php';
 require_once FULL_CUSTOMER_APP . '/api/Env.php';
 require_once FULL_CUSTOMER_APP . '/api/Health.php';
 require_once FULL_CUSTOMER_APP . '/api/Login.php';
-require_once FULL_CUSTOMER_APP . '/api/Plugin.php';
+require_once FULL_CUSTOMER_APP . '/api/PluginInstallation.php';
+require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
 require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
 
 require_once FULL_CUSTOMER_APP . '/backup/Controller.php';

@@ -12,7 +12,8 @@ register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\activationA
 register_deactivation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\deactivationAnalyticsHook');
 
 add_action('rest_api_init', ['\Full\Customer\Api\Login', 'registerRoutes']);
-add_action('rest_api_init', ['\Full\Customer\Api\Plugin', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\PluginInstallation', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Connection', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Backup', 'registerRoutes']);

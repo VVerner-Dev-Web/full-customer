@@ -11,7 +11,7 @@ use WP_Error;
 
 defined('ABSPATH') || exit;
 
-class Plugin extends FullCustomerController
+class PluginInstallation extends FullCustomerController
 {
   private $pluginDir = null;
   private $pluginFile = null;
