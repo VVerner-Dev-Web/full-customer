@@ -10,18 +10,20 @@ defined('ABSPATH') || exit;
 function insertFooterNote(): void
 {
   $full = new FullCustomer();
+  $file = FULL_CUSTOMER_APP . '/views/footer/note.php';
 
-  if ($full->get('allow_backlink')) :
-    require_once FULL_CUSTOMER_APP . '/views/footer/note.php';
+  if ($full->get('allow_backlink') && file_exists($file)) :
+    require_once $file;
   endif;
 }
 
 function insertAdminNotice(): void
 {
   $full = new FullCustomer();
+  $file = FULL_CUSTOMER_APP . '/views/admin/notice.php';
 
-  if (!$full->hasDashboardUrl()) :
-    require_once FULL_CUSTOMER_APP . '/views/admin/notice.php';
+  if (!$full->hasDashboardUrl() && file_exists($file)) :
+    require_once $file;
   endif;
 }
 
