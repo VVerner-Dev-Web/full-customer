@@ -47,7 +47,9 @@ class PluginUpdate extends FullCustomerController
       'body'  => json_encode(['token' => $token])
     ]);
 
-    return json_decode(wp_remote_retrieve_body($response))?->success ? true : false;
+    $data = json_decode(wp_remote_retrieve_body($response));
+
+    return isset($data->success) && $data->success ? true : false;
   }
 
   public function updatePlugin(WP_REST_Request $request): WP_REST_Response
