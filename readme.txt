@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.2
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,15 +41,19 @@ They remain active for the acquired time.
 
 == Changelog ==
 
-# 2.1.0
+## 2.1.1
+
+- FULL. Updates
+
+## 2.1.0
 
 - Implementado proxy para consulta do status do site para atualizações no painel da FULL.
 
-# 2.0.9.1
+## 2.0.9.1
 
 - Corrigindo incompatibilidade com PHP 7.4 no template single que poderia impedir o carregamento do Elementor.
 
-# 2.0.9
+## 2.0.9
 
 - Ao clicar sobre um item da galeria, abrir em um popup
 

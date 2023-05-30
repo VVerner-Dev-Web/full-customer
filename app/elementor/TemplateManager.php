@@ -82,11 +82,11 @@ class TemplateManager
 
       $request  = wp_remote_get($url, ['sslverify' => false]);
       $response = wp_remote_retrieve_body($request);
-      $response = json_decode($response);
+      $response = json_decode($response, true);
       set_transient('full/cloud/categories', $response, HOUR_IN_SECONDS);
     endif;
 
-    return $response ? $response : [];
+    return is_array($response) ? $response : [];
   }
 
   public function getTypes(): array

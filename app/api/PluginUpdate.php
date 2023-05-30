@@ -47,8 +47,6 @@ class PluginUpdate extends FullCustomerController
       'body'  => json_encode(['token' => $token])
     ]);
 
-    error_log(print_r($response, true));
-
     return json_decode(wp_remote_retrieve_body($response))?->success ? true : false;
   }
 

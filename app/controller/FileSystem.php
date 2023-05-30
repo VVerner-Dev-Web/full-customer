@@ -23,8 +23,9 @@ class FileSystem
   {
     $path  = trailingslashit(realpath($path));
     $path  = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+    $flags = defined('GLOB_BRACE') ? GLOB_MARK | GLOB_BRACE : 0;
 
-    return glob($path . '{,.}[!.,!..]*', GLOB_MARK | GLOB_BRACE);
+    return glob($path . '{,.}[!.,!..]*', $flags);
   }
 
   public function createTemporaryDirectory(): void

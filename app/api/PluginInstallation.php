@@ -2,6 +2,7 @@
 
 namespace Full\Customer\Api;
 
+use Exception;
 use Full\Customer\FileSystem;
 use \FullCustomerController;
 use \WP_REST_Server;
@@ -47,7 +48,11 @@ class PluginInstallation extends FullCustomerController
       return new WP_REST_Response(['code' => -1]);
     endif;
 
-    $this->fileSystem->createTemporaryDirectory();
+    try {
+      $this->fileSystem->createTemporaryDirectory();
+    } catch (Exception $e) {
+      return new WP_REST_Response(['code' => $e->getMessage()]);
+    }
 
     $copied = $this->copyZipFile($file);
     if (!$copied) :
@@ -56,6 +61,11 @@ class PluginInstallation extends FullCustomerController
     endif;
 
     $this->setPluginDir();
+
+    if (!$this->pluginDir) :
+      $this->fileSystem->deleteTemporaryDirectory();
+      return new WP_REST_Response(['code' => -6]);
+    endif;
 
     $moved   = $this->movePluginFiles();
     if (!$moved) :
@@ -105,7 +115,7 @@ class PluginInstallation extends FullCustomerController
   private function setPluginDir(): void
   {
     $scan = scandir($this->fileSystem->getTemporaryDirectoryPath());
-    $scan = array_diff($scan, ['.', '..', '__MACOSX']);
+    $scan = $scan ? array_diff($scan, ['.', '..', '__MACOSX']) : [];
     $this->pluginDir = array_pop($scan);
   }
 
