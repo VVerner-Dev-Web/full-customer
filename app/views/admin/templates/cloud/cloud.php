@@ -35,6 +35,12 @@
 
     <div id="full-templates-loader" style="display: none"></div>
 
+    <ul id="full-templates-pagination" style="display: none">
+      <li class="page-item" data-js="previous-page">Página anterior</li>
+      <li>Página <span data-js="current-page">1</span> de <span data-js="total-pages">5</span></li>
+      <li class="page-item" data-js="next-page">Próxima página</li>
+    </ul>
+
     <div class="templately-my-clouds templately-has-no-items" id="no-items">
       <div class="templately-no-items">
         <div class="templately-no-items-inner">

@@ -44,15 +44,20 @@
     }),
   };
 
-  const resetAndFetchTemplates = () => {
-    $("#response-container").data("page", 1).html("");
+  const getCurrentPage = () => {
+    const page = parseInt($("#response-container").data("page"));
+    return isNaN(page) ? 1 : page;
+  };
+
+  const resetAndFetchTemplates = (page = 1) => {
+    $("#response-container").data("page", page).html("");
     fetchTemplates();
   };
 
   const fetchTemplates = () => {
     canBeLoaded = false;
 
-    const page = parseInt($("#response-container").data("page"));
+    const page = getCurrentPage();
 
     const data = {
       origin: $("#response-container").data("type"),
@@ -70,6 +75,8 @@
     toggleLoader();
 
     $.getJSON(apiUrl, data, function (response) {
+      updatePagination(response);
+
       toggleLoader();
 
       $("#response-container").data("page", page + 1);
@@ -87,7 +94,37 @@
       }
 
       canBeLoaded = response.totalPages > response.currentPage;
+
+      $("#endpoint-viewport")[0].scrollIntoView({
+        behavior: "smooth",
+      });
     });
+  };
+
+  const updatePagination = (response) => {
+    const $pagination = $(document).find("#full-templates-pagination");
+
+    if (1 >= response.totalPages) {
+      $pagination.hide();
+      return;
+    }
+
+    $pagination.find('[data-js="current-page"]').text(response.currentPage);
+    $pagination.find('[data-js="total-pages"]').text(response.totalPages);
+
+    if (1 == response.currentPage) {
+      $pagination.find('[data-js="previous-page"]').attr("disabled", true);
+    } else {
+      $pagination.find('[data-js="previous-page"]').attr("disabled", false);
+    }
+
+    if (response.totalPages == response.currentPage) {
+      $pagination.find('[data-js="next-page"]').attr("disabled", true);
+    } else {
+      $pagination.find('[data-js="next-page"]').attr("disabled", false);
+    }
+
+    $pagination.show();
   };
 
   const toggleLoader = () => $("#full-templates-loader").toggle();
@@ -172,44 +209,6 @@
     }).then((response) => {
       return response.json();
     });
-  };
-
-  const bindScrollEvent = () => {
-    if (IN_ELEMENTOR) {
-      $(".templately-contents").on("scroll", function () {
-        const scrollContainer = $(".templately-contents")[0];
-
-        const clientHeight = document
-          .querySelector(".full-templates-admin-body")
-          .getBoundingClientRect().height;
-
-        const scrollHeight = scrollContainer.scrollHeight;
-        const scrollTop = scrollContainer.scrollTop;
-
-        const offset = scrollHeight * 0.15;
-
-        const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
-
-        if (reachBottom && canBeLoaded) {
-          fetchTemplates();
-        }
-      });
-    } else {
-      $(window).on("scroll", function () {
-        const clientHeight = jQuery(window).height();
-
-        const scrollHeight = jQuery(document).height();
-        const scrollTop = jQuery(document).scrollTop();
-
-        const offset = scrollHeight * 0.15;
-
-        const reachBottom = scrollHeight - offset <= clientHeight + scrollTop;
-
-        if (reachBottom && canBeLoaded) {
-          fetchTemplates();
-        }
-      });
-    }
   };
 
   const getTemplatePositionToInsert = () => {
@@ -458,7 +457,6 @@
 
   $(document).on("full-templates/ready", function () {
     resetAndFetchTemplates();
-    bindScrollEvent();
   });
 
   $(document).on("click", ".view-more-filters", function () {
@@ -487,9 +485,25 @@
     );
   });
 
+  $(document).on("click", '[data-js="previous-page"]', function (e) {
+    e.preventDefault();
+
+    const page = getCurrentPage() - 2;
+
+    if (page >= 1) {
+      resetAndFetchTemplates(page);
+    }
+  });
+
+  $(document).on("click", '[data-js="next-page"]', function (e) {
+    e.preventDefault();
+
+    const page = getCurrentPage();
+    resetAndFetchTemplates(page);
+  });
+
   initItemGallery();
   if ($("#response-container").length) {
     resetAndFetchTemplates();
-    bindScrollEvent();
   }
 })(jQuery);

@@ -1,3 +1,33 @@
+#full-templates-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 1em 0;
+}
+
+#full-templates-pagination li {
+  margin: 0 0.5em;
+  padding: 0.5em 0.75em;
+}
+
+#full-templates-pagination li.page-item {
+  background: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  border: solid 1px transparent;
+  transition: all 150ms;
+}
+
+#full-templates-pagination li.page-item:hover {
+  border-color: currentColor;
+}
+
+#full-templates-pagination li.page-item[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .full-template-popup h2 {
   text-align: left;
   font-size: 1.5em;
@@ -131,24 +161,25 @@
 }
 
 #full-templates-loader {
-  display: block;
-  width: 50px;
-  height: 50px;
+  width: 100%;
   margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #full-templates-loader:after {
   content: " ";
   display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
+  width: 3em;
+  height: 3em;
   border-radius: 50%;
   border: 6px solid #fff;
   border-color: #2778c4 transparent #2778c4 transparent;
   -webkit-animation: lds-dual-ring 1.2s linear infinite;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @-webkit-keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);

@@ -27,3 +27,8 @@
 .mfp-bg.mfp-ready {
   z-index: 9699999;
 }
+
+#full-template-category-filter .hidden,
+#full-template-type-filter .hidden {
+  display: none;
+}
