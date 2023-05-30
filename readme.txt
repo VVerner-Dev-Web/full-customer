@@ -44,6 +44,11 @@ They remain active for the acquired time.
 ## 2.1.1
 
 - FULL. Updates
+- Corrigido algumas incompatibilidades com versões antigas do plugin
+- Adicionado verificação de arquivo de notas
+- Definido teste de exclusão durante a instalação de um plugin remoto
+- Corrigido retorno de funções
+- Ajustado regra para definir o diretório do plugin durante a instalação remota
 
 ## 2.1.0
 
