@@ -339,7 +339,7 @@ class Elementor extends FullCustomerController
   private function downloadJsonPack(string $url): array
   {
     $zipFile  = uniqid('pack-') . '.zip';
-    $unzipDir = str_replace('.zip', '', $zipFile);
+    $unzipDir = get_temp_dir() . str_replace('.zip', '', $zipFile);
 
     mkdir($unzipDir, 0777, true);
 
