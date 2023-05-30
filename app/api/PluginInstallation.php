@@ -49,74 +49,73 @@ class PluginInstallation extends FullCustomerController
     endif;
 
     try {
-      $this->fileSystem->createTemporaryDirectory();
+      $tempDir = $this->downloadPlugin($file);
+
+      $this->movePluginFiles($tempDir);
+
+      $activated = $this->activatePlugin();
+
+      if (is_wp_error($activated)) :
+        $this->deactivatePlugin();
+        throw new Exception($activated->get_error_message());
+      endif;
+
+      if (!$this->isSuccessfulActivation()) :
+        $this->deactivatePlugin();
+        throw new Exception('Houve um erro ao tentar ativar o plugin no site');
+      endif;
     } catch (Exception $e) {
-      return new WP_REST_Response(['code' => $e->getMessage()]);
-    }
-
-    $copied = $this->copyZipFile($file);
-    if (!$copied) :
-      $this->fileSystem->deleteTemporaryDirectory();
-      return new WP_REST_Response(['code' => -2]);
-    endif;
-
-    $this->setPluginDir();
-
-    if (!$this->pluginDir) :
-      $this->fileSystem->deleteTemporaryDirectory();
-      return new WP_REST_Response(['code' => -6]);
-    endif;
-
-    $moved   = $this->movePluginFiles();
-    if (!$moved) :
-      $this->fileSystem->deleteTemporaryDirectory();
-      return new WP_REST_Response(['code' => -3]);
-    endif;
-
-    $activated = $this->activatePlugin();
-    if (is_wp_error($activated)) :
-      $this->deactivatePlugin();
-      $this->fileSystem->deleteTemporaryDirectory();
       return new WP_REST_Response([
-        'code'      => -4,
-        'message'   => $activated->get_error_message()
+        'code'    => -8,
+        'message' => $e->getMessage()
       ]);
-    endif;
-
-    if (!$this->isSuccessfulActivation()) :
-      $this->deactivatePlugin();
-      $this->fileSystem->deleteTemporaryDirectory();
-      return new WP_REST_Response(['code' => -5]);
-    endif;
-
-    $this->fileSystem->deleteTemporaryDirectory();
+    }
 
     return new WP_REST_Response(['code' => 1]);
   }
 
-  private function copyZipFile(string $source): bool
+  private function downloadPlugin(string $source): string
   {
-    $zip  = $this->fileSystem->downloadExternalResource($source, 'plugin.zip');
-    return $this->fileSystem->extractZip($zip, $this->fileSystem->getTemporaryDirectoryPath());
-  }
+    $zipFile  = basename($source);
+    $unzipDir = get_temp_dir() . uniqid('full-');
 
-  private function movePluginFiles(): bool
-  {
-    if (!$this->pluginDir) :
-      return false;
+    if (!mkdir($unzipDir, 0777, true)) :
+      throw new Exception('Não foi possível criar o diretório temporário para extração do zip');
     endif;
 
-    $origin      = $this->fileSystem->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $this->pluginDir;
-    $destination = $this->getPluginActivationDir();
+    $download = wp_remote_get($source, [
+      'sslverify' => false,
+      'timeout'   => 60,
+      'stream'    => true,
+      'filename'  => $zipFile
+    ]);
 
-    return $this->fileSystem->moveFile($origin, $destination);
+    if (!$download) :
+      throw new Exception('Não foi possível fazer o download do zip do plugin');
+    endif;
+
+    $fs = new FileSystem;
+    $fs->extractZip($zipFile, $unzipDir, false);
+
+    $scan = scandir($unzipDir);
+    $scan = $scan ? array_diff($scan, ['.', '..', '__MACOSX']) : [];
+
+    $this->pluginDir = array_pop($scan);
+
+    if (!$this->pluginDir) :
+      throw new Exception('Não foi possível definir o diretório de trabalho do plugin');
+    endif;
+
+    return $unzipDir . DIRECTORY_SEPARATOR . $this->pluginDir;
   }
 
-  private function setPluginDir(): void
+  private function movePluginFiles(string $origin)
   {
-    $scan = scandir($this->fileSystem->getTemporaryDirectoryPath());
-    $scan = $scan ? array_diff($scan, ['.', '..', '__MACOSX']) : [];
-    $this->pluginDir = array_pop($scan);
+    $moved = $this->fileSystem->moveFile($origin, $this->getPluginActivationDir());
+
+    if (!$moved) :
+      throw new Exception('Não foi possível mover os arquivos do plugin para o diretório do WordPress');
+    endif;
   }
 
   private function activatePlugin(): ?WP_Error
