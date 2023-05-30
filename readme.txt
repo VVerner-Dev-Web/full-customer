@@ -49,6 +49,8 @@ They remain active for the acquired time.
 - Definido teste de exclusão durante a instalação de um plugin remoto
 - Corrigido retorno de funções
 - Ajustado regra para definir o diretório do plugin durante a instalação remota
+- Paginação nos resultados dos templates e cloud
+- Importação de packs
 
 ## 2.1.0
 

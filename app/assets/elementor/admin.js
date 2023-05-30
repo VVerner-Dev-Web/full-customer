@@ -42,6 +42,25 @@
       preDeny: () => installTemplateItem("template", item),
       preConfirm: () => installTemplateItem("page", item),
     }),
+    pack: (item) => ({
+      titleText: item.title,
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: "Inserir como páginas",
+      denyButtonText: "Inserir como modelos",
+      showLoaderOnConfirm: true,
+      showLoaderOnDeny: true,
+      backdrop: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      html:
+        "<p>Ao importar um pack, todos os templates serão importados em seu site WordPress como páginas ou modelos.</p>" +
+        "<p>A importação do pack pode demorar um pouco dependendo da quantidade de templates que ele possuir. Não feche a página durante o processo.</p>",
+      customClass: {
+        container: "full-template-popup",
+      },
+      preDeny: () => installTemplateItem("template", item),
+      preConfirm: () => installTemplateItem("page", item),
+    }),
   };
 
   const getCurrentPage = () => {
@@ -211,6 +230,16 @@
     });
   };
 
+  const getSwalSettings = (item) => {
+    if (item.hasZipFile) {
+      return SWAL_SETTINGS.pack(item);
+    }
+
+    return IN_ELEMENTOR
+      ? SWAL_SETTINGS.elementor(item)
+      : SWAL_SETTINGS.admin(item);
+  };
+
   const getTemplatePositionToInsert = () => {
     let at = -1;
 
@@ -292,9 +321,7 @@
 
     const item = getTemplateItemFromDOMElement($(this));
 
-    Swal.fire(
-      IN_ELEMENTOR ? SWAL_SETTINGS.elementor(item) : SWAL_SETTINGS.admin(item)
-    ).then((response) => {
+    Swal.fire(getSwalSettings(item)).then((response) => {
       if (response.isDismissed) {
         return;
       }
@@ -306,8 +333,8 @@
         return;
       }
 
-      if (!IN_ELEMENTOR) {
-        Swal.fire("Feito", "Template importado com sucesso!", "success");
+      if (!IN_ELEMENTOR || item.hasZipFile) {
+        Swal.fire("Feito", data.message, "success");
         return;
       }
 

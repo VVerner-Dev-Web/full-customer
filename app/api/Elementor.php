@@ -5,6 +5,7 @@ namespace Full\Customer\Api;
 use Full\Customer\Elementor\Exporter;
 use Full\Customer\Elementor\Importer;
 use Full\Customer\Elementor\TemplateManager;
+use Full\Customer\FileSystem;
 use FullCustomer;
 use \FullCustomerController;
 use stdClass;
@@ -115,13 +116,18 @@ class Elementor extends FullCustomerController
   private function installTemplate(int $itemId, string $mode): WP_REST_Response
   {
     $item     = TemplateManager::instance()->getItem($itemId);
-    $importer = new Importer;
 
     if (!$item || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
     endif;
 
+    if ($item->hasZipFile) :
+      return $this->installPack($item, $mode);
+    endif;
+
+    $importer = new Importer;
     $template = $this->downloadJson($item->fileUrl);
+
     if (!$template) :
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
@@ -152,7 +158,36 @@ class Elementor extends FullCustomerController
     return new WP_REST_Response([
       'postId'    => $postId,
       'editUrl'   => get_edit_post_link($postId, 'internal'),
-      'visitUrl'  => get_permalink($postId)
+      'visitUrl'  => get_permalink($postId),
+      'message'   => 'Template importado com sucesso!'
+    ]);
+  }
+
+  private function installPack(stdClass $item, string $mode): WP_REST_Response
+  {
+    $templates = $this->downloadJsonPack($item->fileUrl);
+    $importer  = new Importer;
+    $postsIds  = [];
+
+    if (!$templates) :
+      return new WP_REST_Response([
+        'error' => 'Não foi possível fazer o download do pack',
+      ]);
+    endif;
+
+    foreach ($templates as $template) :
+      $json = json_decode(file_get_contents($template), ARRAY_A);
+      $data = $importer->get_data($json);
+
+      $postId = ('page' === $mode) ?
+        $importer->create_page($data) :
+        $importer->import_in_library($data);
+
+      $postsIds[] = $postId;
+    endforeach;
+
+    return new WP_REST_Response([
+      'message'  => 'Pack importado com sucesso!',
     ]);
   }
 
@@ -192,7 +227,8 @@ class Elementor extends FullCustomerController
     return new WP_REST_Response([
       'postId'    => $postId,
       'editUrl'   => get_edit_post_link($postId, 'internal'),
-      'visitUrl'  => get_permalink($postId)
+      'visitUrl'  => get_permalink($postId),
+      'message'   => 'Template cloud importado com sucesso!'
     ]);
   }
 
@@ -298,5 +334,32 @@ class Elementor extends FullCustomerController
     $data    = json_decode(wp_remote_retrieve_body($request), ARRAY_A);
 
     return $data ? $data : null;
+  }
+
+  private function downloadJsonPack(string $url): array
+  {
+    $zipFile  = uniqid('pack-') . '.zip';
+    $unzipDir = str_replace('.zip', '', $zipFile);
+
+    mkdir($unzipDir, 0777, true);
+
+    $download = wp_remote_get($url, [
+      'sslverify' => false,
+      'timeout'   => 30,
+      'stream'    => true,
+      'filename'  => $zipFile
+    ]);
+
+    if (is_wp_error($download)) :
+      return [];
+    endif;
+
+    $fs = new FileSystem;
+    $fs->extractZip(
+      $zipFile,
+      $unzipDir
+    );
+
+    return is_dir($unzipDir . DIRECTORY_SEPARATOR . 'templates') ? $fs->scanDir($unzipDir . DIRECTORY_SEPARATOR . 'templates') : [];
   }
 }
