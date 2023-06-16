@@ -15,7 +15,7 @@ use \WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
-class Elementor extends FullCustomerController
+class ElementorTemplates extends FullCustomerController
 {
   public static function registerRoutes(): void
   {

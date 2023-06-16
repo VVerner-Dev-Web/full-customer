@@ -44,7 +44,8 @@ function fullGetLocalize(): array
     'user_login'    => wp_get_current_user()->user_login,
     'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
     'site_url'      => site_url(),
-    'store_url'     => 'https://full.services'
+    'store_url'     => 'https://full.services',
+    'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png')
   ];
 }
 

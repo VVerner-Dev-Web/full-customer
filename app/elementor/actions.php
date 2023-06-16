@@ -18,6 +18,7 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
   wp_enqueue_style('full-admin-elementor', $assetsUrl . 'elementor/admin.css', [], $version);
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
+  wp_enqueue_style('full-elementor-ai', $assetsUrl . 'elementor/ai.css', [], $version);
 }
 
 function editorAfterEnqueueScripts(): void
@@ -29,6 +30,7 @@ function editorAfterEnqueueScripts(): void
   wp_enqueue_script('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.js', ['jquery'], '3.0.0', true);
   wp_enqueue_script('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.js', ['jquery'], '1.0.0', true);
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
+  wp_enqueue_script('full-elementor-ai', $assetsUrl . 'elementor/ai.js', ['jquery'], $version, true);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
 
   wp_localize_script('full-elementor', 'FULL', fullGetLocalize());
@@ -73,6 +75,12 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId): v
 
 function editorFooter(): void
 {
+  _loadTemplatesViews();
+  _loadIaViews();
+}
+
+function _loadTemplatesViews(): void
+{
   $endpoints = [
     'templates',
     'cloud',
@@ -92,6 +100,21 @@ function editorFooter(): void
     foreach ($content as $script) :
       echo $script;
     endforeach;
+  endforeach;
+}
 
+function _loadIaViews(): void
+{
+  ob_start();
+  require FULL_CUSTOMER_APP . '/views/ai/prompt.php';
+  $content = ob_get_clean();
+  $content = explode('_SCRIPTS_DIVIDER_', $content);
+
+  echo '<script  id="full-ai-prompt" type="text/template"> ';
+  echo array_shift($content);
+  echo '</script>';
+
+  foreach ($content as $script) :
+    echo $script;
   endforeach;
 }
