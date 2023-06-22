@@ -6,12 +6,12 @@ class FullCustomer
 
   public function set(string  $prop, $value): void
   {
-    update_option(self::PREFIX . $prop, $value, false);
+    update_option(self::PREFIX . $this->optionEnvSuffix() . $prop, $value, false);
   }
 
   public function get(string  $prop)
   {
-    return get_option(self::PREFIX . $prop, null);
+    return get_option(self::PREFIX . $this->optionEnvSuffix() . $prop, null);
   }
 
   public function getBranding(string $prop, string $default = ''): ?string
@@ -47,5 +47,10 @@ class FullCustomer
   public function getCurrentEnv(): string
   {
     return defined('FULL_CUSTOMER') ? FULL_CUSTOMER : 'PRD';
+  }
+
+  private function optionEnvSuffix(): string
+  {
+    return 'PRD' === $this->getCurrentEnv() ? '' : 'dev-';
   }
 }
