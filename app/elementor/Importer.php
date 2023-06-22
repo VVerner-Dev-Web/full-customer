@@ -54,7 +54,7 @@ class Importer extends ElementorLocal
     $page_settings = $this->page_settings($template_data);
 
     $defaults = [
-      'post_title'   => isset($template_data['page_title']) ? $template_data['page_title'] : 'Templately: ' . $template_data['title'],
+      'post_title'   => isset($template_data['page_title']) ? $template_data['page_title'] : 'Modelo da FULL.',
       'page_settings' => $page_settings,
       'status' => current_user_can('publish_posts') ? 'publish' : 'pending',
     ];

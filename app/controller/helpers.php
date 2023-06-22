@@ -26,7 +26,7 @@ function getFullAssetsVersion(): string
 function isFullsAdminPage(): bool
 {
   $page = filter_input(INPUT_GET, 'page');
-  return strpos($page, 'full-') === 0;
+  return $page && strpos($page, 'full-') === 0;
 }
 
 function fullGetEnv(): string

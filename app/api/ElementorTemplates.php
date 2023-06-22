@@ -29,6 +29,14 @@ class ElementorTemplates extends FullCustomerController
       ]
     ]);
 
+    register_rest_route(self::NAMESPACE, '/elementor/install-dependencies', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'installDependencies'],
+        'permission_callback' => [$api, 'permissionCallback'],
+      ]
+    ]);
+
     register_rest_route(self::NAMESPACE, '/elementor/download', [
       [
         'methods'             => WP_REST_Server::READABLE,
@@ -113,12 +121,62 @@ class ElementorTemplates extends FullCustomerController
       $this->installCloud($itemId, $mode);
   }
 
+  public function installDependencies(WP_REST_Request $request): WP_REST_Response
+  {
+    $item   = $request->get_param('item');
+    $itemId = (int) $item['id'];
+
+    $item     = TemplateManager::instance()->getItem($itemId);
+
+    if (!$item || !$item->canBeInstalled) :
+      return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
+    endif;
+
+    $dependencies = $this->verifyMissingDependencies($item);
+
+    if (!$dependencies) :
+      return new WP_REST_Response(['message' => 'Nenhuma dependência pendente localizada']);
+    endif;
+
+    if (!function_exists('activate_plugin')) :
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    endif;
+
+    foreach ($dependencies['uninstalled'] as $dep) :
+      $request = new WP_REST_Request('POST', '/wp/v2/plugins');
+      $request->set_param('slug', $dep->slug);
+      $request->set_param('status', 'active');
+      $request->set_param('context', 'edit');
+
+      rest_do_request($request);
+    endforeach;
+
+    foreach ($dependencies['inactive'] as $dep) :
+      activate_plugin($dep->localPath);
+    endforeach;
+
+    return new WP_REST_Response(['message' => 'Dependências instaladas! Vamos importar o template escolhi agora.']);
+  }
+
   private function installTemplate(int $itemId, string $mode): WP_REST_Response
   {
     $item     = TemplateManager::instance()->getItem($itemId);
 
     if (!$item || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
+    endif;
+
+    $dependencies = $this->verifyMissingDependencies($item);
+
+    if ($dependencies) :
+      ob_start();
+
+      require_once FULL_CUSTOMER_APP . '/views/components/template-missing-dependencies.php';
+
+      return new WP_REST_Response([
+        'dependencies'  => ob_get_clean(),
+        'mode'          => $mode
+      ]);
     endif;
 
     if ($item->hasZipFile) :
@@ -361,5 +419,46 @@ class ElementorTemplates extends FullCustomerController
     );
 
     return is_dir($unzipDir . DIRECTORY_SEPARATOR . 'templates') ? $fs->scanDir($unzipDir . DIRECTORY_SEPARATOR . 'templates') : [];
+  }
+
+  private function verifyMissingDependencies(stdClass $item): ?array
+  {
+    if (!$item->dependencies) :
+      return null;
+    endif;
+
+    $inactive     = [];
+    $uninstalled  = [];
+
+    if (!function_exists('get_plugins')) :
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    endif;
+
+    $activePlugins = (array) get_option('active_plugins', []);
+    $plugins       = array_keys(get_plugins());
+
+    $activePlugins = array_map([$this, 'getPluginSlug'], $activePlugins);
+    $pluginsSlugs = array_map([$this, 'getPluginSlug'], $plugins);
+
+
+    foreach ($item->dependencies as $dependency) :
+      if (!in_array($dependency->slug, $pluginsSlugs)) :
+        $uninstalled[] = $dependency;
+
+      elseif (!in_array($dependency->slug, $activePlugins)) :
+        $key = array_search($dependency->slug, $pluginsSlugs);
+        $dependency->localPath = $plugins[$key];
+
+        $inactive[] = $dependency;
+      endif;
+    endforeach;
+
+    return $inactive || $uninstalled ? compact('inactive', 'uninstalled') : null;
+  }
+
+  private function getPluginSlug(string $plugin): string
+  {
+    $slug = explode('/', $plugin);
+    return array_shift($slug);
   }
 }

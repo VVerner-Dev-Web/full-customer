@@ -39,6 +39,20 @@
   text-align: left;
   font-size: 14px;
   line-height: 2;
+  margin-top: 0;
+}
+
+.full-template-dependencies-popup h5 {
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.full-template-dependencies-popup ul {
+  margin: 0;
+  text-align: left;
+  margin-bottom: 1em;
+  font-size: 0.85em;
 }
 
 .full-template-popup .swal2-input {

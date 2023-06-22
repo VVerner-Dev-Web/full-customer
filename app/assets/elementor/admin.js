@@ -2,6 +2,7 @@
   "use strict";
 
   let canBeLoaded = true;
+
   const IN_ELEMENTOR = typeof window.elementor !== "undefined";
 
   const SWAL_SETTINGS = {
@@ -230,6 +231,22 @@
     });
   };
 
+  const installTemplateDependencies = (item) => {
+    const endpoint = "full-customer/elementor/install-dependencies/";
+
+    return fetch(FULL.rest_url + endpoint, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-WP-Nonce": FULL.auth,
+      },
+      body: JSON.stringify({ item }),
+    }).then((response) => {
+      return response.json();
+    });
+  };
+
   const getSwalSettings = (item) => {
     if (item.hasZipFile) {
       return SWAL_SETTINGS.pack(item);
@@ -283,6 +300,10 @@
   };
 
   const initItemGallery = () => {
+    if (!$(".full-template-carousel").length) {
+      return;
+    }
+
     $(".full-template-carousel").flickity({
       draggable: ">1",
       freeScroll: true,
@@ -293,6 +314,62 @@
     });
 
     $(".full-template-carousel a").magnificPopup({ type: "image" });
+  };
+
+  const insertTemplateCallback = (response, item) => {
+    if (response.isDismissed) {
+      return;
+    }
+
+    const data = response.value;
+
+    if (data.dependencies) {
+      fireDependenciesSwal(data.dependencies, data.mode, item);
+      return;
+    }
+
+    if (data.error) {
+      Swal.fire("Ops", data.error, "error");
+      return;
+    }
+
+    if (!IN_ELEMENTOR || item.hasZipFile) {
+      Swal.fire("Feito", data.message, "success");
+      return;
+    }
+
+    if (response.isConfirmed) {
+      addTemplateToElementorBuilder(data.builder);
+    }
+  };
+
+  const fireDependenciesSwal = (dependencies, mode, template) => {
+    Swal.fire({
+      titleText: "Quase lá!",
+      html: dependencies,
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Ok, continuar",
+      cancelButtonText: "Voltar",
+      showLoaderOnConfirm: true,
+      backdrop: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      customClass: {
+        container: "full-template-popup full-template-dependencies-popup",
+      },
+      preConfirm: () => {
+        return installTemplateDependencies(template).then((response) => {
+          const $popup = $(document).find(".full-template-popup");
+
+          $popup.find("#swal2-title").text("Feito!");
+          $popup
+            .find("#swal2-html-container")
+            .html("<p>" + response.message + "</p>");
+
+          return installTemplateItem(mode, template);
+        });
+      },
+    }).then((response) => insertTemplateCallback(response, template));
   };
 
   $(document).on(
@@ -321,27 +398,9 @@
 
     const item = getTemplateItemFromDOMElement($(this));
 
-    Swal.fire(getSwalSettings(item)).then((response) => {
-      if (response.isDismissed) {
-        return;
-      }
-
-      const data = response.value;
-
-      if (data.error) {
-        Swal.fire("Ops", data.error, "error");
-        return;
-      }
-
-      if (!IN_ELEMENTOR || item.hasZipFile) {
-        Swal.fire("Feito", data.message, "success");
-        return;
-      }
-
-      if (response.isConfirmed) {
-        addTemplateToElementorBuilder(data.builder);
-      }
-    });
+    Swal.fire(getSwalSettings(item)).then((response) =>
+      insertTemplateCallback(response, item)
+    );
   });
 
   $(document).on("click", "[data-js='buy-item']", function (e) {
