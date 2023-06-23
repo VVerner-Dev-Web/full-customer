@@ -27,6 +27,26 @@ function insertAdminNotice(): void
   endif;
 }
 
+function duplicatorNotice(): void
+{
+  $file = FULL_CUSTOMER_APP . '/views/admin/notice-duplicator-{status}.php';
+
+  $error  = filter_input(INPUT_GET, 'full_duplicator_error');
+  $postId = filter_input(INPUT_GET, 'full_duplicator_post_id', FILTER_VALIDATE_INT);
+  $post   = $postId ? get_post($postId) : null;
+
+  $errorFile = str_replace('{status}', 'error', $file);
+  $successFile = str_replace('{status}', 'success', $file);
+
+  if ($error && file_exists($errorFile)) :
+    require_once $errorFile;
+  endif;
+
+  if ($post && file_exists($successFile)) :
+    require_once $successFile;
+  endif;
+}
+
 function verifySiteConnection(): void
 {
   $flag = 'previous-connect-site-check';

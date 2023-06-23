@@ -3,3 +3,4 @@
 /.github/workflows/temp.xxx
 phpmd-report.json
 notes.txt
+/.vscode/
