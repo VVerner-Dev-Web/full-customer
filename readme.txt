@@ -44,6 +44,10 @@ They remain active for the acquired time.
 ## 2.2.1
 
 - Atualizado para suporte a instalação de dependências relacionadas a plugins no FULL. templates 
+- Corrigido bug em que o botão da AI sumia em alguns casos dentro do Elementor
+- Alterado o prompt sugerido da AI para placeholder
+- Atualizado compatibilidade com funções até PHP 8.2
+- Novidade! FULL.clone para clonar páginas e posts do WordPress.
 
 ## 2.2
 
