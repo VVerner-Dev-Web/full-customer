@@ -343,7 +343,7 @@
     $(ELEMENTS.templatesContainer).hide();
     $(ELEMENTS.iaModeLegend).find("span").text(template.title);
     $(ELEMENTS.iaModeLegend).show();
-    $(ELEMENTS.input).val(template.value);
+    $(ELEMENTS.input).val("").attr("placeholder", template.value);
   });
 
   $(document).on("click", ELEMENTS.iaModeChange, function (e) {
