@@ -186,12 +186,12 @@
     $(".ai-usage .progress").css("width", usage + "%");
   };
 
-  const createAiTrigger = ($el) => {
-    if ($el.find(".full-ai-trigger").length) {
+  const createAiTrigger = () => {
+    if (CURRENT_PANEL.$el.find(".full-ai-trigger").length) {
       return;
     }
 
-    const $title = $el.find(".e-ai-button").first();
+    const $title = CURRENT_PANEL.$el.find(".e-ai-button").first();
 
     $title.after(
       "<span class='full-ai-trigger'><img src='" +
@@ -213,21 +213,16 @@
         return;
       }
 
-      createAiTrigger(panel.$el);
+      CURRENT_WIDGET = model;
+      CURRENT_PANEL = panel;
 
-      panel.$el.on("click", function (e) {
-        const $parent = $(e.target).parents(".elementor-panel-navigation-tab");
-        if ($parent.hasClass("elementor-tab-control-content")) {
-          setTimeout(() => createAiTrigger(panel.$el), 100);
-        }
+      panel.$el.on("DOMSubtreeModified", function () {
+        setTimeout(createAiTrigger, 10);
       });
 
       panel.$el.find(".full-ai-trigger").on("click", function () {
         window.FullIaModal.show();
       });
-
-      CURRENT_WIDGET = model;
-      CURRENT_PANEL = panel;
     }
   );
 
