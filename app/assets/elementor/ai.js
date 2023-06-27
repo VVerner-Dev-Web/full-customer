@@ -220,7 +220,7 @@
         setTimeout(createAiTrigger, 10);
       });
 
-      panel.$el.find(".full-ai-trigger").on("click", function () {
+      panel.$el.on("click", ".full-ai-trigger", function () {
         window.FullIaModal.show();
       });
     }
