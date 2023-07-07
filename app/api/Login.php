@@ -61,7 +61,7 @@ class Login extends FullCustomerController
     $user   = array_shift($hash);
 
     if ($token !== $this->getAuthToken()) :
-      return new WP_REST_Response([], 401);
+      return new WP_REST_Response(['error' => 'invalid auth token'], 401);
     endif;
 
     $this->deleteAuthToken();
@@ -77,9 +77,12 @@ class Login extends FullCustomerController
     wp_clear_auth_cookie();
     wp_set_current_user($user->ID);
     wp_set_auth_cookie($user->ID);
-    wp_redirect(admin_url());
 
-    return null;
+    return rest_ensure_response(new WP_REST_Response(
+      null,
+      302,
+      ['Location' => admin_url()]
+    ));
   }
 
   private function deleteAuthToken(): void
