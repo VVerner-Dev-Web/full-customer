@@ -41,6 +41,11 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.2.3
+
+- Corrigido rota de login que em alguns casos não redirecionava para o painel administrativo
+- Corrigido posicionamento do popup da FULL.ai que se deslocava em alguns casos
+
 ## 2.2.2
 
 - Corrigido bug em que alguns casos não abria o popup da FULL.ai dentro do Elementor

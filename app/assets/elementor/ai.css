@@ -8,6 +8,12 @@
   max-width: 30px !important;
 }
 
+#full-elementor-ai .dialog-widget-content {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
+
 #full-elementor-ai .dialog-message {
   background: #fff;
   padding: 0;

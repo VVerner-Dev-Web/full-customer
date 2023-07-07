@@ -49,10 +49,6 @@
           iconClass: "eicon-close",
         },
         draggable: false,
-        position: {
-          my: "center center",
-          at: "center center",
-        },
         onShow: function () {
           const container = window.FullIaModal.getElements("content");
           container.get(0).innerHTML = $("#full-ai-prompt").html();
@@ -62,6 +58,8 @@
         onHide: function () {
           const container = window.FullIaModal.getElements("content");
           container.get(0).innerHTML = "";
+
+          window.FullIaModal.destroy();
         },
       }
     );
