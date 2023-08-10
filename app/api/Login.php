@@ -22,7 +22,7 @@ class Login extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'processAuthTokenRequest'],
-        'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
 

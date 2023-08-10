@@ -19,7 +19,7 @@ class Connection extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'connectSite'],
-        'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
 
@@ -27,7 +27,7 @@ class Connection extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'disconnectSite'],
-        'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
   }

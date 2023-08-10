@@ -33,7 +33,7 @@ class PluginInstallation extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'installPlugin'],
-        'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
   }
@@ -45,10 +45,12 @@ class PluginInstallation extends FullCustomerController
     $this->pluginFile   = isset($data['activationFile']) ? $data['activationFile'] : null;
 
     if (!$file) :
-      return new WP_REST_Response(['code' => -1]);
+      return new WP_REST_Response(['code' => 'Nenhum arquivo localizado para instalação']);
     endif;
 
     try {
+      $this->verifyFileOrigin($file);
+
       $tempDir = $this->downloadPlugin($file);
 
       $this->movePluginFiles($tempDir);
@@ -72,6 +74,23 @@ class PluginInstallation extends FullCustomerController
     }
 
     return new WP_REST_Response(['code' => 1]);
+  }
+
+  private function verifyFileOrigin(string $source): void
+  {
+    $host = parse_url($source, PHP_URL_HOST);
+
+    $valid = $this->env->getCurrentEnv() === 'PRD' ?
+      'painel.full.services' :
+      'full.dev';
+
+    if ($host !== $valid) :
+      throw new Exception('Origem não reconhecida');
+    endif;
+
+    if ('.zip' !== substr($source, -4)) :
+      throw new Exception('Tipo de arquivo inválido');
+    endif;
   }
 
   private function downloadPlugin(string $source): string

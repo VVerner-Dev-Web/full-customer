@@ -25,7 +25,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'install'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
 
@@ -33,7 +33,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'installDependencies'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
 
@@ -49,7 +49,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'sync'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
 
@@ -57,7 +57,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'builderSendToCloud'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
 
@@ -65,7 +65,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'sendToCloud'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
 
@@ -73,7 +73,7 @@ class ElementorTemplates extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'deleteFromCloud'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
   }
@@ -104,9 +104,9 @@ class ElementorTemplates extends FullCustomerController
     return new WP_REST_Response();
   }
 
-  public function permissionCallback(): bool
+  public function elementorPermissionCallback(): bool
   {
-    return is_user_logged_in() && $this->hasElementor();
+    return $this->isValidUserAuthenticated() && $this->hasElementor();
   }
 
   public function install(WP_REST_Request $request): WP_REST_Response

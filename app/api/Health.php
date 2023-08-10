@@ -5,7 +5,6 @@ namespace Full\Customer\Api;
 use Full\Customer\Health\Controller;
 use \FullCustomerController;
 use \WP_REST_Server;
-use \WP_REST_Request;
 use \WP_REST_Response;
 
 defined('ABSPATH') || exit;
@@ -20,7 +19,7 @@ class Health extends FullCustomerController
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'getHeathStats'],
-        'permission_callback' => 'is_user_logged_in',
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
   }

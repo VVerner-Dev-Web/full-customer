@@ -1,6 +1,9 @@
 {
-    "require": {
-        "nelexa/zip": "3.3.3",
-        "rah/danpu": "^2.7"
-    }
+  "require": {
+    "nelexa/zip": "^4.0",
+    "rah/danpu": "^2.7"
+  },
+  "require-dev": {
+    "vimeo/psalm": "^5.14"
+  }
 }

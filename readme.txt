@@ -1,9 +1,9 @@
 === FULL - Customer ===
 Contributors: fullservices, vverner
 Requires at least: 6.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.4
-Stable tag: 2.2.3
+Stable tag: 2.3
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,11 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.3
+
+- Correções de segurança relacionadas a autenticação de usuários e instalações dos plugins
+- Atualizado versão da biblioteca que manipula arquivos .zip
 
 ## 2.2.3
 

@@ -20,12 +20,12 @@ class ElementorAi extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'generate'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => [$api, 'elementorPermissionCallback'],
       ]
     ]);
   }
 
-  public function permissionCallback(): bool
+  public function elementorPermissionCallback(): bool
   {
     return is_user_logged_in() && $this->hasElementor();
   }

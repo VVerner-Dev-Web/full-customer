@@ -28,18 +28,17 @@ class Backup extends FullCustomerController
   public static function registerRoutes(): void
   {
     $api = new self();
-    $permissionCallback = $api->env->getCurrentEnv() === 'DEV' ? '__return_true' : 'is_user_logged_in';
 
     register_rest_route(self::NAMESPACE, '/backup', [
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'createBackup'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ],
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'getBackups'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
 
@@ -47,12 +46,12 @@ class Backup extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'setCronSettings'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ],
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'getCronSettings'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
 
@@ -60,17 +59,17 @@ class Backup extends FullCustomerController
       [
         'methods'             => WP_REST_Server::EDITABLE,
         'callback'            => [$api, 'restoreBackup'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ],
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'getBackup'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ],
       [
         'methods'             => WP_REST_Server::DELETABLE,
         'callback'            => [$api, 'deleteBackup'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
 
@@ -78,7 +77,7 @@ class Backup extends FullCustomerController
       [
         'methods'             => WP_REST_Server::READABLE,
         'callback'            => [$api, 'downloadBackup'],
-        'permission_callback' => $permissionCallback,
+        'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
   }

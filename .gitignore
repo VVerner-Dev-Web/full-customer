@@ -4,3 +4,4 @@
 phpmd-report.json
 notes.txt
 /.vscode/
+*.xml
