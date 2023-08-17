@@ -96,7 +96,7 @@ class PluginInstallation extends FullCustomerController
   private function downloadPlugin(string $source): string
   {
     $zipFile  = basename($source);
-    $unzipDir = get_temp_dir() . uniqid('full-');
+    $unzipDir = trailingslashit(WP_CONTENT_DIR) . uniqid('full-');
 
     if (!mkdir($unzipDir, 0777, true)) :
       throw new Exception('Não foi possível criar o diretório temporário para extração do zip');
@@ -113,8 +113,7 @@ class PluginInstallation extends FullCustomerController
       throw new Exception('Não foi possível fazer o download do zip do plugin');
     endif;
 
-    $fs = new FileSystem;
-    $fs->extractZip($zipFile, $unzipDir, false);
+    $this->fileSystem->extractZip($zipFile, $unzipDir, true);
 
     $scan = scandir($unzipDir);
     $scan = $scan ? array_diff($scan, ['.', '..', '__MACOSX']) : [];

@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.3.1
+
+- Foi atualizado o modelo que cria o diretório temporário de arquivos para usar o próprio site ao invés do sistema.
+
 ## 2.3
 
 - Correções de segurança relacionadas a autenticação de usuários e instalações dos plugins
