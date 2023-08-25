@@ -105,4 +105,24 @@ class TemplateManager
 
     return $response ? $response : [];
   }
+
+  public function getSegments(): array
+  {
+    $response = get_transient('full/cloud/segments');
+
+    if (!$response) :
+      $full = new FullCustomer();
+      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-segments';
+
+      $request  = wp_remote_get($url, ['sslverify' => false]);
+      $response = wp_remote_retrieve_body($request);
+      $response = json_decode($response)->items;
+
+      $response = is_array($response) ? $response : [];
+
+      set_transient('full/cloud/segments', $response, HOUR_IN_SECONDS);
+    endif;
+
+    return $response ? $response : [];
+  }
 }

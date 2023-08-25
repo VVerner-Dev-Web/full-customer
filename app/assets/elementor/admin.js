@@ -86,6 +86,7 @@
       categories: getCurrentCategoriesFilter(),
       search: getCurrentSearch(),
       types: getCurrentTypesFilter(),
+      segment: getCurrentSegmentFiler(),
     };
 
     const endpoint =
@@ -194,6 +195,16 @@
     const types = [];
 
     $("#full-template-type-filter input:checked").each(function () {
+      types.push($(this).val());
+    });
+
+    return types;
+  };
+
+  const getCurrentSegmentFiler = () => {
+    const types = [];
+
+    $("#full-template-segment-filter input:checked").each(function () {
       types.push($(this).val());
     });
 
@@ -381,6 +392,12 @@
   $(document).on(
     "change",
     "#full-template-type-filter input",
+    resetAndFetchTemplates
+  );
+
+  $(document).on(
+    "change",
+    "#full-template-segment-filter input",
     resetAndFetchTemplates
   );
 

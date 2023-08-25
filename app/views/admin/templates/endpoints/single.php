@@ -68,7 +68,11 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
               <li class="templately-details-price-wrapper">
                 <span class="label">Preço:</span>
                 <span class="templately-details-price">
-                  <?= $templateAsScript ? '{formattedPrice}' : $item->formattedPrice ?>
+                  <?php if ($templateAsScript) : ?>
+                    {priceTagTitle}
+                  <?php else : ?>
+                    <?= $item->price > 0 ? 'Premium' : 'Grátis' ?>
+                  <?php endif; ?>
                 </span>
               </li>
             </ul>

@@ -62,6 +62,34 @@ $maxVisibleItens = 4;
         </div>
       </div>
     </div>
+    <div class="tc-panel-item ts-single tc-panel-active">
+      <div class="tc-panel-header tc-panel-header-active">
+        <h4>Filtrar por segmento</h4>
+      </div>
+      <div class="tc-panel-body tc-content-active">
+        <div class="templately-template-types">
+          <ul id="full-template-segment-filter">
+            <?php foreach (TemplateManager::instance()->getSegments() as $index => $type) : ?>
+              <li class="<?= $index > $maxVisibleItens ? 'hidden' : '' ?>">
+                <label class="toggle-switch toggle-switch-sm" for="type-<?= sanitize_title($type) ?>" style="margin-top: .5rem">
+                  <input type="checkbox" value="<?= $type ?>" class="toggle-switch-input" id="type-<?= sanitize_title($type) ?>">
+                  <span class="toggle-switch-label">
+                    <span class="toggle-switch-indicator"></span>
+                  </span>
+                  <span class="toggle-switch-content">
+                    <span style="display: block;"><?= $type ?></span>
+                  </span>
+                </label>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+
+          <?php if ($index > $maxVisibleItens) : ?>
+            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -128,10 +156,6 @@ $maxVisibleItens = 4;
         </a>
           
         <div class="templately-item-meta">
-          <span class="templately-item-meta-single tb-item-price">
-            {formattedPrice}
-          </span>
-
           {button}
         </div>
       </div>
