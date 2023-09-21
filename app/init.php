@@ -21,6 +21,8 @@ require_once FULL_CUSTOMER_APP . '/backup/Cron.php';
 
 require_once FULL_CUSTOMER_APP . '/health/Controller.php';
 
+require_once FULL_CUSTOMER_APP . '/firewall/Controller.php';
+
 require_once FULL_CUSTOMER_APP . '/controller/Proxy.php';
 require_once FULL_CUSTOMER_APP . '/controller/FileSystem.php';
 

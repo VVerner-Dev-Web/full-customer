@@ -38,6 +38,7 @@ add_action(BackupCron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAs
 add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
 add_action(Proxy::CRON_JOB_NAME, ['\Full\Customer\Proxy', 'cronJob']);
 
+add_action('plugins_loaded', ['\Full\Customer\Firewall\Controller', 'run'], 0);
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
