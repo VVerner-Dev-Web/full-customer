@@ -250,13 +250,20 @@
 
         html = html.replace("{checked}", "");
 
+        const $clone = $(html);
+
         if ("pro" === widget.tier) {
-          const $clone = $(html);
           $clone.find(".status").remove();
-          html = $clone.prop("outerHTML");
         }
 
-        $grids.filter(".widgets-" + widget.tier).append(html);
+        if (widget.required) {
+          $clone.find(".status").text("Obrigatório");
+          $clone.addClass("widget-required");
+        }
+
+        $grids
+          .filter(".widgets-" + widget.tier)
+          .append($clone.prop("outerHTML"));
       }
     });
 

@@ -76,3 +76,12 @@
   text-decoration: none;
   color: #5453fd;
 }
+
+.full-widget.widget-required .status {
+  opacity: 0.5;
+  font-size: 0.75em;
+}
+
+.templately-wrapper .templately-badge {
+  background: #4e4e4e;
+}

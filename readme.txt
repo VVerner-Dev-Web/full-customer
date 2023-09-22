@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.3
 Requires PHP: 7.4
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,11 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.4.1
+
+- Mudanças visuais na tela de extensões
+- Correção de bug que ao desativar os templates, o cloud não funcionava dentro do construtor Elementor.
 
 ## 2.4.0
 

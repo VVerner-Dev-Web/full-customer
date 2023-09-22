@@ -19,7 +19,7 @@
           </div>
 
           <div class="full-page-content">
-            <h4>Extensões grátis</h4>
+            <h4>Extensões FREE</h4>
             <div class="widgets-grid widgets-free">
 
             </div>
@@ -47,6 +47,7 @@
           <span>{tierLabel}</span>
         </span>
       </h4>
+      <div>{description}</div>
       <a href="{url}" target="_blank" rel="noopener noreferrer">Saiba mais</a>
     </div>
     <div class="status">

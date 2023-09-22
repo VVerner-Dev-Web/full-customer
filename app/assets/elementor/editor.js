@@ -1,6 +1,9 @@
 (function ($) {
   "use strict";
 
+  const templatesEnabled = FULL.enabled_services.includes("full-templates");
+  const cloudEnabled = FULL.enabled_services.includes("full-cloud");
+
   const VIEWS = {
     templates: $('.full-templates[data-endpoint="templates"]').html(),
     cloud: $('.full-templates[data-endpoint="cloud"]').html(),
@@ -8,10 +11,7 @@
   };
 
   const insertAddSectionButton = () => {
-    if (
-      !FULL.enabled_services.includes("full-templates") &&
-      !FULL.enabled_services.includes("full-cloud")
-    ) {
+    if (!templatesEnabled && !cloudEnabled) {
       return;
     }
 
@@ -43,7 +43,9 @@
       draggable: false,
       onShow: function () {
         const container = window.FullModal.getElements("content");
-        container.get(0).innerHTML = VIEWS.templates;
+        container.get(0).innerHTML = templatesEnabled
+          ? VIEWS.templates
+          : VIEWS.cloud;
 
         $(document).trigger("full-templates/ready");
       },
