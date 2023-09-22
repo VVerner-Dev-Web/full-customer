@@ -19,8 +19,13 @@
           </div>
 
           <div class="full-page-content">
-            <div id="widgets-grid">
+            <h4>Extensões grátis</h4>
+            <div class="widgets-grid widgets-free">
 
+            </div>
+
+            <h4>Extensões PRO</h4>
+            <div class="widgets-grid widgets-pro">
 
             </div>
           </div>

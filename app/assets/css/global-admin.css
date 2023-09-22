@@ -17,7 +17,12 @@
   padding: 0 30px;
 }
 
-#widgets-grid {
+.full-page-content h4 {
+  margin-bottom: 0.5em;
+  margin-top: 3em;
+}
+
+.widgets-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5em;

@@ -233,8 +233,8 @@
 
   // WIDGETS
   // ========================
-  if ($("#widgets-grid").length) {
-    const $grid = $("#widgets-grid");
+  if ($(".widgets-grid").length) {
+    const $grids = $(".widgets-grid");
 
     $.get(FULL.dashboard_url + "widgets", {}, function (response) {
       for (const widget of response) {
@@ -256,11 +256,11 @@
           html = $clone.prop("outerHTML");
         }
 
-        $grid.append(html);
+        $grids.filter(".widgets-" + widget.tier).append(html);
       }
     });
 
-    $grid.on("change", "input", function () {
+    $grids.on("change", "input", function () {
       const endpoint = "full-customer/toggle-widget/" + $(this).val();
 
       fetch(FULL.rest_url + endpoint, {
