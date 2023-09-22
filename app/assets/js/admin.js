@@ -230,4 +230,47 @@
       text: message,
     });
   };
+
+  // WIDGETS
+  // ========================
+  if ($("#widgets-grid").length) {
+    const $grid = $("#widgets-grid");
+
+    $.get(FULL.dashboard_url + "widgets", {}, function (response) {
+      for (const widget of response) {
+        let html = $("#widget-template").html();
+
+        Object.entries(widget).forEach(([key, value]) => {
+          html = html.replace(new RegExp("{" + key + "}", "g"), value);
+        });
+
+        if (FULL.enabled_services.includes(widget.key)) {
+          html = html.replace("{checked}", "checked");
+        }
+
+        html = html.replace("{checked}", "");
+
+        if ("pro" === widget.tier) {
+          const $clone = $(html);
+          $clone.find(".status").remove();
+          html = $clone.prop("outerHTML");
+        }
+
+        $grid.append(html);
+      }
+    });
+
+    $grid.on("change", "input", function () {
+      const endpoint = "full-customer/toggle-widget/" + $(this).val();
+
+      fetch(FULL.rest_url + endpoint, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "X-WP-Nonce": FULL.auth,
+        },
+      });
+    });
+  }
 })(jQuery);

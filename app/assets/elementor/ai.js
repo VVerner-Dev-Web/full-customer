@@ -185,6 +185,10 @@
   };
 
   const createAiTrigger = () => {
+    if (!FULL.enabled_services.includes("full-ai")) {
+      return;
+    }
+
     if (CURRENT_PANEL.$el.find(".full-ai-trigger").length) {
       return;
     }

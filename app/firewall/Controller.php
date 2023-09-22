@@ -356,8 +356,14 @@ class Controller
     ];
   }
 
-  public static function run()
+  public static function run(): void
   {
+    if (!(fullCustomer())->isServiceEnabled('full-security-pro')) :
+      return;
+    endif;
+
+    header('Protected-By: FULL.');
+
     $request_uri_string = isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $query_string_string = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
     $user_agent_string = isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
@@ -414,7 +420,6 @@ class Controller
     header('HTTP/1.1 403 Forbidden');
     header('Status: 403 Forbidden');
     header('Connection: Close');
-    header('Protected-By: FULL.');
 
     exit;
   }
@@ -425,7 +430,7 @@ class Controller
     return preg_match($pattern, $subject, $matches);
   }
 
-  private static function getString($var): string
+  private static function getString($var)
   {
     if (!is_array($var)) :
       return $var;

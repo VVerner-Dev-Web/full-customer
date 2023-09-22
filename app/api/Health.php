@@ -27,7 +27,7 @@ class Health extends FullCustomerController
   public function getHeathStats(): WP_REST_Response
   {
     return new WP_REST_Response([
-      'results' => (new Controller)->getResults(),
+      'results' => $this->env->isServiceEnabled('full-security') ? (new Controller)->getResults() : [],
     ]);
   }
 }

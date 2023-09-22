@@ -2,7 +2,6 @@
 
 namespace Full\Customer\Api;
 
-use FullCustomer;
 use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
@@ -32,7 +31,7 @@ class ElementorAi extends FullCustomerController
 
   public function generate(WP_REST_Request $request): WP_REST_Response
   {
-    $full    = new FullCustomer();
+    $full    = fullCustomer();
     $payload = [
       'site'      => site_url(),
       'prompt'    => $request->get_param('prompt'),

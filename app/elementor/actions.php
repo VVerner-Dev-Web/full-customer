@@ -4,6 +4,7 @@ namespace Full\Customer\Elementor\Actions;
 
 use Full\Customer\Elementor\TemplateManager;
 
+
 defined('ABSPATH') || exit;
 
 function editorBeforeEnqueueStyles(): void
@@ -16,9 +17,10 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.css', [], '1.0.0');
   wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
-  wp_enqueue_style('full-admin-elementor', $assetsUrl . 'elementor/admin.css', [], $version);
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
   wp_enqueue_style('full-elementor-ai', $assetsUrl . 'elementor/ai.css', [], $version);
+
+  wp_enqueue_style('full-global-admin', $assetsUrl . 'css/global-admin.css', [], $version);
 }
 
 function editorAfterEnqueueScripts(): void
@@ -38,10 +40,14 @@ function editorAfterEnqueueScripts(): void
 
 function addMenuPages(): void
 {
+  $full = fullCustomer();
+
+  $name = $full->isServiceEnabled('full-templates') ? 'Full. Templates' : 'Full. Cloud';
+
   add_submenu_page(
-    'options-general.php',
-    'FULL. Templates',
-    'FULL. Templates',
+    'full-connection',
+    $name,
+    $name,
     'edit_posts',
     'full-templates',
     'fullGetAdminPageView'
@@ -53,7 +59,6 @@ function adminEnqueueScripts(): void
   $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/elementor/';
   $version    = getFullAssetsVersion();
 
-  wp_enqueue_style('full-admin-elementor', $assetsUrl . 'admin.css', [], $version);
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'admin.js', ['jquery'], $version, true);
 }
 

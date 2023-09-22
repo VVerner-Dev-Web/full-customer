@@ -1,4 +1,4 @@
-<?php $full = new FullCustomer(); ?>
+<?php $full = fullCustomer(); ?>
 <a href="https://full.services/" style="visibility: hidden; user-select: none; pointer-events: none; display: none;">plugins premium WordPress</a>
 
 <?php if ($full->getBranding('backlink_url')) : ?>

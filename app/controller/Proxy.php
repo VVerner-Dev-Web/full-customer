@@ -4,8 +4,6 @@ namespace Full\Customer;
 
 use Full\Customer\Health\Controller;
 
-use FullCustomer;
-
 class Proxy
 {
   public const CRON_JOB_NAME  = 'full-customer/proxy';
@@ -19,8 +17,9 @@ class Proxy
 
   public static function cronJob(): void
   {
-    $proxy = new self();
-    $proxy->sendData();
+    if (fullCustomer()->isServiceEnabled('full-update')) {
+      (new self())->sendData();
+    }
   }
 
   protected function sendData(): void
@@ -132,7 +131,7 @@ class Proxy
 
   private function getUrl(): string
   {
-    $full = new FullCustomer();
+    $full = fullCustomer()();
     $url  = 'PRD' === $full->getCurrentEnv() ? 'https://wpfull.com.br' : 'https://full-proxy.dev';
 
     return trailingslashit($url);

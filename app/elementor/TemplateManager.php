@@ -2,7 +2,6 @@
 
 namespace Full\Customer\Elementor;
 
-use FullCustomer;
 use stdClass;
 
 defined('ABSPATH') || exit;
@@ -33,7 +32,7 @@ class TemplateManager
 
   public function getItem(int $itemId): ?stdClass
   {
-    $full = new FullCustomer();
+    $full = fullCustomer();
     $url  = $full->getFullDashboardApiUrl() . '-customer/v1/single-template/' . $itemId;
 
     $payload = [
@@ -54,7 +53,7 @@ class TemplateManager
     $item = get_transient('full/cloud/' . $itemId);
 
     if (!$item) :
-      $full = new FullCustomer();
+      $full = fullCustomer();
       $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud/';
 
       $payload = [
@@ -77,7 +76,7 @@ class TemplateManager
     $response = get_transient('full/cloud/categories');
 
     if (!$response) :
-      $full = new FullCustomer();
+      $full = fullCustomer();
       $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-categories';
 
       $request  = wp_remote_get($url, ['sslverify' => false]);
@@ -94,7 +93,7 @@ class TemplateManager
     $response = get_transient('full/cloud/types');
 
     if (!$response) :
-      $full = new FullCustomer();
+      $full = fullCustomer();
       $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-types';
 
       $request  = wp_remote_get($url, ['sslverify' => false]);
@@ -111,7 +110,7 @@ class TemplateManager
     $response = get_transient('full/cloud/segments');
 
     if (!$response) :
-      $full = new FullCustomer();
+      $full = fullCustomer();
       $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template-segments';
 
       $request  = wp_remote_get($url, ['sslverify' => false]);

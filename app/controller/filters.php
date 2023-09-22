@@ -2,8 +2,6 @@
 
 namespace Full\Customer\Filters;
 
-use FullCustomer;
-use WP_Error;
 use WP_REST_Response;
 use WP_Post;
 
@@ -25,7 +23,7 @@ function setPluginBranding(array $plugins): array
     return $plugins;
   endif;
 
-  $full = new FullCustomer();
+  $full = fullCustomer();
 
   $plugins[$key]['Name']        = $full->getBranding('plugin-name', $plugins[$key]['Name']);
   $plugins[$key]['Title']       = $full->getBranding('plugin-name', $plugins[$key]['Title']);
@@ -44,7 +42,7 @@ function pluginRowMeta(array $meta, string $plugin): array
     return $meta;
   endif;
 
-  $full = new FullCustomer();
+  $full = fullCustomer();
 
   if ($full->getBranding('plugin-author', '') === '') :
     return $meta;
@@ -104,7 +102,9 @@ function restPreServeRequest(bool $served, WP_REST_Response $response)
 
 function duplicatorRowActions(array $actions, WP_Post $post): array
 {
-  if (!current_user_can('edit_posts')) :
+  $full = fullCustomer();
+
+  if (!current_user_can('edit_posts') || !$full->isServiceEnabled('full-clone')) :
     return $actions;
   endif;
 

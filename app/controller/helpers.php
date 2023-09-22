@@ -2,6 +2,11 @@
 
 defined('ABSPATH') || exit;
 
+function fullCustomer(): FullCustomer
+{
+  return new FullCustomer();
+}
+
 function fullGetAdminPageView(): void
 {
   $page     = filter_input(INPUT_GET, 'page');
@@ -31,12 +36,12 @@ function isFullsAdminPage(): bool
 
 function fullGetEnv(): string
 {
-  return (new FullCustomer)->getCurrentEnv();
+  return (fullCustomer())->getCurrentEnv();
 }
 
 function fullGetLocalize(): array
 {
-  $env     = new FullCustomer();
+  $env     = fullCustomer();
 
   return [
     'rest_url'      => trailingslashit(rest_url()),
@@ -45,13 +50,14 @@ function fullGetLocalize(): array
     'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
     'site_url'      => site_url(),
     'store_url'     => 'https://full.services',
-    'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png')
+    'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png'),
+    'enabled_services' => $env->getEnabledServices()
   ];
 }
 
 function fullGetSiteConnectionData()
 {
-  $full = new FullCustomer();
+  $full = fullCustomer();
   $url  = $full->getFullDashboardApiUrl() . '-customer/v1/connect-site';
 
   $request  = wp_remote_get($url, [

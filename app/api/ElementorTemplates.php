@@ -6,7 +6,6 @@ use Full\Customer\Elementor\Exporter;
 use Full\Customer\Elementor\Importer;
 use Full\Customer\Elementor\TemplateManager;
 use Full\Customer\FileSystem;
-use FullCustomer;
 use \FullCustomerController;
 use stdClass;
 use \WP_REST_Server;
@@ -292,7 +291,7 @@ class ElementorTemplates extends FullCustomerController
 
   public function builderSendToCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full   = new FullCustomer();
+    $full   = fullCustomer();
 
     $type    = $request->get_param('templateType') ? $request->get_param('templateType') : 'page';
     $content = $request->get_param('templateContent');
@@ -319,7 +318,7 @@ class ElementorTemplates extends FullCustomerController
 
   public function sendToCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full     = new FullCustomer();
+    $full     = fullCustomer();
     $postId   = (int) $request->get_param('post_id');
     $worker   = new Exporter();
     $payload  = [
@@ -346,7 +345,7 @@ class ElementorTemplates extends FullCustomerController
 
   public function deleteFromCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full   = new FullCustomer();
+    $full   = fullCustomer();
     $cloudId = (int) $request->get_param('item_id');
 
     if (!$cloudId) :

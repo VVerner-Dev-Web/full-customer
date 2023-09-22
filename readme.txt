@@ -44,6 +44,7 @@ They remain active for the acquired time.
 ## 2.4.0
 
 - FULL.Security: nova funcionalidade pro para clientes FULL. Um firewall robusto e eficiente para o bloqueio da maioria dos bots que atrapalham o dia a dia dos sites WordPress.
+- Controle de widgets da FULL dentro do site.
 
 ## 2.3.2
 

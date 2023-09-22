@@ -8,6 +8,13 @@
   };
 
   const insertAddSectionButton = () => {
+    if (
+      !FULL.enabled_services.includes("full-templates") &&
+      !FULL.enabled_services.includes("full-cloud")
+    ) {
+      return;
+    }
+
     const $addSectionContainer = $("#tmpl-elementor-add-section");
     const pointer = '<div class="elementor-add-section-drag-title';
     const icon =

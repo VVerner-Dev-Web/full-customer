@@ -1,6 +1,6 @@
 <?php
 
-$full = new FullCustomer();
+$full = fullCustomer();
 $connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
 
 ?>
@@ -42,15 +42,7 @@ $connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
             Site conectado!
           </h2>
 
-          <p>Você está conectado com os dados abaixo:</p>
-
-          <ul class="checkmark-list">
-            <li>
-              <strong>Usuário no painel</strong>
-              <span><?php echo esc_html($full->get('connection_email')) ?></span>
-            </li>
-          </ul>
-
+          <p>Aproveite o melhor que a FULL. tem para aproveitar em seu site </p>
           <a href="<?php echo esc_url($full->get('dashboard_url')) ?>" class="full-primary-button" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem">Acessar painel</a>
         </div>
 

@@ -3,13 +3,12 @@
 namespace Full\Customer\Actions;
 
 use Full\Customer\Backup\Controller;
-use FullCustomer;
 
 defined('ABSPATH') || exit;
 
 function insertFooterNote(): void
 {
-  $full = new FullCustomer();
+  $full = fullCustomer();
   $file = FULL_CUSTOMER_APP . '/views/footer/note.php';
 
   if ($full->get('allow_backlink') && file_exists($file)) :
@@ -19,7 +18,7 @@ function insertFooterNote(): void
 
 function insertAdminNotice(): void
 {
-  $full = new FullCustomer();
+  $full = fullCustomer();
   $file = FULL_CUSTOMER_APP . '/views/admin/notice.php';
 
   if (!$full->hasDashboardUrl() && file_exists($file)) :
@@ -50,7 +49,7 @@ function duplicatorNotice(): void
 function verifySiteConnection(): void
 {
   $flag = 'previous-connect-site-check';
-  $full = new FullCustomer();
+  $full = fullCustomer();
 
   if ($full->get($flag) || $full->hasDashboardUrl()) :
     return;
@@ -68,7 +67,7 @@ function verifySiteConnection(): void
 
 function activationAnalyticsHook(): void
 {
-  $full  = new FullCustomer();
+  $full  = fullCustomer();
   $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
 
   wp_remote_post($url, [
@@ -86,7 +85,7 @@ function activationAnalyticsHook(): void
 
 function deactivationAnalyticsHook(): void
 {
-  $full  = new FullCustomer();
+  $full  = fullCustomer();
   $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
 
   wp_remote_post($url, [
@@ -102,14 +101,24 @@ function deactivationAnalyticsHook(): void
 
 function addMenuPage(): void
 {
-  $full = new FullCustomer();
+  $full = fullCustomer();
 
-  add_submenu_page(
-    'options-general.php',
+  add_menu_page(
     $full->getBranding('admin-page-name', 'FULL.'),
     $full->getBranding('admin-page-name', 'FULL.'),
     'manage_options',
     'full-connection',
+    'fullGetAdminPageView',
+    trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/img/menu.png',
+    0
+  );
+
+  add_submenu_page(
+    'full-connection',
+    'Extensões',
+    'Extensões',
+    'manage_options',
+    'full-widgets',
     'fullGetAdminPageView'
   );
 }
@@ -118,7 +127,6 @@ function adminEnqueueScripts(): void
 {
   $version = getFullAssetsVersion();
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
-  wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
 
   if (isFullsAdminPage()) :
     wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
@@ -132,13 +140,15 @@ function adminEnqueueScripts(): void
     wp_enqueue_script('full-magnific-popup', $baseUrl . 'vendor/magnific-popup/magnific-popup.min.js', ['jquery'], '1.0.0', true);
   endif;
 
+  wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
+
   wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], $version, true);
   wp_localize_script('full-admin', 'FULL', fullGetLocalize());
 }
 
 function upgradePlugin(): void
 {
-  $env = new FullCustomer();
+  $env = fullCustomer();
   $siteVersion = $env->get('version') ? $env->get('version') : '0.0.0';
 
   if (version_compare(FULL_CUSTOMER_VERSION, $siteVersion, '>') && !get_transient('full-upgrading')) :
@@ -187,7 +197,7 @@ function notifyPluginError(): bool
     return false;
   endif;
 
-  $full = new FullCustomer();
+  $full = fullCustomer();
   $url  = $full->getFullDashboardApiUrl() . '-customer/v1/error';
 
   wp_remote_post($url, [

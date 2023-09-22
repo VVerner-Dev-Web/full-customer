@@ -3,7 +3,6 @@
 namespace Full\Customer\Backup;
 
 use Full\Customer\FileSystem;
-use FullCustomer;
 
 class Controller
 {
@@ -200,7 +199,7 @@ class Controller
 
   private function triggerWebhookEvent(string $event, array $data = []): void
   {
-    $full     = new FullCustomer();
+    $full     = fullCustomer();
     $endpoint = 'backup:created-success' === $event ? 'backup-webhook' : 'restore-webhook';
     $url      = $full->getFullDashboardApiUrl() . '-customer/v1/' . $endpoint;
 

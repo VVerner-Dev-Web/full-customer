@@ -14,6 +14,7 @@ require_once FULL_CUSTOMER_APP . '/api/Login.php';
 require_once FULL_CUSTOMER_APP . '/api/PluginInstallation.php';
 require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
 require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
+require_once FULL_CUSTOMER_APP . '/api/Widgets.php';
 
 require_once FULL_CUSTOMER_APP . '/backup/Controller.php';
 require_once FULL_CUSTOMER_APP . '/backup/MysqlDump.php';

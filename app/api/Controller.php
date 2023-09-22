@@ -7,7 +7,7 @@ abstract class FullCustomerController extends WP_REST_Controller
 
   public function __construct()
   {
-    $this->env = new FullCustomer();
+    $this->env = fullCustomer();
   }
 
   public function permissionCallback(): bool
