@@ -1,9 +1,9 @@
 === FULL - Customer ===
 Contributors: fullservices, vverner
 Requires at least: 6.0
-Tested up to: 6.3
+Tested up to: 6.3.2
 Requires PHP: 7.4
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,12 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.4.2
+
+- A extensão "FULL.Clone" agora é "FULL.Duplica"
+- Melhorias visuais na tela de conexão
+- Controle de widgets PRO da FULL dentro do site.
 
 ## 2.4.1
 

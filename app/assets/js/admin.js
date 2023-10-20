@@ -236,36 +236,40 @@
   if ($(".widgets-grid").length) {
     const $grids = $(".widgets-grid");
 
-    $.get(FULL.dashboard_url + "widgets", {}, function (response) {
-      for (const widget of response) {
-        let html = $("#widget-template").html();
+    $.get(
+      FULL.dashboard_url + "widgets",
+      { site: FULL.site_url },
+      function (response) {
+        for (const widget of response) {
+          let html = $("#widget-template").html();
 
-        Object.entries(widget).forEach(([key, value]) => {
-          html = html.replace(new RegExp("{" + key + "}", "g"), value);
-        });
+          Object.entries(widget).forEach(([key, value]) => {
+            html = html.replace(new RegExp("{" + key + "}", "g"), value);
+          });
 
-        if (FULL.enabled_services.includes(widget.key)) {
-          html = html.replace("{checked}", "checked");
+          if (FULL.enabled_services.includes(widget.key)) {
+            html = html.replace("{checked}", "checked");
+          }
+
+          html = html.replace("{checked}", "");
+
+          const $clone = $(html);
+
+          if ("pro" === widget.tier && !widget.purchased) {
+            $clone.find(".status").remove();
+          }
+
+          if (widget.required) {
+            $clone.find(".status").text("Obrigatório");
+            $clone.addClass("widget-required");
+          }
+
+          $grids
+            .filter(".widgets-" + widget.tier)
+            .append($clone.prop("outerHTML"));
         }
-
-        html = html.replace("{checked}", "");
-
-        const $clone = $(html);
-
-        if ("pro" === widget.tier) {
-          $clone.find(".status").remove();
-        }
-
-        if (widget.required) {
-          $clone.find(".status").text("Obrigatório");
-          $clone.addClass("widget-required");
-        }
-
-        $grids
-          .filter(".widgets-" + widget.tier)
-          .append($clone.prop("outerHTML"));
       }
-    });
+    );
 
     $grids.on("change", "input", function () {
       const endpoint = "full-customer/toggle-widget/" + $(this).val();

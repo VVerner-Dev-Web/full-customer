@@ -16,8 +16,12 @@
 [class*="full_page"] #wpbody-content {
   padding-bottom: 0;
 }
-.notice,
-.woocommerce-message {
+.wp-admin .full-customer-page .notice,
+.wp-admin .full-customer-page div.notice,
+.woocommerce-message,
+.wp-admin .full-customer-page div.fs-notice,
+.woocommerce-message,
+.wp-admin .full-customer-page .error {
   display: none !important;
 }
 .full-customer-page {
@@ -207,6 +211,9 @@
   font-weight: 400;
   color: #fff;
   text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   border: 0.0625rem solid transparent;
   padding: 0.54688rem 0.875rem;
@@ -491,6 +498,9 @@
   opacity: 0;
   transform: translate(0, 1em);
   pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   visibility: hidden;
 }
