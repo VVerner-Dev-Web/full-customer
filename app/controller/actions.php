@@ -227,3 +227,19 @@ function initFullElementorTemplates(): void
     require_once FULL_CUSTOMER_APP . '/elementor/Exporter.php';
   endif;
 }
+
+function initFullLoginWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-login')) :
+    require_once FULL_CUSTOMER_APP . '/login/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/login/actions.php';
+    require_once FULL_CUSTOMER_APP . '/login/filters.php';
+
+    require_once FULL_CUSTOMER_APP . '/login/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/login/Url.php';
+    require_once FULL_CUSTOMER_APP . '/login/Identity.php';
+    require_once FULL_CUSTOMER_APP . '/login/Menu.php';
+    require_once FULL_CUSTOMER_APP . '/login/LogoutRedirect.php';
+    require_once FULL_CUSTOMER_APP . '/login/LoginRedirect.php';
+  endif;
+}

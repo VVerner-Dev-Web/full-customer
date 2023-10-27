@@ -27,6 +27,7 @@ add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullLoginWidget');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('admin_notices', '\Full\Customer\Actions\duplicatorNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');

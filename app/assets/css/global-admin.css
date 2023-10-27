@@ -85,3 +85,41 @@
 .templately-wrapper .templately-badge {
   background: #4e4e4e;
 }
+
+.full-widget-form {
+  background: #fff;
+  padding: 0 1em;
+  border-radius: 5px;
+}
+
+.full-widget-form table {
+  width: 100%;
+}
+
+.full-widget-form th {
+  width: 300px;
+}
+
+.full-widget-form th,
+.full-widget-form td {
+  padding: 18px 20px 16px 10px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.full-widget-form .custom-input {
+  display: block;
+  width: 100%;
+  height: calc(1.6em + 1.21875rem);
+  padding: 0.54688rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #1e2022;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 0.0625rem solid #c3c6d1 !important;
+  border-radius: 0.3125rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  display: bçp;
+}
