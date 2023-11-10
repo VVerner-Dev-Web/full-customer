@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.6.0
+
+- Nova extensão: FULL.images faz o controle de uploads e imagens enviadas no site
+
 ## 2.5.0
 
 - Novas extensões foram disponibilizadas gratuitamente!
