@@ -22,7 +22,7 @@ class MediaReplacement
     if ($env->get('enableMediaReplacement')) :
       $cls = new self($env);
       add_filter('media_row_actions', [$cls, 'modifyEditLink'], PHP_INT_MAX, 2);
-      add_filter('attachment_fields_to_edit', [$cls, 'enqueueFields'], PHP_INT_MAX);
+      add_filter('attachment_fields_to_edit', [$cls, 'enqueueFields'], PHP_INT_MAX, 2);
       add_action('edit_attachment', [$cls, 'replaceMedia']);
       add_filter('post_updated_messages', [$cls, 'attachment_updated_custom_message']);
 
@@ -38,7 +38,7 @@ class MediaReplacement
     return $actions;
   }
 
-  public function enqueueFields(array $fields): array
+  public function enqueueFields(array $fields, $post): array
   {
     wp_enqueue_media();
 
@@ -52,6 +52,7 @@ class MediaReplacement
 				</div>
 				<div class="inside">
 				<input type="hidden" id="full-replace-id" name="full-replace-id" />
+				<input type="hidden" id="full-current-id" value="' . $post->ID . '" />
 				<div>
           <p>O arquivo atual será substituído pelo arquivo carregado e/ou selecionado, mantendo o ID atual, a data de publicação e o nome do arquivo. Assim, nenhum link existente será quebrado.</p>
           <p>Note que você só pode substituir pelo mesmo tipo de arquivo, por exemplo. JPG só pode ser substituído por JPG.</p>
@@ -65,9 +66,9 @@ class MediaReplacement
     return $fields;
   }
 
-  public function replaceMedia(int $oldAttachmentId)
+  public static function replaceMedia(int $oldAttachmentId, int $replaceId = null)
   {
-    $replaceId = filter_input(INPUT_POST, 'full-replace-id', FILTER_VALIDATE_INT);
+    $replaceId = $replaceId ?? filter_input(INPUT_POST, 'full-replace-id', FILTER_VALIDATE_INT);
 
     if (!$replaceId) :
       return;
@@ -97,7 +98,7 @@ class MediaReplacement
       return false;
     }
 
-    $this->deleteFiles($oldAttachmentId);
+    self::deleteFiles($oldAttachmentId);
 
     if (array_key_exists('original_image', $new_attachment_meta)) {
       $old_media_file_path = wp_get_original_image_path($oldAttachmentId);
@@ -119,7 +120,7 @@ class MediaReplacement
     set_transient('full/image-replaced/' . $oldAttachmentId, 1, DAY_IN_SECONDS);
   }
 
-  public function deleteFiles(int $postId)
+  public static function deleteFiles(int $postId)
   {
     $attachment_meta = wp_get_attachment_metadata($postId);
     $attachment_file_path = get_attached_file($postId);
@@ -160,17 +161,17 @@ class MediaReplacement
     return $sources;
   }
 
-  public function appendCacheClearParamToImageSrc(array $image, int $id): array
+  public function appendCacheClearParamToImageSrc($image, int $id): array
   {
-    if (!get_transient('full/image-replaced/' . $id) || !is_admin() || empty($image[0])) :
-      return $image;
+    if (!$image || !get_transient('full/image-replaced/' . $id) || !is_admin() || empty($image[0])) :
+      return [];
     endif;
 
     $image[0] .= ((false === strpos($image[0], '?') ? '?' : '&')) . 't=' . time();
     return $image;
   }
 
-  public function appendCacheClearParamToImageJs(array $response, WP_Post $attachment): array
+  public function appendCacheClearParamToImageJs($response, WP_Post $attachment): array
   {
     if (!get_transient('full/image-replaced/' . $attachment->ID) || !is_admin()) :
       return $response;

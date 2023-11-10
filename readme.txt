@@ -41,6 +41,10 @@ They remain active for the acquired time.
 
 == Changelog ==
 
+## 2.6.1
+
+- Correção da extensão FULL.images que não estava sobrecrevendo as imagens pelo modal do wp-admin
+
 ## 2.6.0
 
 - Nova extensão: FULL.images faz o controle de uploads e imagens enviadas no site

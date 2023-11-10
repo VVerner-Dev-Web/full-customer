@@ -23,7 +23,7 @@ jQuery(function ($) {
       });
   });
 
-  $("#full-media-replace").on("click", function () {
+  $(document).on("click", "#full-media-replace", function () {
     const mediaFrame = wp.media({
       title: "Escolher arquivo",
       button: {
@@ -35,16 +35,29 @@ jQuery(function ($) {
     const $mediaFrameEl = $(mediaFrame.open().el);
 
     $mediaFrameEl.find("#menu-item-upload").click();
-    $mediaFrameEl.find("#menu-item-browse").remove();
 
     mediaFrame.on("select", function () {
       const attachment = mediaFrame.state().get("selection").first().toJSON();
 
       jQuery("#full-replace-id").val(attachment.id);
 
-      if (!$("#full-replace-id").closest(".media-modal").length) {
-        $("#full-replace-id").closest("form").submit();
+      if ($("#full-replace-id").closest(".media-modal").length) {
         $(mediaFrame.close());
+
+        const data = {
+          action: "full/widget/image-replacement",
+          original: $("#full-current-id").val(),
+          replace: $("#full-replace-id").val(),
+        };
+
+        $.post(wp.ajax.settings.url, data, function (response) {
+          if (response.success) {
+            alert("Imagem sobrescrita com sucesso!");
+            return location.reload();
+          } else {
+            alert("Não foi possível sobrescrever a imagem");
+          }
+        });
       }
     });
   });

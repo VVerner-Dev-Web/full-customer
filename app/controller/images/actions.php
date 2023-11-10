@@ -2,6 +2,7 @@
 
 namespace Full\Customer\Images\Actions;
 
+use Full\Customer\Images\MediaReplacement;
 use Full\Customer\Images\Settings;
 
 defined('ABSPATH') || exit;
@@ -20,9 +21,15 @@ function addMenuPages(): void
 
 function adminEnqueueScripts(): void
 {
+  global $pagenow;
+
   $worker = new Settings();
 
-  if ('images' === fullAdminPageEndpoint() || $worker->get('enableMediaReplacement') && 'attachment' === get_post_type()) :
+  if (
+    'images' === fullAdminPageEndpoint() ||
+    $worker->get('enableMediaReplacement') && 'attachment' === get_post_type() ||
+    $worker->get('enableMediaReplacement') && 'upload.php' === $pagenow
+  ) :
     $version = getFullAssetsVersion();
     $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
@@ -42,6 +49,20 @@ function updateSettings(): void
   $worker->set('resizeMaxWidth', filter_input(INPUT_POST, 'resizeMaxWidth'));
   $worker->set('resizeMaxHeight', filter_input(INPUT_POST, 'resizeMaxHeight'));
   $worker->set('resizeQuality', filter_input(INPUT_POST, 'resizeQuality', FILTER_VALIDATE_INT));
+
+  wp_send_json_success();
+}
+
+function replaceImage(): void
+{
+  $replace = filter_input(INPUT_POST, 'replace', FILTER_VALIDATE_INT);
+  $original = filter_input(INPUT_POST, 'original', FILTER_VALIDATE_INT);
+
+  if ($original === $replace) :
+    wp_send_json_error();
+  endif;
+
+  MediaReplacement::replaceMedia($original, $replace);
 
   wp_send_json_success();
 }
