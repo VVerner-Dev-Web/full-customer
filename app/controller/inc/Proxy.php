@@ -2,7 +2,7 @@
 
 namespace Full\Customer;
 
-use Full\Customer\Health\Controller;
+use Full\Customer\Health;
 
 class Proxy
 {
@@ -125,7 +125,7 @@ class Proxy
 
   private function getWordPress(): array
   {
-    $results = (new Controller)->getResults();
+    $results = (new Health)->getResults();
     return isset($results['site_status']['direct']) ? $results['site_status']['direct'] : [];
   }
 

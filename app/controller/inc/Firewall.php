@@ -1,8 +1,8 @@
 <?php
 
-namespace Full\Customer\Firewall;
+namespace Full\Customer;
 
-class Controller
+class Firewall
 {
   private const REQUEST_MAX_LENGTH = 2000;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Full\Customer\Health;
+namespace Full\Customer;
 
 if (!class_exists('WP_Site_Health')) :
   require_once ABSPATH . '/wp-admin/includes/update.php';
@@ -12,7 +12,7 @@ endif;
 
 use WP_Site_Health;
 
-class Controller extends WP_Site_Health
+class Health extends WP_Site_Health
 {
   private $response = [
     'site_status' => [

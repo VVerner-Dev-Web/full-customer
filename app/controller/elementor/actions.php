@@ -42,7 +42,7 @@ function addMenuPages(): void
 {
   $full = fullCustomer();
 
-  $name = $full->isServiceEnabled('full-templates') ? 'Full. Templates' : 'Full. Cloud';
+  $name = $full->isServiceEnabled('full-templates') ? 'Full.templates' : 'Full.cloud';
 
   add_submenu_page(
     'full-connection',

@@ -2,7 +2,7 @@
 
 namespace Full\Customer\Api;
 
-use Full\Customer\Health\Controller;
+use Full\Customer\Health as CustomerHealth;
 use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Response;
@@ -27,7 +27,7 @@ class Health extends FullCustomerController
   public function getHeathStats(): WP_REST_Response
   {
     return new WP_REST_Response([
-      'results' => $this->env->isServiceEnabled('full-security') ? (new Controller)->getResults() : [],
+      'results' => $this->env->isServiceEnabled('full-security') ? (new CustomerHealth)->getResults() : [],
     ]);
   }
 }

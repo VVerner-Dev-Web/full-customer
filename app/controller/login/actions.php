@@ -10,8 +10,8 @@ function addMenuPages(): void
 {
   add_submenu_page(
     'full-connection',
-    'FULL. Login',
-    'FULL. Login',
+    'FULL.login',
+    'FULL.login',
     'edit_posts',
     'full-login',
     'fullGetAdminPageView'
@@ -20,7 +20,7 @@ function addMenuPages(): void
 
 function adminEnqueueScripts(): void
 {
-  if ('full-login' !== filter_input(INPUT_GET, 'page')) :
+  if ('login' !== fullAdminPageEndpoint()) :
     return;
   endif;
 

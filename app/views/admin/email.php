@@ -21,7 +21,7 @@ $worker = new Settings();
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title">
-                <h3>FULL. Email</h3>
+                <h3>FULL.smtp</h3>
               </div>
             </div>
           </div>

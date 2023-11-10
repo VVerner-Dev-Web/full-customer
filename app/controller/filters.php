@@ -110,7 +110,7 @@ function duplicatorRowActions(array $actions, WP_Post $post): array
 
   $url  = admin_url('admin.php?action=full_duplicator&post=' . $post->ID);
   $url  = wp_nonce_url($url, 'full_duplicator');
-  $actions['full_duplicator'] = sprintf('<a href="%s" title="%s">%s</a>', $url, 'FULL.Duplica', 'FULL.Duplica');
+  $actions['full_duplicator'] = sprintf('<a href="%s" title="%s">%s</a>', $url, 'FULL.duplica', 'FULL.duplica');
 
   return $actions;
 }

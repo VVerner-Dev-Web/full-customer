@@ -104,8 +104,8 @@ function addMenuPage(): void
   $full = fullCustomer();
 
   add_menu_page(
-    $full->getBranding('admin-page-name', 'FULL.'),
-    $full->getBranding('admin-page-name', 'FULL.'),
+    $full->getBranding('admin-page-name', 'FULL.services'),
+    $full->getBranding('admin-page-name', 'FULL.services'),
     'manage_options',
     'full-connection',
     'fullGetAdminPageView',
@@ -124,8 +124,8 @@ function addMenuPage(): void
 
   add_submenu_page(
     'full-connection',
-    'Loja',
-    'Loja',
+    'Bot Store',
+    'Bot Store',
     'manage_options',
     'full-store',
     'fullGetAdminPageView'
@@ -231,37 +231,48 @@ function notifyPluginError(): bool
 function initFullElementorTemplates(): void
 {
   if (class_exists('\Elementor\Plugin')) :
-    require_once FULL_CUSTOMER_APP . '/elementor/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/elementor/actions.php';
-    require_once FULL_CUSTOMER_APP . '/elementor/filters.php';
-
-    require_once FULL_CUSTOMER_APP . '/elementor/TemplateManager.php';
-    require_once FULL_CUSTOMER_APP . '/elementor/Importer.php';
-    require_once FULL_CUSTOMER_APP . '/elementor/Exporter.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/filters.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/TemplateManager.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/Importer.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/Exporter.php';
   endif;
 }
 
 function initFullLoginWidget(): void
 {
   if (fullCustomer()->isServiceEnabled('full-login')) :
-    require_once FULL_CUSTOMER_APP . '/login/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/login/actions.php';
-
-    require_once FULL_CUSTOMER_APP . '/login/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/login/Url.php';
-    require_once FULL_CUSTOMER_APP . '/login/Identity.php';
-    require_once FULL_CUSTOMER_APP . '/login/Menu.php';
-    require_once FULL_CUSTOMER_APP . '/login/LogoutRedirect.php';
-    require_once FULL_CUSTOMER_APP . '/login/LoginRedirect.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/Url.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/Identity.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/Menu.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/LogoutRedirect.php';
+    require_once FULL_CUSTOMER_APP . '/controller/login/LoginRedirect.php';
   endif;
 }
 
 function initFullEmailWidget(): void
 {
   if (fullCustomer()->isServiceEnabled('full-email')) :
-    require_once FULL_CUSTOMER_APP . '/email/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/email/actions.php';
-    require_once FULL_CUSTOMER_APP . '/email/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/email/SMTP.php';
+    require_once FULL_CUSTOMER_APP . '/controller/email/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/email/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/email/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/email/SMTP.php';
+  endif;
+}
+
+
+function initFullImagesWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-images')) :
+    require_once FULL_CUSTOMER_APP . '/controller/images/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/SvgUpload.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/MediaReplacement.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
   endif;
 }

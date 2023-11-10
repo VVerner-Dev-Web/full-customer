@@ -10,8 +10,8 @@ function addMenuPages(): void
 {
   add_submenu_page(
     'full-connection',
-    'FULL. Email',
-    'FULL. Email',
+    'FULL.smtp',
+    'FULL.smtp',
     'edit_posts',
     'full-email',
     'fullGetAdminPageView'
@@ -20,7 +20,7 @@ function addMenuPages(): void
 
 function adminEnqueueScripts(): void
 {
-  if ('full-email' !== filter_input(INPUT_GET, 'page')) :
+  if ('email' !== fullAdminPageEndpoint()) :
     return;
   endif;
 

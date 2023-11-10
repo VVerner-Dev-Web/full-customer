@@ -16,16 +16,14 @@ require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
 require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
 require_once FULL_CUSTOMER_APP . '/api/Widgets.php';
 
-require_once FULL_CUSTOMER_APP . '/backup/Controller.php';
-require_once FULL_CUSTOMER_APP . '/backup/MysqlDump.php';
-require_once FULL_CUSTOMER_APP . '/backup/Cron.php';
+require_once FULL_CUSTOMER_APP . '/controller/backup/Controller.php';
+require_once FULL_CUSTOMER_APP . '/controller/backup/MysqlDump.php';
+require_once FULL_CUSTOMER_APP . '/controller/backup/Cron.php';
 
-require_once FULL_CUSTOMER_APP . '/health/Controller.php';
-
-require_once FULL_CUSTOMER_APP . '/firewall/Controller.php';
-
-require_once FULL_CUSTOMER_APP . '/controller/Proxy.php';
-require_once FULL_CUSTOMER_APP . '/controller/FileSystem.php';
+require_once FULL_CUSTOMER_APP . '/controller/inc/Health.php';
+require_once FULL_CUSTOMER_APP . '/controller/inc/Firewall.php';
+require_once FULL_CUSTOMER_APP . '/controller/inc/Proxy.php';
+require_once FULL_CUSTOMER_APP . '/controller/inc/FileSystem.php';
 
 require_once FULL_CUSTOMER_APP . '/controller/hooks.php';
 require_once FULL_CUSTOMER_APP . '/controller/actions.php';

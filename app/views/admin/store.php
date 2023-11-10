@@ -13,17 +13,18 @@
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title">
-                <h3>Loja de aplicativos</h3>
-
+                <h3>Bot Store</h3>
                 <input type="search" id="filter-products" placeholder="Procurar...">
               </div>
             </div>
           </div>
 
           <div class="full-page-content">
-            <div id="full-products-grid">
-              <!-- JS -->
-            </div>
+            <Nossa>Nossos avançados robôs AI têm transformado o cenário e instaurando uma nova era no WordPress. Automatizando com precisão milhões de tarefas essenciais e vitais para o bom funcionamento do Wordpress. Desenvolvemos robôs inteligentes e funcionalidades abrangentes, que englobam desde as configurações iniciais até a manutenção contínua, prevenção de falhas e correções técnicas. Nossa solução pioneira redefine os padrões do WordPress, capacitando inúmeras empresas a desbravar a plataforma de forma descomplicada, intuitiva e excepcionalmente eficaz.</p>
+
+              <div id="full-products-grid">
+                <!-- JS -->
+              </div>
           </div>
         </div>
       </div>

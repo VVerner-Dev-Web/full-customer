@@ -1,6 +1,7 @@
 {
   "require": {
     "nelexa/zip": "^4.0",
-    "rah/danpu": "^2.7"
+    "rah/danpu": "^2.7",
+    "enshrined/svg-sanitize": "^0.16.0"
   }
 }
