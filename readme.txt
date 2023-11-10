@@ -1,9 +1,9 @@
 === FULL - Customer ===
 Contributors: fullservices, vverner
 Requires at least: 6.0
-Tested up to: 6.3.2
+Tested up to: 6.4.1
 Requires PHP: 7.4
-Stable tag: 2.4.2
+Stable tag: 2.5.0
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,13 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.5.0
+
+- Novas extensões foram disponibilizadas gratuitamente!
+- FULL.Login : Permite fazer edições na tela de login do WordPress, além de alterar a url para algo menos suscetivel a ataques
+- FULL.Email : Permite realizar configurações SMTP para melhorar a eficiência dos disparos de email do site
+- Foi adicionado uma nova página de "loja" no admin com os plugins disponibilizados pela FULL.
 
 ## 2.4.2
 
