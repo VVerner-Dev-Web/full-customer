@@ -9,13 +9,16 @@ function fullCustomer(): FullCustomer
 
 function fullGetAdminPageView(): void
 {
-  $page     = filter_input(INPUT_GET, 'page');
-  $endpoint = $page ? str_replace('full-', '', $page) : '';
-  $file     = FULL_CUSTOMER_APP . '/views/admin/' . $endpoint . '.php';
-
+  $file = FULL_CUSTOMER_APP . '/views/admin/' . fullAdminPageEndpoint() . '.php';
   if (file_exists($file)) :
     include $file;
   endif;
+}
+
+function fullAdminPageEndpoint(): string
+{
+  $page     = filter_input(INPUT_GET, 'page');
+  return $page ? str_replace('full-', '', $page) : '';
 }
 
 function fullGetImageUrl(string $image): string

@@ -121,6 +121,15 @@ function addMenuPage(): void
     'full-widgets',
     'fullGetAdminPageView'
   );
+
+  add_submenu_page(
+    'full-connection',
+    'Loja',
+    'Loja',
+    'manage_options',
+    'full-store',
+    'fullGetAdminPageView'
+  );
 }
 
 function adminEnqueueScripts(): void
@@ -141,6 +150,10 @@ function adminEnqueueScripts(): void
   endif;
 
   wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
+
+  if ('store' === fullAdminPageEndpoint()) :
+    wp_enqueue_script('full-store', $baseUrl . 'js/admin-store.js', ['jquery'], $version, true);
+  endif;
 
   wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], $version, true);
   wp_localize_script('full-admin', 'FULL', fullGetLocalize());
@@ -233,7 +246,6 @@ function initFullLoginWidget(): void
   if (fullCustomer()->isServiceEnabled('full-login')) :
     require_once FULL_CUSTOMER_APP . '/login/hooks.php';
     require_once FULL_CUSTOMER_APP . '/login/actions.php';
-    require_once FULL_CUSTOMER_APP . '/login/filters.php';
 
     require_once FULL_CUSTOMER_APP . '/login/Settings.php';
     require_once FULL_CUSTOMER_APP . '/login/Url.php';
@@ -241,5 +253,14 @@ function initFullLoginWidget(): void
     require_once FULL_CUSTOMER_APP . '/login/Menu.php';
     require_once FULL_CUSTOMER_APP . '/login/LogoutRedirect.php';
     require_once FULL_CUSTOMER_APP . '/login/LoginRedirect.php';
+  endif;
+}
+
+function initFullEmailWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-email')) :
+    require_once FULL_CUSTOMER_APP . '/email/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/email/actions.php';
+    require_once FULL_CUSTOMER_APP . '/email/Settings.php';
   endif;
 }
