@@ -262,5 +262,6 @@ function initFullEmailWidget(): void
     require_once FULL_CUSTOMER_APP . '/email/hooks.php';
     require_once FULL_CUSTOMER_APP . '/email/actions.php';
     require_once FULL_CUSTOMER_APP . '/email/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/email/SMTP.php';
   endif;
 }
