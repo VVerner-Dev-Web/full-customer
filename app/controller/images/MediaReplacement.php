@@ -147,7 +147,7 @@ class MediaReplacement
     return $messages;
   }
 
-  public function appendCacheClearParamToImageSrcset(array $sources, $size_array, $image_src, $image_meta, int $id): array
+  public function appendCacheClearParamToImageSrcset(array $sources, $size_array, $image_src, $image_meta, $id): array
   {
     if (!get_transient('full/image-replaced/' . $id) || !is_admin()) :
       return $sources;
@@ -161,7 +161,7 @@ class MediaReplacement
     return $sources;
   }
 
-  public function appendCacheClearParamToImageSrc($image, int $id): array
+  public function appendCacheClearParamToImageSrc($image, $id): array
   {
     if (!$image || !get_transient('full/image-replaced/' . $id) || !is_admin() || empty($image[0])) :
       return [];
@@ -171,7 +171,7 @@ class MediaReplacement
     return $image;
   }
 
-  public function appendCacheClearParamToImageJs($response, WP_Post $attachment): array
+  public function appendCacheClearParamToImageJs($response, $attachment): array
   {
     if (!get_transient('full/image-replaced/' . $attachment->ID) || !is_admin()) :
       return $response;
