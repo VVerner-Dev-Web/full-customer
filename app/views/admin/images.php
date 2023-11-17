@@ -20,8 +20,8 @@ $worker = new Settings();
 
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
-              <div class="templately-header-title">
-                <h3>FULL.imagem</h3>
+              <div class="templately-header-title full-widget-title">
+                <h3>FULL.images</h3>
               </div>
             </div>
           </div>

@@ -276,3 +276,12 @@ function initFullImagesWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
   endif;
 }
+
+function initFullCodeWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-code')) :
+    require_once FULL_CUSTOMER_APP . '/controller/code/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/code/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/code/Settings.php';
+  endif;
+}

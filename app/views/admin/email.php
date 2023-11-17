@@ -20,7 +20,7 @@ $worker = new Settings();
 
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
-              <div class="templately-header-title">
+              <div class="templately-header-title full-widget-title">
                 <h3>FULL.smtp</h3>
               </div>
             </div>

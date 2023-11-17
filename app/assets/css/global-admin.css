@@ -341,3 +341,7 @@
   border: solid 0.75px #f1f3f5;
   padding: 0.25em 1em;
 }
+
+.full-widget-title h3 {
+  text-transform: none !important;
+}
