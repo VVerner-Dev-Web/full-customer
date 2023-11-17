@@ -42,14 +42,9 @@ function enqueueFrontendCustomStyles(): void
 {
   $worker = new Settings();
 
-  error_log('oi');
-
   if (!$worker->get('frontend-css')) :
     return;
   endif;
-
-  error_log('oi2');
-
 
   echoCodeWithComments('<style id="full-frontend-css">' . $worker->get('frontend-css') . '</style>');
 }

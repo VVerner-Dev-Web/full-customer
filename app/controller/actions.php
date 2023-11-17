@@ -285,3 +285,16 @@ function initFullCodeWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/code/Settings.php';
   endif;
 }
+
+function initFullSpeedWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-speed')) :
+    require_once FULL_CUSTOMER_APP . '/controller/speed/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/DeprecatedComponents.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/BlockBasedFeatures.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/Revisions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/speed/Heartbeat.php';
+  endif;
+}

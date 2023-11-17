@@ -1,16 +1,4 @@
 jQuery(function ($) {
-  $("#full-email-settings").on("submit", function (e) {
-    e.preventDefault();
-
-    const $form = $(this);
-    const $btn = $form.find("button");
-    $btn.addClass("loading");
-
-    $.post(ajaxurl, $form.serialize(), function (response) {
-      $btn.removeClass("loading");
-    });
-  });
-
   $("#full-email-test").on("submit", function (e) {
     e.preventDefault();
 

@@ -1,16 +1,4 @@
 jQuery(function ($) {
-  $("#full-images-settings").on("submit", function (e) {
-    e.preventDefault();
-
-    const $form = $(this);
-    const $btn = $form.find("button");
-    $btn.addClass("loading");
-
-    $.post(ajaxurl, $form.serialize(), function (response) {
-      $btn.removeClass("loading");
-    });
-  });
-
   $("#enableUploadResize").on("change", function () {
     const required = this.checked;
 
