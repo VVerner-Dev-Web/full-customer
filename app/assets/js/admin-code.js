@@ -9,4 +9,11 @@ codeItems.forEach((el) => {
   });
 
   codemirror.setSize("100%", 300);
+
+  codemirror.on("change", function (instance, obj) {
+    jQuery(el)
+      .parents("form")
+      .find(".codemirror-code-value")
+      .val(instance.getValue());
+  });
 });

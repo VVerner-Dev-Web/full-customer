@@ -27,7 +27,6 @@ $worker = new Settings();
           </div>
 
           <div class="full-page-content">
-
             <?php foreach ($worker->getSections() as $section) : ?>
 
               <h3><?= $section['name'] ?></h3>
@@ -38,7 +37,8 @@ $worker = new Settings();
                 <input type="hidden" name="action" value="full/widget/code/<?= $section['callback'] ?>">
                 <input type="hidden" name="code" value="<?= $section['key'] ?>">
 
-                <textarea class="codemirror-code hidden" data-mode="<?= $section['mode'] ?>" name="<?= $section['key'] ?>"><?= $worker->get($section['key']) ?></textarea>
+                <textarea class="codemirror-code-value hidden" name="<?= $section['key'] ?>"><?= $worker->get($section['key']) ?></textarea>
+                <textarea class="codemirror-code" data-mode="<?= $section['mode'] ?>"><?= $worker->get($section['key']) ?></textarea>
                 <button class="full-primary-button" style="margin-top: 10px">Atualizar</button>
               </form>
 
