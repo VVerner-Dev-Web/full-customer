@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.4.1
 Requires PHP: 7.4
-Stable tag: 2.6.2
+Stable tag: 2.7.0
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,14 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.7.0
+
+- Nova extensão: FULL.code (Insira códigos personalizados no seu site)
+- Nova extensão: FULL.speed (Melhore a velocidade do seu site com ajustes finos nas configurações)
+- Nova extensão: FULL.admin (Melhore a interface do wp-admin do seu site)
+- Ajustes visuais nas telas das extensões
+- Inserção da lib "codemirror" para edição dos arquivos através da FULL.code
 
 ## 2.6.2
 
