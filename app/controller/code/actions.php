@@ -99,7 +99,7 @@ function updateInsertedCode()
   check_ajax_referer('full/widget/code/update-code');
 
   $key = filter_input(INPUT_POST, 'code');
-  $code = wp_kses_post(filter_input(INPUT_POST, $key));
+  $code = filter_input(INPUT_POST, $key);
 
   $worker = new Settings();
   $worker->set($key, $code);
@@ -112,7 +112,7 @@ function updateRobotsFile()
   check_ajax_referer('full/widget/code/update-robots');
 
   $key = filter_input(INPUT_POST, 'code');
-  $code = wp_kses_post(filter_input(INPUT_POST, $key));
+  $code = filter_input(INPUT_POST, $key);
 
   file_put_contents(ABSPATH . '/robots.txt', $code);
 
