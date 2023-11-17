@@ -298,3 +298,13 @@ function initFullSpeedWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/speed/Heartbeat.php';
   endif;
 }
+
+function initFullAdminWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-admin')) :
+    require_once FULL_CUSTOMER_APP . '/controller/admin/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin/AdminInterface.php';
+  endif;
+}

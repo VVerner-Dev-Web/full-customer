@@ -62,7 +62,7 @@ function pluginRowMeta(array $meta, string $plugin): array
   return $meta;
 }
 
-function wpPhpErrorArgs(array $args, array $error): array
+function notifyPluginError(array $args, array $error): array
 {
   if (strpos($error['file'], dirname(FULL_CUSTOMER_FILE)) === false) :
     return $args;

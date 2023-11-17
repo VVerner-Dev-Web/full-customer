@@ -296,6 +296,10 @@
 
     jQuery.post(ajaxurl, $form.serialize(), function (response) {
       $btn.removeClass("loading");
+
+      if (response.data.reload) {
+        location.reload();
+      }
     });
   });
 })(jQuery);

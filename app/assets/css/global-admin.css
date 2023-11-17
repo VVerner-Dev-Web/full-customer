@@ -345,3 +345,7 @@
 .full-widget-title h3 {
   text-transform: none !important;
 }
+
+[class*="full-services_page_"] #wpcontent {
+  padding-left: 0 !important;
+}

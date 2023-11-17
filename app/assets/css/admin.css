@@ -13,7 +13,7 @@
   vertical-align: middle;
 }
 #wpbody-content,
-[class*="full_page"] #wpbody-content {
+[class*="full-services_page_"] #wpbody-content {
   padding-bottom: 0;
 }
 .wp-admin .full-customer-page .notice,
