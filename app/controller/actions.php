@@ -309,6 +309,21 @@ function initFullAdminWidget(): void
   endif;
 }
 
+function initFullSecurityWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-security')) :
+    require_once FULL_CUSTOMER_APP . '/controller/security/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/Settings.php';
+
+    require_once FULL_CUSTOMER_APP . '/controller/security/Feeds.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/LastLoginColumn.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/PasswordProtection.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/UsersOnlyMode.php';
+    require_once FULL_CUSTOMER_APP . '/controller/security/UserSwitch.php';
+  endif;
+}
+
 function initFullWooCommerceWidget(): void
 {
   if (fullCustomer()->isServiceEnabled('full-woocommerce')) :

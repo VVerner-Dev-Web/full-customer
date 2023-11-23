@@ -34,6 +34,7 @@ add_action('plugins_loaded', '\Full\Customer\Actions\initFullCodeWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullSpeedWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullWooCommerceWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullAdminWidget');
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullSecurityWidget');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('admin_notices', '\Full\Customer\Actions\duplicatorNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
