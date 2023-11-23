@@ -308,3 +308,22 @@ function initFullAdminWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/admin/AdminInterface.php';
   endif;
 }
+
+function initFullWooCommerceWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-woocommerce')) :
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/Settings.php';
+
+    if (function_exists('WC')) :
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/EstimateMode.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/HidePrices.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/OrderReceived.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/ProductCustomTab.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/ProductReviews.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/TestPaymentGateway.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/AutocompleteOrders.php';
+    endif;
+  endif;
+}

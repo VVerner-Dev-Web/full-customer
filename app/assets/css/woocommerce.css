@@ -1,0 +1,13 @@
+.cart-price,
+.woocommerce-mini-cart__total,
+.woocommerce-mini-cart-item .amount,
+.product-price,
+.product-subtotal,
+.cart_totals .shop_table,
+.product-total,
+.cart-subtotal,
+.order-total,
+.woocommerce-table--order-details tfoot,
+.woocommerce-order-overview__total {
+  display: none !important;
+}

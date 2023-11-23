@@ -32,6 +32,7 @@ add_action('plugins_loaded', '\Full\Customer\Actions\initFullEmailWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullImagesWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullCodeWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullSpeedWidget');
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullWooCommerceWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullAdminWidget');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('admin_notices', '\Full\Customer\Actions\duplicatorNotice');
