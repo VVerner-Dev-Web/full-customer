@@ -306,4 +306,23 @@
       }
     });
   });
+
+  // TABS
+  // ========================
+  $(".full-page-content .tabs a").on("click", function (e) {
+    e.preventDefault();
+
+    const $el = $(this);
+    const $panel = $($el.attr("href"));
+
+    if (!$panel.length) {
+      return alert("Em breve");
+    }
+
+    $(".full-page-content .tabs a").removeClass("active");
+    $(".full-page-content .tabbed-content form").hide();
+
+    $el.addClass("active");
+    $panel.slideToggle();
+  });
 })(jQuery);

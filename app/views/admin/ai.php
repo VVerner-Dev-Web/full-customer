@@ -7,6 +7,8 @@ $worker = new Settings();
 $quota = get_option('full/ai/quota', null)
 ?>
 
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
 <div class="full-templates-admin-body">
   <div class="templately-wrapper">
     <div class="templately-header">
@@ -34,8 +36,8 @@ $quota = get_option('full/ai/quota', null)
 
             <div class="tabs">
               <a href="#copywrite-generator" class="active">Gerador de conteúdo</a>
-              <a href="#metadescription-generator" onclick="alert('Em breve')" class="disabled">Gerador de meta descrição e resumo</a>
-              <a href="#image-alt-generator" onclick="alert('Em breve')" class="disabled">Gerador de Alt para imagens</a>
+              <a href="#metadescription-generator">Gerador de meta descrição e resumo</a>
+              <a href="#image-alt-generator">Gerador de Alt para imagens</a>
             </div>
 
             <div class="tabbed-content" style="margin-bottom: 30px">
@@ -111,7 +113,47 @@ $quota = get_option('full/ai/quota', null)
                 <button id="publish-trigger" class="full-primary-button">Criar post com conteúdo</button>
 
                 <div id="copywrite-writing">
-                  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+                  <dotlottie-player src="https://lottie.host/c747577d-688e-49c6-899d-8eb891b91c05/nSRGmWyp6x.lottie" background="transparent" speed="1" style="width: 350px; height: 350px; margin: auto;" loop autoplay></dotlottie-player>
+                </div>
+              </form>
+
+              <form method="POST" id="metadescription-generator" class="full-widget-form" style="display: none">
+                <?php wp_nonce_field('full/ai/metadescription-generator'); ?>
+                <input type="hidden" name="action" value="full/ai/metadescription-generator">
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>
+                        <label for="postId">Conteúdo</label>
+                      </th>
+                      <td>
+                        <select name="postId" id="postId" class="custom-input" required>
+                          <option hidden>Carregando...</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <button class="full-primary-button">Gerar conteúdo</button>
+                      </th>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+
+              <form method="POST" id="metadesc-publish" style="padding: 16px; margin-top: 30px; display: none" class="full-widget-form">
+                <?php wp_nonce_field('full/ai/metadesc-publish'); ?>
+                <input type="hidden" name="action" value="full/ai/metadesc-publish">
+                <input type="text" name="metadescription" id="metadesc-received" class="hidden">
+                <input type="text" name="postId" id="metadesc-postId" class="hidden">
+
+                <div id="metadesc-content" style="margin-bottom: 20px"></div>
+
+                <button id="metadesc-trigger" class="full-primary-button">Atualizar post</button>
+
+                <div id="metadesc-writing">
                   <dotlottie-player src="https://lottie.host/c747577d-688e-49c6-899d-8eb891b91c05/nSRGmWyp6x.lottie" background="transparent" speed="1" style="width: 350px; height: 350px; margin: auto;" loop autoplay></dotlottie-player>
                 </div>
               </form>
@@ -122,6 +164,4 @@ $quota = get_option('full/ai/quota', null)
       </div>
     </div>
   </div>
-</div>
-</div>
 </div>
