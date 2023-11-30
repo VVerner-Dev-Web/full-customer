@@ -323,7 +323,6 @@ function initFullWooCommerceWidget(): void
   endif;
 }
 
-
 function initFullContentWidget(): void
 {
   if (fullCustomer()->isServiceEnabled('full-clone')) :
@@ -334,5 +333,14 @@ function initFullContentWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/content/Posts.php';
     require_once FULL_CUSTOMER_APP . '/controller/content/Links.php';
     require_once FULL_CUSTOMER_APP . '/controller/content/Comments.php';
+  endif;
+}
+
+function initFullAiWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-ai')) :
+    require_once FULL_CUSTOMER_APP . '/controller/ai/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/ai/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/ai/Settings.php';
   endif;
 }

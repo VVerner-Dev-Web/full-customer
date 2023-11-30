@@ -294,10 +294,14 @@
     const $btn = $form.find("button");
     $btn.addClass("loading");
 
+    $(window).trigger("full/form-submitted/" + $form.attr("id"));
+
     jQuery.post(ajaxurl, $form.serialize(), function (response) {
       $btn.removeClass("loading");
 
-      if (response.data.reload) {
+      $(window).trigger("full/form-received/" + $form.attr("id"), response);
+
+      if (response?.data?.reload) {
         location.reload();
       }
     });

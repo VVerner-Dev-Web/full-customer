@@ -36,6 +36,7 @@ add_action('plugins_loaded', '\Full\Customer\Actions\initFullWooCommerceWidget')
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullAdminWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullSecurityWidget');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullContentWidget');
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullAiWidget');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 

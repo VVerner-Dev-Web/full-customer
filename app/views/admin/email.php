@@ -128,7 +128,6 @@ $worker = new Settings();
                     </th>
                     <td></td>
                   </tr>
-                  </tr>
                 </tbody>
               </table>
             </form>

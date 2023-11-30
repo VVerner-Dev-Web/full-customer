@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.4.1
 Requires PHP: 7.4
-Stable tag: 2.9.0
+Stable tag: 2.10.0
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,10 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.10.0
+
+- A FULL.ai ganhou novas funcionalidades e agora pode gerar blog posts completos!
 
 ## 2.9.0
 
