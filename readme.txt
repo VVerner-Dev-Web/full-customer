@@ -45,6 +45,7 @@ They remain active for the acquired time.
 
 - FULL.ai: otimizado a busca de conteúdo para geração de meta descrição
 - FULL.woocommerce: adicionado a funcionalidade de finalização de compra por whatsapp
+- Foi corrigido um bug em que o modal da AI no Elementor não era fechado em alguns casos
 
 ## 2.10.2
 

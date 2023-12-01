@@ -58,8 +58,6 @@
         onHide: function () {
           const container = window.FullIaModal.getElements("content");
           container.get(0).innerHTML = "";
-
-          window.FullIaModal.destroy();
         },
       }
     );

@@ -52,8 +52,6 @@
       onHide: function () {
         const container = window.FullModal.getElements("content");
         container.get(0).innerHTML = "";
-
-        window.FullModal.destroy();
       },
     });
 
