@@ -61,7 +61,7 @@ class WhatsAppCheckout
 
     $url = 'https://wa.me/' . $this->phoneNumber . '?text=' . $message;
 
-    header('Location: ' . $url);
+    wp_redirect($url);
     exit;
   }
 }
