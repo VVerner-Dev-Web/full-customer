@@ -13,3 +13,7 @@ add_action('wp_ajax_full/ai/copywrite-publish', 'Full\Customer\Ai\Actions\copywr
 add_action('wp_ajax_full/ai/list-posts', 'Full\Customer\Ai\Actions\listPosts');
 add_action('wp_ajax_full/ai/metadescription-generator', 'Full\Customer\Ai\Actions\metadescriptionGenerator');
 add_action('wp_ajax_full/ai/metadesc-publish', 'Full\Customer\Ai\Actions\metadescriptionPublish');
+
+add_action('wp_ajax_full/ai/list-images-missing-alt', 'Full\Customer\Ai\Actions\listImagesMissingAlt');
+add_action('wp_ajax_full/ai/update-image-alt', 'Full\Customer\Ai\Actions\imageAltUpdate');
+add_action('wp_ajax_full/ai/generate-image-alt', 'Full\Customer\Ai\Actions\imageAltGenerator');

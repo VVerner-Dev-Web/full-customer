@@ -287,7 +287,7 @@
 
   // WIDGETS SETTINGS FORMS
   // ========================
-  $(".full-widget-form").on("submit", function (e) {
+  $("form.full-widget-form").on("submit", function (e) {
     e.preventDefault();
 
     const $form = jQuery(this);
@@ -320,7 +320,7 @@
     }
 
     $(".full-page-content .tabs a").removeClass("active");
-    $(".full-page-content .tabbed-content form").hide();
+    $(".full-page-content .tabbed-content .full-widget-form").hide();
 
     $el.addClass("active");
     $panel.slideToggle();

@@ -33,7 +33,6 @@ $quota = get_option('full/ai/quota', null)
           </div>
 
           <div class="full-page-content">
-
             <div class="tabs">
               <a href="#copywrite-generator" class="active">Gerador de conteúdo</a>
               <a href="#metadescription-generator">Gerador de meta descrição e resumo</a>
@@ -157,6 +156,17 @@ $quota = get_option('full/ai/quota', null)
                   <dotlottie-player src="https://lottie.host/c747577d-688e-49c6-899d-8eb891b91c05/nSRGmWyp6x.lottie" background="transparent" speed="1" style="width: 350px; height: 350px; margin: auto;" loop autoplay></dotlottie-player>
                 </div>
               </form>
+
+              <div id="image-alt-generator" class="full-widget-form" style="padding: 16px; display: none">
+                <p>O atributo "alt" para as imagens define um texto descritivo para a imagem em questão. Ele é extremamente necessário para a acessibilidade do seu site e também pode causar impacto positivo no SEO dos seus conteúdos.</p>
+
+                <div id="images-response"></div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                  <span class="images-pagination"></span><br>
+                  <button type="button" data-page="1" id="search-images-missing-alt" class="full-primary-button">Procurar imagens sem alt text</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -165,3 +175,17 @@ $quota = get_option('full/ai/quota', null)
     </div>
   </div>
 </div>
+
+<script type="text/template" id="template-image-missing-alt">
+  <form class="image-card alt-form">
+    <input type="hidden" class="attachmentId" value="{id}">
+    <a href="{url}" target="_blank" rel="noopener noreferrer">
+      <img src="{url}">
+    </a>
+    <div class="image-content">
+      <textarea rows="2" class="custom-input alt-input" placeholder="Atributo ALT para ser usado na imagem" rows="2" required></textarea>
+      <button type="button" class="full-primary-button generate-image-alt" >Gerar conteúdo</button>
+      <button type="submit" class="full-primary-button update-image-alt"  style="display: none">Atualizar</button>
+    </div>
+  </form>
+</script>
