@@ -21,7 +21,7 @@ $quota = get_option('full/ai/quota', null)
       <div class="templately-container-row" id="endpoint-viewport">
         <div class="templately-contents">
 
-          <div class="templately-contents-header">
+          <div class="templately-contents-header" style="flex-direction: column;">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title full-widget-title">
                 <h3>FULL.ai</h3>
@@ -30,6 +30,7 @@ $quota = get_option('full/ai/quota', null)
                 </p>
               </div>
             </div>
+            <p>Potencialize seu WordPress com suas ferramentas integradas. Simplifique a criação de conteúdo, aprimora meta descrições e enriquece imagens com textos alternativos. Melhore a visibilidade do seu site nos resultados de busca e impulsione seus resultados com a FULL.ai </p>
           </div>
 
           <div class="full-page-content">
@@ -127,7 +128,7 @@ $quota = get_option('full/ai/quota', null)
                         <label for="postId">Conteúdo</label>
                       </th>
                       <td>
-                        <select name="postId" id="postId" class="custom-input" required>
+                        <select name="postId" id="postId" class="custom-input" style="width: 100%" required>
                           <option hidden>Carregando...</option>
                         </select>
                       </td>

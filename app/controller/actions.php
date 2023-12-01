@@ -319,6 +319,7 @@ function initFullWooCommerceWidget(): void
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/ProductReviews.php';
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/TestPaymentGateway.php';
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/AutocompleteOrders.php';
+      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/WhatsAppCheckout.php';
     endif;
   endif;
 }

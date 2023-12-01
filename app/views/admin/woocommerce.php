@@ -57,6 +57,39 @@ $worker = new Settings();
 
                     <tr>
                       <th>
+                        <label for="enableWhatsAppCheckout">Ativar finalização de compra por WhatsApp?</label>
+                      </th>
+                      <td>
+                        <label class="toggle-switch toggle-switch-sm" for="enableWhatsAppCheckout">
+                          <input type="checkbox" name="enableWhatsAppCheckout" value="1" class="toggle-switch-input" id="enableWhatsAppCheckout" <?php checked($worker->get('enableWhatsAppCheckout')) ?>>
+                          <span class="toggle-switch-label">
+                            <span class="toggle-switch-indicator"></span>
+                          </span>
+                        </label>
+                      </td>
+                    </tr>
+
+                    <tr class="whatsapp-checkout <?= $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
+                      <th>
+                        <label for="whatsAppCheckoutNumber">Número para receber pedidos</label>
+                      </th>
+                      <td>
+                        <input type="text" name="whatsAppCheckoutNumber" placeholder="(00) 987.564.231" value="<?= $worker->get('whatsAppCheckoutNumber') ?>" class="custom-input" id="whatsAppCheckoutNumber" <?= $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>>
+                      </td>
+                    </tr>
+
+                    <tr class="whatsapp-checkout <?= $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
+                      <th>
+                        <label for="whatsAppCheckoutMessage">Mensagem padrão</label><br>
+                      </th>
+                      <td>
+                        <textarea class="custom-input" style="min-height: 150px" name="whatsAppCheckoutMessage" id="whatsAppCheckoutMessage" cols="30" rows="10" <?= $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>><?= $worker->get('whatsAppCheckoutMessage') ?></textarea>
+                        <p style="margin-bottom: 0"><strong>Campos dinâmicos:</strong> {itens_do_carrinho}, {preco_total_carrinho}</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>
                         <label for="enableEstimateOrders">Opção de solicitar orçamento no checkout?</label>
                       </th>
                       <td>

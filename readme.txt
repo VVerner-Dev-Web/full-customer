@@ -3,7 +3,7 @@ Contributors: fullservices, vverner
 Requires at least: 6.0
 Tested up to: 6.4.1
 Requires PHP: 7.4
-Stable tag: 2.10.2
+Stable tag: 2.10.3
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,11 @@ They remain active for the acquired time.
 1. FULL website homepage
 
 == Changelog ==
+
+## 2.10.3
+
+- FULL.ai: otimizado a busca de conteúdo para geração de meta descrição
+- FULL.woocommerce: adicionado a funcionalidade de finalização de compra por whatsapp
 
 ## 2.10.2
 

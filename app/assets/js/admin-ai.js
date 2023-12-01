@@ -70,7 +70,7 @@ jQuery(function ($) {
         "</option>";
     }
 
-    $select.html("<option hidden>Selecione o conteúdo</option>");
+    $select.html("<option></option>");
 
     for (const type in options) {
       let optgroup = '<optgroup label="' + types[type] + '">';
@@ -79,6 +79,12 @@ jQuery(function ($) {
 
       $select.append(optgroup);
     }
+
+    $select.select2({
+      placeholder: "Escolha o conteúdo",
+      allowClear: true,
+      debug: true,
+    });
   });
 
   $(window).on("full/form-submitted/metadescription-generator", function () {

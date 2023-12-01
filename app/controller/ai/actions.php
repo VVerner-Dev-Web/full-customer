@@ -27,6 +27,9 @@ function adminEnqueueScripts(): void
   $version = getFullAssetsVersion();
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
+  wp_enqueue_style('full-select2', $baseUrl . 'vendor/select2/select2.min.css', [], '4.1.0');
+  wp_enqueue_script('full-select2', $baseUrl . 'vendor/select2/select2.min.js', ['jquery'], '4.1.0', true);
+
   wp_enqueue_script('full-admin-ai', $baseUrl . 'js/admin-ai.js', ['jquery'], $version, true);
 }
 
