@@ -25,7 +25,6 @@ require_once FULL_CUSTOMER_APP . '/controller/inc/Firewall.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/Proxy.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/FileSystem.php';
 
-require_once FULL_CUSTOMER_APP . '/controller/overrides.php';
 require_once FULL_CUSTOMER_APP . '/controller/hooks.php';
 require_once FULL_CUSTOMER_APP . '/controller/actions.php';
 require_once FULL_CUSTOMER_APP . '/controller/filters.php';
