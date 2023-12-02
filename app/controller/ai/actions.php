@@ -231,8 +231,10 @@ function imageAltGenerator(): void
   $response = wp_remote_retrieve_body($request);
   $response = json_decode($response);
 
-  if (!$response || isset($response->error)) :
-    wp_send_json_error($response?->error ?? 'Não foi possível gerar o conteúdo solicitado');
+  if (!$response || !isset($response->error)) :
+    wp_send_json_error('Não foi possível gerar o conteúdo solicitado');
+  elseif (isset($response->error)) :
+    wp_send_json_error($response->error);
   endif;
 
   update_option('full/ai/quota', $response->quota);
