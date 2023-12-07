@@ -1,39 +1,63 @@
-=== FULL - Customer ===
+=== FULL - Cliente ===
 Contributors: fullservices, vverner
-Requires at least: 6.0
-Tested up to: 6.4.1
+Tags: full, elementor, security, tool
+Requires at least: 6.3
+Tested up to: 6.4.2
 Requires PHP: 7.4
 Stable tag: 2.10.4
-License: GPL v3 or later
+License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-This plugin allows automatic installation and activation of plugins purchased from FULL.
+Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins
 
 == Description ==
-Once your site is integrated into the FULL dashboard, this plugin will be automatically installed on the connected WordPress site.
 
-The FULL - Customers plugin is intended to automate the process of installing and activating purchased plugins and licenses.
+O plugin FULL - CLiente é uma poderosa ferramenta desenvolvida pela FULL para otimizar e aprimorar a experiência de gerenciamento do seu site WordPress. 
 
-Subsequently, the plugin will also allow the FULL support team to make necessary corrections to use the purchased plugins and also extract automatic reports from your website for use in your FULL dashboard.
+Com uma série de extensões e funcionalidades inovadoras, o plugin oferece soluções abrangentes para diversas necessidades, desde segurança até a criação de conteúdo dinâmico.
 
-[FULL customer support](https://full.services/)
-
-== Installation ==
-Once your site is integrated into the FULL dashboard, this plugin will be automatically installed on the connected WordPress site.
+Além disso o plugin serve como conexão entre o site o painel de ativações da FULL, para que possa de maneira automatizada ativar e atualizar os plugins comprados.
 
 == Frequently Asked Questions ==
 
-### Why was this plugin installed?
+= Porque este plugin foi instalado? = 
 
-After connecting a site to the FULL dashboard, this plugin is automatically installed and activated to manage your licenses
+Após conectar seu site via API no painel da FULL. este plugin será instalado para finalizar a conexão.
 
-### Can I delete this plugin?
+= Posso excluir este plugin? =
 
-He can! Your already activated licenses will not be affected, however the panel will lose connection with your website and you will need to install it again to activate new licenses or take full advantage of the FULL control panel
+Sim, entretanto recomendamos que você mantenha-o ativo para usufruir nas funcionalidades adicionais entregues pelo plugin.
 
-### How are my licenses if I uninstall the plugin?
+= O que acontece com os plugins ativados pela FULL. se eu excluir o plugin? =
 
-They remain active for the acquired time.
+O plugin ativado continuará funcionando sem problemas.
+
+== Installation ==
+
+= Instalação via painel =
+
+* Ao conectar seu site no painel da FULL. via "conexão por API", este plugin será automaticamente instalado e ativado em seu site.
+
+= Instalação via arquivo .zip =
+
+* Na página de conexão do painel, baixe o arquivo ZIP do plugin.
+* Acesse o painel administrativo do WordPress e vá para "Plugins".
+* Clique em "Adicionar Novo" e, em seguida, em "Fazer Upload do Plugin".
+* Selecione o arquivo ZIP baixado e clique em "Instalar Agora".
+* Ative o plugin após a conclusão da instalação.
+* Após, acesse a página "FULL." no topo do menu administrativo e conecte seu site no painel.
+
+= Instalação via WordPress =
+
+* Acesse o painel administrativo do WordPress e vá para "Plugins".
+* Clique em "Adicionar Novo" e, em seguida, pesquise por FULL - Cliente
+* Clique em "Instalar" e depois "Ativar"
+* Após, acesse a página "FULL." no topo do menu administrativo e conecte seu site no painel.
+
+= Requisitos =
+
+* PHP com versão 7.4 ou mais recente. PHP 8.2 é a versão recomendada atualmente.
+* MySQL com versão 5.6 ou mais recente, OU MariaDB com versão 10.1 ou mais recente
 
 == Screenshots ==
 
@@ -41,275 +65,7 @@ They remain active for the acquired time.
 
 == Changelog ==
 
-# 2.10.4
+= 2.10.4 = 
 
-- Correção de bug relacionado ao null safe operator (?->) que estava causando erro crítico em sites com PHP < 8
-
-## 2.10.3
-
-- FULL.ai: otimizado a busca de conteúdo para geração de meta descrição
-- FULL.woocommerce: adicionado a funcionalidade de finalização de compra por whatsapp
-- Foi corrigido um bug em que o modal da AI no Elementor não era fechado em alguns casos
-
-## 2.10.2
-
-- A FULL.ai agora também pode gerar conteúdo para o atributo ALT das imagens do WordPress.
-
-## 2.10.1
-
-- A FULL.ai agora também pode gerar e atualizar o resumo dos posts, bem como as meta-descrições nos principais plugins de SEO 
-
-## 2.10.0
-
-- A FULL.ai ganhou novas funcionalidades e agora pode gerar blog posts completos!
-
-## 2.9.0
-
-- A extensão FULL.duplica foi aumentada para mais funcionalidades e agora se chama FULL.content
-
-## 2.8.0
-
-- Nova extensão: FULL.woocommerce
-- Melhorias e novas funções para a extensão: FULL.security
-
-## 2.7.1
-
-- Corrigido problema em que em alguns casos o FULL.code não salvava a alteração
-
-## 2.7.0
-
-- Nova extensão: FULL.code (Insira códigos personalizados no seu site)
-- Nova extensão: FULL.speed (Melhore a velocidade do seu site com ajustes finos nas configurações)
-- Nova extensão: FULL.admin (Melhore a interface do wp-admin do seu site)
-- Ajustes visuais nas telas das extensões
-- Inserção da lib "codemirror" para edição dos arquivos através da FULL.code
-
-## 2.6.2
-
-- Correção na extensão FULL.images que poderiam receber um parametro com a tipagem errada e devido a isso causar um erro no wordpress
-
-## 2.6.1
-
-- Correção da extensão FULL.images que não estava sobrecrevendo as imagens pelo modal do wp-admin
-
-## 2.6.0
-
-- Nova extensão: FULL.images faz o controle de uploads e imagens enviadas no site
-
-## 2.5.0
-
-- Novas extensões foram disponibilizadas gratuitamente!
-- FULL.Login : Permite fazer edições na tela de login do WordPress, além de alterar a url para algo menos suscetivel a ataques
-- FULL.Email : Permite realizar configurações SMTP para melhorar a eficiência dos disparos de email do site
-- Foi adicionado uma nova página de "loja" no admin com os plugins disponibilizados pela FULL.
-
-## 2.4.2
-
-- A extensão "FULL.Clone" agora é "FULL.Duplica"
-- Melhorias visuais na tela de conexão
-- Controle de widgets PRO da FULL dentro do site.
-
-## 2.4.1
-
-- Mudanças visuais na tela de extensões
-- Correção de bug que ao desativar os templates, o cloud não funcionava dentro do construtor Elementor.
-
-## 2.4.0
-
-- FULL.Security: nova funcionalidade pro para clientes FULL. Um firewall robusto e eficiente para o bloqueio da maioria dos bots que atrapalham o dia a dia dos sites WordPress.
-- Controle de widgets da FULL dentro do site.
-
-## 2.3.2
-
-- FULL.templates: adicionado filtro por "segmentos" do painel
-
-## 2.3.1
-
-- Foi atualizado o modelo que cria o diretório temporário de arquivos para usar o próprio site ao invés do sistema.
-
-## 2.3
-
-- Correções de segurança relacionadas a autenticação de usuários e instalações dos plugins
-- Atualizado versão da biblioteca que manipula arquivos .zip
-
-## 2.2.3
-
-- Corrigido rota de login que em alguns casos não redirecionava para o painel administrativo
-- Corrigido posicionamento do popup da FULL.ai que se deslocava em alguns casos
-
-## 2.2.2
-
-- Corrigido bug em que alguns casos não abria o popup da FULL.ai dentro do Elementor
-
-## 2.2.1
-
-- Atualizado para suporte a instalação de dependências relacionadas a plugins no FULL. templates 
-- Corrigido bug em que o botão da AI sumia em alguns casos dentro do Elementor
-- Alterado o prompt sugerido da AI para placeholder
-- Atualizado compatibilidade com funções até PHP 8.2
-- Novidade! FULL.clone para clonar páginas e posts do WordPress.
-
-## 2.2
-
-- FULL.ai lançada e disponível para uso!
-
-## 2.1.2
-
-- Otimizado o fluxo de ativação remota para usar o diretório temporário do servidor ao invés do FC-temp
-- Compatibilidade com php 7.4
-
-## 2.1.1
-
-- FULL. Updates
-- Corrigido algumas incompatibilidades com versões antigas do plugin
-- Adicionado verificação de arquivo de notas
-- Definido teste de exclusão durante a instalação de um plugin remoto
-- Corrigido retorno de funções
-- Ajustado regra para definir o diretório do plugin durante a instalação remota
-- Paginação nos resultados dos templates e cloud
-- Importação de packs
-
-## 2.1.0
-
-- Implementado proxy para consulta do status do site para atualizações no painel da FULL.
-
-## 2.0.9.1
-
-- Corrigindo incompatibilidade com PHP 7.4 no template single que poderia impedir o carregamento do Elementor.
-
-## 2.0.9
-
-- Ao clicar sobre um item da galeria, abrir em um popup
-
-## 2.0.8
-
-- Melhorado processo de download de templates para forçar o download
-- Adicionado galeria nos templates
-- Corrigido problema em que não era possível adicionar o template pelo construtor
-
-## 2.0.7
-
-- Corrigido layout do botão dentro do construtor que poderia quebrar em duas linhas em telas muito pequenas
-
-## 2.0.6
-
-- Melhorias na usabilidade dos templates do cloud.
-
-## 2.0.5
-
-- Corrigido problema em que o  cloud não estava configurado dentro do Elementor
-
-## 2.0.4
-
-- Nova logo
-
-## 2.0.3
-
-- Templates integrados diretamente ao construtor do Elementor
-
-### 2.0.2
-
-- Novas funcionalidades e correções gerais relacionadas aos templates
-
-### 2.0.1
-
-- Correção para que o plugin possa ser utilizado em versões 7.4 do PHP
-
-### 2.0
-
-- Nova funcionalidade adicionada! FULL. Cloud Templates chegaram para permitir salvar os modelos e usar eles entre sites!
-
-### 1.2.2
-
-- Readicionado o filtro que modifica o retorno do rest quando encontrava um cabeçalho full "restPreServeRequest"
-
-### 1.2.1
-
-- Esc de todos os echos no plugin
-- Removido filtro que modificava o retorno do rest quando encontrava um cabeçalho full "restPreServeRequest"
-- Alterada versão da lib SweetAlert2 para 11.4.8
-
-### 1.2.0
-
-- Bump nas versões mínimas do WP e PHP
-
-### 1.1.0
-
-- Nesta versão foi adicionado a possibilidade de restaurar backups armazenados no Google Drive
-
-### 1.0.8
-
-- Foi implementado um novo evento para que possamos mensurar erros que ocorram que o plugin causa em seu site
-- Adicionado webhook para caso de falha da criação de um backup
-
-### 1.0.7
-
-- Backups: Adicionada possibilidade de definir quantos backups manter salvos
-- Backups: Modificado retorno da busca de backups para ordem cronologica
-
-### 1.0.6
-
-- Foi adicionado um timeout de 60 segundos para a criação de backups solicitados pelo painel para corrigir o conflito com o plugin WP Rocket
-
-### 1.0.5
-
-- A biblioteca que gera o zip para backup foi revertida para a versão 3.3.3 para maior compatibilidade com o php
-- Aberto endpoint para consumo das informações de health
-- FS melhorada para limpeza de diretórios
-
-### 1.0.4
-
-**VERSÃO BETA**
-
-- Fluxo de criação, restauração e exclusão de backups internos do site
-- Integração do fluxo de backup com o painel FULL.
-
-### 1.0.3
-
-- Criada classe FileSystem para auxiliar na manipulação de arquivos
-- Corrigido problema em que alguns casos o FC não conseguia copiar ou mover os arquivos de instalação
-- Atualizada formato de download de arquivo remoto
-
-### 1.0.2
-
-- Atualizado namespaces e integração com PHPMD
-
-### 1.0.1
-
-- Atualizado forma de conexão no "Acessa fácil" para condizer com usuário conectado ao painel
-
-### 1.0.0
-
-- Atualizado a URL dos serviços da FULL. para full.services, essa atualização causará incompatibilidade com as versões anteriores do plugin
-
-### 0.2.4
-
-- Inserido link de conexão na listagem de plugins do WordPress
-
-### 0.2.3
-
-- Nesta atualização movemos a página de configuração do plugin para dentro do menu "Configurações" do WordPress
-- A tela consentimento de backlink foi removida e agora esta opção deve ser configurada dentro do painel da FULL.
-
-### 0.2.2
-
-- Corrigido o fluxo de conexão onde em alguns casos o navegador autocompletava a senha incorretamente
-- Inserida validação da conexão atual do site ao painel sempre que acessar a página de conexão do plugin
-
-### 0.2.1
-
-- Removido o link de "ver detalhes" quando configurado o nome do autor nas definições de whitelabel do painel
-
-### 0.2.0
-
-- Whitelabel
-
-### Versões anteriores a 0.2.0
-
-- Login remoto
-- Instalação de plugin adquirido na FULL.
-- Configurações de privacidade e backlink
-- Assets para repositório do WordPress
-- Confirmação de chaves de aplicação disponível (resolver conflito com plugins de segurança)
-- Conexão ao painel via plugin
-- Criação de conta no painel via plugin
+Correção de bug relacionado ao null safe operator (?->) que estava causando erro crítico em sites com PHP < 8
+[Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

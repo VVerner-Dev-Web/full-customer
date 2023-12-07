@@ -1,8 +1,8 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Plugin Name:         FULL - Customer
- * Description:         This plugin allows automatic installation and activation of plugins purchased from FULL.
+ * Plugin Name:         FULL - Cliente
+ * Description:         Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins.
  * Version:             2.10.4
  * Requires at least:   6.0
  * Tested up to:        6.3
