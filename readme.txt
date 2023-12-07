@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 2.10.4
+Stable tag: 2.10.5
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,7 +65,7 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 2.10.4 = 
+= 2.10.5 = 
 
-Correção de bug relacionado ao null safe operator (?->) que estava causando erro crítico em sites com PHP < 8
+Novo changelog e descrições do plugin no respositório do WordPress
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
