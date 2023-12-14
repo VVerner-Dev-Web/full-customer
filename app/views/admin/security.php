@@ -21,12 +21,13 @@ $worker = new Settings();
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title full-widget-title">
-                <h3>FULL.security</h3>
+                <h3>FULL.firewall</h3>
               </div>
             </div>
           </div>
 
           <div class="full-page-content">
+            <p>Ao ativar a extensão FULL.firewall, seu site fica automaticamente equipado com um firewall rigoroso contra as principais ameaças a sites WordPress.</p>
 
             <form method="POST" id="full-security-settings" class="full-widget-form" style="margin-bottom: 30px">
               <?php wp_nonce_field('full/widget/security-settings'); ?>

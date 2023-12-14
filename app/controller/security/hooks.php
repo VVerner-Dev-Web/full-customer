@@ -1,6 +1,6 @@
 <?php
 
-namespace Full\Security\Code;
+namespace Full\Customer\Security;
 
 defined('ABSPATH') || exit;
 

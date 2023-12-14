@@ -10,8 +10,8 @@ function addMenuPages(): void
 {
   add_submenu_page(
     'full-connection',
-    'FULL.security',
-    'FULL.security',
+    'FULL.firewall',
+    'FULL.firewall',
     'edit_posts',
     'full-security',
     'fullGetAdminPageView'

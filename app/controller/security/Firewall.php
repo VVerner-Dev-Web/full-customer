@@ -1,6 +1,6 @@
 <?php
 
-namespace Full\Customer;
+namespace Full\Customer\Security;
 
 class Firewall
 {
@@ -358,7 +358,7 @@ class Firewall
 
   public static function run(): void
   {
-    if (!(fullCustomer())->isServiceEnabled('full-security-pro')) :
+    if (!(fullCustomer())->isServiceEnabled('full-security')) :
       return;
     endif;
 

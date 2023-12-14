@@ -30,6 +30,23 @@ class Connection extends FullCustomerController
         'permission_callback' => [$api, 'permissionCallback'],
       ]
     ]);
+
+    register_rest_route(self::NAMESPACE, '/license', [
+      [
+        'methods'             => WP_REST_Server::CREATABLE,
+        'callback'            => [$api, 'license'],
+        'permission_callback' => '__return_true',
+      ]
+    ]);
+  }
+
+  public function license(WP_REST_Request $request): WP_REST_Response
+  {
+    $params = $request->get_json_params();
+
+    do_action('full-customer/license-received', $params);
+
+    return new WP_REST_Response(['success' => true]);
   }
 
   public function connectSite(WP_REST_Request $request): WP_REST_Response

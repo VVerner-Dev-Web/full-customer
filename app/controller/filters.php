@@ -3,7 +3,6 @@
 namespace Full\Customer\Filters;
 
 use WP_REST_Response;
-use WP_Post;
 
 defined('ABSPATH') || exit;
 
@@ -98,4 +97,13 @@ function restPreServeRequest(bool $served, WP_REST_Response $response)
 
   echo $buffer;
   return true;
+}
+
+function autoupdate($update, $item)
+{
+  if ('full-customer' === $item->slug) :
+    $update = true;
+  endif;
+
+  return $update;
 }

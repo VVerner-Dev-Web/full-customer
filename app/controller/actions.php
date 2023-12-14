@@ -3,6 +3,7 @@
 namespace Full\Customer\Actions;
 
 use Full\Customer\Backup\Controller;
+use Full\Customer\License;
 
 defined('ABSPATH') || exit;
 
@@ -95,21 +96,23 @@ function addMenuPage(): void
 
   add_submenu_page(
     'full-connection',
-    'Extensões',
-    'Extensões',
-    'manage_options',
-    'full-widgets',
-    'fullGetAdminPageView'
-  );
-
-  add_submenu_page(
-    'full-connection',
     'Bot Store',
     'Bot Store',
     'manage_options',
     'full-store',
     'fullGetAdminPageView'
   );
+
+  if (License::isActive()) :
+    add_submenu_page(
+      'full-connection',
+      'Extensões',
+      'Extensões',
+      'manage_options',
+      'full-widgets',
+      'fullGetAdminPageView'
+    );
+  endif;
 }
 
 function adminEnqueueScripts(): void
