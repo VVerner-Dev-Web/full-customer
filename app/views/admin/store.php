@@ -13,18 +13,19 @@
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title">
-                <h3>Bot Store</h3>
+                <h3>Integrações FULL.</h3>
                 <input type="search" id="filter-products" placeholder="Procurar...">
               </div>
             </div>
           </div>
 
           <div class="full-page-content">
-            <Nossa>Nossos avançados robôs AI têm transformado o cenário e instaurando uma nova era no WordPress. Automatizando com precisão milhões de tarefas essenciais e vitais para o bom funcionamento do Wordpress. Desenvolvemos robôs inteligentes e funcionalidades abrangentes, que englobam desde as configurações iniciais até a manutenção contínua, prevenção de falhas e correções técnicas. Nossa solução pioneira redefine os padrões do WordPress, capacitando inúmeras empresas a desbravar a plataforma de forma descomplicada, intuitiva e excepcionalmente eficaz.</p>
+            <p>As integrações FULL. proporciona uma fusão perfeita entre nossa plataforma e os recursos PRO avançados do Wordpress. Dessa forma os plugins mais amados e desejados se integram perfeitamente à plataforma FULL. Essa parceria inovadora simplifica desde de o processo de instalação, ativação até a manutenção contínua visando a prevenção de falhas e correções técnicas.</p>
+            <p>Com recursos inteligentes e abrangentes capacitamos empresas a explorarem o Worpdress de forma descomplicada, intuitiva em busa de resultados excepcionais</p>
 
-              <div id="full-products-grid">
-                <!-- JS -->
-              </div>
+            <div id="full-products-grid">
+              <!-- JS -->
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,20 @@
 <?php
 
+use Full\Customer\License;
+
 defined('ABSPATH') || exit;
+
+function fullIsCorrectlyConnected(): bool
+{
+  $code = (int) get_transient('full/connected');
+
+  if (!$code) :
+    $code = fullCustomer()->hasDashboardUrl() && isSiteConnectedOnFull() ? 1 : -1;
+    set_transient('full/connected', $code, DAY_IN_SECONDS);
+  endif;
+
+  return $code > 0;
+}
 
 function fullCustomer(): FullCustomer
 {
@@ -54,7 +68,8 @@ function fullGetLocalize(): array
     'site_url'      => site_url(),
     'store_url'     => 'https://full.services',
     'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png'),
-    'enabled_services' => $env->getEnabledServices()
+    'full_pro'      => License::isActive(),
+    'enabled_services' => $env->getEnabledServices(),
   ];
 }
 

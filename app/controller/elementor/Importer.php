@@ -10,104 +10,69 @@ use Elementor\Core\Settings\Page\Model;
 use Elementor\Plugin as ElementorPlugin;
 use Elementor\TemplateLibrary\Source_Local as ElementorLocal;
 
-class Importer extends ElementorLocal
+class Importer
 {
-  /**
-   * Get template data.
-   *
-   * @inheritDoc
-   *
-   * @param array $args Custom template arguments.
-   *
-   * @return array Remote Template data.
-   */
-  public function get_data(array $args)
+  private string $name;
+  private string $filename;
+
+  public function __construct(string $name, string $filename)
   {
-    ElementorPlugin::$instance->editor->set_edit_mode(true);
-
-    $args['content'] = $this->replace_elements_ids($args['content']);
-    $args['content'] = $this->process_export_import_content($args['content'], 'on_import');
-
-    return $args;
+    $this->name = $name;
+    $this->filename = $filename;
   }
 
-  public function import_in_library($data)
+  public function import()
   {
-    $page_settings = $this->page_settings($data);
+    $localJson  = json_decode(file_get_contents($this->filename), true);
+    $source     = ElementorPlugin::$instance->templates_manager->get_source('local');
 
-    $template_id = $this->save_item([
-      'content' => $data['content'],
-      'title'   => $data['title'],
-      'type'    => $data['type'],
-      'page_settings' => $page_settings,
-    ]);
-
-    if (is_wp_error($template_id)) {
-      return $template_id;
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+      ini_set('display_errors', false);
     }
 
-    return $this->get_item($template_id);
-  }
-
-  public function create_page($template_data)
-  {
-    $page_settings = $this->page_settings($template_data);
-
-    $defaults = [
-      'post_title'   => isset($template_data['page_title']) ? $template_data['page_title'] : 'Modelo da FULL.',
-      'page_settings' => $page_settings,
-      'status' => current_user_can('publish_posts') ? 'publish' : 'pending',
-    ];
-
-    $template_data = wp_parse_args($template_data, $defaults);
-
-    $document = ElementorPlugin::$instance->documents->create(
-      $template_data['type'],
-      [
-        'post_title' => $template_data['post_title'],
-        'post_status' => $template_data['status'],
-        'post_type' => 'page',
-      ]
-    );
-
-    if (is_wp_error($document)) {
-      /**
-       * @var WP_Error $document
-       */
-      return $document;
+    if (!empty($localJson['metadata']['elementor_pro_required']) && !class_exists('\ElementorPro\Plugin')) {
+      $localJson['type'] = 'page';
     }
 
-    $document->save([
-      'elements' => $template_data['content'],
-      'settings' => $page_settings,
-    ]);
+    require_once ABSPATH . '/wp-admin/includes/file.php';
+    $temp_wp_json_file = wp_tempnam('elements-tk-import-');
+    file_put_contents($temp_wp_json_file, json_encode($localJson));
 
-    return $document->get_main_id();
-  }
+    $result = $source->import_template(basename($temp_wp_json_file), $temp_wp_json_file);
 
-  /**
-   * @param $template_data
-   * @noinspection DuplicatedCode
-   *
-   * @return array
-   */
-  private function page_settings($template_data)
-  {
-    $page_settings = [];
+    if (file_exists($temp_wp_json_file)) {
+      unlink($temp_wp_json_file);
+    }
 
-    if (!empty($template_data['page_settings'])) {
-      $page = new Model([
-        'id' => 0,
-        'settings' => $template_data['page_settings'],
-      ]);
+    if (is_wp_error($result)) {
+      return new \WP_Error('import_error', 'Failed to import template: ' . esc_html($result->get_error_message()));
+    }
 
-      $page_settings_data = $this->process_element_export_import_content($page, 'on_import');
+    if ($result[0] && $result[0]['template_id']) {
+      $imported_template_id = $result[0]['template_id'];
 
-      if (!empty($page_settings_data['settings'])) {
-        $page_settings = $page_settings_data['settings'];
+      if ($localJson['metadata'] && !empty($localJson['metadata']['elementor_pro_conditions'])) {
+        update_post_meta($imported_template_id, '_elementor_conditions', $localJson['metadata']['elementor_pro_conditions']);
       }
+
+      if ($localJson['metadata'] && !empty($localJson['metadata']['wp_page_template'])) {
+        update_post_meta($imported_template_id, '_wp_page_template', $localJson['metadata']['wp_page_template']);
+      }
+
+      if ($localJson['metadata'] && !empty($localJson['metadata']['template_type']) && 'global-styles' === $localJson['metadata']['template_type']) {
+        update_post_meta($imported_template_id, '_elementor_edit_mode', 'builder');
+        update_post_meta($imported_template_id, '_elementor_template_type', 'kit');
+        update_option('elementor_active_kit', $imported_template_id);
+
+        wp_update_post([
+          'ID'         => $imported_template_id,
+          'post_title' => 'Template Kit FULL: ' . $this->name,
+        ]);
+      }
+
+      return $imported_template_id;
     }
 
-    return $page_settings;
+    return new \WP_Error('import_error', 'Unknown import error');
   }
 }

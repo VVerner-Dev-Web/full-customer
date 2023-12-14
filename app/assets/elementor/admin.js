@@ -87,6 +87,7 @@
       search: getCurrentSearch(),
       types: getCurrentTypesFilter(),
       segment: getCurrentSegmentFiler(),
+      search: $("#template-searcher input").val().trim(),
     };
 
     const endpoint =
@@ -577,6 +578,12 @@
   });
 
   $(document).on("full-templates/ready", initItemGallery);
+
+  $(document).on("keydown", "#template-searcher input", function (e) {
+    if (e.key === "Enter") {
+      resetAndFetchTemplates();
+    }
+  });
 
   $(document).on("click", '[data-js="export-template"]', function (e) {
     e.preventDefault();

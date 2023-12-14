@@ -94,25 +94,40 @@ function addMenuPage(): void
     0
   );
 
+  $connectionOk   = fullIsCorrectlyConnected();
+  $cls = $connectionOk ? 'success' : 'error';
+  $text = $connectionOk ? 'conectado' : 'desconectado';
+
   add_submenu_page(
     'full-connection',
-    'Bot Store',
-    'Bot Store',
+    'Conexão',
+    'Conexão <span class="full-badge full-' . $cls . '">' . $text . '</span>',
+    'manage_options',
+    'full-connection',
+    'fullGetAdminPageView'
+  );
+
+  $licenseOk = License::isActive();
+  $cls = $licenseOk ? 'full' : 'error';
+  $text = $licenseOk ? 'PRO' : 'seja PRO';
+
+  add_submenu_page(
+    'full-connection',
+    'FULL. PRO',
+    'FULL. PRO <span class="full-badge full-' . $cls . '">' . $text . '</span>',
+    'manage_options',
+    'full-widgets',
+    'fullGetAdminPageView'
+  );
+
+  add_submenu_page(
+    'full-connection',
+    'Integrações',
+    'Integrações',
     'manage_options',
     'full-store',
     'fullGetAdminPageView'
   );
-
-  if (License::isActive()) :
-    add_submenu_page(
-      'full-connection',
-      'Extensões',
-      'Extensões',
-      'manage_options',
-      'full-widgets',
-      'fullGetAdminPageView'
-    );
-  endif;
 }
 
 function adminEnqueueScripts(): void

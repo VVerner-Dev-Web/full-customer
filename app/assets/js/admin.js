@@ -235,6 +235,7 @@
   // ========================
   if ($(".widgets-grid").length) {
     const $grids = $(".widgets-grid");
+    const changed = [];
 
     $.get(
       FULL.dashboard_url + "widgets",
@@ -255,7 +256,10 @@
 
           const $clone = $(html);
 
-          if ("pro" === widget.tier && !widget.purchased) {
+          if (
+            ("addon" === widget.tier && !widget.purchased) ||
+            "native" === widget.tier
+          ) {
             $clone.find(".status").remove();
           }
 
@@ -272,9 +276,77 @@
     );
 
     $grids.on("change", "input", function () {
-      const endpoint = "full-customer/toggle-widget/" + $(this).val();
+      const key = $(this).val();
+      const index = changed.indexOf(key);
 
-      fetch(FULL.rest_url + endpoint, {
+      index > -1 ? changed.splice(index, 1) : changed.push(key);
+    });
+
+    $("#update-widgets").on("click", function () {
+      const count = changed.length;
+      if (!count) {
+        Swal.fire(
+          "Ops",
+          "O status de menhuma extensão foi modificado para atualizarmos.",
+          "info"
+        );
+        return;
+      }
+
+      const legend = count > 1 ? " extensões" : " extensão";
+
+      Swal.fire({
+        titleText: "Quase lá!",
+        html: "Tem certeza que deseja alterar o status de " + count + legend,
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Sim, continuar",
+        cancelButtonText: "Voltar",
+        showLoaderOnConfirm: true,
+        backdrop: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        customClass: {
+          container: "full-template-popup full-template-dependencies-popup",
+        },
+        preConfirm: () => {
+          toggleWidgetsStatus(changed);
+
+          return new Promise((resolve, reject) => {
+            let index = 0;
+            let messages = [
+              "Preparando para decolar...",
+              "Checando compatibilidades e dependências...",
+              "Configurando as extensões...",
+              "Conferindo últimos ajustes...",
+              "Aperte os cintos, vamos decolar...",
+            ];
+
+            let interval = setInterval(() => {
+              const message = messages[index];
+
+              if (!message) {
+                clearInterval(interval);
+                resolve();
+              }
+
+              $("#swal2-html-container").text(message);
+
+              index++;
+            }, 1000);
+          });
+        },
+      }).then((response) => {
+        if (!response.isConfirmed) {
+          return;
+        }
+
+        location.reload();
+      });
+    });
+
+    function toggleWidgetsStatus(widgets) {
+      const endpoint = "full-customer/toggle-widgets?widgets=" + widgets.join();
+      return fetch(FULL.rest_url + endpoint, {
         method: "POST",
         credentials: "same-origin",
         headers: {
@@ -282,7 +354,7 @@
           "X-WP-Nonce": FULL.auth,
         },
       });
-    });
+    }
   }
 
   // WIDGETS SETTINGS FORMS

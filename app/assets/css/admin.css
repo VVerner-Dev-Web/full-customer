@@ -4,6 +4,33 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+#template-searcher {
+  margin-right: 3em;
+  display: flex;
+  justify-content: center;
+  background: #ffff;
+  border-radius: 99px;
+  overflow: hidden;
+  align-items: center;
+  padding: 0.5em 0.5em;
+}
+
+#template-searcher input {
+  border: unset !important;
+  outline: none !important;
+  box-shadow: unset !important;
+}
+
+#template-searcher button {
+  border-radius: 99px;
+  border: unset;
+  background: #e9bb32;
+  height: 2em;
+  width: 2em;
+  cursor: pointer;
+}
+
 .full-primary-button,
 .toggle-switch-input:checked + .toggle-switch-label {
   background-color: #05ab2e;

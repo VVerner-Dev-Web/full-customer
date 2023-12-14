@@ -1,9 +1,4 @@
-<?php
-
-$full = fullCustomer();
-$connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
-
-?>
+<?php $full = fullCustomer(); ?>
 
 <div class="wrap full-customer-page" id="fc-connection">
 
@@ -35,7 +30,7 @@ $connectionOk   = $full->hasDashboardUrl() && isSiteConnectedOnFull();
     </div>
 
     <div class="col-login">
-      <?php if ($connectionOk) : ?>
+      <?php if (fullIsCorrectlyConnected()) : ?>
 
         <div id="full-connect">
           <h2>

@@ -26,6 +26,11 @@ add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
 add_action(Proxy::CRON_JOB_NAME, ['\Full\Customer\Proxy', 'cronJob']);
 
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
+
+add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerRoutes']);
+add_action('rest_api_init', ['\Full\Customer\Api\ElementorAi', 'registerRoutes']);
+
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
 add_filter('auto_update_plugin', '\Full\Customer\Filters\autoupdate', PHP_INT_MAX, 2);
@@ -34,12 +39,9 @@ if (License::isActive()) :
   add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Backup', 'registerRoutes']);
-  add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerRoutes']);
-  add_action('rest_api_init', ['\Full\Customer\Api\ElementorAi', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Widgets', 'registerRoutes']);
 
   add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullLoginWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullEmailWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullImagesWidget');

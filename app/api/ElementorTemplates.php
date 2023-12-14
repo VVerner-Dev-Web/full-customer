@@ -223,7 +223,6 @@ class ElementorTemplates extends FullCustomerController
   private function installPack(stdClass $item, string $mode): WP_REST_Response
   {
     $templates = $this->downloadJsonPack($item->fileUrl);
-    $importer  = new Importer;
     $postsIds  = [];
 
     if (!$templates) :
@@ -234,13 +233,23 @@ class ElementorTemplates extends FullCustomerController
 
     foreach ($templates as $template) :
       $json = json_decode(file_get_contents($template), ARRAY_A);
-      $data = $importer->get_data($json);
 
-      $postId = ('page' === $mode) ?
-        $importer->create_page($data) :
-        $importer->import_in_library($data);
+      $importer  = new Importer($item->title, $template);
+      $templateId = $importer->import();
 
-      $postsIds[] = $postId;
+      if (is_wp_error($templateId)) :
+        error_log('[FULL] Erro ao importar o template: ' . $template->get_error_message());
+        continue;
+      endif;
+
+      if ('page' === $mode && 'page' === $json['type']) :
+        wp_update_post([
+          'ID' => $templateId,
+          'post_type' => 'page'
+        ]);
+      endif;
+
+      $postsIds[] = $templateId;
     endforeach;
 
     return new WP_REST_Response([

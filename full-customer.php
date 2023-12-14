@@ -3,7 +3,7 @@
 /**
  * Plugin Name:         FULL - Cliente
  * Description:         Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins.
- * Version:             3.0.0
+ * Version:             3.0.1
  * Requires at least:   6.2
  * Tested up to:        6.4.2
  * Requires PHP:        7.4
@@ -16,7 +16,7 @@
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) :
-  define('FULL_CUSTOMER_VERSION', '3.0.0');
+  define('FULL_CUSTOMER_VERSION', '3.0.1');
   define('FULL_CUSTOMER_FILE', __FILE__);
   define('FULL_CUSTOMER_APP', __DIR__ . '/app');
   define('FULL_BACKUP_TIME_LIMIT', 900);

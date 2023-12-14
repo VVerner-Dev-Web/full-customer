@@ -1,3 +1,6 @@
+<?php
+
+use Full\Customer\License; ?>
 <div class="full-templates-admin-body">
   <div class="templately-wrapper">
     <div class="templately-header">
@@ -19,8 +22,8 @@
           </div>
 
           <div class="full-page-content">
-            <h4>Extensões FREE</h4>
-            <div class="widgets-grid widgets-free">
+            <h4>Extensões nativas</h4>
+            <div class="widgets-grid widgets-native">
 
             </div>
 
@@ -28,6 +31,21 @@
             <div class="widgets-grid widgets-pro">
 
             </div>
+
+            <h4>Extensões adicionais</h4>
+            <div class="widgets-grid widgets-addon">
+
+            </div>
+
+
+            <br>
+            <br>
+
+            <button id="update-widgets">Salvar alterações</button>
+
+            <br><br>
+            <br><br>
+
           </div>
         </div>
       </div>
@@ -50,13 +68,16 @@
       <div>{description}</div>
       <a href="{url}" target="_blank" rel="noopener noreferrer">Saiba mais</a>
     </div>
+
     <div class="status">
-      <label class="toggle-switch-sm" for="full-widget-{key}">
-        <input type="checkbox" value="{key}" class="toggle-switch-input" id="full-widget-{key}" {checked}>
-        <span class="toggle-switch-label">
-          <span class="toggle-switch-indicator"></span>
-        </span>
-      </label>
+      <?php if (License::isActive()) : ?>
+        <label class="toggle-switch-sm" for="full-widget-{key}">
+          <input type="checkbox" value="{key}" class="toggle-switch-input" id="full-widget-{key}" {checked}>
+          <span class="toggle-switch-label">
+            <span class="toggle-switch-indicator"></span>
+          </span>
+        </label>
+      <?php endif; ?>
     </div>
   </div>
 </script>

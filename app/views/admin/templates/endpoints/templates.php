@@ -101,6 +101,13 @@ $maxVisibleItens = 4;
         <h3>Todas as Páginas</h3>
       </div>
 
+      <div class="templately-plan-switcher" id="template-searcher">
+        <input type="search" placeholder="Digite e aperte enter">
+        <button>
+          <i class="tio-search"></i>
+        </button>
+      </div>
+
       <div class="templately-plan-switcher">
         <button data-plan="" class="components-button active">Todos</button>
         <button data-plan="free" class="components-button">Grátis</button>
