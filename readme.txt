@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,13 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.1 = 
+= 3.0.2 = 
 
-* Correção dos templates free ficarem sempre abertos
-* Uma nova categoria de extensões (chamei de nativo porque já vem por padrão)
-* Firula de ativar extensões
-* Tags de pro e contectado
-* Search no templates
-* A melhoria de importação de kits
+* Correção de um erro crítico no site para sites sem licença do Elementor
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

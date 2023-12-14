@@ -58,10 +58,10 @@ if (License::isActive()) :
   add_action(BackupCron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
   add_action(BackupCron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
   add_action(BackupCron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup', 10, 3);
-
-  add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
-  add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
-  add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
-  add_filter('wp_php_error_args', '\Full\Customer\Filters\notifyPluginError', PHP_INT_MAX, 2);
-  add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest', 0, 2);
 endif;
+
+add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
+add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
+add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
+add_filter('wp_php_error_args', '\Full\Customer\Filters\notifyPluginError', PHP_INT_MAX, 2);
+add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest', 0, 2);
