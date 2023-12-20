@@ -11,9 +11,6 @@ defined('ABSPATH') || exit;
 
 class Login extends FullCustomerController
 {
-  private const TOKEN_KEY         = '_full-remote-login';
-  private const TOKEN_EXPIRATION  = HOUR_IN_SECONDS;
-
   public static function registerRoutes(): void
   {
     $api = new self();
@@ -22,7 +19,7 @@ class Login extends FullCustomerController
       [
         'methods'             => WP_REST_Server::CREATABLE,
         'callback'            => [$api, 'processAuthTokenRequest'],
-        'permission_callback' => [$api, 'permissionCallback'],
+        'permission_callback' => '__return_true',
       ]
     ]);
 
@@ -35,98 +32,17 @@ class Login extends FullCustomerController
     ]);
   }
 
-  public function processAuthTokenRequest(WP_REST_Request $request): WP_REST_Response
+  public function processAuthTokenRequest(): WP_REST_Response
   {
-    $fullToken = $request->get_header('x-full');
-    $fullTokenEnv = $request->get_header('x-env') ? $request->get_header('x-env') : 'prd';
-    $fullTokenEnv = strtoupper($fullTokenEnv);
-
-    if (!$fullToken || !$this->validateReceivedFullToken($fullToken, $fullTokenEnv)) :
-      return new WP_REST_Response([], 401);
-    endif;
-
-    $this->deleteAuthToken();
-
     return new WP_REST_Response([
-      'token' => $this->createAuthToken(),
+      'deprecated' => true
     ]);
   }
 
-  public function processLogin(WP_REST_Request $request): ?WP_REST_Response
+  public function processLogin(): WP_REST_Response
   {
-    $hash   = $request->get_param('hash');
-    $hash   = explode(':', base64_decode($hash));
-
-    $token  = array_shift($hash);
-    $user   = array_shift($hash);
-
-    if ($token !== $this->getAuthToken()) :
-      return new WP_REST_Response(['error' => 'invalid auth token'], 401);
-    endif;
-
-    $this->deleteAuthToken();
-
-    $isEmail  = strpos('@', $user) !== false;
-    $getBy    = $isEmail ? 'email' : 'login';
-    $user     = get_user_by($getBy, $user);
-
-    if (!$user) :
-      return new WP_REST_Response(['error' => 'user ' . $user . ' not found'], 401);
-    endif;
-
-    wp_clear_auth_cookie();
-    wp_set_current_user($user->ID);
-    wp_set_auth_cookie($user->ID);
-
-    return rest_ensure_response(new WP_REST_Response(
-      null,
-      302,
-      ['Location' => admin_url()]
-    ));
-  }
-
-  private function deleteAuthToken(): void
-  {
-    delete_transient(self::TOKEN_KEY);
-  }
-
-  private function createAuthToken(): string
-  {
-    $token = strtoupper(bin2hex(random_bytes(12)));
-    set_transient(self::TOKEN_KEY, $token, self::TOKEN_EXPIRATION);
-    return $token;
-  }
-
-  private function getAuthToken(): ?string
-  {
-    $token = get_transient(self::TOKEN_KEY);
-    return $token ? $token : null;
-  }
-
-  private function validateReceivedFullToken(string $fullToken, string $env = null): bool
-  {
-    $site   = home_url();
-    $site   = parse_url($site);
-
-    $request = wp_remote_post($this->getFullAuthenticationEndpoint($env), [
-      'sslverify' => false,
-      'headers'   => [
-        'Content-Type' => 'application/json'
-      ],
-      'body'      => json_encode([
-        'token'     => $fullToken,
-        'domain'    => isset($site['host']) ? $site['host'] : ''
-      ])
+    return new WP_REST_Response([
+      'deprecated' => true
     ]);
-
-    return wp_remote_retrieve_response_code($request) === 200;
-  }
-
-  private function getFullAuthenticationEndpoint(string $env = null): string
-  {
-    $uri   = $this->env->getFullDashboardApiUrl($env);
-    $uri  .= '/v1/validate-token/';
-
-    return $uri;
   }
 }

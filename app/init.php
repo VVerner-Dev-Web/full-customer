@@ -21,6 +21,7 @@ require_once FULL_CUSTOMER_APP . '/api/ElementorAi.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/Health.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/Proxy.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/FileSystem.php';
+require_once FULL_CUSTOMER_APP . '/controller/inc/RemoteLogin.php';
 
 if (License::isActive()) :
   require_once FULL_CUSTOMER_APP . '/api/Backup.php';
