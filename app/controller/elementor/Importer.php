@@ -2,28 +2,27 @@
 
 namespace Full\Customer\Elementor;
 
-use WP_Error;
-use function wp_parse_args;
-use function current_user_can;
-use Elementor\Core\Settings\Page\Model;
-
 use Elementor\Plugin as ElementorPlugin;
-use Elementor\TemplateLibrary\Source_Local as ElementorLocal;
 
 class Importer
 {
   private string $name;
-  private string $filename;
+  private array $localJson;
 
-  public function __construct(string $name, string $filename)
+  public function __construct(string $name, string $filename = null, array $localJson = null)
   {
     $this->name = $name;
-    $this->filename = $filename;
+
+    if ($filename) :
+      $this->localJson = json_decode(file_get_contents($filename), true);
+    elseif ($localJson) :
+      $this->localJson = $localJson;
+    endif;
   }
 
   public function import()
   {
-    $localJson  = json_decode(file_get_contents($this->filename), true);
+    $localJson  = $this->localJson;
     $source     = ElementorPlugin::$instance->templates_manager->get_source('local');
 
     if (defined('WP_DEBUG') && WP_DEBUG) {

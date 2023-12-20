@@ -80,14 +80,18 @@ class ElementorTemplates extends FullCustomerController
   public function download(WP_REST_Request $request): void
   {
     $itemId = (int) $request->get_param('id');
+    $item     = TemplateManager::instance()->getCloudItem($itemId);
+
+    if (!$item || !isset($item->fileUrl) || !$item->fileUrl) :
+      wp_send_json_error();
+    endif;
 
     header("Content-type: application/vnd.ms-excel");
     header("Content-Type: application/force-download");
     header("Content-Type: application/download");
-    header("Content-disposition: teste.json");
-    header("Content-disposition: filename=teste.json");
+    header("Content-disposition: template.json");
+    header("Content-disposition: filename=template.json");
 
-    $item     = TemplateManager::instance()->getCloudItem($itemId);
     $template = $this->downloadJson($item->fileUrl);
 
     exit(fullJsonEncode($template));
@@ -182,40 +186,37 @@ class ElementorTemplates extends FullCustomerController
       return $this->installPack($item, $mode);
     endif;
 
-    $importer = new Importer;
     $template = $this->downloadJson($item->fileUrl);
 
     if (!$template) :
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
-    $data     = $importer->get_data($template);
+    $importer  = new Importer($item->title, '', $template);
 
     if ('builder' === $mode) :
-      return new WP_REST_Response(['builder' => $data]);
+      return new WP_REST_Response(['builder' => $template]);
     endif;
 
-    $template['page_title']  = $item->title;
-    $template['title']  = $item->title;
+    $templateId = $importer->import();
 
-    if (!isset($template['type'])) :
-      $template['type']  = 'page';
-    endif;
-
-    $postId = ('page' === $mode) ?
-      $importer->create_page($data) :
-      $importer->import_in_library($data);
-
-    if (is_wp_error($postId)) :
+    if (is_wp_error($templateId)) :
       return new WP_REST_Response([
-        'error' => $postId->get_error_message(),
+        'error' => $templateId->get_error_message(),
+      ]);
+    endif;
+
+    if ('page' === $mode) :
+      wp_update_post([
+        'ID' => $templateId,
+        'post_type' => 'page'
       ]);
     endif;
 
     return new WP_REST_Response([
-      'postId'    => $postId,
-      'editUrl'   => get_edit_post_link($postId, 'internal'),
-      'visitUrl'  => get_permalink($postId),
+      'postId'    => $templateId,
+      'editUrl'   => get_edit_post_link($templateId, 'internal'),
+      'visitUrl'  => get_permalink($templateId),
       'message'   => 'Template importado com sucesso!'
     ]);
   }
@@ -259,7 +260,6 @@ class ElementorTemplates extends FullCustomerController
 
   private function installCloud(int $itemId, string $mode): WP_REST_Response
   {
-    $importer = new Importer;
     $item     = TemplateManager::instance()->getCloudItem($itemId);
     $template = $this->downloadJson($item->fileUrl);
 
@@ -267,33 +267,35 @@ class ElementorTemplates extends FullCustomerController
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
-    $data     = $importer->get_data($template);
+    if ('builder' === $mode) :
+      return new WP_REST_Response(['builder' => $template]);
+    endif;
+
+    $importer  = new Importer($item->title, '', $template);
 
     if ('builder' === $mode) :
-      return new WP_REST_Response(['builder' => $data]);
+      return new WP_REST_Response(['builder' => $template]);
     endif;
 
-    $template['page_title']  = $item->title;
-    $template['title']  = $item->title;
+    $templateId = $importer->import();
 
-    if (!isset($template['type'])) :
-      $template['type']  = 'page';
-    endif;
-
-    $postId = ('page' === $mode) ?
-      $importer->create_page($data) :
-      $importer->import_in_library($data);
-
-    if (is_wp_error($postId)) :
+    if (is_wp_error($templateId)) :
       return new WP_REST_Response([
-        'error' => $postId->get_error_message(),
+        'error' => $templateId->get_error_message(),
+      ]);
+    endif;
+
+    if ('page' === $mode) :
+      wp_update_post([
+        'ID' => $templateId,
+        'post_type' => 'page'
       ]);
     endif;
 
     return new WP_REST_Response([
-      'postId'    => $postId,
-      'editUrl'   => get_edit_post_link($postId, 'internal'),
-      'visitUrl'  => get_permalink($postId),
+      'postId'    => $templateId,
+      'editUrl'   => get_edit_post_link($templateId, 'internal'),
+      'visitUrl'  => get_permalink($templateId),
       'message'   => 'Template cloud importado com sucesso!'
     ]);
   }

@@ -68,5 +68,7 @@ O plugin ativado continuará funcionando sem problemas.
 = 3.0.3 = 
 
 * Novo método de autenticação remota via painel
+* Correção no proxy de atualizações para evitar erros de comunicação com o servidor intermediário
+* Corrigido problema de importação de templates Cloud no construtor
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

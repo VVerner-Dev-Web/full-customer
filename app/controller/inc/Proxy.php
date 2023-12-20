@@ -131,7 +131,7 @@ class Proxy
 
   private function getUrl(): string
   {
-    $full = fullCustomer()();
+    $full = fullCustomer();
     $url  = 'PRD' === $full->getCurrentEnv() ? 'https://wpfull.com.br' : 'https://full-proxy.dev';
 
     return trailingslashit($url);

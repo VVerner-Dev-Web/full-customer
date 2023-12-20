@@ -86,7 +86,7 @@ class FullCustomer
       $this->set('enabled_services', $default);
     endif;
 
-    return $this->get('enabled_services');
+    return $this->get('enabled_services') ?? [];
   }
 
   private function optionEnvSuffix(): string
