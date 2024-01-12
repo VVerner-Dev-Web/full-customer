@@ -7,9 +7,10 @@ defined('ABSPATH') || exit;
 function fullIsCorrectlyConnected(): bool
 {
   $code = (int) get_transient('full/connected');
+  $code = 0;
 
   if (!$code) :
-    $code = fullCustomer()->hasDashboardUrl() && isSiteConnectedOnFull() ? 1 : -1;
+    $code = isSiteConnectedOnFull() && fullCustomer()->hasDashboardUrl() ? 1 : -1;
     set_transient('full/connected', $code, DAY_IN_SECONDS);
   endif;
 
@@ -53,7 +54,7 @@ function isFullsAdminPage(): bool
 
 function fullGetEnv(): string
 {
-  return (fullCustomer())->getCurrentEnv();
+  return fullCustomer()->getCurrentEnv();
 }
 
 function fullGetLocalize(): array
@@ -97,6 +98,11 @@ function fullGetSiteConnectionData()
 function isSiteConnectedOnFull(): bool
 {
   $connectionTest = fullGetSiteConnectionData();
+
+  if ($connectionTest && $connectionTest->success) :
+    fullCustomer()->set('dashboard_url', $connectionTest->dashboard_url);
+  endif;
+
   return $connectionTest && $connectionTest->success;
 }
 

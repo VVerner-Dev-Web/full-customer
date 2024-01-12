@@ -1,7 +1,6 @@
 <?php $full = fullCustomer(); ?>
 
 <div class="wrap full-customer-page" id="fc-connection">
-
   <div class="login-container">
     <div class="col-instructions">
       <a href="<?php echo esc_url($full->getBranding('plugin-author-url', 'https://painel.full.services/login/')) ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
