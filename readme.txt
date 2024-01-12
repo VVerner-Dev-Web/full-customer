@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,10 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.3 = 
+= 3.0.4 = 
 
-* Novo método de autenticação remota via painel
-* Correção no proxy de atualizações para evitar erros de comunicação com o servidor intermediário
-* Corrigido problema de importação de templates Cloud no construtor
+* O relatório de erros agora inclui a versão do plugin FC instalada para que a equipe da FULL possa trabalhar mais rapidamente na correção dos problemas
+* Foi corrigido um bug em que após a conexão bem sucedida do site ao painel, ele ainda aparecia como desconectado no wp-admin
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
