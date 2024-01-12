@@ -218,7 +218,8 @@ function notifyPluginError(): bool
     ],
     'body'  => json_encode([
       'site_url'  => home_url(),
-      'error'     => $error
+      'error'     => $error,
+      'version'   => FULL_CUSTOMER_VERSION
     ])
   ]);
 
