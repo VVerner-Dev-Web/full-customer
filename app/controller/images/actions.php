@@ -43,12 +43,11 @@ function updateSettings(): void
 
   $worker = new Settings();
 
+  $worker->set('useImagify', filter_input(INPUT_POST, 'useImagify', FILTER_VALIDATE_BOOL));
   $worker->set('enableUploadResize', filter_input(INPUT_POST, 'enableUploadResize', FILTER_VALIDATE_BOOL));
   $worker->set('enableSvgUpload', filter_input(INPUT_POST, 'enableSvgUpload', FILTER_VALIDATE_BOOL));
   $worker->set('enableMediaReplacement', filter_input(INPUT_POST, 'enableMediaReplacement', FILTER_VALIDATE_BOOL));
-  $worker->set('resizeMaxWidth', filter_input(INPUT_POST, 'resizeMaxWidth'));
-  $worker->set('resizeMaxHeight', filter_input(INPUT_POST, 'resizeMaxHeight'));
-  $worker->set('resizeQuality', filter_input(INPUT_POST, 'resizeQuality', FILTER_VALIDATE_INT));
+  $worker->set('resizeMaxSize', filter_input(INPUT_POST, 'resizeMaxSize', FILTER_VALIDATE_INT));
 
   wp_send_json_success();
 }

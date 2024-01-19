@@ -17,7 +17,7 @@ class UploadResizer
   {
     $env = new Settings();
 
-    if ($env->get('enableUploadResize')) :
+    if ($env->get('enableUploadResize') && !$env->get('useImagify')) :
       $cls = new self($env);
       add_filter('wp_handle_upload', [$cls, 'resize']);
     endif;
@@ -39,21 +39,18 @@ class UploadResizer
     $editor = wp_get_image_editor($upload['file']);
     $imageSize = $editor->get_size();
 
-    $maxWidth = $this->env->get('resizeMaxWidth');
-    $maxHeight = $this->env->get('resizeMaxHeight');
-    $quality = $this->env->get('resizeQuality');
+    $maxSize = $this->env->get('resizeMaxSize');
 
-    if (isset($imageSize['width']) && $imageSize['width'] > $maxWidth) :
-      $editor->resize($maxWidth, null, false);
+    if (isset($imageSize['width']) && $imageSize['width'] > $maxSize) :
+      $editor->resize($maxSize, null, false);
     endif;
 
     $imageSize = $editor->get_size();
 
-    if (isset($imageSize['height']) && $imageSize['height'] > $maxHeight) :
-      $editor->resize(null, $maxHeight, false);
+    if (isset($imageSize['height']) && $imageSize['height'] > $maxSize) :
+      $editor->resize(null, $maxSize, false);
     endif;
 
-    $editor->set_quality($quality);
     $editor->save($upload['file']);
 
     return $upload;

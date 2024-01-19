@@ -273,6 +273,7 @@ function initFullImagesWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/images/SvgUpload.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/MediaReplacement.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
+    require_once FULL_CUSTOMER_APP . '/controller/images/ImageOptimization.php';
   endif;
 }
 

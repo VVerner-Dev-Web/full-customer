@@ -1,5 +1,6 @@
 <?php
 
+use Full\Customer\Images\ImageOptimization;
 use Full\Customer\Images\Settings;
 
 $worker = new Settings();
@@ -28,7 +29,8 @@ $worker = new Settings();
 
           <div class="full-page-content">
 
-            <form method="POST" id="full-images-settings" class="full-widget-form">
+            <h3>Otimização de imagens</h3>
+            <form method="POST" id="full-images-settings" class="full-widget-form" style="margin-bottom: 30px">
               <?php wp_nonce_field('full/widget/image-settings'); ?>
               <input type="hidden" name="action" value="full/widget/image-settings">
 
@@ -36,7 +38,22 @@ $worker = new Settings();
                 <tbody>
                   <tr>
                     <th>
-                      <label for="enableUploadResize">Otimizar novos uploads?</label>
+                      <label for="useImagify">Comprimir (reduzir o peso) de novos uploads?</label>
+                      <a href="http://" target="_blank" rel="noopener noreferrer">Saiba mais</a>
+                    </th>
+                    <td>
+                      <label class="toggle-switch toggle-switch-sm" for="useImagify">
+                        <input type="checkbox" name="useImagify" value="1" class="toggle-switch-input" id="useImagify" <?php checked($worker->get('useImagify')) ?>>
+                        <span class="toggle-switch-label">
+                          <span class="toggle-switch-indicator"></span>
+                        </span>
+                      </label>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th>
+                      <label for="enableUploadResize">Redimensionar novos uploads?</label>
                     </th>
                     <td>
                       <label class="toggle-switch toggle-switch-sm" for="enableUploadResize">
@@ -50,28 +67,10 @@ $worker = new Settings();
 
                   <tr class="resize <?= $worker->get('enableUploadResize') ? '' : 'hidden' ?>">
                     <th>
-                      <label for="resizeMaxWidth">Largura máxima (em pixel)</label>
+                      <label for="resizeMaxSize">Tamanho máximo (em pixel)</label>
                     </th>
                     <td>
-                      <input type="text" name="resizeMaxWidth" id="resizeMaxWidth" value="<?= $worker->get('enableUploadResize') ? $worker->get('resizeMaxWidth') : '' ?>" class="custom-input">
-                    </td>
-                  </tr>
-
-                  <tr class="resize <?= $worker->get('enableUploadResize') ? '' : 'hidden' ?>">
-                    <th>
-                      <label for="resizeMaxHeight">Altura máxima (em pixel)</label>
-                    </th>
-                    <td>
-                      <input type="text" name="resizeMaxHeight" id="resizeMaxHeight" value="<?= $worker->get('enableUploadResize') ? $worker->get('resizeMaxHeight') : '' ?>" class="custom-input">
-                    </td>
-                  </tr>
-
-                  <tr class="resize <?= $worker->get('enableUploadResize') ? '' : 'hidden' ?>">
-                    <th>
-                      <label for="resizeQuality">Qualidade da imagem (0 a 100)</label>
-                    </th>
-                    <td>
-                      <input type="number" name="resizeQuality" min="0" step="1" max="100" id="resizeQuality" value="<?= $worker->get('enableUploadResize') ? $worker->get('resizeQuality') : '' ?>" class="custom-input">
+                      <input type="text" name="resizeMaxSize" id="resizeMaxSize" value="<?= $worker->get('enableUploadResize') ? $worker->get('resizeMaxSize') : '' ?>" class="custom-input">
                     </td>
                   </tr>
 
@@ -113,6 +112,35 @@ $worker = new Settings();
                 </tbody>
               </table>
             </form>
+
+            <?php if ($worker->get('useImagify')) :
+              $usage = ImageOptimization::getUsage();
+            ?>
+
+              <h3>Status de compressões</h3>
+              <div class="full-widget-form" style="margin-bottom: 30px">
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>Imagens otimizadas</th>
+                      <td>
+                        <?= $usage->done . _n(' imagem', ' imagens', $usage->done) ?>
+                        <?php if ($usage->optimization > 0) : ?>
+                          - redução total de <?= $usage->readableOptimization ?>
+                        <?php endif; ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Créditos disponíveis</th>
+                      <td><?= $usage->available . _n(' crédito', ' créditos', $usage->available) ?></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
+            <?php endif; ?>
 
           </div>
         </div>
