@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,9 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.4 = 
+= 3.0.5 = 
 
-* O relatório de erros agora inclui a versão do plugin FC instalada para que a equipe da FULL possa trabalhar mais rapidamente na correção dos problemas
-* Foi corrigido um bug em que após a conexão bem sucedida do site ao painel, ele ainda aparecia como desconectado no wp-admin
+* Adicionado uma nova funcionalidade ao FULL.image que pode comprimir as imagens automaticamente no momento do upload! Todas os membros PRO ganharão 200 imagens grátis para otimização!
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
