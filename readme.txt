@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.5 = 
+= 3.0.6 = 
 
-* Adicionado uma nova funcionalidade ao FULL.image que pode comprimir as imagens automaticamente no momento do upload! Todas os membros PRO ganharão 200 imagens grátis para otimização!
+* Corrigido uma validação onde a AI não conseguia identificar a criação de uma ALT tag para imagens
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
