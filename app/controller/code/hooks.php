@@ -14,3 +14,4 @@ add_action('wp_footer', 'Full\Customer\Code\Actions\enqueueFooterScripts');
 
 add_action('wp_ajax_full/widget/code/update-code', 'Full\Customer\Code\Actions\updateInsertedCode');
 add_action('wp_ajax_full/widget/code/update-robots', 'Full\Customer\Code\Actions\updateRobotsFile');
+add_action('wp_ajax_full/widget/code/wp-config', 'Full\Customer\Code\Actions\updateWpConfigFile');

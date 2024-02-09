@@ -31,6 +31,33 @@
   cursor: pointer;
 }
 
+.show-logs {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0.54688rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  margin-left: 10px;
+  text-decoration: none;
+  border: solid 1px;
+  border-radius: 5px;
+}
+
+.show-logs:hover {
+  border: solid 1px !important;
+}
+
+.show-logs.hidden {
+  display: none;
+}
+
 .full-primary-button,
 .toggle-switch-input:checked + .toggle-switch-label {
   background-color: #05ab2e;

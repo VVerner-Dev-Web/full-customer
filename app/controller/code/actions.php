@@ -123,3 +123,20 @@ function echoCodeWithComments(string $code): void
 {
   echo '<!-- scripts adicionados pelo FULL.code -->' . $code . '<!-- /scripts adicionados pelo FULL.code -->';
 }
+
+function updateWpConfigFile(): void
+{
+  check_ajax_referer('full/widget/code/wp-config');
+
+  $worker = new Settings();
+
+  $enableWpDebug = filter_input(INPUT_POST, 'enableWpDebug', FILTER_VALIDATE_BOOL);
+  $enableWpDebugLog = filter_input(INPUT_POST, 'enableWpDebugLog', FILTER_VALIDATE_BOOL);
+  $enableWpDebugDisplay = filter_input(INPUT_POST, 'enableWpDebugDisplay', FILTER_VALIDATE_BOOL);
+
+  $enableWpDebug ? $worker->enableWpDebug() : $worker->disableWpDebug();
+  $enableWpDebug && $enableWpDebugLog ? $worker->enableWpDebugLog() : $worker->disableWpDebugLog();
+  $enableWpDebug && $enableWpDebugDisplay ? $worker->enableWpDebugDisplay() : $worker->disableWpDebugDisplay();
+
+  wp_send_json_success();
+}
