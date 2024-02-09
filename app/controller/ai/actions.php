@@ -178,8 +178,8 @@ function listImagesMissingAlt(): void
   $page = max(filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT), 1) - 1;
   $offset = $perPage * $page;
 
-  $subQuery = "SELECT post_id FROM wp_postmeta WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != ''";
-  $sql = "SELECT ID FROM `wp_posts` WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND ID NOT IN ($subQuery)";
+  $subQuery = "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != ''";
+  $sql  = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%' AND ID NOT IN ($subQuery)";
   $sql .= " ORDER BY ID DESC";
 
   $total = count($wpdb->get_col($sql));
