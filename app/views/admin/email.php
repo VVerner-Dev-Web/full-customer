@@ -86,9 +86,9 @@ $worker = new Settings();
                     </th>
                     <td>
                       <select name="smtpSecurity" id="smtpSecurity" class="custom-input">
-                        <option value="none" <?php selected($worker->get('smtpSecurity')) ?>>Nenhuma</option>
-                        <option value="ssl" <?php selected($worker->get('smtpSecurity')) ?>>SSL</option>
-                        <option value="tls" <?php selected($worker->get('smtpSecurity')) ?>>TLS</option>
+                        <option value="none" <?php selected('none', $worker->get('smtpSecurity')) ?>>Nenhuma</option>
+                        <option value="ssl" <?php selected('ssl', $worker->get('smtpSecurity')) ?>>SSL</option>
+                        <option value="tls" <?php selected('tls', $worker->get('smtpSecurity')) ?>>TLS</option>
                       </select>
                     </td>
                   </tr>

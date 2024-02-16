@@ -52,6 +52,7 @@ if (License::isActive()) :
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullSecurityWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullContentWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullAiWidget');
+  add_action('plugins_loaded', '\Full\Customer\Actions\initFullWhatsAppWidget');
   add_action('plugins_loaded', ['\Full\Customer\Security\Firewall', 'run'], 0);
 
   add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);

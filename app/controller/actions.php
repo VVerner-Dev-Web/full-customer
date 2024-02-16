@@ -365,3 +365,12 @@ function initFullAiWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/ai/Settings.php';
   endif;
 }
+
+function initFullWhatsAppWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-whatsapp')) :
+    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/Settings.php';
+  endif;
+}

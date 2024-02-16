@@ -2,9 +2,9 @@
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool
 Requires at least: 6.3
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 3.0.8
+Stable tag: 3.0.9
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.8 = 
+= 3.0.9 = 
 
-* Adicionado novas funcionalidades ao FULL.code para controle dos logs e modo de testes do WordPress.
+* Nova funcionalidade! Botão de WhatsApp flutuante em todas as páginas do site
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

@@ -1,0 +1,23 @@
+#fc-whatsapp-container {
+  position: fixed;
+  bottom: min(3%, 1em);
+}
+
+#fc-whatsapp-container.bottom-left {
+  left: min(2%, 1em);
+}
+
+#fc-whatsapp-container.bottom-center {
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+#fc-whatsapp-container.bottom-right {
+  right: min(2%, 1em);
+}
+
+#fc-whatsapp-container img {
+  aspect-ratio: 1;
+  height: auto;
+}
