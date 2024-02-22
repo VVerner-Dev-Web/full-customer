@@ -397,4 +397,29 @@
     $el.addClass("active");
     $panel.slideToggle();
   });
+
+  // ACCESS TOKEN
+  // ========================
+  $("[data-js='full-generate-temporary-token']").on("click", function (e) {
+    e.preventDefault();
+
+    const $btn = $(this);
+    $btn.addClass("disabled").text("Gerando...").attr("disabled", true);
+
+    const data = {
+      action: "full/generate-temporary-token",
+      userId: $(this).data("user"),
+    };
+
+    $.post(ajaxurl, data, function ({ data }) {
+      $btn.removeClass("disabled").text("Gerar link").attr("disabled", false);
+
+      prompt(
+        "URL temporária criada com sucesso! Este token é de uso único e recriado em cada nova solicitação",
+        data
+      );
+
+      navigator.clipboard.writeText(data);
+    });
+  });
 })(jQuery);

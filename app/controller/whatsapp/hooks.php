@@ -5,6 +5,8 @@ namespace Full\Customer\WhatsApp;
 defined('ABSPATH') || exit;
 
 add_action('admin_menu', 'Full\Customer\WhatsApp\Actions\addMenuPages');
+add_action('add_meta_boxes', 'Full\Customer\WhatsApp\Actions\addMetaBoxes');
+add_action('save_post', 'Full\Customer\WhatsApp\Actions\maybeUpdateSinglePostSettings');
 add_action('admin_enqueue_scripts', 'Full\Customer\WhatsApp\Actions\adminEnqueueScripts');
 
 add_action('wp_ajax_full/widget/whatsapp-settings', 'Full\Customer\WhatsApp\Actions\updateSettings');

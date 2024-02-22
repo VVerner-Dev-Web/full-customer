@@ -174,7 +174,7 @@ $worker = new Settings();
                       </th>
                       <td>
                         <textarea name="customProductTabContent" id="customProductTabContent" cols="30" rows="10" class="custom-input" style="min-height: 150px"><?= $worker->get('customProductTabContent') ?></textarea>
-                        <small>Para usuários avaçados: Utilize o hook do_action('full-customer/woocommerce/custom-product-tab-content') para inserir conteúdos</small>
+                        <small>Para usuários avançados: Utilize o hook do_action('full-customer/woocommerce/custom-product-tab-content') para inserir conteúdos</small>
                       </td>
                     </tr>
 

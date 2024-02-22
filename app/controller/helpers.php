@@ -22,6 +22,15 @@ function fullCustomer(): FullCustomer
   return new FullCustomer();
 }
 
+function fullGetMetaBox($post, array $metaBox): void
+{
+  $endpoint = str_replace('full-', '', $metaBox['id']);
+  $file = FULL_CUSTOMER_APP . '/views/metaboxes/' . $endpoint . '.php';
+  if (file_exists($file)) :
+    include $file;
+  endif;
+}
+
 function fullGetAdminPageView(): void
 {
   $file = FULL_CUSTOMER_APP . '/views/admin/' . fullAdminPageEndpoint() . '.php';

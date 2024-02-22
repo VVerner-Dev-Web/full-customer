@@ -18,12 +18,43 @@ function addMenuPages(): void
   );
 }
 
-function adminEnqueueScripts(): void
+function addMetaBoxes(): void
 {
-  if ('whatsapp' !== fullAdminPageEndpoint()) :
+  $worker = new Settings();
+  if (!$worker->isButtonEnabled()) :
     return;
   endif;
 
+  add_meta_box(
+    'full-whatsapp',
+    'FULL.whatsapp',
+    'fullGetMetaBox',
+    get_post_types(['public' => true]),
+    'side',
+    'high'
+  );
+}
+
+function maybeUpdateSinglePostSettings($postId): void
+{
+  if (wp_is_post_revision($postId) || !filter_input(INPUT_POST, 'fullUpdatingWhatsApp', FILTER_VALIDATE_BOOL)) {
+    return;
+  }
+
+  $full = filter_input(INPUT_POST, 'full', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+  $full = wp_parse_args($full, [
+    'whatsappDisplay' => '',
+    'whatsappNumber' => '',
+    'whatsappMessage' => '',
+  ]);
+
+  update_post_meta($postId, 'full/whatsappDisplay', trim($full['whatsappDisplay']));
+  update_post_meta($postId, 'full/whatsappNumber', trim($full['whatsappNumber']));
+  update_post_meta($postId, 'full/whatsappMessage', trim($full['whatsappMessage']));
+}
+
+function adminEnqueueScripts(): void
+{
   $version = getFullAssetsVersion();
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
@@ -43,6 +74,8 @@ function updateSettings(): void
   $worker->set('whatsappPosition', filter_input(INPUT_POST, 'whatsappPosition'));
   $worker->set('whatsappLogo', filter_input(INPUT_POST, 'whatsappLogo'));
   $worker->set('whatsappLogoSize', filter_input(INPUT_POST, 'whatsappLogoSize', FILTER_VALIDATE_INT));
+  $worker->set('displayCondition', sanitize_title(filter_input(INPUT_POST, 'displayCondition')));
+  $worker->set('validCpt', filter_input(INPUT_POST, 'validCpt', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?? []);
 
   wp_send_json_success();
 }
@@ -50,17 +83,20 @@ function updateSettings(): void
 function addButton(): void
 {
   $worker = new Settings();
-  if (!$worker->get('enableGlobalButton')) :
-    return;
-  endif;
 
-  require_once FULL_CUSTOMER_APP . '/views/footer/whatsapp-button.php';
+  if (
+    $worker->isButtonEnabledForGlobal() ||
+    $worker->isButtonEnabledForPostType(get_post_type()) ||
+    (is_single() && $worker->isButtonEnabledForSinglePost(get_the_ID()))
+  ) :
+    require_once FULL_CUSTOMER_APP . '/views/footer/whatsapp-button.php';
+  endif;
 }
 
 function addButtonStyles(): void
 {
   $worker = new Settings();
-  if (!$worker->get('enableGlobalButton')) :
+  if (!$worker->isButtonEnabled()) :
     return;
   endif;
 

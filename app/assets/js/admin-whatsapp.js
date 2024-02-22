@@ -9,6 +9,16 @@ jQuery(function ($) {
       .each(function () {
         $(this).attr("required", required).prop("required", required);
       });
+
+    $("#displayCondition").val("global").trigger("change");
+  });
+
+  $("#displayCondition").on("change", function () {
+    const showingForCpt = "cpt" === $(this).val();
+
+    showingForCpt
+      ? $(".displayConditionCpt").removeClass("hidden")
+      : $(".displayConditionCpt").addClass("hidden");
   });
 
   const SPMaskBehavior = (val) =>
@@ -16,7 +26,7 @@ jQuery(function ($) {
       ? "(00) 00000-0000"
       : "(00) 0000-00009";
 
-  $("#whatsappNumber").mask(SPMaskBehavior, {
+  $("#whatsappNumber, #full-whatsappNumber").mask(SPMaskBehavior, {
     clearIfNotMatch: true,
     onKeyPress: function (val, e, field, options) {
       field.mask(SPMaskBehavior.apply({}, arguments), options);
