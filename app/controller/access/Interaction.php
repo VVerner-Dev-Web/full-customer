@@ -49,7 +49,7 @@ class Interaction
     $userId = filter_input(INPUT_POST, 'userId', FILTER_VALIDATE_INT);
     $url = add_query_arg([
       'fta' => Authentication::generateAccessToken($userId)
-    ], home_url());
+    ], admin_url());
 
     wp_send_json_success($url);
   }

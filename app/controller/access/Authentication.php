@@ -17,8 +17,8 @@ class Authentication
   {
     $cls = new self();
 
-    add_filter('template_redirect', [$cls, 'maybeLogoutUser'], 3);
-    add_filter('template_redirect', [$cls, 'maybeLoginUser'], 5);
+    add_filter('plugins_loaded', [$cls, 'maybeLogoutUser'], 3);
+    add_filter('plugins_loaded', [$cls, 'maybeLoginUser'], 5);
     add_filter('wp_authenticate_user', [$cls, 'verifyExpirationDate'], PHP_INT_MAX);
   }
 
@@ -26,7 +26,7 @@ class Authentication
   {
     $token = filter_input(INPUT_GET, 'fta') ? filter_input(INPUT_GET, 'fta') : '';
 
-    if (!$token || is_user_logged_in()) :
+    if (!$token) :
       return;
     endif;
 
@@ -36,12 +36,17 @@ class Authentication
       return;
     endif;
 
-    wp_destroy_current_session();
-    wp_clear_auth_cookie();
-    wp_set_current_user(0);
+    $user = get_userdata($userId);
 
-    wp_set_current_user($userId);
-    wp_set_auth_cookie($userId, true, false);
+    if (!$user) :
+      return;
+    endif;
+
+    wp_clear_auth_cookie();
+
+    wp_set_current_user($user->ID, $user->user_login);
+    wp_set_auth_cookie($user->ID);
+    do_action('wp_login', $user->user_login, $user);
 
     wp_redirect(remove_query_arg('fta'));
     exit;
