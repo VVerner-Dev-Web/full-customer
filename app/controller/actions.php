@@ -374,3 +374,11 @@ function initFullWhatsAppWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/Settings.php';
   endif;
 }
+
+function initFullShortcodesWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
+    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
+  endif;
+}

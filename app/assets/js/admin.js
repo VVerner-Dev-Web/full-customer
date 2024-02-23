@@ -373,6 +373,13 @@
 
       $(window).trigger("full/form-received/" + $form.attr("id"), response);
 
+      fireAlert(
+        response?.success ? "success" : "warning",
+        response?.success
+          ? "Configurações atualizadas com sucesso"
+          : "Falha ao atualizar as configurações, tente novamente por favor"
+      );
+
       if (response?.data?.reload) {
         location.reload();
       }

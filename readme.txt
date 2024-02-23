@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 3.0.10
+Stable tag: 3.0.11
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,9 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.10 = 
+= 3.0.11 = 
 
-* Atualização no FULL.whatsapp. Agora é possível controlar a visibilidade do botão por post type ou conteúdo específico.
-* Nova funcionalidade! FULL.access permite a criação de login temporários e urls de login automático rapidamente para todos os usuários do site.
+* Novos indicadores para sucesso de atualização de configurações
+* Nova funcionalidade! FULL.shortcodes é uma coleção de shortcodes úteis para seu site.
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
