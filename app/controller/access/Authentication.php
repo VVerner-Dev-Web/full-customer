@@ -36,7 +36,9 @@ class Authentication
       return;
     endif;
 
-    wp_logout();
+    wp_destroy_current_session();
+    wp_clear_auth_cookie();
+    wp_set_current_user(0);
 
     wp_set_current_user($userId);
     wp_set_auth_cookie($userId, true, false);
@@ -65,9 +67,11 @@ class Authentication
     $currentToken = get_transient('full/access-token/' . $userId);
     $isValidToken = $token === $currentToken;
 
-    if ($isValidToken) :
-      delete_transient('full/access-token/' . $userId);
+    if (!$isValidToken) :
+      return 0;
     endif;
+
+    delete_transient('full/access-token/' . $userId);
 
     return $userId;
   }
