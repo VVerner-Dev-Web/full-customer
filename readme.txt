@@ -1,10 +1,10 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
-Tags: full, elementor, security, tool
+Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 3.0.14
+Stable tag: 3.0.15
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,12 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.14 = 
+=  3.0.15 = 
 
-* Foi adicionada a possibilidade de ativar/desativar algumas widgets nativas.
-* Corrigido problema em que alguns plugins o autoupdate não vinha preenchido
-* Removido funcionalidades de backup
-* Adicionado um cache de 1 dia para verificação de status de conexão do site com o painel
-* Integrado com widget FULL.performance
+* Adicionado steps durante a importação de templates
+* Atualizado identidade visual no repositório
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

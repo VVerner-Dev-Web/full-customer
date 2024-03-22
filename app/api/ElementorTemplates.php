@@ -16,9 +16,19 @@ defined('ABSPATH') || exit;
 
 class ElementorTemplates extends FullCustomerController
 {
+  private string $token;
+
   public static function registerRoutes(): void
   {
     $api = new self();
+
+    register_rest_route(self::NAMESPACE, '/elementor/install-events', [
+      [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => [$api, 'installEvents'],
+        'permission_callback' => '__return_true',
+      ]
+    ]);
 
     register_rest_route(self::NAMESPACE, '/elementor/install', [
       [
@@ -112,16 +122,44 @@ class ElementorTemplates extends FullCustomerController
     return $this->isValidUserAuthenticated() && $this->hasElementor();
   }
 
+  public function installEvents(WP_REST_Request $request): WP_REST_Response
+  {
+    return new WP_REST_Response([
+      'data' => get_option('full/import/' . $request->get_param('token'), 'Importação não localizada ou finalizada')
+    ]);
+  }
+
+  private function logProgress(string $message): void
+  {
+    $content  = get_option('full/import/' . $this->token, '');
+    $content .= '[' . current_time('d/m/Y H:i:s') . '] ' . $message;
+
+    update_option('full/import/' . $this->token, $message, false);
+  }
+
+  private function clearLog(): void
+  {
+    delete_option('full/import/' . $this->token);
+  }
+
   public function install(WP_REST_Request $request): WP_REST_Response
   {
+    $this->token = $request->get_param('token');
+
+    $this->logProgress('Processando instalação');
+
     $item   = $request->get_param('item');
     $itemId = (int) $item['id'];
     $origin = sanitize_title($item['origin']);
     $mode   = sanitize_title($request->get_param('mode'));
 
-    return ('template' === $origin) ?
+    $response = ('template' === $origin) ?
       $this->installTemplate($itemId, $mode) :
       $this->installCloud($itemId, $mode);
+
+    $this->clearLog();
+
+    return $response;
   }
 
   public function installDependencies(WP_REST_Request $request): WP_REST_Response
@@ -163,11 +201,15 @@ class ElementorTemplates extends FullCustomerController
 
   private function installTemplate(int $itemId, string $mode): WP_REST_Response
   {
+    $this->logProgress('Verificando item solicitado');
+
     $item     = TemplateManager::instance()->getItem($itemId);
 
     if (!$item || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
     endif;
+
+    $this->logProgress('Item localizado, validando dependências');
 
     $dependencies = $this->verifyMissingDependencies($item);
 
@@ -182,9 +224,13 @@ class ElementorTemplates extends FullCustomerController
       ]);
     endif;
 
+    $this->logProgress('Nenhuma dependência pendente encontrada, seguindo com a instalação');
+
     if ($item->hasZipFile) :
       return $this->installPack($item, $mode);
     endif;
+
+    $this->logProgress('Realizando o download do arquivo de template');
 
     $template = $this->downloadJson($item->fileUrl);
 
@@ -192,12 +238,15 @@ class ElementorTemplates extends FullCustomerController
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
+    $this->logProgress('Preparando ambiente para importação');
+
     $importer  = new Importer($item->title, '', $template);
 
     if ('builder' === $mode) :
       return new WP_REST_Response(['builder' => $template]);
     endif;
 
+    $this->logProgress('Importando arquivo de template: ' . $item->title);
     $templateId = $importer->import();
 
     if (is_wp_error($templateId)) :
@@ -223,6 +272,8 @@ class ElementorTemplates extends FullCustomerController
 
   private function installPack(stdClass $item, string $mode): WP_REST_Response
   {
+    $this->logProgress('Realizando o download dos arquivos do pack de templates');
+
     $templates = $this->downloadJsonPack($item->fileUrl);
     $postsIds  = [];
 
@@ -232,8 +283,12 @@ class ElementorTemplates extends FullCustomerController
       ]);
     endif;
 
-    foreach ($templates as $template) :
+    $total = count($templates);
+    $this->logProgress('Download concluído, iniciando a importação dos ' . $total . ' templates');
+
+    foreach ($templates as $index => $template) :
       $json = json_decode(file_get_contents($template), ARRAY_A);
+      $this->logProgress('Importando template: ' . $json['title'] . ' (' . ($index + 1) . ' de ' . $total . ')');
 
       $importer  = new Importer($item->title, $template);
       $templateId = $importer->import();

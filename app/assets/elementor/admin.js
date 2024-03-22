@@ -228,7 +228,30 @@
   };
 
   const installTemplateItem = (mode, item) => {
-    const endpoint = "full-customer/elementor/install/";
+    const token = Math.random().toString(36).slice(2);
+    const endpoint = "full-customer/elementor/install/?token=" + token;
+
+    const $el = $(document).find("#swal2-html-container");
+    $el.html("Realizando importação");
+
+    let fetching = false;
+    let eventsInterval = setInterval(() => {
+      if (fetching) {
+        console.log("to soon");
+        return;
+      }
+
+      fetching = true;
+
+      $.get(
+        FULL.rest_url + "full-customer/elementor/install-events",
+        { token },
+        function (response) {
+          fetching = false;
+          $el.html(response.data);
+        }
+      );
+    }, 1000);
 
     return fetch(FULL.rest_url + endpoint, {
       method: "POST",
@@ -239,6 +262,7 @@
       },
       body: JSON.stringify({ mode, item }),
     }).then((response) => {
+      clearInterval(eventsInterval);
       return response.json();
     });
   };

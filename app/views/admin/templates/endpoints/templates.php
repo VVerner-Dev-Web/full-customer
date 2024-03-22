@@ -3,7 +3,9 @@
 use Full\Customer\Elementor\TemplateManager;
 
 $maxVisibleItens = 4;
+$index = 0;
 ?>
+
 
 <div class="templately-sidebar templately-templates-sidebar">
   <div class="templately-collapse">
