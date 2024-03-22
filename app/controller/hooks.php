@@ -2,7 +2,6 @@
 
 namespace Full\Customer\Hooks;
 
-use Full\Customer\Backup\Cron as BackupCron;
 use Full\Customer\License;
 use Full\Customer\Proxy;
 
@@ -38,7 +37,6 @@ add_filter('auto_update_plugin', '\Full\Customer\Filters\autoupdate', PHP_INT_MA
 if (License::isActive()) :
   add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
-  add_action('rest_api_init', ['\Full\Customer\Api\Backup', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Widgets', 'registerRoutes']);
 
   add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
@@ -55,12 +53,9 @@ if (License::isActive()) :
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullWhatsAppWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullShortcodesWidget');
   add_action('plugins_loaded', ['\Full\Customer\Security\Firewall', 'run'], 0);
-
-  add_action('wp', ['\Full\Customer\Backup\Cron', 'enqueueCreateHook']);
-  add_action(BackupCron::JOB_NAME, '\Full\Customer\Actions\createCronBackup');
-  add_action(BackupCron::ASYNC_JOB_NAME, '\Full\Customer\Actions\createAsyncCronBackup');
-  add_action(BackupCron::ASYNC_RESTORE_JOB_NAME, '\Full\Customer\Actions\restoreAsyncBackup', 10, 3);
 endif;
+
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullAccessWidget');
 
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');

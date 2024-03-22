@@ -80,7 +80,7 @@ class FileSystem
   public function extractZip(string $zipFilePath, string $destinationPath, bool $deleteAfterExtract = true): bool
   {
     if (function_exists('set_time_limit')) :
-      set_time_limit(FULL_BACKUP_TIME_LIMIT);
+      set_time_limit(600);
     endif;
 
     $zipFile = new ZipFile();
@@ -97,7 +97,7 @@ class FileSystem
   public function createZip(string $sourcePath, string $outputZipPath)
   {
     if (function_exists('set_time_limit')) :
-      set_time_limit(FULL_BACKUP_TIME_LIMIT);
+      set_time_limit(600);
     endif;
 
     $zipFile = new ZipFile();

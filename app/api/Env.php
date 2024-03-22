@@ -77,7 +77,7 @@ class FullCustomer
       $default = [
         'full-bot',
         'full-cloud',
-        'full-templates',
+        'full-access',
         'full-clone',
         'full-update',
         'full-security',

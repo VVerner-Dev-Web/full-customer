@@ -23,19 +23,10 @@ require_once FULL_CUSTOMER_APP . '/controller/inc/Proxy.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/FileSystem.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/RemoteLogin.php';
 
-require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
-require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
-require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
-
 if (License::isActive()) :
-  require_once FULL_CUSTOMER_APP . '/api/Backup.php';
   require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
   require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
   require_once FULL_CUSTOMER_APP . '/api/Widgets.php';
-
-  require_once FULL_CUSTOMER_APP . '/controller/backup/Controller.php';
-  require_once FULL_CUSTOMER_APP . '/controller/backup/MysqlDump.php';
-  require_once FULL_CUSTOMER_APP . '/controller/backup/Cron.php';
 
   require_once FULL_CUSTOMER_APP . '/controller/security/Firewall.php';
 endif;

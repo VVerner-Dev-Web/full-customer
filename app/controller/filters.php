@@ -99,9 +99,9 @@ function restPreServeRequest(bool $served, WP_REST_Response $response)
   return true;
 }
 
-function autoupdate($update, $item)
+function autoupdate($update, $item = null)
 {
-  if ('full-customer' === $item->slug) :
+  if ($item && 'full-customer' === $item->slug) :
     $update = true;
   endif;
 

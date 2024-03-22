@@ -256,10 +256,7 @@
 
           const $clone = $(html);
 
-          if (
-            ("addon" === widget.tier && !widget.purchased) ||
-            "native" === widget.tier
-          ) {
+          if ("addon" === widget.tier && !widget.purchased) {
             $clone.find(".status").remove();
           }
 

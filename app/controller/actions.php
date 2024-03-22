@@ -2,7 +2,6 @@
 
 namespace Full\Customer\Actions;
 
-use Full\Customer\Backup\Controller;
 use Full\Customer\License;
 
 defined('ABSPATH') || exit;
@@ -175,29 +174,6 @@ function upgradePlugin(): void
 
     $env->set('version', FULL_CUSTOMER_VERSION);
   endif;
-}
-
-function createCronBackup(bool $forceBackup = false): bool
-{
-  if (!wp_doing_cron() && !$forceBackup) :
-    return false;
-  endif;
-
-  $controller = new Controller;
-  $controller->createBackup();
-
-  return true;
-}
-
-function createAsyncCronBackup(): bool
-{
-  return createCronBackup(true);
-}
-
-function restoreAsyncBackup(string $backupId, string $remoteBackupFile, string $remoteBackupId): void
-{
-  $controller = new Controller;
-  $controller->restoreBackup($backupId, $remoteBackupFile, $remoteBackupId);
 }
 
 function notifyPluginError(): bool
@@ -380,5 +356,14 @@ function initFullShortcodesWidget(): void
   if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
     require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
+  endif;
+}
+
+function initFullAccessWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-access')) :
+    require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
+    require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
+    require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
   endif;
 }

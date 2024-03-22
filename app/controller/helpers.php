@@ -85,21 +85,23 @@ function fullGetLocalize(): array
 
 function fullGetSiteConnectionData()
 {
-  $full = fullCustomer();
-  $url  = $full->getFullDashboardApiUrl() . '-customer/v1/connect-site';
+  $response = get_transient('full/site-connection-data');
 
-  $request  = wp_remote_get($url, [
-    'sslverify' => false,
-    'headers'   => [
-      'Content-type' => 'application/json'
-    ],
-    'body'      => [
-      'site_url' => site_url()
-    ]
-  ]);
+  if (!$response || 'full-connection' === filter_input(INPUT_GET, 'page')) :
+    $full = fullCustomer();
+    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/connect-site';
 
-  $response = wp_remote_retrieve_body($request);
-  $response = json_decode($response);
+    $request  = wp_remote_get($url, [
+      'sslverify' => false,
+      'headers'   => ['Content-type' => 'application/json'],
+      'body'      => ['site_url' => site_url()]
+    ]);
+
+    $response = wp_remote_retrieve_body($request);
+    $response = json_decode($response);
+
+    set_transient('full/site-connection-data', $response, DAY_IN_SECONDS);
+  endif;
 
   return $response;
 }

@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool
 Requires at least: 6.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 3.0.13
+Stable tag: 3.0.14
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,12 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.0.13 = 
+= 3.0.14 = 
 
-* Redirecionamento padrão do FULL.access agora é para o painel administrativo do WordPress.
+* Foi adicionada a possibilidade de ativar/desativar algumas widgets nativas.
+* Corrigido problema em que alguns plugins o autoupdate não vinha preenchido
+* Removido funcionalidades de backup
+* Adicionado um cache de 1 dia para verificação de status de conexão do site com o painel
+* Integrado com widget FULL.performance
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
