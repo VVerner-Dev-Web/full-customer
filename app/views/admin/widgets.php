@@ -69,15 +69,15 @@ use Full\Customer\License; ?>
       <a href="{url}" target="_blank" rel="noopener noreferrer">Saiba mais</a>
     </div>
 
-    <div class="status">
-      <?php if (License::isActive()) : ?>
-        <label class="toggle-switch-sm" for="full-widget-{key}">
-          <input type="checkbox" value="{key}" class="toggle-switch-input" id="full-widget-{key}" {checked}>
-          <span class="toggle-switch-label">
-            <span class="toggle-switch-indicator"></span>
-          </span>
-        </label>
-      <?php endif; ?>
-    </div>
+    <div class="status">{toggle}</div>
   </div>
+</script>
+
+<script id="widget-toggle-template" type="text-template">
+  <label class="toggle-switch-sm" for="full-widget-{key}">
+    <input type="checkbox" value="{key}" class="toggle-switch-input" id="full-widget-{key}" {checked}>
+    <span class="toggle-switch-label">
+      <span class="toggle-switch-indicator"></span>
+    </span>
+  </label>
 </script>

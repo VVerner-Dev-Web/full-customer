@@ -14,6 +14,8 @@ function fullIsCorrectlyConnected(): bool
     set_transient('full/connected', $code, DAY_IN_SECONDS);
   endif;
 
+  error_log($code);
+
   return $code > 0;
 }
 

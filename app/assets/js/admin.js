@@ -236,6 +236,7 @@
   if ($(".widgets-grid").length) {
     const $grids = $(".widgets-grid");
     const changed = [];
+    const isProUser = FULL.full_pro ? true : false;
 
     $.get(
       FULL.dashboard_url + "widgets",
@@ -243,6 +244,12 @@
       function (response) {
         for (const widget of response) {
           let html = $("#widget-template").html();
+          const toggleHtml =
+            isProUser || "native" === widget.tier
+              ? $("#widget-toggle-template").html()
+              : "";
+
+          html = html.replace("{toggle}", toggleHtml);
 
           Object.entries(widget).forEach(([key, value]) => {
             html = html.replace(new RegExp("{" + key + "}", "g"), value);

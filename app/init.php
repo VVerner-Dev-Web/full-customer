@@ -17,6 +17,7 @@ require_once FULL_CUSTOMER_APP . '/api/Login.php';
 require_once FULL_CUSTOMER_APP . '/api/PluginInstallation.php';
 require_once FULL_CUSTOMER_APP . '/api/ElementorTemplates.php';
 require_once FULL_CUSTOMER_APP . '/api/ElementorAi.php';
+require_once FULL_CUSTOMER_APP . '/api/Widgets.php';
 
 require_once FULL_CUSTOMER_APP . '/controller/inc/Health.php';
 require_once FULL_CUSTOMER_APP . '/controller/inc/Proxy.php';
@@ -26,7 +27,6 @@ require_once FULL_CUSTOMER_APP . '/controller/inc/RemoteLogin.php';
 if (License::isActive()) :
   require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
   require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
-  require_once FULL_CUSTOMER_APP . '/api/Widgets.php';
 
   require_once FULL_CUSTOMER_APP . '/controller/security/Firewall.php';
 endif;
