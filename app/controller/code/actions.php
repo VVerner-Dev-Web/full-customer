@@ -94,7 +94,7 @@ function enqueueFooterScripts(): void
 }
 
 
-function updateInsertedCode()
+function updateInsertedCode(): void
 {
   check_ajax_referer('full/widget/code/update-code');
 
@@ -107,7 +107,7 @@ function updateInsertedCode()
   wp_send_json_success();
 }
 
-function updateRobotsFile()
+function updateRobotsFile(): void
 {
   check_ajax_referer('full/widget/code/update-robots');
 

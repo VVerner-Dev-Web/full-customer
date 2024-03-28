@@ -30,7 +30,7 @@ function adminEnqueueScripts(): void
   wp_enqueue_script('full-admin-security', $baseUrl . 'js/admin-security.js', ['jquery'], $version, true);
 }
 
-function updateSettings()
+function updateSettings(): void
 {
   check_ajax_referer('full/widget/security-settings');
 
@@ -41,7 +41,6 @@ function updateSettings()
   $worker->set('disableXmlrpc', filter_input(INPUT_POST, 'disableXmlrpc', FILTER_VALIDATE_BOOL));
   $worker->set('enablePasswordProtection', filter_input(INPUT_POST, 'enablePasswordProtection', FILTER_VALIDATE_BOOL));
   $worker->set('enableUsersOnlyMethod', filter_input(INPUT_POST, 'enableUsersOnlyMethod', FILTER_VALIDATE_BOOL));
-  $worker->set('enableUserSwitch', filter_input(INPUT_POST, 'enableUserSwitch', FILTER_VALIDATE_BOOL));
 
   if ($worker->get('enablePasswordProtection')) :
     $worker->set('sitePassword', filter_input(INPUT_POST, 'sitePassword'));

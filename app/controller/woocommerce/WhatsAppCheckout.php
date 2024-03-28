@@ -6,7 +6,8 @@ defined('ABSPATH') || exit;
 
 class WhatsAppCheckout
 {
-  public $env;
+
+  public Settings $env;
   public string $phoneNumber;
   public string $template;
 

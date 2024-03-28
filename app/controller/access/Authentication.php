@@ -32,7 +32,7 @@ class Authentication
 
     $userId = $this->validateAccessToken($token);
 
-    if (!$userId) :
+    if ($userId === 0) :
       return;
     endif;
 
@@ -54,7 +54,7 @@ class Authentication
 
   public static function generateAccessToken(int $userId): string
   {
-    $token = bin2hex(random_bytes(10));
+    $token = wp_generate_uuid4();
     set_transient('full/access-token/' . $userId, $token, HOUR_IN_SECONDS);
     return base64_encode($userId . ':' . $token);
   }

@@ -120,7 +120,7 @@ class FileSystem
     return @unlink($path);
   }
 
-  public function downloadExternalResource(string $source, string $filename)
+  public function downloadExternalResource(string $source, string $filename): string
   {
     $this->createTemporaryDirectory();
 

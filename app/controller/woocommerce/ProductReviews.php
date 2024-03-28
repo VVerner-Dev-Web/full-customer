@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class ProductReviews
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

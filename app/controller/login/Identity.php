@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class Identity
 {
-  public $env;
+  public Settings $env;
   public $loginSlug;
 
   private function __construct(Settings $env)

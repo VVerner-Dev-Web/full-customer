@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class LastLoginColumn
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -44,7 +44,7 @@ class LastLoginColumn
       $timestamp = (int) get_user_meta($userId, 'full-customer/last-login-date', true);
       $value = 'Ainda não fez login';
 
-      if ($timestamp) :
+      if ($timestamp !== 0) :
         $value = wp_date('d/m/Y \à\s H:i', $timestamp);
       endif;
     endif;

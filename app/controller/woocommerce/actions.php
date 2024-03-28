@@ -41,7 +41,7 @@ function adminEnqueueScripts(): void
   wp_enqueue_script('full-admin-woocommerce', $baseUrl . 'js/admin-woocommerce.js', ['jquery'], $version, true);
 }
 
-function updateSettings()
+function updateSettings(): void
 {
   check_ajax_referer('full/widget/woocommerce-settings');
 

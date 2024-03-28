@@ -28,7 +28,7 @@ class FullCustomer
 
   public function hasDashboardUrl(): bool
   {
-    return $this->get('dashboard_url') ? true : false;
+    return (bool) $this->get('dashboard_url');
   }
 
   public function getFullDashboardApiUrl(string $env = null): string
@@ -68,7 +68,7 @@ class FullCustomer
 
   public function isServiceEnabled(string $service): bool
   {
-    return array_search($service, $this->getEnabledServices(), true) !== false;
+    return in_array($service, $this->getEnabledServices(), true);
   }
 
   public function getEnabledServices(): array

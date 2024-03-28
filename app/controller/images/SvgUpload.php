@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 
 class SvgUpload
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -33,7 +33,7 @@ class SvgUpload
 
   public function confirmFileType(array $ext, $file, string $filename, $mimes): array
   {
-    if (substr($filename, -4) == '.svg') :
+    if (substr($filename, -4) === '.svg') :
       $ext['type'] = 'image/svg+xml';
       $ext['ext'] = 'svg';
     endif;
@@ -49,7 +49,7 @@ class SvgUpload
     $tmpName = $file['tmp_name'];
     $filename = (isset($file['name']) ? $file['name'] : '');
     $fileTypeExt = wp_check_filetype_and_ext($tmpName, $filename);
-    $fileType = (!empty($fileTypeExt['type']) ? $fileTypeExt['type'] : '');
+    $fileType = (empty($fileTypeExt['type']) ? '' : $fileTypeExt['type']);
 
     if ('image/svg+xml' === $fileType) :
       $sanitizer = new Sanitizer();
@@ -79,15 +79,15 @@ class SvgUpload
     if ($svg) :
       $attributes = $svg->attributes();
 
-      if (isset($attributes->width, $attributes->height)) {
-        $width = intval(floatval($attributes->width));
-        $height = intval(floatval($attributes->height));
-      } elseif (isset($attributes->viewBox)) {
+      if (property_exists($attributes, 'width') && $attributes->width !== null && (property_exists($attributes, 'height') && $attributes->height !== null)) {
+        $width = (int) (float) $attributes->width;
+        $height = (int) (float) $attributes->height;
+      } elseif (property_exists($attributes, 'viewBox') && $attributes->viewBox !== null) {
         $sizes = explode(' ', $attributes->viewBox);
 
         if (isset($sizes[2], $sizes[3])) {
-          $width = intval(floatval($sizes[2]));
-          $height = intval(floatval($sizes[3]));
+          $width = (int) (float) $sizes[2];
+          $height = (int) (float) $sizes[3];
         }
       }
     endif;

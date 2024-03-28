@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class OrderReceived
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -17,7 +17,7 @@ class OrderReceived
   {
     $env = new Settings();
 
-    if (!trim($env->get('orderReceivedPageCustomCode'))) :
+    if (trim($env->get('orderReceivedPageCustomCode')) === '' || trim($env->get('orderReceivedPageCustomCode')) === '0') :
       return;
     endif;
 

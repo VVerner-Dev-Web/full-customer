@@ -77,7 +77,7 @@ $worker = new Settings();
                 file_put_contents($filename, '');
               endif;
 
-              $validSize  = $valid ? filesize($filename) < 500000 : false;
+              $validSize  = $valid && filesize($filename) < 500000;
               $content    = $validSize ? file_get_contents($filename) : 'Conteúdo indisponível ou muito grande para ser carregado no navegador.'
             ?>
               <h3>Log de erros do WordPress</h3>

@@ -2,13 +2,11 @@
 
 namespace Full\Customer\Content;
 
-use WP_Post;
-
 defined('ABSPATH') || exit;
 
 class Links
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

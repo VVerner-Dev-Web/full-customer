@@ -92,7 +92,7 @@ class ElementorTemplates extends FullCustomerController
     $itemId = (int) $request->get_param('id');
     $item     = TemplateManager::instance()->getCloudItem($itemId);
 
-    if (!$item || !isset($item->fileUrl) || !$item->fileUrl) :
+    if (!$item instanceof \stdClass || !isset($item->fileUrl) || !$item->fileUrl) :
       wp_send_json_error();
     endif;
 
@@ -169,13 +169,13 @@ class ElementorTemplates extends FullCustomerController
 
     $item     = TemplateManager::instance()->getItem($itemId);
 
-    if (!$item || !$item->canBeInstalled) :
+    if (!$item instanceof \stdClass || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
     endif;
 
     $dependencies = $this->verifyMissingDependencies($item);
 
-    if (!$dependencies) :
+    if ($dependencies === null || $dependencies === []) :
       return new WP_REST_Response(['message' => 'Nenhuma dependência pendente localizada']);
     endif;
 
@@ -205,7 +205,7 @@ class ElementorTemplates extends FullCustomerController
 
     $item     = TemplateManager::instance()->getItem($itemId);
 
-    if (!$item || !$item->canBeInstalled) :
+    if (!$item instanceof \stdClass || !$item->canBeInstalled) :
       return new WP_REST_Response(['error' => 'O item selecionado não pode ser instalado.']);
     endif;
 
@@ -213,7 +213,7 @@ class ElementorTemplates extends FullCustomerController
 
     $dependencies = $this->verifyMissingDependencies($item);
 
-    if ($dependencies) :
+    if ($dependencies !== null && $dependencies !== []) :
       ob_start();
 
       require_once FULL_CUSTOMER_APP . '/views/components/template-missing-dependencies.php';
@@ -234,7 +234,7 @@ class ElementorTemplates extends FullCustomerController
 
     $template = $this->downloadJson($item->fileUrl);
 
-    if (!$template) :
+    if ($template === null || $template === []) :
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
@@ -277,7 +277,7 @@ class ElementorTemplates extends FullCustomerController
     $templates = $this->downloadJsonPack($item->fileUrl);
     $postsIds  = [];
 
-    if (!$templates) :
+    if ($templates === []) :
       return new WP_REST_Response([
         'error' => 'Não foi possível fazer o download do pack',
       ]);
@@ -318,7 +318,7 @@ class ElementorTemplates extends FullCustomerController
     $item     = TemplateManager::instance()->getCloudItem($itemId);
     $template = $this->downloadJson($item->fileUrl);
 
-    if (!$template) :
+    if ($template === null || $template === []) :
       return new WP_REST_Response(['error' => 'O item selecionado não foi localizado.']);
     endif;
 
@@ -370,7 +370,7 @@ class ElementorTemplates extends FullCustomerController
       'site'  => site_url(),
       'title' => $request->get_param('templateName'),
       'type'  => $type,
-      'json'  => fullJsonEncode(compact('type', 'content'))
+      'json'  => fullJsonEncode(['type' => $type, 'content' => $content])
     ];
 
     $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';
@@ -414,7 +414,7 @@ class ElementorTemplates extends FullCustomerController
     $full   = fullCustomer();
     $cloudId = (int) $request->get_param('item_id');
 
-    if (!$cloudId) :
+    if ($cloudId === 0) :
       return new WP_REST_Response(['error' => 'Item não localizado no Cloud']);
     endif;
 
@@ -518,7 +518,7 @@ class ElementorTemplates extends FullCustomerController
       endif;
     endforeach;
 
-    return $inactive || $uninstalled ? compact('inactive', 'uninstalled') : null;
+    return $inactive || $uninstalled ? ['inactive' => $inactive, 'uninstalled' => $uninstalled] : null;
   }
 
   private function getPluginSlug(string $plugin): string

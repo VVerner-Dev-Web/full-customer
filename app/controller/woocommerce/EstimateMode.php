@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class EstimateMode
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

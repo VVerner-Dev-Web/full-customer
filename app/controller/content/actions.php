@@ -19,7 +19,7 @@ function addMenuPages(): void
 }
 
 
-function updateSettings()
+function updateSettings(): void
 {
   check_ajax_referer('full/widget/content-settings');
 

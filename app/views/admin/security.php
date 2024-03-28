@@ -116,20 +116,6 @@ $worker = new Settings();
 
                   <tr>
                     <th>
-                      <label for="enableUserSwitch">Permitir que admins possam trocar para conta de outros usuários</label>
-                    </th>
-                    <td>
-                      <label class="toggle-switch toggle-switch-sm" for="enableUserSwitch">
-                        <input type="checkbox" name="enableUserSwitch" value="1" class="toggle-switch-input" id="enableUserSwitch" <?php checked($worker->get('enableUserSwitch')) ?>>
-                        <span class="toggle-switch-label">
-                          <span class="toggle-switch-indicator"></span>
-                        </span>
-                      </label>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <th>
                       <button class="full-primary-button">Atualizar</button>
                     </th>
                     <td></td>
@@ -171,7 +157,7 @@ $worker = new Settings();
                     </tr>
                     <tr>
                       <th>Banco de dados</th>
-                      <td><?= $db_short_version ? $db_short_version : 'Não reconhecido' ?></td>
+                      <td><?= $db_short_version !== '' && $db_short_version !== '0' ? $db_short_version : 'Não reconhecido' ?></td>
                     </tr>
                     <tr>
                       <th>Versão do WordPress</th>

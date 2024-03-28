@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class Heartbeat
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -25,7 +25,7 @@ class Heartbeat
     add_filter('heartbeat_settings', [$cls, 'modifyFrequency'], PHP_INT_MAX, 2);
   }
 
-  public function modifyFrequency($settings)
+  public function modifyFrequency(array $settings): array
   {
     $url = ((isset($_SERVER['HTTPS']) ? "https" : "http")) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
     $request_path = parse_url($url, PHP_URL_PATH);
@@ -40,10 +40,6 @@ class Heartbeat
     endif;
 
     return $settings;
-  }
-
-  public function disableHeartbeat(): void
-  {
   }
 }
 

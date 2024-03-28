@@ -16,7 +16,7 @@ class PluginInstallation extends FullCustomerController
 {
   private $pluginDir = null;
   private $pluginFile = null;
-  private $fileSystem;
+  private FileSystem $fileSystem;
 
   public function __construct()
   {

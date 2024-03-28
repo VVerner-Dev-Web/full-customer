@@ -126,7 +126,7 @@ class Settings
       $done = file_put_contents($filename, $content);
     endif;
 
-    return $done ? true : false;
+    return (bool) $done;
   }
 
   public function enableWpDebugLog(): void

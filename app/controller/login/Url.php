@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class Url
 {
-  public $env;
+  public Settings $env;
   public $loginSlug;
 
   private function __construct(Settings $env)
@@ -44,10 +44,8 @@ class Url
       remove_action('login_head', [$this, 'redirectOnDefaultLoginUrls']);
     }
 
-    if (false !== strpos($inputUrl, $this->loginSlug)) {
-      if (substr($inputUrl, -1) != '/') {
-        $inputUrl = $inputUrl . '/';
-      }
+    if (false !== strpos($inputUrl, $this->loginSlug) && substr($inputUrl, -1) !== '/') {
+      $inputUrl .= '/';
     }
 
     if (false !== strpos($inputUrl, '/' . $this->loginSlug . '/')) {
@@ -56,7 +54,7 @@ class Url
     }
   }
 
-  public function updateLostPasswordUrl($lostpassword_url)
+  public function updateLostPasswordUrl(string $lostpassword_url): string
   {
     return $lostpassword_url . '&' . $this->loginSlug;
   }
@@ -66,12 +64,9 @@ class Url
     global  $interim_login;
     $inputUrl = sanitize_text_field(filter_input(INPUT_SERVER, 'REQUEST_URI'));
 
-    if (!is_user_logged_in() && false !== strpos($inputUrl, 'wp-login.php') && false === strpos($inputUrl, $this->loginSlug)) {
-
-      if ('success' != $interim_login) {
-        wp_safe_redirect(home_url('404'), 302);
-        exit;
-      }
+    if (!is_user_logged_in() && false !== strpos($inputUrl, 'wp-login.php') && false === strpos($inputUrl, $this->loginSlug) && 'success' != $interim_login) {
+      wp_safe_redirect(home_url('404'), 302);
+      exit;
     }
   }
 

@@ -32,7 +32,7 @@ class Whitelabel extends FullCustomerController
   public function setWhitelabelOptions(WP_REST_Request $request): WP_REST_Response
   {
     $received = $request->get_json_params();
-    $received = array_filter($received, function (string $key) {
+    $received = array_filter($received, function (string $key): bool {
       return array_key_exists($key, $this->getValidSettings());
     }, ARRAY_FILTER_USE_KEY);
 

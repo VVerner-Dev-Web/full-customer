@@ -3,11 +3,11 @@
 use Full\Customer\Elementor\TemplateManager;
 
 $itemId = filter_input(INPUT_GET, 'item', FILTER_VALIDATE_INT);
-$templateAsScript = isset($templateAsScript) ? true : false;
+$templateAsScript = isset($templateAsScript);
 $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemId);
 ?>
 
-<?php if (!$item && !$templateAsScript) : ?>
+<?php if (!$item instanceof \stdClass && !$templateAsScript) : ?>
 
   <div class="templately-contents templately-item-details">
     <div class="templately-item-details-header">

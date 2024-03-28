@@ -2,13 +2,11 @@
 
 namespace Full\Customer\Admin;
 
-use WP_Admin_Bar;
-
 defined('ABSPATH') || exit;
 
 class AdminInterface
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 
 class DeprecatedComponents
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -48,7 +48,7 @@ class DeprecatedComponents
     add_filter('wp_resource_hints', [$cls, 'disableEmojiDnsFetch'], 10, 2);
   }
 
-  public function disableEmojiDnsFetch($urls, $relationType)
+  public function disableEmojiDnsFetch(array $urls, $relationType): array
   {
     if ('dns-prefetch' !== $relationType) :
       return $urls;

@@ -9,7 +9,7 @@ defined('ABSPATH') || exit;
 
 class Menu
 {
-  public $env;
+  public Settings $env;
   public $loginSlug;
 
   private function __construct(Settings $env)
@@ -144,7 +144,7 @@ class Menu
     return $menuItem;
   }
 
-  public function removeUnnecessaryMenuItems(array $menuItems)
+  public function removeUnnecessaryMenuItems(array $menuItems): array
   {
     foreach ($menuItems as $index => $item) :
       if (in_array('full-login', $item->classes) && is_user_logged_in()) {

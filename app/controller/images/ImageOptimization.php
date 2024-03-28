@@ -9,7 +9,7 @@ defined('ABSPATH') || exit;
 
 class ImageOptimization
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

@@ -12,7 +12,7 @@ class Collection
 
   public static function list(): array
   {
-    return array_filter(get_class_methods(__CLASS__), fn ($method) => 'full_' === substr($method, 0, 5));
+    return array_filter(get_class_methods(__CLASS__), fn ($method): bool => 'full_' === substr($method, 0, 5));
   }
 
   public static function attach(): void

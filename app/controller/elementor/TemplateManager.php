@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 
 class TemplateManager
 {
-  private static $instances = [];
+  private static array $instances = [];
 
   protected function __clone()
   {

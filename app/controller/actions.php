@@ -296,7 +296,6 @@ function initFullSecurityWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/security/LastLoginColumn.php';
     require_once FULL_CUSTOMER_APP . '/controller/security/PasswordProtection.php';
     require_once FULL_CUSTOMER_APP . '/controller/security/UsersOnlyMode.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/UserSwitch.php';
   endif;
 }
 

@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 
 class MediaReplacement
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {
@@ -126,7 +126,7 @@ class MediaReplacement
     $attachment_file_path = get_attached_file($postId);
     $attachment_file_basename = basename($attachment_file_path);
     if (isset($attachment_meta['sizes']) && is_array($attachment_meta['sizes'])) {
-      foreach ($attachment_meta['sizes'] as $size => $size_info) {
+      foreach ($attachment_meta['sizes'] as $size_info) {
         $intermediate_file_path = str_replace($attachment_file_basename, $size_info['file'], $attachment_file_path);
         wp_delete_file($intermediate_file_path);
       }

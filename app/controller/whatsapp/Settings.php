@@ -22,7 +22,7 @@ class Settings
 
   public function isButtonEnabled(): bool
   {
-    return intval($this->get('enableGlobalButton')) === 1;
+    return (int) $this->get('enableGlobalButton') === 1;
   }
 
   public function getSinglePostUrl($postId): string

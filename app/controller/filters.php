@@ -74,7 +74,7 @@ function notifyPluginError(array $args, array $error): array
   return $args;
 }
 
-function restPreServeRequest(bool $served, WP_REST_Response $response)
+function restPreServeRequest(bool $served, WP_REST_Response $response): bool
 {
   if ($served) :
     return $served;

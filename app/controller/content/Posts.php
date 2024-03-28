@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
 
 class Posts
 {
-  public $env;
+  public Settings $env;
 
   private function __construct(Settings $env)
   {

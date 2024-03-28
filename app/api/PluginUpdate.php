@@ -49,7 +49,7 @@ class PluginUpdate extends FullCustomerController
 
     $data = json_decode(wp_remote_retrieve_body($response));
 
-    return isset($data->success) && $data->success ? true : false;
+    return isset($data->success) && $data->success;
   }
 
   public function updatePlugin(WP_REST_Request $request): WP_REST_Response
@@ -62,7 +62,7 @@ class PluginUpdate extends FullCustomerController
     $plugin   = sanitize_title($request->get_param('plugin'));
     $plugin   = $this->getPlugin($plugin);
 
-    if (!$plugin) :
+    if ($plugin === null || $plugin === '' || $plugin === '0') :
       return new WP_REST_Response(['error' => 'Plugin não localizado para atualização.']);
     endif;
 

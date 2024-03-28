@@ -21,7 +21,7 @@ class RemoteLogin
       return;
     endif;
 
-    add_action('init', function () use ($cls, $request) {
+    add_action('init', function () use ($cls, $request): void {
       call_user_func([$cls, $request]);
     });
   }
