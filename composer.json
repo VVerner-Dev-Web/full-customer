@@ -3,8 +3,5 @@
     "nelexa/zip": "^4.0",
     "rah/danpu": "^2.7",
     "enshrined/svg-sanitize": "^0.18.0"
-  },
-  "require-dev": {
-    "rector/rector": "^1.0"
   }
 }
