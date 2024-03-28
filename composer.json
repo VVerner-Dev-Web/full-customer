@@ -1,6 +1,8 @@
 {
   "require": {
-    "nelexa/zip": "4.0.0",
-    "enshrined/svg-sanitize": "^0.18.0"
+    "php": ">=7.4",
+    "nelexa/zip": "4.0",
+    "enshrined/svg-sanitize": "0.16.0",
+    "symfony/deprecation-contracts": "2.5.2"
   }
 }
