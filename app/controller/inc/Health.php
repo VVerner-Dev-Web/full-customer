@@ -33,7 +33,7 @@ class Health extends WP_Site_Health
     return $this->response;
   }
 
-  private function runAsyncTest(array $test)
+  private function runAsyncTest(array $test): void
   {
     if (!is_string($test['test'])) :
       return;
@@ -47,7 +47,7 @@ class Health extends WP_Site_Health
     ];
   }
 
-  private function runDirectTest(array $test)
+  private function runDirectTest(array $test): void
   {
     if (is_string($test['test'])) :
       $testFunction = sprintf('get_test_%s', $test['test']);

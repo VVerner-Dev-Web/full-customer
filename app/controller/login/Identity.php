@@ -30,7 +30,7 @@ class Identity
     add_filter('login_title', [$cls, 'loginTitle']);
   }
 
-  public function loginIconUrl()
+  public function loginIconUrl(): void
   {
     if (!has_site_icon()) :
       return;

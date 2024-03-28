@@ -33,7 +33,7 @@ class Menu
     add_filter('wp_nav_menu_objects', [$cls, 'removeUnnecessaryMenuItems']);
   }
 
-  public function addMetaBox()
+  public function addMetaBox(): void
   {
     add_meta_box(
       'add-login-logout',
@@ -50,7 +50,7 @@ class Menu
    *
    * @since 3.4.0
    */
-  public function addMetaboxItems()
+  public function addMetaboxItems(): void
   {
     $menu_items = [
       'full-login'        => [

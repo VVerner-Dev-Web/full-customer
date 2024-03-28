@@ -405,7 +405,7 @@ class Firewall
     endif;
   }
 
-  private static function response(array $errors)
+  private static function response(array $errors): void
   {
     do_action('full/firewall', $errors);
 

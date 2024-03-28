@@ -94,7 +94,7 @@ class FileSystem
     return true;
   }
 
-  public function createZip(string $sourcePath, string $outputZipPath)
+  public function createZip(string $sourcePath, string $outputZipPath): void
   {
     if (function_exists('set_time_limit')) :
       set_time_limit(600);

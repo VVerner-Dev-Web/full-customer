@@ -22,9 +22,7 @@ class FullCustomerEstimateGateway extends WC_Payment_Gateway
     add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
   }
 
-
-
-  public function init_form_fields()
+  public function init_form_fields(): void
   {
     $this->form_fields = [
       'title' => [

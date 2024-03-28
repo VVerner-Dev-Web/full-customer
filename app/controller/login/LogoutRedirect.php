@@ -25,7 +25,7 @@ class LogoutRedirect
     add_filter('wp_logout', [$cls, 'redirect'], 5);
   }
 
-  public function redirect()
+  public function redirect(): void
   {
     wp_safe_redirect(home_url($this->env->get('redirectAfterLogout')));
     exit;

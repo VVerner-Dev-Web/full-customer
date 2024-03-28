@@ -120,7 +120,7 @@ class MediaReplacement
     set_transient('full/image-replaced/' . $oldAttachmentId, 1, DAY_IN_SECONDS);
   }
 
-  public static function deleteFiles(int $postId)
+  public static function deleteFiles(int $postId): void
   {
     $attachment_meta = wp_get_attachment_metadata($postId);
     $attachment_file_path = get_attached_file($postId);

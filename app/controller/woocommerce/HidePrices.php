@@ -28,7 +28,7 @@ class HidePrices
     add_action('wp_enqueue_scripts', [$cls, 'assets']);
   }
 
-  public function assets()
+  public function assets(): void
   {
     $assetsUrl  = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
     $version    = getFullAssetsVersion();

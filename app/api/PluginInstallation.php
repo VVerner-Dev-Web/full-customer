@@ -127,7 +127,7 @@ class PluginInstallation extends FullCustomerController
     return $unzipDir . DIRECTORY_SEPARATOR . $this->pluginDir;
   }
 
-  private function movePluginFiles(string $origin)
+  private function movePluginFiles(string $origin): void
   {
     $moved = $this->fileSystem->moveFile($origin, $this->getPluginActivationDir());
 

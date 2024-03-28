@@ -32,7 +32,7 @@ class Url
     add_action('wp_logout', [$cls, 'redirectOnSuccessfulLogout']);
   }
 
-  public function redirectOnCustomLoginUrl()
+  public function redirectOnCustomLoginUrl(): void
   {
     $inputUrl = sanitize_text_field(filter_input(INPUT_SERVER, 'REQUEST_URI'));
 
@@ -61,7 +61,7 @@ class Url
     return $lostpassword_url . '&' . $this->loginSlug;
   }
 
-  public function redirectOnDefaultLoginUrls()
+  public function redirectOnDefaultLoginUrls(): void
   {
     global  $interim_login;
     $inputUrl = sanitize_text_field(filter_input(INPUT_SERVER, 'REQUEST_URI'));
@@ -75,13 +75,13 @@ class Url
     }
   }
 
-  public function redirectOnFail()
+  public function redirectOnFail(): void
   {
     wp_safe_redirect(home_url('wp-login.php?' . $this->loginSlug . '&redirect=false&failed_login=true'));
     exit;
   }
 
-  public function redirectOnSuccessfulLogout()
+  public function redirectOnSuccessfulLogout(): void
   {
     wp_safe_redirect(home_url('wp-login.php?' . $this->loginSlug . '&redirect=false'));
     exit;
