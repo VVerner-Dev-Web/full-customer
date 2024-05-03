@@ -83,13 +83,16 @@ function addMenuPage(): void
 {
   $full = fullCustomer();
 
+  error_log('data:image/svg+xml;base64,' . base64_encode(file_get_contents(plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/img/menu-novo.svg')));
+
   add_menu_page(
     $full->getBranding('admin-page-name', 'FULL.services'),
     $full->getBranding('admin-page-name', 'FULL.services'),
     'manage_options',
     'full-connection',
     'fullGetAdminPageView',
-    trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/img/menu.png',
+    'data:image/svg+xml;base64,' . base64_encode(file_get_contents(plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/img/menu-novo.svg')),
+    // 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdib3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjYTdhYWFkIiBkPSJNMTcuNiA4LjVoLTcuNXYzaDQuNGMtLjQgMi4xLTIuMyAzLjUtNC40IDMuNC0yLjYtLjEtNC42LTIuMS00LjctNC43LS4xLTIuNyAyLTUgNC43LTUuMSAxLjEgMCAyLjIuNCAzLjEgMS4ybDIuMy0yLjJDMTQuMSAyLjcgMTIuMSAyIDEwLjIgMmMtNC40IDAtOCAzLjYtOCA4czMuNiA4IDggOGM0LjYgMCA3LjctMy4yIDcuNy03LjgtLjEtLjYtLjEtMS4xLS4zLTEuN3oiIGZpbGxydWxlPSJldmVub2RkIiBjbGlwcnVsZT0iZXZlbm9kZCI+PC9wYXRoPjwvc3ZnPg==',
     0
   );
 
@@ -364,5 +367,14 @@ function initFullAccessWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
     require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
     require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
+  endif;
+}
+
+function initFullElementorCrmWidget(): void
+{
+  if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Leads.php';
   endif;
 }

@@ -50,7 +50,7 @@ $worker = new Settings();
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-dark-2.png') ?>" alt="Logo FULL">
+        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
       </div>
     </div>
 

@@ -53,6 +53,7 @@ if (License::isActive()) :
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullAiWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullWhatsAppWidget');
   add_action('plugins_loaded', '\Full\Customer\Actions\initFullShortcodesWidget');
+  add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorCrmWidget');
   add_action('plugins_loaded', ['\Full\Customer\Security\Firewall', 'run'], 0);
 endif;
 

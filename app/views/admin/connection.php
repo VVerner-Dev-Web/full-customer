@@ -4,7 +4,7 @@
   <div class="login-container">
     <div class="col-instructions">
       <a href="<?php echo esc_url($full->getBranding('plugin-author-url', 'https://painel.full.services/login/')) ?>" target="_blank" rel="noopener noreferrer" class="logo-img">
-        <img src="<?php echo esc_url($full->getBranding('admin-page-logo-url', fullGetImageUrl('logo-dark-2.png'))) ?>" alt="<?php echo esc_html($full->getBranding('plugin-author', 'FULL.')) ?>">
+        <img src="<?php echo esc_url($full->getBranding('admin-page-logo-url', fullGetImageUrl('logo-novo.png'))) ?>" alt="<?php echo esc_html($full->getBranding('plugin-author', 'FULL.')) ?>">
       </a>
 
       <img src="<?php echo esc_url(fullGetImageUrl('wordpress.svg')) ?>" alt="WordPress" class="wordpress-img">

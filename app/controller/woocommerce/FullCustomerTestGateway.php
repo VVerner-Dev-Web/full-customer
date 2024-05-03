@@ -5,7 +5,7 @@ class FullCustomerTestGateway extends WC_Payment_Gateway
   public function __construct()
   {
     $this->id = 'full-customer';
-    $this->icon = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/img/menu.png';
+    $this->icon = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/img/menu-novo.png';
     $this->has_fields = false;
     $this->method_title = 'FULL. Pagamento teste';
     $this->method_description = 'Método de pagamento de testes da FULL.';

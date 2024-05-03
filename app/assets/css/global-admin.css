@@ -8,11 +8,6 @@
   margin: auto;
 }
 
-#adminmenu .toplevel_page_full-connection img {
-  -webkit-filter: grayscale(1) brightness(100);
-  filter: grayscale(1) brightness(100);
-}
-
 .full-page-content {
   padding: 0 30px;
 }
