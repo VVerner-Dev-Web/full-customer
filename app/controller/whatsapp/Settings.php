@@ -61,13 +61,13 @@ class Settings
   public function isButtonEnabledForPostType($postType = null): bool
   {
     $keys = $this->get('validCpt');
-    return $this->isButtonEnabled() && is_array($keys) && in_array($postType, $keys, true);
+    return $this->isButtonEnabledForGlobal() || ($this->isButtonEnabled() && is_array($keys) && in_array($postType, $keys, true));
   }
 
   public function getSinglePostSettings($postId): stdClass
   {
     return (object) [
-      'display' => get_post_meta($postId, 'full/whatsappDisplay', true),
+      'display' => get_post_meta($postId, 'full/whatsappDisplay', true) ? get_post_meta($postId, 'full/whatsappDisplay', true) : 'inherit',
       'number' => get_post_meta($postId, 'full/whatsappNumber', true),
       'message' => get_post_meta($postId, 'full/whatsappMessage', true),
     ];

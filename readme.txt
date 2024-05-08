@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,9 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.3 = 
+= 3.1.4 = 
 
-* Nova extensão! FULL.crm para Elementor PRO
-* Adequação da identidade visual para nova logo da empresa.
+* Removido um log persistente adicionado na versão 3.1.3
+* Corrigido um bug com a extensão FULL.whatsapp que não estava exibindo o botão em alguns casos
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
