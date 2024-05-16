@@ -2,6 +2,8 @@
 
 namespace Full\Customer\ElementorCrm;
 
+use ElementorPro\Modules\Forms\Submissions\Database\Repositories\Form_Snapshot_Repository;
+
 class Hooks
 {
   private Settings $env;
@@ -22,6 +24,7 @@ class Hooks
     add_action('wp_ajax_full/widget/crm/form/set-stages', [$cls, 'processStageUpdate']);
     add_action('wp_ajax_full/widget/crm/form/get-analytics', [$cls, 'formAnalytics']);
     add_action('wp_ajax_full/widget/crm/form/get-leads', [$cls, 'getLeads']);
+    add_action('wp_ajax_full/widget/crm/form/get-fields', [$cls, 'getFormFields']);
 
     add_action('wp_ajax_full/widget/crm/lead/update', [$cls, 'updateLead']);
     add_action('wp_ajax_full/widget/crm/lead/delete', [$cls, 'deleteLead']);
@@ -77,6 +80,7 @@ class Hooks
     wp_enqueue_script('full-admin-crm', $baseUrl . 'js/admin-crm.js', ['jquery', 'jquery-ui-sortable', 'jquery-ui-draggable'], $version, true);
     wp_localize_script('full-admin-crm', 'fullCrm', [
       'stages' => $this->env->get('stages'),
+      'fragments' => $this->env->get('fragments'),
       'leadBaseUrl' => admin_url('admin.php?page=e-form-submissions#/')
     ]);
   }
@@ -149,17 +153,57 @@ class Hooks
   {
     check_ajax_referer('full/widget/crm/form/set-stages');
 
+    $stages = $this->env->get('stages');
+    $fragments = $this->env->get('fragments');
+
     $formId = filter_input(INPUT_POST, 'formId');
     $formStages = filter_input(INPUT_POST, 'stage', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?? [];
-    $stages = $this->env->get('stages');
+    $formFragments = filter_input(INPUT_POST, 'fragments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?? [];
+
+    if (!is_array($stages)) :
+      $stages = [];
+    endif;
+
+    if (!is_array($fragments)) :
+      $fragments = [];
+    endif;
 
     $stages[$formId] = array_filter($formStages, fn ($row) => isset($row['name']) && $row['name']);
+    $fragments[$formId] = array_filter(array_map('sanitize_text_field', $formFragments));
 
     $this->env->set('stages', $stages);
+    $this->env->set('fragments', $fragments);
 
     wp_send_json_success([
-      'stages' => $this->env->get('stages')
+      'stages' => $this->env->get('stages'),
+      'fragments' => $this->env->get('fragments')
     ]);
+  }
+
+  public function getFormFields(): void
+  {
+    global $wpdb;
+
+    $formId = sanitize_text_field(filter_input(INPUT_POST, 'formId'));
+
+    $sql  = " SELECT meta_value FROM {$wpdb->postmeta}  ";
+    $sql .= " WHERE `meta_key` = '" . Form_Snapshot_Repository::POST_META_KEY . "'";
+    $sql .= " AND meta_value LIKE '%\"id\":\"$formId\"%';";
+
+    $data = $wpdb->get_col($sql);
+    $data = is_array($data) ? array_map('json_decode', $data) : [];
+
+    $fields = [];
+
+    foreach ($data as $snapshots) :
+      foreach ($snapshots as $form) :
+        foreach ($form->fields as $field) :
+          $fields[$field->id] = $field->label;
+        endforeach;
+      endforeach;
+    endforeach;
+
+    wp_send_json($fields);
   }
 
   public function getLeads(): void
@@ -178,6 +222,8 @@ class Hooks
     $firstStage = array_key_first($stages);
 
     foreach ($list['data'] as $item) :
+      $item['labels'] = [];
+
       if (!array_key_exists($item['status'], $stages)) :
         $item['status'] = $firstStage;
       endif;
@@ -185,6 +231,10 @@ class Hooks
       if (!isset($formatted[$item['status']])) :
         $formatted[$item['status']] = [];
       endif;
+
+      foreach ($item['form']['fields'] as $field) :
+        $item['labels'][$field['id']] = $field['label'];
+      endforeach;
 
       $formatted[$item['status']][] = $item;
     endforeach;

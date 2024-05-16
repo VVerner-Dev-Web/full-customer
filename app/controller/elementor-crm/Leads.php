@@ -37,10 +37,12 @@ class Leads
   {
     return $this->query->get_submissions([
       'per_page' => PHP_INT_MAX,
+      'with_form_fields' => true,
+      'with_meta' => true,
       'filters'  => [
         'form' => $formId,
         'ids'  => [
-          'value' => $this->getFormHiddenIds($formId)
+          'value' => $this->getFormVisibleIds($formId)
         ]
       ]
     ]);
@@ -58,7 +60,7 @@ class Leads
     );
   }
 
-  private function getFormHiddenIds($formId): array
+  private function getFormVisibleIds($formId): array
   {
     global $wpdb;
     $sql = "SELECT id FROM {$this->query->get_table_submissions()} WHERE status != 'hidden' AND element_id = '$formId'";

@@ -1,5 +1,7 @@
 #pipeline-editor th,
-#pipeline-editor td {
+#pipeline-editor td,
+#card-editor th,
+#card-editor td {
   padding: 5px;
 }
 
@@ -157,8 +159,42 @@ form#full-crm {
   margin-bottom: 30px;
 }
 
-.form-selector h4 {
-  margin: 0;
+#formId {
+  border-radius: 99px;
+  border: unset;
+  outline: unset;
+  box-shadow: unset;
+  padding: 0.25em 1em;
+  min-width: 250px;
+}
+
+.lead-search {
+  display: flex;
+  justify-content: center;
+  background: #ffff;
+  border-radius: 99px;
+  overflow: hidden;
+  align-items: center;
+  padding: 0.25em 0.5em;
+}
+
+.lead-search:not(.enabled) {
+  display: none;
+}
+
+.lead-search input {
+  border: unset !important;
+  outline: none !important;
+  box-shadow: unset !important;
+}
+
+.lead-search button {
+  border-radius: 99px;
+  border: unset;
+  background: #e9bb32;
+  height: 2em;
+  width: 2em;
+  cursor: pointer;
 }
 
 #pipeline-kanban {
@@ -228,7 +264,7 @@ a.kanban-item {
   height: unset !important;
 }
 
-.kanban-item-main-value {
+.kanban-item-value {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -273,7 +309,8 @@ span.delete-lead {
 .kanban-item-content {
   margin-bottom: 10px;
   display: flex;
-  flex-flow: column;
+  gap: 5px;
+  align-items: center;
 }
 
 .kanban-item-content strong {
@@ -300,4 +337,83 @@ span.delete-lead {
   position: absolute;
   top: 50%;
   width: 16px;
+}
+
+.fragment-toggle {
+  border: solid 1px #363636;
+  border-radius: 99px;
+  position: relative;
+  display: inline-block;
+  height: 1.7em;
+  width: 2.75em;
+  display: flex;
+  cursor: pointer;
+}
+
+.fragment-indicator {
+  background: #e9eef3;
+  display: block;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-80%, -50%);
+  transition: all 150ms;
+}
+
+.fragment-toggle input {
+  display: none;
+}
+
+.fragment-toggle input:checked + .fragment-indicator {
+  background: #e9bb32;
+  transform: translate(-10%, -50%);
+}
+
+.fragment-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.reload-kanban {
+  cursor: pointer;
+}
+
+.reload-kanban span {
+  color: #e9bb32;
+}
+
+.reload-kanban.loading {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.reload-kanban.loading span {
+  -webkit-animation: full_spin 1s linear infinite;
+  animation: full_spin 1s linear infinite;
+}
+
+@-webkit-keyframes full_spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+
+@keyframes full_spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0);
+  }
 }

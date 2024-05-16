@@ -22,7 +22,7 @@ $forms = $worker->getForms();
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title full-widget-title">
-                <h3>FULL.Elementor CRM</h3>
+                <h3>FULL.Elementor CRM <abbr title="Lembre-se! Apenas formulários que já capturaram pelo menos um contato serão considerados pelo CRM."><span class="dashicons dashicons-info"></span></abbr></h3>
               </div>
             </div>
           </div>
@@ -34,20 +34,33 @@ $forms = $worker->getForms();
                 <input type="hidden" name="action" value="full/widget/crm/form/set-stages">
 
                 <div class="form-selector">
-                  <h4>Leads<abbr title="Lembre-se! Apenas formulários que já capturaram pelo menos um contato serão considerados pelo CRM."><span class="dashicons dashicons-info"></span></abbr></h4>
+                  <div>
+                    <select name="formId" id="formId" required>
+                      <option value="">Selecione um formulário</option>
+                      <?php foreach ($forms as $index => $form) : ?>
+                        <option value="<?= $index ?>"><?= $form ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
 
-                  <select name="formId" id="formId" required>
-                    <option value="">Selecione um formulário</option>
-                    <?php foreach ($forms as $index => $form) : ?>
-                      <option value="<?= $index ?>"><?= $form ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <div class="lead-search">
+                    <input type="text" id="lead-search" autocomplete="off" placeholder="Procurar lead">
+                    <button>
+                      <i class="tio-search"></i>
+                    </button>
+                  </div>
                 </div>
 
                 <ul id="crm-view-nav" style="display: none">
-                  <li><a href="#kanban">Kanban</a></li>
+                  <li>
+                    <a href="#kanban">Kanban</a>
+                  </li>
                   <li><a href="#editor">Editor</a></li>
                   <li><a href="#analytics">Relatórios</a></li>
+                  <li class="reload-kanban">
+                    <span class="dashicons dashicons-image-rotate"></span>
+                    Atualizar dados
+                  </li>
                 </ul>
 
                 <div class="crm-view" id="kanban">
@@ -56,12 +69,27 @@ $forms = $worker->getForms();
 
                 <div class="crm-view" id="editor">
 
+                  <table id="card-editor">
+                    <thead>
+                      <tr>
+                        <th>
+                          Ative os campos do formulário, para habilitar a visibilidade no card
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- JS -->
+                    </tbody>
+                  </table>
+
+                  <br>
+
                   <table id="pipeline-editor">
                     <thead>
                       <tr>
                         <th colspan="4">
                           <div class="pipeline-editor-header">
-                            Estágio
+                            Crie as etapas do seu processo de venda para organizar seu board
                             <span class="button stage-action add-stage">Adicionar estágio</span>
                           </div>
                         </th>
@@ -154,12 +182,23 @@ $forms = $worker->getForms();
   </tr>
 </script>
 
+<script type="text-template" id="card-fragment-editor-template">
+  <tr>
+    <td>
+      <div class="fragment-container">
+        <label for="" class="fragment-toggle">
+          <input type="checkbox" name="fragments[]" value="">
+          <span class="fragment-indicator"></span>
+        </label>
+        <span class="fragment-name"></span>
+      </div>
+    </td>
+  </tr>
+</script>
+
 <script type="text-template" id="kanban-card-template">
   <a class="kanban-item" target="_blank" rel="noopener noreferrer">
-    <div class="kanban-item-content">
-      <small class="kanban-item-main-key"></small>
-      <strong class="kanban-item-main-value"></strong>
-    </div>
+    <div class="kanban-item-fragments"></div>
     <div class="kanban-item-footer">
       <span class="view-lead">Ver mais</span>
 
@@ -167,6 +206,13 @@ $forms = $worker->getForms();
       <span data-action="delete" class="delete-lead" title="Esta ação não poderá ser desfeita">Excluir</span>
     </div>
   </a>
+</script>
+
+<script type="text-template" id="card-fragment-template">
+  <div class="kanban-item-content">
+    <small class="kanban-item-key"></small>
+    <strong class="kanban-item-value"></strong>
+  </div>
 </script>
 
 <script type="text-template" id="kanban-column-template">
