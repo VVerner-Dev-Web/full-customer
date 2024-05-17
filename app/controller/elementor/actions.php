@@ -18,7 +18,10 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
-  wp_enqueue_style('full-elementor-ai', $assetsUrl . 'elementor/ai.css', [], $version);
+
+  if (fullCustomer()->isServiceEnabled('full-ai-elementor')) :
+    wp_enqueue_style('full-elementor-ai', $assetsUrl . 'elementor/ai.css', [], $version);
+  endif;
 
   wp_enqueue_style('full-global-admin', $assetsUrl . 'css/global-admin.css', [], $version);
 }
@@ -32,7 +35,11 @@ function editorAfterEnqueueScripts(): void
   wp_enqueue_script('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.js', ['jquery'], '3.0.0', true);
   wp_enqueue_script('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.js', ['jquery'], '1.0.0', true);
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
-  wp_enqueue_script('full-elementor-ai', $assetsUrl . 'elementor/ai.js', ['jquery'], $version, true);
+
+  if (fullCustomer()->isServiceEnabled('full-ai-elementor')) :
+    wp_enqueue_script('full-elementor-ai', $assetsUrl . 'elementor/ai.js', ['jquery'], $version, true);
+  endif;
+
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
 
   wp_localize_script('full-elementor', 'FULL', fullGetLocalize());

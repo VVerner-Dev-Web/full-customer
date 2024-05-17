@@ -203,19 +203,16 @@ function notifyPluginError(): bool
   return true;
 }
 
-function initFullElementorTemplates(): void
+function initFullAccessWidget(): void
 {
-  if (class_exists('\Elementor\Plugin')) :
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/filters.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/TemplateManager.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/Importer.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor/Exporter.php';
+  if (fullCustomer()->isServiceEnabled('full-access')) :
+    require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
+    require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
+    require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
   endif;
 }
 
-function initFullLoginWidget(): void
+function startWidgets(): void
 {
   if (fullCustomer()->isServiceEnabled('full-login')) :
     require_once FULL_CUSTOMER_APP . '/controller/login/hooks.php';
@@ -227,21 +224,14 @@ function initFullLoginWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/login/LogoutRedirect.php';
     require_once FULL_CUSTOMER_APP . '/controller/login/LoginRedirect.php';
   endif;
-}
 
-function initFullEmailWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-email')) :
     require_once FULL_CUSTOMER_APP . '/controller/email/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/email/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/email/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/email/SMTP.php';
   endif;
-}
 
-
-function initFullImagesWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-images')) :
     require_once FULL_CUSTOMER_APP . '/controller/images/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/actions.php';
@@ -251,19 +241,13 @@ function initFullImagesWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/ImageOptimization.php';
   endif;
-}
 
-function initFullCodeWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-code')) :
     require_once FULL_CUSTOMER_APP . '/controller/code/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/code/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/code/Settings.php';
   endif;
-}
 
-function initFullSpeedWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-speed')) :
     require_once FULL_CUSTOMER_APP . '/controller/speed/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/speed/actions.php';
@@ -273,20 +257,14 @@ function initFullSpeedWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/speed/Revisions.php';
     require_once FULL_CUSTOMER_APP . '/controller/speed/Heartbeat.php';
   endif;
-}
 
-function initFullAdminWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-admin')) :
     require_once FULL_CUSTOMER_APP . '/controller/admin/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/AdminInterface.php';
   endif;
-}
 
-function initFullSecurityWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-security')) :
     require_once FULL_CUSTOMER_APP . '/controller/security/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/security/actions.php';
@@ -297,10 +275,7 @@ function initFullSecurityWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/security/PasswordProtection.php';
     require_once FULL_CUSTOMER_APP . '/controller/security/UsersOnlyMode.php';
   endif;
-}
 
-function initFullWooCommerceWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-woocommerce')) :
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/actions.php';
@@ -317,10 +292,7 @@ function initFullWooCommerceWidget(): void
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/WhatsAppCheckout.php';
     endif;
   endif;
-}
 
-function initFullContentWidget(): void
-{
   if (fullCustomer()->isServiceEnabled('full-clone')) :
     require_once FULL_CUSTOMER_APP . '/controller/content/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/content/actions.php';
@@ -330,48 +302,48 @@ function initFullContentWidget(): void
     require_once FULL_CUSTOMER_APP . '/controller/content/Links.php';
     require_once FULL_CUSTOMER_APP . '/controller/content/Comments.php';
   endif;
-}
 
-function initFullAiWidget(): void
-{
-  if (fullCustomer()->isServiceEnabled('full-ai')) :
-    require_once FULL_CUSTOMER_APP . '/controller/ai/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/ai/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/ai/Settings.php';
+  if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
+    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
   endif;
-}
 
-function initFullWhatsAppWidget(): void
-{
+  if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Leads.php';
+  endif;
+
   if (fullCustomer()->isServiceEnabled('full-whatsapp')) :
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/Settings.php';
   endif;
-}
 
-function initFullShortcodesWidget(): void
-{
-  if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
-    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
+  if (fullCustomer()->isServiceEnabled('full-ai-images')) :
+    require_once FULL_CUSTOMER_APP . '/controller/ai-images/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/ai-images/actions.php';
+  endif;
+
+  if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
+    require_once FULL_CUSTOMER_APP . '/controller/ai-copy/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/ai-copy/actions.php';
+  endif;
+
+  if (fullCustomer()->isServiceEnabled('full-ai-meta')) :
+    require_once FULL_CUSTOMER_APP . '/controller/ai-meta/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/ai-meta/actions.php';
   endif;
 }
 
-function initFullAccessWidget(): void
+function initFullElementorTemplates(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-access')) :
-    require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
-    require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
-    require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
-  endif;
-}
-
-function initFullElementorCrmWidget(): void
-{
-  if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Leads.php';
+  if (class_exists('\Elementor\Plugin')) :
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/filters.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/TemplateManager.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/Importer.php';
+    require_once FULL_CUSTOMER_APP . '/controller/elementor/Exporter.php';
   endif;
 }

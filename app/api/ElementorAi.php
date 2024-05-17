@@ -26,7 +26,7 @@ class ElementorAi extends FullCustomerController
 
   public function elementorPermissionCallback(): bool
   {
-    return is_user_logged_in() && $this->hasElementor();
+    return is_user_logged_in() && $this->hasElementor() && fullCustomer()->isServiceEnabled('full-ai-elementor');
   }
 
   public function generate(WP_REST_Request $request): WP_REST_Response

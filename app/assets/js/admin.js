@@ -233,53 +233,66 @@
 
   // WIDGETS
   // ========================
-  if ($(".widgets-grid").length) {
-    const $grids = $(".widgets-grid");
+  const $container = $("#full-widgets");
+  if ($container.length) {
     const changed = [];
     const isProUser = FULL.full_pro ? true : false;
+
+    const categoryContainerTemplate = $("#widget-container-template").html();
+    const widgetCardTemplate = $("#widget-template").html();
+    const widgetToggleTemplate = $("#widget-toggle-template").html();
 
     $.get(
       FULL.dashboard_url + "widgets",
       { site: FULL.site_url },
       function (response) {
         for (const widget of response) {
-          let html = $("#widget-template").html();
-          const toggleHtml =
-            isProUser || "native" === widget.tier
-              ? $("#widget-toggle-template").html()
-              : "";
+          const categoryKey = "fw-" + slugfy(widget.category);
+          let $category = $("#" + categoryKey);
 
-          html = html.replace("{toggle}", toggleHtml);
-
-          Object.entries(widget).forEach(([key, value]) => {
-            html = html.replace(new RegExp("{" + key + "}", "g"), value);
-          });
-
-          if (FULL.enabled_services.includes(widget.key)) {
-            html = html.replace("{checked}", "checked");
+          if (!$category.length) {
+            $category = $(categoryContainerTemplate).clone();
+            $category.find("h4").text(widget.category);
+            $category.attr("id", categoryKey);
+            $container.append($category);
           }
 
-          html = html.replace("{checked}", "");
+          const $widget = $(widgetCardTemplate).clone();
 
-          const $clone = $(html);
+          $widget.find("img").attr("src", widget.icon).attr("alt", widget.name);
+          $widget.find(".widget-name").text(widget.name);
+          $widget.find(".badge").addClass("templately-" + widget.tier);
+          $widget.find(".templately-badge span").text(widget.tierLabel);
+          $widget.find(".widget-description").text(widget.description);
+          $widget.find("a").attr("href", widget.url);
+
+          const $toggle =
+            isProUser || "native" === widget.tier
+              ? $(widgetToggleTemplate).clone()
+              : $("<div></div>");
+
+          $toggle.find("label").attr("for", "input-" + widget.key);
+          $toggle
+            .find("input")
+            .attr("id", "input-" + widget.key)
+            .attr("value", widget.key)
+            .attr("checked", FULL.enabled_services.includes(widget.key));
 
           if ("addon" === widget.tier && !widget.purchased) {
-            $clone.find(".status").remove();
+            $toggle.html("");
+          } else if (widget.required) {
+            $toggle.text("Obrigatório");
+            $widget.addClass("widget-required");
           }
 
-          if (widget.required) {
-            $clone.find(".status").text("Obrigatório");
-            $clone.addClass("widget-required");
-          }
+          $widget.find(".status").append($toggle);
 
-          $grids
-            .filter(".widgets-" + widget.tier)
-            .append($clone.prop("outerHTML"));
+          $category.find(".widgets-grid").append($widget);
         }
       }
     );
 
-    $grids.on("change", "input", function () {
+    $container.on("change", "input", function () {
       const key = $(this).val();
       const index = changed.indexOf(key);
 
@@ -291,7 +304,7 @@
       if (!count) {
         Swal.fire(
           "Ops",
-          "O status de menhuma extensão foi modificado para atualizarmos.",
+          "O status de nenhuma extensão foi modificado para atualizarmos.",
           "info"
         );
         return;
@@ -433,4 +446,23 @@
       navigator.clipboard.writeText(data);
     });
   });
+
+  function slugfy(str) {
+    str = str.replace(/^\s+|\s+$/g, "");
+    str = str.toLowerCase();
+
+    const from = "àáäâèéëêìíïîòóöôùúüûñçěščřžýúůďťň·/_,:;";
+    const to = "aaaaeeeeiiiioooouuuuncescrzyuudtn------";
+
+    for (let i = 0, l = from.length; i < l; i++) {
+      str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+    }
+
+    return str
+      .replace(".", "-") // replace a dot by a dash
+      .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+      .replace(/\s+/g, "-") // collapse whitespace and replace by a dash
+      .replace(/-+/g, "-") // collapse dashes
+      .replace(/\//g, ""); // collapse all forward-slashes
+  }
 })(jQuery);

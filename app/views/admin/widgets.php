@@ -22,21 +22,7 @@ use Full\Customer\License; ?>
           </div>
 
           <div class="full-page-content">
-            <h4>Extensões nativas</h4>
-            <div class="widgets-grid widgets-native">
-
-            </div>
-
-            <h4>Extensões PRO</h4>
-            <div class="widgets-grid widgets-pro">
-
-            </div>
-
-            <h4>Extensões adicionais</h4>
-            <div class="widgets-grid widgets-addon">
-
-            </div>
-
+            <div id="full-widgets"></div>
 
             <br>
             <br>
@@ -53,29 +39,34 @@ use Full\Customer\License; ?>
   </div>
 </div>
 
+<script id="widget-container-template" type="text/template">
+  <div class="widget-category-container">
+    <h4></h4>
+    <div class="widgets-grid">
+  </div>
+</script>
+
 <script id="widget-template" type="text-template">
   <div class="full-widget">
-    <div class="icon">
-      <img src="{icon}" alt="{name}">
-    </div>
+    <div class="icon"><img></div>
     <div class="description">
       <h4>
-        {name}
-        <span class="templately-badge templately-{tier}">
-          <span>{tierLabel}</span>
+        <span class="widget-name"></span>
+        <span class="badge templately-badge">
+          <span></span>
         </span>
       </h4>
-      <div>{description}</div>
+      <div class="widget-description"></div>
       <a href="{url}" target="_blank" rel="noopener noreferrer">Saiba mais</a>
     </div>
 
-    <div class="status">{toggle}</div>
+    <div class="status"></div>
   </div>
 </script>
 
 <script id="widget-toggle-template" type="text-template">
-  <label class="toggle-switch-sm" for="full-widget-{key}">
-    <input type="checkbox" value="{key}" class="toggle-switch-input" id="full-widget-{key}" {checked}>
+  <label class="toggle-switch-sm">
+    <input type="checkbox" class="toggle-switch-input">
     <span class="toggle-switch-label">
       <span class="toggle-switch-indicator"></span>
     </span>

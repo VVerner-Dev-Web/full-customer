@@ -36,28 +36,16 @@ add_filter('auto_update_plugin', '\Full\Customer\Filters\autoupdate', PHP_INT_MA
 
 add_action('rest_api_init', ['\Full\Customer\Api\Widgets', 'registerRoutes']);
 
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullAccessWidget');
+
 if (License::isActive()) :
   add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
 
   add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullLoginWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullEmailWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullImagesWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullCodeWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullSpeedWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullWooCommerceWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullAdminWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullSecurityWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullContentWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullAiWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullWhatsAppWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullShortcodesWidget');
-  add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorCrmWidget');
+  add_action('plugins_loaded', '\Full\Customer\Actions\startWidgets');
   add_action('plugins_loaded', ['\Full\Customer\Security\Firewall', 'run'], 0);
 endif;
-
-add_action('plugins_loaded', '\Full\Customer\Actions\initFullAccessWidget');
 
 add_filter('full-versions-upgrades', '\Full\Customer\Filters\versionsWithUpgrade');
 add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
