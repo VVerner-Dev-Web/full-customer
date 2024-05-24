@@ -334,6 +334,15 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/ai-meta/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/ai-meta/actions.php';
   endif;
+
+  if (fullCustomer()->isServiceEnabled('full-analytics')) :
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/Database.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/Assets.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/PageView.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/API.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/Admin.php';
+  endif;
 }
 
 function initFullElementorTemplates(): void
