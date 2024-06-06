@@ -19,6 +19,50 @@ class API
 
     add_action('wp_ajax_full/analytics/settings', [$cls, 'updateSettings']);
     add_action('wp_ajax_full/analytics/report', [$cls, 'report']);
+
+    add_action('wp_ajax_full/analytics/journey', [$cls, 'journey']);
+    add_action('wp_ajax_full/analytics/journey/delete', [$cls, 'deleteJourney']);
+  }
+
+  public function deleteJourney(): void
+  {
+    $env = new Settings;
+    $journeyId  = filter_input(INPUT_POST, 'journeyId');
+    $journeys = $env->journeys();
+
+    if (array_key_exists($journeyId, $journeys)) :
+      unset($journeys[$journeyId]);
+    endif;
+
+    $env->set('journeys', $journeys);
+
+    wp_send_json_success($env->journeys());
+  }
+
+  public function journey(): void
+  {
+    check_ajax_referer('full/analytics/journey');
+
+    $env = new Settings;
+    $journeyId  = filter_input(INPUT_POST, 'journeyId');
+
+    if (!$journeyId) :
+      $journeyId = strtoupper(uniqid());
+    endif;
+
+    $journeyName  = filter_input(INPUT_POST, 'journeyName');
+    $journey    = array_filter(array_map('trim', filter_input(INPUT_POST, 'journey', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?? []));
+
+    $journeys = $env->journeys();
+    $journeys[$journeyId] = [
+      'id' => $journeyId,
+      'name' => $journeyName,
+      'stages' => $journey
+    ];
+
+    $env->set('journeys', $journeys);
+
+    wp_send_json_success($env->journeys());
   }
 
   public function track(): void
@@ -56,11 +100,15 @@ class API
     $sessionsCountSql = "SELECT COUNT(DISTINCT session) FROM " . Database::$table . " WHERE DATE(createdAt) = %s GROUP BY DATE(createdAt);";
     $viewsCountSql = "SELECT COUNT(id) FROM " . Database::$table . " WHERE DATE(createdAt) = %s GROUP BY DATE(createdAt);";
     $pagesTableSql = "SELECT `page` as item, COUNT(id) as entries FROM " . Database::$table . " GROUP BY `page` ORDER BY entries DESC LIMIT 0,10;";
-    $qsTableSql = "SELECT `queryString` as item, COUNT(id) as entries FROM " . Database::$table . " GROUP BY `queryString` ORDER BY queryString DESC LIMIT 0,10;";
 
     $labels = [];
     $sessions = [];
     $views = [];
+    $journeys = [];
+
+    foreach ((new Settings)->journeys() as $journey) {
+      $journeys[$journey['id']] = $this->getJourneyStats($journey, $from, $to);
+    }
 
     while ($to >= $from) {
       $labels[] = $from->format('d/m');
@@ -69,18 +117,17 @@ class API
       $from->modify('+1 day');
     }
 
-    $sessions = array_sum($sessions);
-    $views = array_sum($views);
+    $sessionsSum = array_sum($sessions);
+    $viewsSum = array_sum($views);
 
     wp_send_json([
       'totals' => [
-        'sessions' => $sessions,
-        'views' => $views,
-        'average' => $sessions ? $views / $sessions : 0
+        'sessions' => $sessionsSum,
+        'views' => $viewsSum,
+        'average' => $sessionsSum ? $viewsSum / $sessionsSum : 0
       ],
       'tables' => [
         'pages' => $wpdb->get_results($pagesTableSql),
-        'queryStrings' => $wpdb->get_results($qsTableSql),
       ],
       'chartData' => [
         'labels' => $labels,
@@ -102,7 +149,50 @@ class API
           ]
         ]
       ],
+      'journeysList' => (new Settings)->journeys(),
+      'journeyStats' => $journeys
     ]);
+  }
+
+  private function getJourneyStats(array $journey, DateTime $from, DateTime $to): ?array
+  {
+    global $wpdb;
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    $response = [];
+    $drop = "DROP TABLE IF EXISTS full_user_journeys";
+
+    $wpdb->query($drop);
+
+    $create = "CREATE TABLE full_user_journeys AS
+      SELECT session, GROUP_CONCAT(page ORDER BY createdAt) AS journey
+      FROM " .  Database::$table . "
+      WHERE createdAt BETWEEN '{$from->format('Y-m-d')} 00:00:00' AND '{$to->format('Y-m-d')} 23:59:59'
+      GROUP BY session;";
+
+    ob_start();
+
+    dbDelta($create);
+
+    ob_clean();
+
+    $where = [];
+
+    foreach ($journey['stages'] as $stage) :
+      $path  = parse_url($stage, PHP_URL_PATH);
+      $where[] = trailingslashit($path);
+      $value = "SELECT COUNT(*) FROM full_user_journeys WHERE journey LIKE '%" . implode(',', $where) . "%'";
+
+      $response[] = [
+        'name' => $path,
+        'value' => (int) $wpdb->get_var($value),
+      ];
+    endforeach;
+
+    $wpdb->query($drop);
+
+    return $response ? $response : null;
   }
 
   public function updateSettings(): void

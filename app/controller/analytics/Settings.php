@@ -17,4 +17,9 @@ class Settings
   {
     return fullCustomer()->get(self::PREFIX . $prop);
   }
+
+  public function journeys(): array
+  {
+    return is_array($this->get('journeys')) ? $this->get('journeys') : [];
+  }
 }

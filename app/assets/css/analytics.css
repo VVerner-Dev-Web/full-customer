@@ -84,17 +84,24 @@
   }
 }
 
-#chart-area ._header {
+#chart-area ._header,
+#journey-view ._header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#chart-area ._header input {
+#chart-area ._header input,
+#journey-view ._header select {
   padding: 10px 5px;
   font-size: 1.25em;
   line-height: 1;
   text-align: center;
+}
+
+#journey-view ._header select {
+  text-align: left;
+  min-width: 200px;
 }
 
 #chart-area ._body {
@@ -147,7 +154,8 @@
   line-height: 1;
 }
 
-#table-area {
+#table-area,
+#journey-stats {
   display: flex;
   gap: 30px;
   margin-top: 30px;
@@ -163,6 +171,9 @@
   box-shadow: 0 0.375rem 0.75rem rgba(140, 152, 164, 0.075);
   padding: 15px;
   flex: 1;
+  max-width: 50%;
+  display: block;
+  overflow-x: auto;
 }
 
 .table-card h3 {
@@ -173,4 +184,51 @@
 .table-card table {
   margin: 0;
   border: unset;
+}
+
+.stage-editions {
+  display: flex;
+  justify-content: center;
+}
+
+.stage-editions input {
+  flex: 1;
+}
+
+.stage-editions .actions {
+  border: solid 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.stage-editions .actions a {
+  padding: 5px;
+  text-decoration: none;
+  border-right: solid 1px black !important;
+  display: block;
+  width: 100%;
+  flex: 1;
+  line-height: 1;
+}
+
+.stage-editions .actions a:last-child {
+  border-right: 0 !important;
+}
+
+.stage-editions .actions a:hover {
+  border-right: solid 1px black;
+}
+
+.pipeline-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#pipeline-editor th,
+#pipeline-editor td {
+  padding: 5px;
 }

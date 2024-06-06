@@ -20,11 +20,11 @@ class Assets
   {
     wp_enqueue_script('full-analytics', plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/js/full-analytics.js', [], getFullAssetsVersion(), true);
     wp_localize_script('full-analytics', 'fullAnalytics', [
+      'timeoutWindow' => MINUTE_IN_SECONDS * 5 * 1000,
       'endpoint' => add_query_arg([
         'action'    => 'full/track',
         'nonce'     => wp_create_nonce('full/track'),
       ], admin_url('admin-ajax.php')),
-      'timeoutWindow' => MINUTE_IN_SECONDS * 5 * 1000,
     ]);
   }
 

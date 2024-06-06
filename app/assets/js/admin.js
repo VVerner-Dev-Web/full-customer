@@ -465,4 +465,16 @@
       .replace(/-+/g, "-") // collapse dashes
       .replace(/\//g, ""); // collapse all forward-slashes
   }
+
+  $("[data-modal]").on("click", function (e) {
+    e.preventDefault();
+
+    const $modal = $(this).data("modal");
+    $(`${$modal}`).addClass("open");
+  });
+
+  $(".full-modal-overlay, .full-modal-close").on("click", function (e) {
+    e.preventDefault();
+    $(".full-modal-container").removeClass("open");
+  });
 })(jQuery);
