@@ -106,14 +106,14 @@ function addMenuPage(): void
     'fullGetAdminPageView'
   );
 
-  $licenseOk = License::isActive();
-  $cls = $licenseOk ? 'full' : 'error';
-  $text = $licenseOk ? 'PRO' : 'seja PRO';
+  $status = License::status();
+  $cls = $status['plan'] ? 'full' : 'error';
+  $text = $status['plan'] ? $status['plan'] : 'seja PRO';
 
   add_submenu_page(
     'full-connection',
     'FULL. PRO',
-    'FULL. PRO <span class="full-badge full-' . $cls . '">' . $text . '</span>',
+    'FULL. PRO <span class="full-badge full-' . sanitize_title($cls) . '">' . $text . '</span>',
     'manage_options',
     'full-widgets',
     'fullGetAdminPageView'

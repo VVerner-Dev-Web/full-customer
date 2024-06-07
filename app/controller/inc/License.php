@@ -65,8 +65,9 @@ class License
   {
     return (array) get_option('full/license-status', [
       'expireDate' => null,
-      'status' => 'new',
-      'active' => false
+      'status'  => 'new',
+      'active'  => false,
+      'plan'    => ''
     ]);
   }
 
