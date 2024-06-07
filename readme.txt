@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
 Tested up to: 6.5.4
 Requires PHP: 7.4
-Stable tag: 3.1.8
+Stable tag: 3.1.9
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,10 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.8 = 
+= 3.1.9 = 
 
-* Adicionamos a funcionalidade de "jornadas" no FULL. Analytics
-* Removemos a exibição das querystrings na página de relatórios do FULL. Analytics
-* Atualizamos as versões de testes compatíveis do WordPress
+* Melhoramos a exibição das extensões para mostra seus planos de acesso
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

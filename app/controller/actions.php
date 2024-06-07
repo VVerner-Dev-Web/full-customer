@@ -112,8 +112,8 @@ function addMenuPage(): void
 
   add_submenu_page(
     'full-connection',
-    'FULL. PRO',
-    'FULL. PRO <span class="full-badge full-' . sanitize_title($cls) . '">' . $text . '</span>',
+    'FULL.PRO',
+    'FULL.PRO <span class="full-badge full-' . sanitize_title($cls) . '">' . $text . '</span>',
     'manage_options',
     'full-widgets',
     'fullGetAdminPageView'
