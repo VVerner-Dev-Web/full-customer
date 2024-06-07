@@ -236,7 +236,6 @@
   const $container = $("#full-widgets");
   if ($container.length) {
     const changed = [];
-    const isProUser = FULL.full_pro ? true : false;
 
     const categoryContainerTemplate = $("#widget-container-template").html();
     const widgetCardTemplate = $("#widget-template").html();
@@ -267,7 +266,7 @@
           $widget.find("a").attr("href", widget.url);
 
           const $toggle =
-            isProUser || "native" === widget.tier
+            widget.purchased || "native" === widget.tier
               ? $(widgetToggleTemplate).clone()
               : $("<div></div>");
 
