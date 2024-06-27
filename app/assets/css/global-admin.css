@@ -1,3 +1,8 @@
+#full-notice-api,
+#open-full-notice-api {
+  display: none;
+}
+
 .full-disconnected-notice {
   color: #ed4c78;
   background-color: rgba(237, 76, 120, 0.15);

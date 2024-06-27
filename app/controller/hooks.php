@@ -20,6 +20,7 @@ add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
+add_action('admin_notices', '\Full\Customer\Actions\insertAdminApiNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 
 add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);

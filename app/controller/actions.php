@@ -26,6 +26,15 @@ function insertAdminNotice(): void
   endif;
 }
 
+function insertAdminApiNotice(): void
+{
+  $file = FULL_CUSTOMER_APP . '/views/admin/notice-api.php';
+
+  if (file_exists($file) && current_user_can('manage_options')) :
+    require_once $file;
+  endif;
+}
+
 function verifySiteConnection(): void
 {
   $flag = 'previous-connect-site-check';
@@ -342,6 +351,12 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/analytics/PageView.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/API.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Admin.php';
+  endif;
+
+  if (fullCustomer()->isServiceEnabled('full-social-proof')) :
+    require_once FULL_CUSTOMER_APP . '/controller/social-proof/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/social-proof/WooCommerce.php';
+    require_once FULL_CUSTOMER_APP . '/controller/social-proof/Admin.php';
   endif;
 }
 
