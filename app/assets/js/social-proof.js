@@ -1,8 +1,12 @@
 jQuery(function ($) {
   let visible = false;
   let index = sessionStorage.getItem("socialProofIndex") ?? 0;
+  let data = [];
 
-  const data = socialProofFeed;
+  $.get(socialProofFeed, function (response) {
+    data = response;
+  });
+
   const $popup = $("#full-woo-orders-popup");
   const heartbeat = 5000;
 
@@ -16,9 +20,11 @@ jQuery(function ($) {
       const item = data[index];
 
       Object.entries(item).forEach(([key, value]) => {
-        key === "image"
-          ? $content.find(`[data-fragment="${key}"]`).attr("src", value)
-          : $content.find(`[data-fragment="${key}"]`).text(value);
+        if (value) {
+          key === "image"
+            ? $content.find(`[data-fragment="${key}"]`).attr("src", value)
+            : $content.find(`[data-fragment="${key}"]`).text(value);
+        }
       });
 
       $popup.find(".full-woo-orders-popup-inner").replaceWith($content);

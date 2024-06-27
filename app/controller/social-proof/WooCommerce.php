@@ -8,11 +8,13 @@ class WooCommerce
 {
   private Settings $env;
   private string $feedFilename;
+  private string $feedUrl;
 
   private function __construct()
   {
     $this->env = new Settings();
     $this->feedFilename = (untrailingslashit(WP_CONTENT_DIR)) . '/woocommerce-popup-orders-feed.json';
+    $this->feedUrl = (untrailingslashit(WP_CONTENT_URL)) . '/woocommerce-popup-orders-feed.json';
   }
 
   public static function attach(): void
@@ -57,7 +59,7 @@ class WooCommerce
 
       $data[] = [
         'product' => $product ? $product->get_name() : '',
-        'productThumbnail' => $product ? wp_get_attachment_url($product->get_image_id()) : '',
+        'image' => $product ? wp_get_attachment_url($product->get_image_id()) : '',
         'customerFirstName' => $order->get_billing_first_name(),
         'customerLastName' => $order->get_billing_last_name(),
         'customerLocation' => $order->get_billing_city() . '/' . $order->get_billing_state(),
@@ -111,7 +113,7 @@ class WooCommerce
 
     wp_enqueue_style('full-social-proof', $baseUrl . 'css/social-proof.css', [], $version);
     wp_enqueue_script('full-social-proof', $baseUrl . 'js/social-proof.js', ['jquery'], $version, true);
-    wp_localize_script('full-social-proof', 'socialProofFeed', json_decode(file_get_contents($this->feedFilename)));
+    wp_localize_script('full-social-proof', 'socialProofFeed', add_query_arg('v', uniqid(), $this->feedUrl));
   }
 }
 
