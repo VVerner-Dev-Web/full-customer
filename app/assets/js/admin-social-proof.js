@@ -14,4 +14,6 @@ jQuery(function ($) {
   });
 
   $tabLinks.first().trigger("click");
+
+  $(".select2").select2({});
 });

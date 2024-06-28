@@ -4,7 +4,7 @@ namespace Full\Customer\SocialProof;
 
 use WC_Order;
 
-class WooCommerce
+class RecentPurchases
 {
   private Settings $env;
   private string $feedFilename;
@@ -13,6 +13,7 @@ class WooCommerce
   private function __construct()
   {
     $this->env = new Settings();
+
     $this->feedFilename = (untrailingslashit(WP_CONTENT_DIR)) . '/woocommerce-popup-orders-feed.json';
     $this->feedUrl = (untrailingslashit(WP_CONTENT_URL)) . '/woocommerce-popup-orders-feed.json';
   }
@@ -82,15 +83,20 @@ class WooCommerce
 
   public function addPopup(): void
   {
+    $excluded = is_array($this->env->get('excludedPages')) ? $this->env->get('excludedPages') : [];
+    if (in_array(get_the_ID(), $excluded)) :
+      return;
+    endif;
+
     $position = $this->env->get('ordersPopupPosition');
 
     $template  = '<template id="full-woo-orders-popup-template">
     <div class="full-woo-orders-popup-inner"><div class="customer-information"><p>{name} {address} comprou <strong data-fragment="product"></strong> {orderDate}</p></div>{img}</div>
     </template>';
 
-    $name = $this->env->fragmentEnabled('customerFirstName') ? '<span data-fragment="firstName"></span>' : '';
-    $name .= $this->env->fragmentEnabled('customerLastName') ? ' <span data-fragment="lastName"></span>' : '';
-    $address = $this->env->fragmentEnabled('customerLocation') ? ' de <span data-fragment="address"></span>' : '';
+    $name = $this->env->fragmentEnabled('customerFirstName') ? '<span data-fragment="customerFirstName"></span>' : '';
+    $name .= $this->env->fragmentEnabled('customerLastName') ? ' <span data-fragment="customerLastName"></span>' : '';
+    $address = $this->env->fragmentEnabled('customerLocation') ? ' de <span data-fragment="customerLocation"></span>' : '';
     $orderDate = $this->env->fragmentEnabled('orderDate') ? ' em <span data-fragment="orderDate"></span>' : '';
     $productThumbnail = $this->env->fragmentEnabled('productThumbnail') ? '<img src="" data-fragment="image">' : '';
 
@@ -99,7 +105,7 @@ class WooCommerce
     $template = str_replace('{orderDate}', ($orderDate ? $orderDate : ''), $template);
     $template = str_replace('{img}', ($productThumbnail ? $productThumbnail : ''), $template);
 
-    echo '<div id="full-woo-orders-popup" class="full-woo-orders-popup ' . $position . '">
+    echo '<div id="full-woo-orders-popup" class="full-woo-orders-popup full-social-proof-social ' . $position . '">
       <span class="dismiss-woo-order-popup">&times;</span>
       <div class="full-woo-orders-popup-inner"></div>
     </div>';
@@ -113,8 +119,10 @@ class WooCommerce
 
     wp_enqueue_style('full-social-proof', $baseUrl . 'css/social-proof.css', [], $version);
     wp_enqueue_script('full-social-proof', $baseUrl . 'js/social-proof.js', ['jquery'], $version, true);
-    wp_localize_script('full-social-proof', 'socialProofFeed', add_query_arg('v', uniqid(), $this->feedUrl));
+    wp_localize_script('full-social-proof', 'socialProofFeed', [
+      'url' => add_query_arg('v', uniqid(), $this->feedUrl),
+    ]);
   }
 }
 
-WooCommerce::attach();
+RecentPurchases::attach();

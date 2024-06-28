@@ -27,21 +27,26 @@ $env = new Full\Customer\SocialProof\Settings();
           <div class="full-page-content">
             <ul id="analytics-view-nav">
               <?php if (defined('WC_PLUGIN_FILE')) : ?>
-                <li><a href="#woocommerce">WooCommerce</a></li>
+                <li><a href="#recent-purchases">Compras recentes</a></li>
               <?php endif; ?>
+
+              <li><a href="#product-visitors">Visitas recentes</a></li>
             </ul>
 
             <?php if (defined('WC_PLUGIN_FILE')) : ?>
-              <div class="analytics-view" id="woocommerce">
+              <div class="analytics-view" id="recent-purchases">
                 <form method="POST" id="full-social-proof-settings" class="full-widget-form">
-                  <?php wp_nonce_field('full/widget/social-proof'); ?>
-                  <input type="hidden" name="action" value="full/widget/social-proof">
+
+                  <p>Este popup exibirá informações das últimas compras realizadas na loja.</p>
+
+                  <?php wp_nonce_field('full/widget/social-proof/purchases'); ?>
+                  <input type="hidden" name="action" value="full/widget/social-proof/purchases">
 
                   <table>
                     <tbody>
                       <tr>
                         <th>
-                          <label for="enableWooCommerceOrdersPopup">Popups de pedidos recentes</label>
+                          <label for="enableWooCommerceOrdersPopup">Ativar?</label>
                         </th>
                         <td>
                           <label class="toggle-switch toggle-switch-sm" for="enableWooCommerceOrdersPopup">
@@ -111,6 +116,24 @@ $env = new Full\Customer\SocialProof\Settings();
                           </label>
                         </td>
                       </tr>
+
+                      <tr>
+                        <th>
+                          <label for="excludedPages">Não exibir nas páginas</label>
+                        </th>
+                        <td>
+                          <select name="excludedPages[]" id="excludedPages" class="select2" multiple>
+                            <?php $excluded = is_array($env->get('excludedPages')) ? $env->get('excludedPages') : []; ?>
+                            <?php foreach (get_pages() as $page) : ?>
+                              <option value="<?= $page->ID ?>" <?= in_array($page->ID, $excluded) ? 'selected' : '' ?>>
+                                <?= $page->post_title ?>
+                              </option>
+                              </option>
+                            <?php endforeach; ?>
+                          </select>
+                        </td>
+                      </tr>
+
                       <tr>
                         <th>
                           <button class="full-primary-button">Atualizar</button>
@@ -124,11 +147,66 @@ $env = new Full\Customer\SocialProof\Settings();
               </div>
             <?php endif; ?>
 
-            <?php if (!defined('WC_PLUGIN_FILE')) : ?>
-              <div class="analytics-view" style="display: block">
-                <p>Você precisa ter o <strong>WooCommerce</strong> instalado para usar esta extensão</p>
-              </div>
-            <?php endif; ?>
+            <div class="analytics-view" id="product-visitors">
+              <form method="POST" id="full-social-proof-settings" class="full-widget-form">
+
+                <p>Este popup exibirá quantos acessos cada url teve na janela de tempo configurada</p>
+
+                <?php wp_nonce_field('full/widget/social-proof/visitors'); ?>
+                <input type="hidden" name="action" value="full/widget/social-proof/visitors">
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>
+                        <label for="enableRecentVisitors">Exibir em quais tipos de conteúdo?</label>
+                      </th>
+                      <td>
+                        <?php $enabled = is_array($env->get('visitorsEnabledOn')) ? $env->get('visitorsEnabledOn') : []; ?>
+                        <?php foreach (get_post_types(['public' => true], 'objects') as $cpt) : ?>
+                          <label class="toggle-switch toggle-switch-sm" style="gap: 5px; margin-bottom: 5px;" for="enableRecentVisitors-<?= $cpt->name ?>">
+                            <input type="checkbox" name="visitorsEnabledOn[]" value="<?= $cpt->name ?>" class="toggle-switch-input" id="enableRecentVisitors-<?= $cpt->name ?>" <?php checked(in_array($cpt->name, $enabled)) ?>>
+                            <span class="toggle-switch-label">
+                              <span class="toggle-switch-indicator"></span>
+                            </span>
+                            <?= $cpt->label ?>
+                          </label>
+                        <?php endforeach; ?>
+
+                        <small>Você poderá ocultar o popup em conteúdos específicos através do editor no wp-admin.</small>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <label for="visitorTrackingWindow">Janela de tempo em minutos</label>
+                      </th>
+                      <td>
+                        <input type="number" name="visitorTrackingWindow" id="visitorTrackingWindow" value="<?= $env->get('visitorTrackingWindow') ?>" step="1" min="0" class="custom-input">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <label for="visitorsPopupPosition">Posição do popup</label>
+                      </th>
+                      <td>
+                        <select name="visitorsPopupPosition" id="visitorsPopupPosition" class="custom-input">
+                          <option <?php selected('bottom-left', $env->get('visitorsPopupPosition')) ?> value="bottom-left">Inferior, lado esquerdo</option>
+                          <option <?php selected('bottom-center', $env->get('visitorsPopupPosition')) ?> value="bottom-center">Inferior, centro</option>
+                          <option <?php selected('bottom-right', $env->get('visitorsPopupPosition')) ?> value="bottom-right">Inferior, lado direito</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <button class="full-primary-button">Atualizar</button>
+                      </th>
+                      <td></td>
+                    </tr>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
 
             <br>
             <br>

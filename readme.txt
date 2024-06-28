@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
 Tested up to: 6.5.4
 Requires PHP: 7.4
-Stable tag: 3.1.11
+Stable tag: 3.1.12
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.11 = 
+= 3.1.12 = 
 
-* Correção da criação do feed do social proof que as vezes estava gerando sem imagens
+* Nova extensão chamada FULL.Social que mostra compras e visitas recentes nas páginas do site
+* Nova extensão FULL.Cupom Secreto que permite a criação de um cupom secreto no WooCommerce para compras acima de X valor.
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

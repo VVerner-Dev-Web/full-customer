@@ -355,8 +355,15 @@ function startWidgets(): void
 
   if (fullCustomer()->isServiceEnabled('full-social-proof')) :
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/social-proof/WooCommerce.php';
+    require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentPurchases.php';
+    require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentVisitors.php';
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/Admin.php';
+  endif;
+
+  if (fullCustomer()->isServiceEnabled('full-secret-coupon')) :
+    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Frontend.php';
+    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Admin.php';
   endif;
 }
 

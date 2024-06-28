@@ -122,7 +122,10 @@
   border: 0.0625rem solid #c3c6d1 !important;
   border-radius: 0.3125rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  display: bçp;
+}
+
+.full-widget-form .select2-container {
+  width: 100% !important;
 }
 
 #full-products-grid {
