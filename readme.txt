@@ -2,9 +2,9 @@
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
-Tested up to: 6.5.4
+Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 3.1.12
+Stable tag: 3.1.13
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,9 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.12 = 
+= 3.1.13 = 
 
-* Nova extensão chamada FULL.Social que mostra compras e visitas recentes nas páginas do site
-* Nova extensão FULL.Cupom Secreto que permite a criação de um cupom secreto no WooCommerce para compras acima de X valor.
+* Correção de segurança referente a checagem de licença.
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

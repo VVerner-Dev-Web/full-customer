@@ -2,6 +2,7 @@
 
 namespace Full\Customer\Api;
 
+use Full\Customer\License;
 use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
@@ -40,13 +41,11 @@ class Connection extends FullCustomerController
     ]);
   }
 
-  public function license(WP_REST_Request $request): WP_REST_Response
+  public function license(): WP_REST_Response
   {
-    $params = $request->get_json_params();
-
-    do_action('full-customer/license-received', $params);
-
-    return new WP_REST_Response(['success' => true]);
+    return new WP_REST_Response([
+      'success' => License::updateStatus()
+    ]);
   }
 
   public function connectSite(WP_REST_Request $request): WP_REST_Response

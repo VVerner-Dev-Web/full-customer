@@ -15,8 +15,7 @@ class License
     $cls = new self();
 
     add_action('wp', [$cls, 'enqueueCronJob']);
-    add_action('full-customer/license-check', [$cls, 'checkLicenseStatus']);
-    add_action('full-customer/license-received', [$cls, 'updateReceivedLicense']);
+    add_action('full-customer/license-check', [$cls, 'updateStatus']);
   }
 
   public function enqueueCronJob(): void
@@ -26,7 +25,7 @@ class License
     endif;
   }
 
-  public function checkLicenseStatus(): void
+  public static function updateStatus(): bool
   {
     $url   = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/license';
 
@@ -39,26 +38,19 @@ class License
     ]);
 
     if (is_wp_error($response)) :
-      return;
+      return false;
     endif;
 
     $response = wp_remote_retrieve_body($response);
     $response = json_decode($response, true);
 
     if (!$response || !isset($response['status'])) :
-      return;
+      return false;
     endif;
 
     update_option('full/license-status', $response, false);
-  }
 
-  public function updateReceivedLicense(array $license): void
-  {
-    if (!$license || !isset($license['status'])) :
-      return;
-    endif;
-
-    update_option('full/license-status', $license, false);
+    return true;
   }
 
   public static function status(): array
