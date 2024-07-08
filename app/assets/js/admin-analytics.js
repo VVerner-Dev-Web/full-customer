@@ -1,6 +1,13 @@
 jQuery(function ($) {
   let JOURNEYS_LIST = {};
   let JOURNEYS_STATS = JOURNEYS_LIST;
+  let CONVERSIONS_LIST = [];
+
+  const CONVERSION_TYPES = {
+    "element:click": "Clique em elemento",
+    "element:submit": "Envio de formulário",
+    "page:view": "Acesso a página",
+  };
 
   const $tabLinks = $("#analytics-view-nav a");
   const $periodInput = $("#dataPeriod");
@@ -149,7 +156,6 @@ jQuery(function ($) {
   const updateJourneyChart = (stats) => {
     JOURNEYS_STATS = typeof stats === "object" ? stats : JOURNEYS_STATS;
     const data = JOURNEYS_STATS[$("#chartJourney").val()] ?? [];
-    console.log(data);
 
     journeyChart.data.labels = data.map((item) => item.name);
     journeyChart.data.datasets[0].data = data.map((item) => item.value);
@@ -208,22 +214,58 @@ jQuery(function ($) {
     $("#chartJourney").trigger("change");
   };
 
-  const updateView = () => {
-    $.post(ajaxurl, $("#data-period-form").serialize(), function (response) {
-      const { totals, tables, chartData, journeysList, journeyStats } =
-        response;
+  const updateConversionList = (conversionsList = null) => {
+    CONVERSIONS_LIST =
+      typeof conversionsList === "object" ? conversionsList : CONVERSIONS_LIST;
 
-      updateTotalsPageViews(totals);
-      updatePageViews(tables);
-      updateChartPageViews(chartData);
-      updateJourneyList(journeysList);
-      updateJourneyChart(journeyStats);
+    $("#current-conversions tbody").empty();
+
+    CONVERSIONS_LIST.forEach((conv) => {
+      const $row = $($("#existing-conversion-row").html());
+
+      $row.find(".conversion-name").text(conv.name);
+      $row.find(".conversion-type").text(CONVERSION_TYPES[conv.type]);
+      $row.find(".conversion-element").text(conv.element);
+      $row.find(".conversion-global-rate").text(conv.performance.conversion);
+
+      for (const key of Object.keys(conv.performance)) {
+        if (key !== "conversion") {
+          const $period = $row.find('[data-period="' + key + '"]');
+          $period.find(".current").text(conv.performance[key].current);
+          $period.find(".change").text(conv.performance[key].change);
+          $period.find(".change").addClass(conv.performance[key].trending);
+        }
+      }
+
+      $row.data("conversion", conv);
+
+      $("#current-conversions tbody").append($row);
     });
   };
 
+  const updateView = () => {
+    $.post(ajaxurl, $("#data-period-form").serialize(), function (response) {
+      updateTotalsPageViews(response.totals);
+      updatePageViews(response.tables);
+      updateChartPageViews(response.chartData);
+      updateJourneyList(response.journeysList);
+      updateJourneyChart(response.journeyStats);
+      updateConversionList(response.conversionsList);
+    });
+  };
+
+  $(document).on("modal-closed/modal-conversion-editor", function () {
+    $(
+      "#conversionName, #conversionType, #conversionElement, #conversionId"
+    ).val("");
+
+    $(".conversion-tutorial").hide();
+  });
+
+  $(document).on("modal-closed/modal-journey-editor", function () {});
+
   $(".full-modal-close").on("click", function () {
-    $("#journeyId").val("");
-    $("#journeyName").val("");
+    $("#journeyId, #journeyName").val("");
     $stageEditor.find("tbody").empty();
   });
 
@@ -288,12 +330,17 @@ jQuery(function ($) {
             action: "full/analytics/journey/delete",
           },
           function (journeysList) {
-            console.log(journeysList);
             updateJourneyList(journeysList.data);
           }
         );
       }
     });
+  });
+
+  $(document).on("change", "#conversionType", function (e) {
+    const tutorial = $(this).val().split(":").pop();
+
+    $(".conversion-tutorial.for-" + tutorial).show();
   });
 
   $(document).on("click", ".journey-view", function (e) {
@@ -302,6 +349,51 @@ jQuery(function ($) {
     const $tr = $(this).closest("tr");
     const $template = $($("#existing-journey-row").html());
     $template.data("journey", $tr.data("journey"));
+  });
+
+  $(document).on("click", ".conversion-edit", function (e) {
+    e.preventDefault();
+    const data = $(this).closest("tr").data("conversion");
+
+    $(".conversion-tutorial").hide();
+
+    $("#conversionName").val(data.name);
+    $("#conversionType").val(data.type).trigger("change");
+    $("#conversionElement").val(data.element);
+    $("#conversionId").val(data.id);
+
+    $('[data-modal="#modal-conversion-editor"]').trigger("click");
+  });
+
+  $(document).on("click", ".conversion-delete", function (e) {
+    e.preventDefault();
+
+    Swal.fire({
+      icon: "warning",
+      text: "Tem certeza que deseja excluir esta conversão?",
+      showConfirmButton: false,
+      showDenyButton: true,
+      showCancelButton: true,
+      cancelButtonText: "Voltar",
+      denyButtonText: "Excluir",
+    }).then((result) => {
+      if (result.isDenied) {
+        const $tr = $(this).closest("tr");
+
+        console.log($tr.data("conversion"));
+
+        $.post(
+          ajaxurl,
+          {
+            id: $tr.data("conversion").id,
+            action: "full/analytics/conversion/delete",
+          },
+          function (list) {
+            updateConversionList(list.data);
+          }
+        );
+      }
+    });
   });
 
   $(window).on("full/form-received/full-analytics-settings", updateView);

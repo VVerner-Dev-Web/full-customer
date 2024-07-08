@@ -4,13 +4,11 @@ namespace Full\Customer\Analytics;
 
 use DateTimeImmutable;
 
-class PageView
+class ConversionTracker
 {
   public int $id;
-  public string $session = 'unknown';
+  public int $conversionId = 0;
   public DateTimeImmutable $createdAt;
-  public string $page = '/';
-  public string $queryString = '';
 
   public function __construct()
   {
@@ -29,17 +27,13 @@ class PageView
     endif;
 
     $wpdb->insert(
-      Database::$table,
+      Database::$conversionTrackerTable,
       [
-        'session' => $this->session,
+        'conversionId' => $this->conversionId,
         'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
-        'page' => $this->page,
-        'queryString' => $this->queryString
       ],
       [
-        '%s',
-        '%s',
-        '%s',
+        '%d',
         '%s'
       ]
     );

@@ -14,14 +14,70 @@ class API
   {
     $cls = new self();
 
-    add_action('wp_ajax_full/track', [$cls, 'track']);
-    add_action('wp_ajax_nopriv_full/track', [$cls, 'track']);
+    add_action('wp_ajax_full/track-conversion', [$cls, 'trackConversion']);
+    add_action('wp_ajax_nopriv_full/track-conversion', [$cls, 'trackConversion']);
+
+    add_action('wp_ajax_full/track', [$cls, 'trackPageView']);
+    add_action('wp_ajax_nopriv_full/track', [$cls, 'trackPageView']);
 
     add_action('wp_ajax_full/analytics/settings', [$cls, 'updateSettings']);
     add_action('wp_ajax_full/analytics/report', [$cls, 'report']);
 
     add_action('wp_ajax_full/analytics/journey', [$cls, 'journey']);
     add_action('wp_ajax_full/analytics/journey/delete', [$cls, 'deleteJourney']);
+
+    add_action('wp_ajax_full/analytics/conversion', [$cls, 'conversion']);
+    add_action('wp_ajax_full/analytics/conversion/delete', [$cls, 'deleteConversion']);
+  }
+
+  public function trackConversion(): void
+  {
+    if (!wp_verify_nonce(filter_input(INPUT_GET, 'nonce') ?? '', 'full/track-conversion')) :
+      wp_send_json_error();
+    endif;
+
+    $convId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $conv = array_filter(Conversion::list(), fn ($c) => $c->id === $convId);
+
+    if (!$conv) :
+      wp_send_json_error();
+    endif;
+
+    $track = new ConversionTracker;
+    $track->conversionId = $convId;
+    $track->save();
+
+    wp_send_json_success();
+  }
+
+  public function deleteConversion(): void
+  {
+    $convId  = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT) ?? 0;
+
+    Conversion::delete($convId);
+
+    wp_send_json_success(Conversion::list());
+  }
+
+  public function conversion(): void
+  {
+    check_ajax_referer('full/analytics/conversion');
+
+    $convId  = filter_input(INPUT_POST, 'conversionId', FILTER_VALIDATE_INT) ?? 0;
+
+    $conv = new Conversion();
+
+    if ($convId) :
+      $conv->id = $convId;
+    endif;
+
+    $conv->type = filter_input(INPUT_POST, 'conversionType') ?? 'element:click';
+    $conv->element = filter_input(INPUT_POST, 'conversionElement');
+    $conv->name = filter_input(INPUT_POST, 'conversionName');
+
+    $conv->save();
+
+    wp_send_json_success($conv);
   }
 
   public function deleteJourney(): void
@@ -65,7 +121,7 @@ class API
     wp_send_json_success($env->journeys());
   }
 
-  public function track(): void
+  public function trackPageView(): void
   {
     if (!wp_verify_nonce(filter_input(INPUT_GET, 'nonce') ?? '', 'full/track')) :
       wp_send_json_error();
@@ -150,7 +206,8 @@ class API
         ]
       ],
       'journeysList' => (new Settings)->journeys(),
-      'journeyStats' => $journeys
+      'journeyStats' => $journeys,
+      'conversionsList' => Conversion::performance(Conversion::list(true))
     ]);
   }
 

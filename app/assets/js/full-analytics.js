@@ -33,3 +33,37 @@ jQuery.post(fullAnalytics.endpoint, {
   session: localStorage.getItem("full-analytics-session"),
   queryString: location.search,
 });
+
+const removeLastSlash = (str) => (str.endsWith("/") ? str.slice(0, -1) : str);
+
+const currentLocation = removeLastSlash(
+  location.protocol + "//" + location.host + location.pathname
+);
+const conversions = fullAnalytics.conversions.length
+  ? fullAnalytics.conversions
+  : [];
+
+const trackConversion = (id) =>
+  jQuery.post(fullAnalytics.conversionEndpoint, { id });
+
+conversions
+  .filter((c) => c.type === "page:view")
+  .forEach((c) => {
+    const url = c.element;
+
+    if (removeLastSlash(url) === currentLocation) {
+      trackConversion(c.id);
+    }
+  });
+
+conversions
+  .filter((c) => c.type === "element:click")
+  .forEach((c) => {
+    jQuery(c.element).on("click", () => trackConversion(c.id));
+  });
+
+conversions
+  .filter((c) => c.type === "element:submit")
+  .forEach((c) => {
+    jQuery(c.element).on("submit", () => trackConversion(c.id));
+  });

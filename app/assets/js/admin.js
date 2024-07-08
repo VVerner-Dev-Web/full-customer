@@ -470,10 +470,16 @@
 
     const $modal = $(this).data("modal");
     $(`${$modal}`).addClass("open");
+
+    $(document).trigger("modal-opened/" + $(`${$modal}`).attr("id"));
   });
 
   $(".full-modal-overlay, .full-modal-close").on("click", function (e) {
     e.preventDefault();
+
+    const $modal = $(".full-modal-container.open");
+
     $(".full-modal-container").removeClass("open");
+    $(document).trigger("modal-closed/" + $modal.attr("id"));
   });
 })(jQuery);

@@ -1,5 +1,6 @@
 <?php
 
+use Full\Customer\Analytics\Conversion;
 use Full\Customer\Analytics\Settings;
 
 $env = new Settings;
@@ -29,6 +30,7 @@ $env = new Settings;
             <ul id="analytics-view-nav">
               <li><a href="#dashboard">Relatórios</a></li>
               <li><a href="#journeys">Jornadas</a></li>
+              <li><a href="#conversions">Conversões</a></li>
               <li><a href="#settings">Configurações</a></li>
             </ul>
 
@@ -160,6 +162,30 @@ $env = new Settings;
               <button data-modal="#modal-journey-editor" class="full-primary-button">Criar jornada</button>
             </div>
 
+            <div class="analytics-view" id="conversions">
+              <h3>Conversões</h3>
+              <p>Defina eventos de conversão em seu site e acompanhe a evolução deles</p>
+
+              <table id="current-conversions" class="widefat striped show-for-journeys" style="margin: 0; border: unset;">
+                <thead>
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Tipo</th>
+                    <th style="text-align: center" scope="col"><abbr title="Índice de conversão entre total de seções X total de eventos em todo o período">Conversão</abbr></th>
+                    <th style="text-align: center" scope="col"><abbr title="Contagem de eventos que aconteceram no período indicado comparado ao período anterior">7 dias</abbr></th>
+                    <th style="text-align: center" scope="col"><abbr title="Contagem de eventos que aconteceram no período indicado comparado ao período anterior">30 dias</abbr></th>
+                    <th style="text-align: center" scope="col"><abbr title="Contagem de eventos que aconteceram no período indicado comparado ao período anterior">90 dias</abbr></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
+              <br>
+
+              <button data-modal="#modal-conversion-editor" class="full-primary-button">Criar conversão</button>
+            </div>
 
             <div class="analytics-view" id="settings">
               <form class="full-widget-form" id="full-analytics-settings" style="min-height: 500px">
@@ -248,6 +274,47 @@ $env = new Settings;
   </div>
 </div>
 
+<div class="full-modal-container" id="modal-conversion-editor">
+  <div class="full-modal-overlay"></div>
+  <div class="full-modal">
+    <div class="full-modal-header">
+      <h3>Nova conversão</h3>
+      <a href="#" class="full-modal-close">&times;</a>
+    </div>
+    <div class="full-modal-body">
+      <form class="full-widget-form" id="full-analytics-journey">
+        <?php wp_nonce_field('full/analytics/conversion'); ?>
+        <input type="hidden" name="action" value="full/analytics/conversion">
+        <input type="hidden" name="conversionId" id="conversionId" value="">
+
+        <div style="margin-bottom: 15px">
+          <label for="conversionName">Nome da conversão</label>
+          <input type="text" name="conversionName" id="conversionName" class="large-text" required>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="conversionType">Tipo de conversão</label>
+          <select name="conversionType" id="conversionType" style="display: block; width: 100%; max-width: unset;" required>
+            <option value="element:click">Clique em elemento</option>
+            <option value="element:submit">Envio de formulário</option>
+            <option value="page:view">Acesso a página</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <label for="conversionElement">Localizador</label>
+          <input type="text" name="conversionElement" id="conversionElement" class="large-text" required>
+          <span class="conversion-tutorial for-click" style="display: none">Insira o seletor CSS do botão <a href="<?= fullGetImageUrl('analytics/tutorial-botao.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-submit" style="display: none">Insira o seletor CSS do formulário <a href="<?= fullGetImageUrl('analytics/tutorial-form.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-view" style="display: none">Insira a URL que o visitante deve acessar <a href="<?= fullGetImageUrl('analytics/tutorial-link.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+        </div>
+
+        <button class="full-primary-button">Salvar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 <template id="journey-stage-row">
   <tr>
     <td class="stage-cell">
@@ -268,9 +335,39 @@ $env = new Settings;
     <td class="journey-name">Nome da jornada</td>
     <td class="journey-stages">Etapas</td>
     <td>
-      <button class="journey-view">Ver relatório</button>
-      <button class="journey-edit">Editar</button>
-      <button class="journey-delete">Excluir</button>
+      <button class="full-secondary-button  journey-view">Ver relatório</button>
+      <button class="full-secondary-button  journey-edit">Editar</button>
+      <button class="full-secondary-button  journey-delete">Excluir</button>
+    </td>
+  </tr>
+</template>
+
+<template id="existing-conversion-row">
+  <tr>
+    <td class="conversion-name">Nome da jornada</td>
+    <td class="conversion-type">Etapas</td>
+    <td style="text-align: center" class="conversion-global-rate">30%</td>
+    <td>
+      <span class="conversion-data" data-period="7days">
+        <span class="current">3</span>
+        <span class="change ">+2</span>
+      </span>
+    </td>
+    <td>
+      <span class="conversion-data" data-period="30days">
+        <span class="current">100</span>
+        <span class="change ">+50</span>
+      </span>
+    </td>
+    <td>
+      <span class="conversion-data" data-period="90days">
+        <span class="current">1000</span>
+        <span class="change ">-500</span>
+      </span>
+    </td>
+    <td style="text-align: right">
+      <button class="full-secondary-button conversion-edit">Editar</button>
+      <button class="full-secondary-button conversion-delete">Excluir</button>
     </td>
   </tr>
 </template>

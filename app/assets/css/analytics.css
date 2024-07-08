@@ -194,3 +194,43 @@
 #pipeline-editor td {
   padding: 5px;
 }
+
+.conversion-data {
+  display: flex;
+  line-height: 1;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  background: #f1f3f5;
+  font-weight: bold;
+  color: rgb(103, 119, 136);
+  position: relative;
+}
+
+.conversion-data .change {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  line-height: 1;
+  display: block;
+  padding: 5px;
+  font-size: 60%;
+  border-radius: 3px;
+  font-weight: normal;
+  border: solid 1px;
+}
+
+.conversion-data .change.up {
+  color: rgb(0, 201, 167);
+  background-color: rgb(229 249 246);
+}
+
+.conversion-data .change.down {
+  color: rgb(237, 76, 120);
+  background-color: rgb(253 237 241);
+}
+
+#current-conversions td {
+  vertical-align: middle;
+}

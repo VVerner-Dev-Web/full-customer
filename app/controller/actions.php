@@ -349,6 +349,8 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Database.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Assets.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/PageView.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/Conversion.php';
+    require_once FULL_CUSTOMER_APP . '/controller/analytics/ConversionTracker.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/API.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Admin.php';
   endif;

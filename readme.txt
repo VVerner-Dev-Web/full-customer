@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
 Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 3.1.13
+Stable tag: 3.1.14
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.13 = 
+= 3.1.14 = 
 
-* Correção de segurança referente a checagem de licença.
+* Novas funcionalidades para a extensão FULL.Analytics
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

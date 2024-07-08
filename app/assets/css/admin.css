@@ -400,6 +400,25 @@ a.full-modal-close {
   pointer-events: none;
   position: relative;
 }
+.full-secondary-button {
+  display: inline-block;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 0.0625rem solid transparent;
+  padding: 5px;
+  font-size: 0.875rem;
+  line-height: 1;
+  border-radius: 0.3125rem;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #eabc32;
+}
 .full-form label,
 .templately-wrapper
   .templately-container
