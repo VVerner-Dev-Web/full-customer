@@ -31,13 +31,13 @@
     <div class="col-login">
       <?php if (fullIsCorrectlyConnected()) : ?>
 
-        <div id="full-connect">
+        <div id="full-connect" class="full-form">
           <h2>
             Site conectado!
           </h2>
 
           <p>Aproveite o melhor que a FULL. tem para aproveitar em seu site </p>
-          <a href="<?php echo esc_url($full->get('dashboard_url')) ?>" class="full-primary-button" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem">Acessar painel</a>
+          <a href="<?php echo esc_url($full->get('dashboard_url')) ?>" class="full-primary-button full-button-block" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem">Acessar painel</a>
         </div>
 
       <?php else : ?>
@@ -105,6 +105,13 @@
           <button class="full-primary-button full-button-block">Realizar conexão</button>
         </form>
       <?php endif; ?>
+
+      <div id="full-connection-validate">
+        <a href="<?= add_query_arg('full', 'verify_license') ?>">
+          Verificar licença PRO
+        </a>
+      </div>
+
     </div>
   </div>
 </div>

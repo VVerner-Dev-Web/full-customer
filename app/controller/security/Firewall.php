@@ -362,6 +362,10 @@ class Firewall
       return;
     endif;
 
+    if (is_admin() && current_user_can('edit_posts')) :
+      return;
+    endif;
+
     $request_uri_string = isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
     $query_string_string = isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
     $user_agent_string = isset($_SERVER['HTTP_USER_AGENT']) && !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
@@ -370,22 +374,27 @@ class Firewall
     $matches = [];
 
     if (strlen($request_uri_string) > self::REQUEST_MAX_LENGTH || strlen($referrer_string) > self::REQUEST_MAX_LENGTH) :
+      error_log(__LINE__);
       self::response([self::REQUEST_MAX_LENGTH]);
     endif;
 
     if ($request_uri_string && self::preg_match_array($request_uri_string, self::requestUriItems(), $matches)) :
+      error_log(__LINE__);
       self::response($matches);
     endif;
 
     if ($query_string_string && self::preg_match_array($query_string_string, self::queryStringItems(), $matches)) :
+      error_log(__LINE__);
       self::response($matches);
     endif;
 
     if ($user_agent_string && self::preg_match_array($user_agent_string, self::userAgentItems(), $matches)) :
+      error_log(__LINE__);
       self::response($matches);
     endif;
 
     if ($referrer_string && self::preg_match_array($referrer_string, self::referrerItems(), $matches)) :
+      error_log(__LINE__);
       self::response($matches);
     endif;
 
@@ -398,6 +407,7 @@ class Firewall
         }
 
         if (self::preg_match_array($value, self::postItems(), $matches)) {
+          error_log(__LINE__);
           self::response($matches);
           break;
         }

@@ -87,21 +87,6 @@ $worker = new Settings();
                       </label>
                     </td>
                   </tr>
-
-                  <tr>
-                    <th>
-                      <label for="enableMediaReplacement">Sobrescrever imagens</label>
-                    </th>
-                    <td>
-                      <label class="toggle-switch toggle-switch-sm" for="enableMediaReplacement">
-                        <input type="checkbox" name="enableMediaReplacement" value="1" class="toggle-switch-input" id="enableMediaReplacement" <?php checked($worker->get('enableMediaReplacement')) ?>>
-                        <span class="toggle-switch-label">
-                          <span class="toggle-switch-indicator"></span>
-                        </span>
-                      </label>
-                    </td>
-                  </tr>
-
                   <tr>
                     <th>
                       <button class="full-primary-button">Atualizar</button>

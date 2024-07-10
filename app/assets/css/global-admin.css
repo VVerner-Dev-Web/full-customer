@@ -1,3 +1,22 @@
+#full-connection-validate {
+  text-align: center;
+  margin-top: 15px;
+}
+
+#full-connection-validate a {
+  text-decoration: none;
+}
+
+#full-connection-validate span {
+  font-size: 1em;
+  display: none;
+}
+
+#full-connection-validate a {
+  display: inline-flex;
+  line-height: 1;
+}
+
 #full-notice-api,
 #open-full-notice-api {
   display: none;

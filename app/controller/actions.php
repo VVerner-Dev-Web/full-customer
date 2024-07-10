@@ -35,6 +35,17 @@ function insertAdminApiNotice(): void
   endif;
 }
 
+function forceLicenseCheck(): void
+{
+  if (filter_input(INPUT_GET, 'full') !== 'verify_license') :
+    return;
+  endif;
+
+  License::updateStatus();
+
+  wp_safe_redirect(remove_query_arg('full'));
+}
+
 function verifySiteConnection(): void
 {
   $flag = 'previous-connect-site-check';
@@ -246,7 +257,6 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/images/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/SvgUpload.php';
-    require_once FULL_CUSTOMER_APP . '/controller/images/MediaReplacement.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/ImageOptimization.php';
   endif;
