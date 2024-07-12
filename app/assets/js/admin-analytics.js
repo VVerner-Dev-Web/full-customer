@@ -172,8 +172,11 @@ jQuery(function ($) {
 
     for (const item of data) {
       const fromTotal = (item.value / funnelEntries) * 100;
-      const transition =
-        previous === null ? 100 : (item.value / previous) * 100;
+      let transition = previous === null ? 100 : (item.value / previous) * 100;
+
+      if (previous === 0) {
+        transition = 0;
+      }
 
       $("#journey-rate").append(
         `<tr><td><strong>${item.name}</strong></td><td>${numberFormat(

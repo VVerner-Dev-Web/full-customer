@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
 Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 3.1.15
+Stable tag: 3.1.16
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,10 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.15 = 
+= 3.1.16 = 
 
-* Adicionado um filtro no firewall para permitir adição de códigos personalizados sem disparar o erro 403
-* Adicionado funcionalidade para forçar a checagem da licença do FULL.PRO
-* Removido temporariamente a funcionalidade de substituição de imagens para evitar conflito com Elementor
+* O filtro dos templates agora carrega pelo navegador para evitar bloqueios de servidor
+* Correções na lógica para analise das jornadas no FULL.Analytics
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

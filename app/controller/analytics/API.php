@@ -223,7 +223,7 @@ class API
     $wpdb->query($drop);
 
     $create = "CREATE TABLE full_user_journeys AS
-      SELECT session, GROUP_CONCAT(page ORDER BY createdAt) AS journey
+      SELECT session,  GROUP_CONCAT(CONCAT('\"', page, '\"') ORDER BY createdAt)AS journey
       FROM " .  Database::$table . "
       WHERE createdAt BETWEEN '{$from->format('Y-m-d')} 00:00:00' AND '{$to->format('Y-m-d')} 23:59:59'
       GROUP BY session;";
@@ -239,7 +239,10 @@ class API
     foreach ($journey['stages'] as $stage) :
       $path  = parse_url($stage, PHP_URL_PATH);
       $where[] = trailingslashit($path);
-      $value = "SELECT COUNT(*) FROM full_user_journeys WHERE journey LIKE '%" . implode(',', $where) . "%'";
+
+      $value = "SELECT COUNT(*) FROM full_user_journeys WHERE journey LIKE '\"" . implode('","', $where) . "\"%'";
+
+      error_log($value);
 
       $response[] = [
         'name' => $path,
@@ -247,7 +250,7 @@ class API
       ];
     endforeach;
 
-    $wpdb->query($drop);
+    // $wpdb->query($drop);
 
     return $response ? $response : null;
   }

@@ -15,24 +15,8 @@ $index = 0;
       </div>
       <div class="tc-panel-body tc-content-active">
         <div class="templately-template-types">
-          <ul id="full-template-category-filter">
-            <?php foreach (TemplateManager::instance()->getCategories() as $index => $category) : ?>
-              <li class="<?= $index >= $maxVisibleItens ? 'hidden' : '' ?>">
-                <label class="toggle-switch toggle-switch-sm" for="category-<?= $category->id ?>" style="margin-top: .5rem">
-                  <input type="checkbox" value="<?= $category->id ?>" class="toggle-switch-input" id="category-<?= $category->id ?>">
-                  <span class="toggle-switch-label">
-                    <span class="toggle-switch-indicator"></span>
-                  </span>
-                  <span class="toggle-switch-content">
-                    <span style="display: block;"><?= $category->name ?></span>
-                  </span>
-                </label>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-          <?php if ($index >= $maxVisibleItens) : ?>
-            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
-          <?php endif; ?>
+          <ul id="full-template-category-filter" class="template-filter" data-filter="template-categories"></ul>
+          <span class="view-more-filters" style="display: none">Ver mais</span>
         </div>
       </div>
     </div>
@@ -42,25 +26,8 @@ $index = 0;
       </div>
       <div class="tc-panel-body tc-content-active">
         <div class="templately-template-types">
-          <ul id="full-template-type-filter">
-            <?php foreach (TemplateManager::instance()->getTypes() as $index => $type) : ?>
-              <li class="<?= $index > $maxVisibleItens ? 'hidden' : '' ?>">
-                <label class="toggle-switch toggle-switch-sm" for="type-<?= $type->id ?>" style="margin-top: .5rem">
-                  <input type="checkbox" value="<?= $type->id ?>" class="toggle-switch-input" id="type-<?= $type->id ?>">
-                  <span class="toggle-switch-label">
-                    <span class="toggle-switch-indicator"></span>
-                  </span>
-                  <span class="toggle-switch-content">
-                    <span style="display: block;"><?= $type->name ?></span>
-                  </span>
-                </label>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-          <?php if ($index > $maxVisibleItens) : ?>
-            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
-          <?php endif; ?>
+          <ul id="full-template-type-filter" class="template-filter" data-filter="template-types"></ul>
+          <span class="view-more-filters" style="display: none">Ver mais</span>
         </div>
       </div>
     </div>
@@ -70,25 +37,8 @@ $index = 0;
       </div>
       <div class="tc-panel-body tc-content-active">
         <div class="templately-template-types">
-          <ul id="full-template-segment-filter">
-            <?php foreach (TemplateManager::instance()->getSegments() as $index => $type) : ?>
-              <li class="<?= $index > $maxVisibleItens ? 'hidden' : '' ?>">
-                <label class="toggle-switch toggle-switch-sm" for="type-<?= sanitize_title($type) ?>" style="margin-top: .5rem">
-                  <input type="checkbox" value="<?= $type ?>" class="toggle-switch-input" id="type-<?= sanitize_title($type) ?>">
-                  <span class="toggle-switch-label">
-                    <span class="toggle-switch-indicator"></span>
-                  </span>
-                  <span class="toggle-switch-content">
-                    <span style="display: block;"><?= $type ?></span>
-                  </span>
-                </label>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-          <?php if ($index > $maxVisibleItens) : ?>
-            <span class="view-more-filters" data-visible_items="<?= $maxVisibleItens ?>">Ver mais</span>
-          <?php endif; ?>
+          <ul id="full-template-segment-filter" class="template-filter" data-filter="template-segments"></ul>
+          <span class="view-more-filters" style="display: none">Ver mais</span>
         </div>
       </div>
     </div>
@@ -185,3 +135,17 @@ $index = 0;
     Comprar
   </button>
 </script>
+
+<template id="filter-template">
+  <li class="">
+    <label class="toggle-switch toggle-switch-sm" for="" style="margin-top: .5rem">
+      <input type="checkbox" value="" class="toggle-switch-input" id="">
+      <span class="toggle-switch-label">
+        <span class="toggle-switch-indicator"></span>
+      </span>
+      <span class="toggle-switch-content">
+        <span style="display: block;"></span>
+      </span>
+    </label>
+  </li>
+</template>

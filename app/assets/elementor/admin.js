@@ -64,6 +64,8 @@
     }),
   };
 
+  const filterTemplate = () => $($("#filter-template").html());
+
   const getCurrentPage = () => {
     const page = parseInt($("#response-container").data("page"));
     return isNaN(page) ? 1 : page;
@@ -408,6 +410,68 @@
     }).then((response) => insertTemplateCallback(response, template));
   };
 
+  const initTemplateFilters = () => {
+    $(".template-filter").each(function () {
+      const $ul = $(this);
+      const cacheKey = "full-filters-" + $ul.data("filter");
+
+      const itemsInCache = JSON.parse(localStorage.getItem(cacheKey));
+
+      if (
+        itemsInCache &&
+        Date.now() - itemsInCache.timestamp < 1000 * 60 * 60 * 24
+      ) {
+        renderTemplateFilters($ul, itemsInCache.items);
+      } else {
+        $.get(FULL.dashboard_url + $ul.data("filter"), function (response) {
+          const list = response.items ?? response;
+          renderTemplateFilters($ul, list);
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              items: list,
+              timestamp: Date.now(),
+            })
+          );
+        });
+      }
+    });
+  };
+
+  const renderTemplateFilters = ($ul, list) => {
+    $ul.empty();
+
+    const maxVisible = 4;
+    let counter = 0;
+
+    for (const item of list) {
+      const normalized = {
+        id: typeof item === "string" ? "item-" + counter : item.id,
+        name: typeof item === "string" ? item : item.name,
+        value: typeof item === "string" ? item : item.name,
+      };
+
+      const $li = filterTemplate();
+      const id = "item-" + normalized.id;
+
+      $li.find(".toggle-switch").attr("for", id);
+      $li.find(".toggle-switch-input").val(normalized.value).attr("id", id);
+      $li.find(".toggle-switch-content span").text(normalized.name);
+
+      if (counter > maxVisible) {
+        $li.addClass("hidden");
+      }
+
+      $ul.append($li);
+
+      counter++;
+    }
+
+    if (counter > maxVisible) {
+      $ul.next().show();
+    }
+  };
+
   $(document).on(
     "change",
     "#full-template-category-filter input",
@@ -584,17 +648,17 @@
   );
 
   $(document).on("full-templates/ready", function () {
+    initTemplateFilters();
     resetAndFetchTemplates();
   });
 
   $(document).on("click", ".view-more-filters", function () {
     const $trigger = $(this);
     const $ul = $trigger.prev();
-    const visibleItems = parseInt($trigger.data("visible_items")) - 1;
 
     if ($trigger.is(".opened")) {
       $trigger.text("Ver mais").removeClass("opened");
-      $ul.find("li:gt(" + visibleItems + ")").addClass("hidden");
+      $ul.find("li:gt(4)").addClass("hidden");
     } else {
       $trigger.text("Fechar").addClass("opened");
       $ul.find("li.hidden").removeClass("hidden");
@@ -602,6 +666,7 @@
   });
 
   $(document).on("full-templates/ready", initItemGallery);
+  $(document).on("full-templates/ready", initTemplateFilters);
 
   $(document).on("keydown", "#template-searcher input", function (e) {
     if (e.key === "Enter") {
@@ -636,6 +701,7 @@
     resetAndFetchTemplates(page);
   });
 
+  initTemplateFilters();
   initItemGallery();
   if ($("#response-container").length) {
     resetAndFetchTemplates();
