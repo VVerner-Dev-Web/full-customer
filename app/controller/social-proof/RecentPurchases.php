@@ -55,6 +55,13 @@ class RecentPurchases
   private function extractOrderData(WC_Order $order): array
   {
     $data = [];
+    $ip = $order->get_customer_ip_address() ? $order->get_customer_ip_address() : '72.14.201.200';
+
+    $fetch = wp_remote_get("https://ipinfo.io/{$ip}/json", ['sslverify' => false]);
+    $fetch = json_decode(wp_remote_retrieve_body($fetch));
+
+    $location = isset($fetch->loc) ? implode(',', array_reverse(explode(',', $fetch->loc))) : '';
+
     foreach ($order->get_items() as $item) :
       $product = $item->get_product();
 
@@ -62,9 +69,10 @@ class RecentPurchases
         'product' => $product ? $product->get_name() : '',
         'image' => $product ? wp_get_attachment_url($product->get_image_id()) : '',
         'customerFirstName' => $order->get_billing_first_name(),
-        'customerLastName' => $order->get_billing_last_name(),
+        'customerLastName' => $order->get_billing_last_name() ? $order->get_billing_last_name()[0] . '.' : '',
         'customerLocation' => $order->get_billing_city() . '/' . $order->get_billing_state(),
         'orderDate' => $order->get_date_created()->format('d/m/Y'),
+        'location'  => $location
       ];
     endforeach;
     return $data;
@@ -100,6 +108,10 @@ class RecentPurchases
     $orderDate = $this->env->fragmentEnabled('orderDate') ? ' em <span data-fragment="orderDate"></span>' : '';
     $productThumbnail = $this->env->fragmentEnabled('productThumbnail') ? '<img src="" data-fragment="image">' : '';
 
+    if ($this->env->fragmentEnabled('userLocation')) :
+      $template = str_replace('{img}', '<div id="full-map"></div>', $template);
+    endif;
+
     $template = str_replace('{name}', ($name ? $name : 'Alguém'), $template);
     $template = str_replace('{address}', ($address ? $address : ''), $template);
     $template = str_replace('{orderDate}', ($orderDate ? $orderDate : ''), $template);
@@ -117,10 +129,15 @@ class RecentPurchases
     $version = getFullAssetsVersion();
     $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
+    wp_enqueue_style('openlayers', $baseUrl . 'vendor/openlayer/style.css', [], '9.4.2');
+    wp_enqueue_script('openlayers', $baseUrl . 'vendor/openlayer/app.js', [], '9.4.2', true);
+
     wp_enqueue_style('full-social-proof', $baseUrl . 'css/social-proof.css', [], $version);
     wp_enqueue_script('full-social-proof', $baseUrl . 'js/social-proof.js', ['jquery'], $version, true);
+
     wp_localize_script('full-social-proof', 'socialProofFeed', [
       'url' => add_query_arg('v', uniqid(), $this->feedUrl),
+      'mapPin' => $baseUrl . 'img/location-pin.png'
     ]);
   }
 }

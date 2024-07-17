@@ -29,6 +29,7 @@ add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
 add_action(Proxy::CRON_JOB_NAME, ['\Full\Customer\Proxy', 'cronJob']);
 
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
+add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorAddons');
 
 add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\ElementorAi', 'registerRoutes']);

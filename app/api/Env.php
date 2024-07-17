@@ -87,6 +87,27 @@ class FullCustomer
       $this->set('enabled_services', $default);
     endif;
 
+    if (!get_option('full_customer/seo-migrated')) :
+      $services   = $this->get('enabled_services');
+      $legacySeo  = ['full-ai-images', 'full-ai-meta', 'full-clone'];
+      $found      = false;
+
+      foreach ($legacySeo as $key) :
+        $index = array_search($key, $services, true);
+        if ($index !== false) :
+          $found = true;
+          unset($services[$index]);
+        endif;
+      endforeach;
+
+      if ($found) :
+        $services[] = 'full-seo';
+        $this->set('enabled_services', $services);
+      endif;
+
+      update_option('full_customer/seo-migrated', 1, false);
+    endif;
+
     return $this->get('enabled_services') ?? [];
   }
 

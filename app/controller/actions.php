@@ -312,16 +312,6 @@ function startWidgets(): void
     endif;
   endif;
 
-  if (fullCustomer()->isServiceEnabled('full-clone')) :
-    require_once FULL_CUSTOMER_APP . '/controller/content/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/content/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/content/Settings.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/content/Posts.php';
-    require_once FULL_CUSTOMER_APP . '/controller/content/Links.php';
-    require_once FULL_CUSTOMER_APP . '/controller/content/Comments.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
     require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
@@ -339,19 +329,18 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/Settings.php';
   endif;
 
-  if (fullCustomer()->isServiceEnabled('full-ai-images')) :
-    require_once FULL_CUSTOMER_APP . '/controller/ai-images/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/ai-images/actions.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
     require_once FULL_CUSTOMER_APP . '/controller/ai-copy/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/ai-copy/actions.php';
   endif;
 
-  if (fullCustomer()->isServiceEnabled('full-ai-meta')) :
-    require_once FULL_CUSTOMER_APP . '/controller/ai-meta/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/ai-meta/actions.php';
+  if (fullCustomer()->isServiceEnabled('full-seo')) :
+    require_once FULL_CUSTOMER_APP . '/controller/seo/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/seo/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/seo/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/seo/Posts.php';
+    require_once FULL_CUSTOMER_APP . '/controller/seo/Links.php';
+    require_once FULL_CUSTOMER_APP . '/controller/seo/Comments.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-analytics')) :
@@ -377,6 +366,12 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Frontend.php';
     require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Admin.php';
   endif;
+
+  if (fullCustomer()->isServiceEnabled('full-checkout_redirect')) :
+    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Admin.php';
+    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Frontend.php';
+  endif;
 }
 
 function initFullElementorTemplates(): void
@@ -388,5 +383,12 @@ function initFullElementorTemplates(): void
     require_once FULL_CUSTOMER_APP . '/controller/elementor/TemplateManager.php';
     require_once FULL_CUSTOMER_APP . '/controller/elementor/Importer.php';
     require_once FULL_CUSTOMER_APP . '/controller/elementor/Exporter.php';
+  endif;
+}
+
+function initFullElementorAddons(): void
+{
+  if (class_exists('\Elementor\Plugin')) :
+    require_once FULL_CUSTOMER_APP . '/controller/elementor-addons/Registrar.php';
   endif;
 }

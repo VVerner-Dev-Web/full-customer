@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.2
 Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 3.1.16
+Stable tag: 3.1.17
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,9 +65,13 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.16 = 
+= 3.1.17 = 
 
-* O filtro dos templates agora carrega pelo navegador para evitar bloqueios de servidor
-* Correções na lógica para analise das jornadas no FULL.Analytics
+* Adicionado nova widget para elementor - Calendly
+* Nova extensão - FULL. Checkout Redirect . Ela permite redirecionar os usuários após finalização do pedido no WooCommerce
+* Nas extensões WhatsApp e SocialProof foi adicionado o z-index: 999 para ficar acima de outros elementos na página
+* Unificamos 3 extensões para criar a extensão FULL.SEO
+* Nova extensão nativa - FULL. ElementorAddons. Com ela adicionamos novos recursos ao construtor de páginas Elementor!
+* Possibilidade de exibir um mapa de localização no popup do FULL.Social Proof
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

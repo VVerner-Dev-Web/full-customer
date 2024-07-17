@@ -1,6 +1,6 @@
 <?php
 
-namespace Full\Customer\Content;
+namespace Full\Customer\Seo;
 
 defined('ABSPATH') || exit;
 

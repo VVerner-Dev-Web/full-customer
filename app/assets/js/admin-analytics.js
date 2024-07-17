@@ -277,7 +277,7 @@ jQuery(function ($) {
     $stageEditor.find("tbody").append($template);
   });
 
-  $("#chartJourney").on("change", updateJourneyChart);
+  $("#chartJourney").on("change", () => updateJourneyChart());
 
   $stageEditor.on("click", ".up-stage", function (e) {
     const $tr = $(this).closest("tr");

@@ -35,6 +35,10 @@ class Assets
 
   public function admin(): void
   {
+    if ('analytics' !== fullAdminPageEndpoint()) :
+      return;
+    endif;
+
     wp_enqueue_style('full-analytics', plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/css/analytics.css', [], getFullAssetsVersion());
 
     wp_enqueue_script('full-chartjs', plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/vendor/chartjs/app.js', [], '4.4.1', true);

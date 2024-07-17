@@ -1,6 +1,7 @@
 #fc-whatsapp-container {
   position: fixed;
   bottom: min(3%, 1em);
+  z-index: 999;
 }
 
 #fc-whatsapp-container.bottom-left {

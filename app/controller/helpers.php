@@ -79,7 +79,7 @@ function fullGetLocalize(): array
     'store_url'     => 'https://full.services',
     'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png'),
     'full_pro'      => License::isActive(),
-    'enabled_services' => $env->getEnabledServices(),
+    'enabled_services' => array_values($env->getEnabledServices()),
   ];
 }
 

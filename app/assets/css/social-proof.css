@@ -1,6 +1,7 @@
 .full-social-proof-social {
   position: fixed;
   bottom: 15px;
+  z-index: 999;
 }
 
 .full-social-proof-social.bottom-left {
@@ -31,13 +32,19 @@
   gap: 10px;
 }
 
+.full-social-proof-social .customer-information {
+  flex: 1;
+  flex-basis: calc(100% - 50px);
+}
+
 .full-social-proof-social p {
   margin: 0;
   line-height: 1;
   font-size: 12px;
 }
 
-.full-social-proof-social img {
+.full-social-proof-social img,
+#full-map {
   width: 50px;
   aspect-ratio: 1;
   -o-object-fit: cover;

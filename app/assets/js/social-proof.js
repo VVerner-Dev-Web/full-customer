@@ -11,6 +11,40 @@ jQuery(function ($) {
 
   const popupContent = () => $($("#full-woo-orders-popup-template").html());
 
+  const createMap = (long, lat) => {
+    return new ol.Map({
+      target: "full-map",
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: [
+              new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([long, lat])),
+              }),
+            ],
+          }),
+          style: new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              crossOrigin: "anonymous",
+              src: socialProofFeed.mapPin,
+            }),
+          }),
+        }),
+      ],
+      view: new ol.View({
+        constrainResolution: true,
+        center: ol.proj.fromLonLat([long, lat]),
+        zoom: 14,
+      }),
+      controls: [],
+      interactions: [],
+    });
+  };
+
   $.get(socialProofFeed.url, function (response) {
     data = response ? response : [];
   });
@@ -36,6 +70,15 @@ jQuery(function ($) {
         .find(".full-woo-orders-popup-inner")
         .replaceWith($content);
 
+      console.log();
+
+      if ($recentPurchasePopup.find("#full-map") && item.location) {
+        const [long, lat] = item.location.split(",");
+        createMap(long, lat);
+      } else {
+        $recentPurchasePopup.find("#full-map").hide();
+      }
+
       index = index + 1 >= data.length ? 0 : index + 1;
       sessionStorage.setItem("socialProofIndex", index);
     }
@@ -59,5 +102,8 @@ jQuery(function ($) {
 
   if ($recentPurchasePopup.length && $recentVisitorsPopup.length) {
     $recentPurchasePopup.addClass("stacked");
+  }
+
+  if (typeof ol !== "undefined") {
   }
 });

@@ -1,12 +1,12 @@
 <?php
 
-namespace Full\Customer\Content;
+namespace Full\Customer\CheckoutRedirect;
 
 defined('ABSPATH') || exit;
 
 class Settings
 {
-  const PREFIX = 'content-';
+  const PREFIX = 'checkout-redirect-';
 
   public function set(string  $prop, $value): void
   {

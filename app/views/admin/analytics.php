@@ -1,6 +1,5 @@
 <?php
 
-use Full\Customer\Analytics\Conversion;
 use Full\Customer\Analytics\Settings;
 
 $env = new Settings;

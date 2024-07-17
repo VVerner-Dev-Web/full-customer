@@ -1,6 +1,6 @@
 <?php
 
-namespace Full\Customer\Content;
+namespace Full\Customer\Seo;
 
 use WP_Post;
 

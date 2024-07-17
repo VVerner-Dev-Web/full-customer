@@ -114,6 +114,14 @@ $env = new Full\Customer\SocialProof\Settings();
 
                             Foto do produto
                           </label>
+                          <label style="gap: 5px; margin-bottom: 5px;" class="toggle-switch toggle-switch-sm" for="userLocation">
+                            <input type="checkbox" name="ordersPopupFragments[]" value="userLocation" class="toggle-switch-input" id="userLocation" <?= checked($env->fragmentEnabled('userLocation')) ?>>
+                            <span class="toggle-switch-label">
+                              <span class="toggle-switch-indicator"></span>
+                            </span>
+
+                            Mapa do usuário
+                          </label>
                         </td>
                       </tr>
 
