@@ -38,9 +38,6 @@ class Whitelabel extends FullCustomerController
 
     $this->env->set('whitelabel_settings', $received);
 
-    $allow = isset($received['allow_backlink']) && $received['allow_backlink'] === 'yes';
-    $this->env->set('allow_backlink', $allow);
-
     return new WP_REST_Response(['updated' => $received]);
   }
 

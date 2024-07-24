@@ -31,13 +31,13 @@ $quota = get_option('full/ai/quota', null)
 
           <div class="full-page-content">
 
-            <ul id="analytics-view-nav">
+            <ul id="analytics-view-nav" class="full-tab-nav">
               <li><a href="#powerups">PowerUps</a></li>
               <li><a href="#image-alt">Gerador de Alt para Imagens</a></li>
               <li><a href="#meta-generator">Gerador de MetaDescription</a></li>
             </ul>
 
-            <div class="analytics-view" id="powerups">
+            <div class="full-tab-panel analytics-view" id="powerups">
 
               <form method="POST" id="full-content-settings" class="full-widget-form">
                 <?php wp_nonce_field('full/widget/content-settings'); ?>
@@ -128,25 +128,11 @@ $quota = get_option('full/ai/quota', null)
               </form>
             </div>
 
-            <div class="analytics-view" id="image-alt">
-              <br>
-              <p>
-                Uso de palavras <span data-quota="used"><?= $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?= $quota ? $quota->granted : '0' ?></span>
-              </p>
+            <div class="full-tab-panel analytics-view" id="image-alt">
 
-              <div id="image-alt-generator" class="full-widget-form" style="padding: 16px">
-                <p>O atributo "alt" para as imagens define um texto descritivo para a imagem em questão. Ele é extremamente necessário para a acessibilidade do seu site e também pode causar impacto positivo no SEO dos seus conteúdos.</p>
-
-                <div id="images-response"></div>
-
-                <div style="text-align: center; margin-top: 30px;">
-                  <span class="images-pagination"></span><br>
-                  <button type="button" data-page="1" id="search-images-missing-alt" class="full-primary-button">Procurar imagens sem alt text</button>
-                </div>
-              </div>
             </div>
 
-            <div class="analytics-view" id="meta-generator">
+            <div class="full-tab-panel analytics-view" id="meta-generator">
               <br>
               <p>
                 Uso de palavras <span data-quota="used"><?= $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?= $quota ? $quota->granted : '0' ?></span>
@@ -199,17 +185,3 @@ $quota = get_option('full/ai/quota', null)
     </div>
   </div>
 </div>
-
-<script type="text/template" id="template-image-missing-alt">
-  <form class="image-card alt-form">
-    <input type="hidden" class="attachmentId" value="{id}">
-    <a href="{url}" target="_blank" rel="noopener noreferrer">
-      <img src="{url}">
-    </a>
-    <div class="image-content">
-      <textarea rows="2" class="custom-input alt-input" placeholder="Atributo ALT para ser usado na imagem" rows="2" required></textarea>
-      <button type="button" class="full-primary-button generate-image-alt" >Gerar conteúdo</button>
-      <button type="submit" class="full-primary-button update-image-alt"  style="display: none">Atualizar</button>
-    </div>
-  </form>
-</script>

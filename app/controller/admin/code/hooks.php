@@ -4,7 +4,6 @@ namespace Full\Customer\Code;
 
 defined('ABSPATH') || exit;
 
-add_action('admin_menu', 'Full\Customer\Code\Actions\addMenuPages');
 add_action('admin_enqueue_scripts', 'Full\Customer\Code\Actions\adminEnqueueScripts');
 add_action('wp_enqueue_scripts', 'Full\Customer\Code\Actions\enqueueFrontendCustomStyles');
 add_action('admin_enqueue_scripts', 'Full\Customer\Code\Actions\enqueueAdminCustomStyles');

@@ -25,7 +25,7 @@ $env = new Full\Customer\SocialProof\Settings();
           </div>
 
           <div class="full-page-content">
-            <ul id="analytics-view-nav">
+            <ul id="analytics-view-nav" class="full-tab-nav">
               <?php if (defined('WC_PLUGIN_FILE')) : ?>
                 <li><a href="#recent-purchases">Compras recentes</a></li>
               <?php endif; ?>
@@ -34,7 +34,7 @@ $env = new Full\Customer\SocialProof\Settings();
             </ul>
 
             <?php if (defined('WC_PLUGIN_FILE')) : ?>
-              <div class="analytics-view" id="recent-purchases">
+              <div class="analytics-view full-tab-panel " id="recent-purchases">
                 <form method="POST" id="full-social-proof-settings" class="full-widget-form">
 
                   <p>Este popup exibirá informações das últimas compras realizadas na loja.</p>
@@ -155,7 +155,7 @@ $env = new Full\Customer\SocialProof\Settings();
               </div>
             <?php endif; ?>
 
-            <div class="analytics-view" id="product-visitors">
+            <div class="analytics-view full-tab-panel " id="product-visitors">
               <form method="POST" id="full-social-proof-settings" class="full-widget-form">
 
                 <p>Este popup exibirá quantos acessos cada url teve na janela de tempo configurada</p>

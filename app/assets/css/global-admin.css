@@ -463,3 +463,37 @@
 #update-widgets:hover {
   box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.1);
 }
+
+#full-widgets {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 3em;
+}
+
+#full-widgets h4 {
+  margin: 0;
+}
+
+#full-widgets .widgets-grid {
+  margin-top: 0.5em;
+}
+
+#full-widgets #fw-basic {
+  order: 2;
+}
+
+#full-widgets #fw-nativo {
+  order: 1;
+}
+
+#full-widgets #fw-pro {
+  order: 4;
+}
+
+#full-widgets #fw-advanced {
+  order: 3;
+}
+
+#full-widgets #fw-add-on {
+  order: 99;
+}

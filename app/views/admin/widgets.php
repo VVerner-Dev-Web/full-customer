@@ -52,9 +52,6 @@ use Full\Customer\License; ?>
     <div class="description">
       <h4>
         <span class="widget-name"></span>
-        <span class="badge templately-badge">
-          <span></span>
-        </span>
       </h4>
       <div class="widget-description"></div>
       <a href="{url}" target="_blank" rel="noopener noreferrer">Saiba mais</a>

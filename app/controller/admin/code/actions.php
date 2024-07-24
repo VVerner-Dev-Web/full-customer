@@ -6,21 +6,9 @@ use Full\Customer\Code\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
-{
-  add_submenu_page(
-    'full-connection',
-    'FULL.code',
-    'FULL.code',
-    'edit_posts',
-    'full-code',
-    'fullGetAdminPageView'
-  );
-}
-
 function adminEnqueueScripts(): void
 {
-  if ('code' !== fullAdminPageEndpoint()) :
+  if ('config' !== fullAdminPageEndpoint()) :
     return;
   endif;
 

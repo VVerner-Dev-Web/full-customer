@@ -9,23 +9,8 @@ jQuery(function ($) {
     "page:view": "Acesso a página",
   };
 
-  const $tabLinks = $("#analytics-view-nav a");
   const $periodInput = $("#dataPeriod");
   const $stageEditor = $("#pipeline-editor");
-
-  $tabLinks.on("click", function (e) {
-    e.preventDefault();
-
-    const $target = $($(this).attr("href"));
-
-    $tabLinks.not(this).removeClass("active");
-    $(this).addClass("active");
-
-    $(".analytics-view").hide();
-    $target.show();
-  });
-
-  $tabLinks.first().trigger("click");
 
   const picker = new Litepicker({
     autoRefresh: true,

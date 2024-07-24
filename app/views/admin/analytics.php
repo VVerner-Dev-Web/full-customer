@@ -26,14 +26,14 @@ $env = new Settings;
           </div>
 
           <div class="full-page-content">
-            <ul id="analytics-view-nav">
+            <ul id="analytics-view-nav" class="full-tab-nav">
               <li><a href="#dashboard">Relatórios</a></li>
               <li><a href="#journeys">Jornadas</a></li>
               <li><a href="#conversions">Conversões</a></li>
               <li><a href="#settings">Configurações</a></li>
             </ul>
 
-            <div class="analytics-view" id="dashboard">
+            <div class="full-tab-panel analytics-view" id="dashboard">
 
               <div id="chart-area">
                 <div class="_header">
@@ -141,7 +141,7 @@ $env = new Settings;
               </div>
             </div>
 
-            <div class="analytics-view" id="journeys">
+            <div class="full-tab-panel analytics-view" id="journeys">
               <h3>Jornada dos visitantes</h3>
               <p>Crie múltiplas jornadas de usuários ao site e acompanhe a navegação deles em seu site</p>
 
@@ -161,7 +161,7 @@ $env = new Settings;
               <button data-modal="#modal-journey-editor" class="full-primary-button">Criar jornada</button>
             </div>
 
-            <div class="analytics-view" id="conversions">
+            <div class="full-tab-panel analytics-view" id="conversions">
               <h3>Conversões</h3>
               <p>Defina eventos de conversão em seu site e acompanhe a evolução deles</p>
 
@@ -186,7 +186,7 @@ $env = new Settings;
               <button data-modal="#modal-conversion-editor" class="full-primary-button">Criar conversão</button>
             </div>
 
-            <div class="analytics-view" id="settings">
+            <div class="full-tab-panel analytics-view" id="settings">
               <form class="full-widget-form" id="full-analytics-settings" style="min-height: 500px">
                 <?php wp_nonce_field('full/analytics/settings'); ?>
                 <input type="hidden" name="action" value="full/analytics/settings">

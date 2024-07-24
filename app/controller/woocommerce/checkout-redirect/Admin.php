@@ -12,23 +12,10 @@ class Admin
   {
     $cls = new self();
 
-    add_action('admin_menu', [$cls, 'addMenuPages'], 150);
     add_action('wp_ajax_full/widget/checkout-redirect', [$cls, 'ajaxCallback']);
 
     add_action('woocommerce_product_options_general_product_data', [$cls, 'addProductFields']);
     add_action('woocommerce_process_product_meta', [$cls, 'processProductFields']);
-  }
-
-  public function addMenuPages(): void
-  {
-    add_submenu_page(
-      'full-connection',
-      'FULL.Checkout Redirect',
-      'FULL.Checkout Redirect',
-      'edit_posts',
-      'full-checkout-redirect',
-      'fullGetAdminPageView'
-    );
   }
 
   public function ajaxCallback(): void

@@ -260,8 +260,6 @@
 
           $widget.find("img").attr("src", widget.icon).attr("alt", widget.name);
           $widget.find(".widget-name").text(widget.name);
-          $widget.find(".badge").addClass("templately-" + widget.tier);
-          $widget.find(".templately-badge span").text(widget.tierLabel);
           $widget.find(".widget-description").text(widget.description);
           $widget.find("a").attr("href", widget.url);
 
@@ -404,22 +402,20 @@
 
   // TABS
   // ========================
-  $(".full-page-content .tabs a").on("click", function (e) {
+  const $tabLinks = $(".full-tab-nav a");
+  $tabLinks.on("click", function (e) {
     e.preventDefault();
 
-    const $el = $(this);
-    const $panel = $($el.attr("href"));
+    const $target = $($(this).attr("href"));
 
-    if (!$panel.length) {
-      return alert("Em breve");
-    }
+    $tabLinks.not(this).removeClass("active");
+    $(this).addClass("active");
 
-    $(".full-page-content .tabs a").removeClass("active");
-    $(".full-page-content .tabbed-content .full-widget-form").hide();
-
-    $el.addClass("active");
-    $panel.slideToggle();
+    $(".full-tab-panel").hide();
+    $target.show();
   });
+
+  $tabLinks.first().trigger("click");
 
   // ACCESS TOKEN
   // ========================

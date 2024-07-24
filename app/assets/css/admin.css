@@ -1,4 +1,4 @@
-#analytics-view-nav {
+.full-tab-nav {
   margin: 0;
   display: flex;
   justify-content: flex-start;
@@ -6,11 +6,11 @@
   gap: 1em;
 }
 
-#analytics-view-nav li {
+.full-tab-nav li {
   margin: 0;
 }
 
-#analytics-view-nav a {
+.full-tab-nav a {
   background: #f7f7f8;
   padding: 1em;
   border-radius: 10px 10px 0 0;
@@ -20,19 +20,19 @@
   color: #363636;
 }
 
-#analytics-view-nav a.active {
+.full-tab-nav a.active {
   background: #fff;
   font-weight: bold;
 }
 
-.analytics-view {
+.full-tab-panel {
   background: #fff;
   padding: 1em;
   border-radius: 0 0 5px 5px;
   display: none;
 }
 
-.analytics-view * {
+.full-tab-panel * {
   box-sizing: border-box;
 }
 

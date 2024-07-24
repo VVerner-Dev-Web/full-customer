@@ -17,7 +17,7 @@ class OrderReceived
   {
     $env = new Settings();
 
-    if (trim($env->get('orderReceivedPageCustomCode')) === '' || trim($env->get('orderReceivedPageCustomCode')) === '0') :
+    if (!$env->get('orderReceivedPageCustomCode') || trim($env->get('orderReceivedPageCustomCode')) === '' || trim($env->get('orderReceivedPageCustomCode')) === '0') :
       return;
     endif;
 

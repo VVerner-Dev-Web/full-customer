@@ -10,10 +10,10 @@ function addMenuPages(): void
 {
   add_submenu_page(
     'full-connection',
-    'FULL.admin',
-    'FULL.admin',
+    'FULL.config',
+    'FULL.config',
     'edit_posts',
-    'full-admin',
+    'full-config',
     'fullGetAdminPageView'
   );
 }

@@ -11,7 +11,10 @@ function insertFooterNote(): void
   $full = fullCustomer();
   $file = FULL_CUSTOMER_APP . '/views/footer/note.php';
 
-  if ($full->get('allow_backlink') && file_exists($file)) :
+  $settings = $full->get('whitelabel_settings');
+  $enabled = is_array($settings) && isset($settings['allow_backlink']) ? $settings['allow_backlink'] !== 'no' : true;
+
+  if ($enabled && file_exists($file)) :
     require_once $file;
   endif;
 }
@@ -79,8 +82,6 @@ function activationAnalyticsHook(): void
       'plugin_status' => 'active'
     ])
   ]);
-
-  $full->set('allow_backlink', true);
 }
 
 function deactivationAnalyticsHook(): void
@@ -261,27 +262,23 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/images/ImageOptimization.php';
   endif;
 
-  if (fullCustomer()->isServiceEnabled('full-code')) :
-    require_once FULL_CUSTOMER_APP . '/controller/code/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/code/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/code/Settings.php';
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-speed')) :
-    require_once FULL_CUSTOMER_APP . '/controller/speed/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/DeprecatedComponents.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/BlockBasedFeatures.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/Revisions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/speed/Heartbeat.php';
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-admin')) :
+  if (fullCustomer()->isServiceEnabled('full-config')) :
     require_once FULL_CUSTOMER_APP . '/controller/admin/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/admin/AdminInterface.php';
+
+    require_once FULL_CUSTOMER_APP . '/controller/admin//code/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//code/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//code/Settings.php';
+
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/DeprecatedComponents.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/BlockBasedFeatures.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Revisions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Heartbeat.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-security')) :
@@ -300,6 +297,14 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/actions.php';
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/Settings.php';
 
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Frontend.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Admin.php';
+
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Admin.php';
+    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Frontend.php';
+
     if (function_exists('WC')) :
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/EstimateMode.php';
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/HidePrices.php';
@@ -310,11 +315,6 @@ function startWidgets(): void
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/AutocompleteOrders.php';
       require_once FULL_CUSTOMER_APP . '/controller/woocommerce/WhatsAppCheckout.php';
     endif;
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-shortcodes')) :
-    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/shortcodes/Collection.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
@@ -359,18 +359,6 @@ function startWidgets(): void
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentPurchases.php';
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentVisitors.php';
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/Admin.php';
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-secret-coupon')) :
-    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Frontend.php';
-    require_once FULL_CUSTOMER_APP . '/controller/secret-coupon/Admin.php';
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-checkout_redirect')) :
-    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Admin.php';
-    require_once FULL_CUSTOMER_APP . '/controller/checkout-redirect/Frontend.php';
   endif;
 }
 

@@ -6,18 +6,6 @@ use Full\Customer\Speed\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
-{
-  add_submenu_page(
-    'full-connection',
-    'FULL.speed',
-    'FULL.speed',
-    'edit_posts',
-    'full-speed',
-    'fullGetAdminPageView'
-  );
-}
-
 function updateSettings(): void
 {
   check_ajax_referer('full/widget/speed-settings');
