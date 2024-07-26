@@ -6,16 +6,14 @@ use Full\Customer\WhatsApp\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.whatsapp',
-    'FULL.whatsapp',
-    'edit_posts',
-    'full-whatsapp',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.whatsapp',
+    'endpoint' => 'full-whatsapp'
+  ];
+
+  return $menu;
 }
 
 function addMetaBoxes(): void

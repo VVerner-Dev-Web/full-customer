@@ -45,20 +45,14 @@ function editorAfterEnqueueScripts(): void
   wp_localize_script('full-elementor', 'FULL', fullGetLocalize());
 }
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  $full = fullCustomer();
+  $menu[] = [
+    'name' => fullCustomer()->isServiceEnabled('full-templates') ? 'FULL.templates' : 'FULL.cloud',
+    'endpoint' => 'full-templates'
+  ];
 
-  $name = $full->isServiceEnabled('full-templates') ? 'FULL.templates' : 'FULL.cloud';
-
-  add_submenu_page(
-    'full-connection',
-    $name,
-    $name,
-    'edit_posts',
-    'full-templates',
-    'fullGetAdminPageView'
-  );
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

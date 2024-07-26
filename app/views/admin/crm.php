@@ -22,7 +22,7 @@ $forms = $worker->getForms();
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title full-widget-title">
-                <h3>FULL.Elementor CRM <abbr title="Lembre-se! Apenas formulários que já capturaram pelo menos um contato serão considerados pelo CRM."><span class="dashicons dashicons-info"></span></abbr></h3>
+                <h3>FULL.elementor crm <abbr title="Lembre-se! Apenas formulários que já capturaram pelo menos um contato serão considerados pelo CRM."><span class="dashicons dashicons-info"></span></abbr></h3>
               </div>
             </div>
           </div>

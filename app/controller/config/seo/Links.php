@@ -29,12 +29,12 @@ class Links
 
   public function redirect404(): void
   {
-    if (!is_404() || is_admin() || (defined('DOING_CRON') && DOING_CRON) || (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST)) {
+    if (!is_404() || is_admin() || defined('DOING_CRON') && DOING_CRON || defined('XMLRPC_REQUEST') && XMLRPC_REQUEST) {
       return;
-    } else {
+    } elseif (is_404()) {
       header('HTTP/1.1 301 Moved Permanently');
-      header('Location: ' . home_url());
-      exit();
+      header('Location: ' . site_url());
+      exit;
     }
   }
 

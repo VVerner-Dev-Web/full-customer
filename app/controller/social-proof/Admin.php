@@ -12,22 +12,20 @@ class Admin
   {
     $cls = new self();
 
-    add_action('admin_menu', [$cls, 'addMenuPages'], 150);
+    add_filter('full-customer/active-widgets-menu', [$cls, 'addMenuPages'], 150);
     add_action('admin_enqueue_scripts', [$cls, 'enqueueScripts'], 150);
     add_action('wp_ajax_full/widget/social-proof/purchases', [$cls, 'purchasesAjaxCallback']);
     add_action('wp_ajax_full/widget/social-proof/visitors', [$cls, 'visitorsAjaxCallback']);
   }
 
-  public function addMenuPages(): void
+  public function addMenuPages(array $menu): array
   {
-    add_submenu_page(
-      'full-connection',
-      'FULL.SocialProof',
-      'FULL.SocialProof',
-      'edit_posts',
-      'full-social-proof',
-      'fullGetAdminPageView'
-    );
+    $menu[] = [
+      'name' => 'FULL.social proof',
+      'endpoint' => 'full-social-proof'
+    ];
+
+    return $menu;
   }
 
   public function enqueueScripts(): void

@@ -6,16 +6,14 @@ use Full\Customer\Security\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.firewall',
-    'FULL.firewall',
-    'edit_posts',
-    'full-security',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.firewall',
+    'endpoint' => 'full-security'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

@@ -14,7 +14,7 @@ class Admin
   {
     $cls = new self();
 
-    add_action('admin_menu', [$cls, 'addMenuPages'], 150);
+    add_filter('full-customer/active-widgets-menu', [$cls, 'addMenuPages'], 150);
     add_action('wp', [$cls, 'registerCronJob']);
     add_action(self::CRON_JOB, [$cls, 'cron']);
   }
@@ -47,16 +47,14 @@ class Admin
     $wpdb->query("OPTIMIZE TABLE `" . Database::$table . "`");
   }
 
-  public function addMenuPages(): void
+  public function addMenuPages(array $menu): array
   {
-    add_submenu_page(
-      'full-connection',
-      'FULL.analytics',
-      'FULL.analytics',
-      'edit_posts',
-      'full-analytics',
-      'fullGetAdminPageView'
-    );
+    $menu[] = [
+      'name' => 'FULL.analytics',
+      'endpoint' => 'full-analytics',
+    ];
+
+    return $menu;
   }
 }
 

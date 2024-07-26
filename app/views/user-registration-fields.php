@@ -1,7 +1,7 @@
 <?php $expirationDate = $user ? get_user_meta($user->ID, 'full/expirationDate', true) : ''; ?>
 
 <div id="full-temporary-settings">
-  <h3>FULL. - Acesso temporário</h3>
+  <h3>FULL.acess</h3>
   <table class="form-table">
     <tr>
       <th>

@@ -19,7 +19,7 @@ $env = new Full\Customer\SocialProof\Settings();
           <div class="templately-contents-header">
             <div class="templately-contents-header-inner">
               <div class="templately-header-title full-widget-title">
-                <h3>FULL.SocialProof</h3>
+                <h3>FULL.social proof</h3>
               </div>
             </div>
           </div>

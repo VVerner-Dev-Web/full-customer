@@ -148,6 +148,25 @@ function addMenuPage(): void
     'full-store',
     'fullGetAdminPageView'
   );
+
+  $widgets = apply_filters('full-customer/active-widgets-menu', []);
+
+  error_log(print_r($widgets, true));
+
+  uasort($widgets, function ($a, $b) {
+    return strcmp($a['name'], $b['name']);
+  });
+
+  foreach ($widgets as $widget) :
+    add_submenu_page(
+      'full-connection',
+      $widget['name'],
+      $widget['name'],
+      'edit_posts',
+      $widget['endpoint'],
+      'fullGetAdminPageView'
+    );
+  endforeach;
 }
 
 function adminEnqueueScripts(): void
@@ -263,22 +282,29 @@ function startWidgets(): void
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-config')) :
-    require_once FULL_CUSTOMER_APP . '/controller/admin/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin/AdminInterface.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/AdminInterface.php';
 
-    require_once FULL_CUSTOMER_APP . '/controller/admin//code/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//code/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//code/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Posts.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Links.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Comments.php';
 
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/DeprecatedComponents.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/BlockBasedFeatures.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Revisions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/admin//speed/Heartbeat.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/code/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/code/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/code/Settings.php';
+
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Settings.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/DeprecatedComponents.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/BlockBasedFeatures.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Revisions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Heartbeat.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-security')) :
@@ -332,15 +358,6 @@ function startWidgets(): void
   if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
     require_once FULL_CUSTOMER_APP . '/controller/ai-copy/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/ai-copy/actions.php';
-  endif;
-
-  if (fullCustomer()->isServiceEnabled('full-seo')) :
-    require_once FULL_CUSTOMER_APP . '/controller/seo/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/seo/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/seo/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/seo/Posts.php';
-    require_once FULL_CUSTOMER_APP . '/controller/seo/Links.php';
-    require_once FULL_CUSTOMER_APP . '/controller/seo/Comments.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-analytics')) :

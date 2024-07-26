@@ -6,16 +6,14 @@ use Full\Customer\WooCommerce\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.woocommerce',
-    'FULL.woocommerce',
-    'edit_posts',
-    'full-woocommerce',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.woocommerce',
+    'endpoint' => 'full-woocommerce'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

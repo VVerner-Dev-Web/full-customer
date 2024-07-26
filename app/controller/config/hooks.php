@@ -4,10 +4,9 @@ namespace Full\Customer\Admin;
 
 defined('ABSPATH') || exit;
 
-add_action('admin_menu', 'Full\Customer\Admin\Actions\addMenuPages');
+add_filter('full-customer/active-widgets-menu', 'Full\Customer\Admin\Actions\addMenuPages');
 
 add_action('wp_ajax_full/widget/admin-settings', 'Full\Customer\Admin\Actions\updateSettings');
-
 
 add_action('admin_enqueue_scripts', 'Full\Customer\Code\Actions\adminEnqueueScripts');
 add_action('wp_enqueue_scripts', 'Full\Customer\Code\Actions\enqueueFrontendCustomStyles');

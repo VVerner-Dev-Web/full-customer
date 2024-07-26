@@ -17,7 +17,7 @@ class Hooks
   {
     $cls = new self();
 
-    add_action('admin_menu', [$cls, 'addMenuPage']);
+    add_filter('full-customer/active-widgets-menu', [$cls, 'addMenuPage']);
     add_action('admin_enqueue_scripts', [$cls, 'adminEnqueueScripts']);
     add_action('elementor/frontend/before_render', [$cls, 'countFormView']);
 
@@ -55,16 +55,14 @@ class Hooks
     $fullCrmFormsTracked[] = $key;
   }
 
-  public function addMenuPage(): void
+  public function addMenuPage(array $menu): array
   {
-    add_submenu_page(
-      'full-connection',
-      'FULL.Elementor CRM',
-      'FULL.Elementor CRM',
-      'edit_posts',
-      'full-crm',
-      'fullGetAdminPageView'
-    );
+    $menu[] = [
+      'name' => 'FULL.elementor crm',
+      'endpoint' => 'full-crm'
+    ];
+
+    return $menu;
   }
 
   public function adminEnqueueScripts(): void

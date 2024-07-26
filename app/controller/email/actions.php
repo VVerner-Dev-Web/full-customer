@@ -6,16 +6,14 @@ use Full\Customer\Email\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.smtp',
-    'FULL.smtp',
-    'edit_posts',
-    'full-email',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.smtp',
+    'endpoint' => 'full-email'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

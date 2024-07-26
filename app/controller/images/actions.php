@@ -6,16 +6,14 @@ use Full\Customer\Images\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.images',
-    'FULL.images',
-    'edit_posts',
-    'full-images',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.images',
+    'endpoint' => 'full-images'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

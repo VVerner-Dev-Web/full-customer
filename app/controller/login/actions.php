@@ -6,16 +6,14 @@ use Full\Customer\Login\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.login',
-    'FULL.login',
-    'edit_posts',
-    'full-login',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.login',
+    'endpoint' => 'full-login'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

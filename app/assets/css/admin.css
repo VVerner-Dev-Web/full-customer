@@ -534,6 +534,7 @@ a.full-modal-close {
   border: 0.125rem solid transparent;
   border-radius: 6.1875rem;
   transition: 0.3s;
+  cursor: pointer;
 }
 .toggle-switch-sm .toggle-switch-label {
   width: 2rem;

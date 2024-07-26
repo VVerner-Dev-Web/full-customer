@@ -6,16 +6,14 @@ use Full\Customer\Seo\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.SEO',
-    'FULL.SEO',
-    'edit_posts',
-    'full-seo',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.seo',
+    'endpoint' => 'full-seo',
+  ];
+
+  return $menu;
 }
 
 

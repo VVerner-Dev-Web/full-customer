@@ -4,16 +4,14 @@ namespace Full\Customer\AiCopy\Actions;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.ai - Copy',
-    'FULL.ai - Copy',
-    'edit_posts',
-    'full-ai-copy',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.copy',
+    'endpoint' => 'full-ai-copy'
+  ];
+
+  return $menu;
 }
 
 function adminEnqueueScripts(): void

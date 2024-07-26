@@ -6,16 +6,14 @@ use Full\Customer\Admin\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(): void
+function addMenuPages(array $menu): array
 {
-  add_submenu_page(
-    'full-connection',
-    'FULL.config',
-    'FULL.config',
-    'edit_posts',
-    'full-config',
-    'fullGetAdminPageView'
-  );
+  $menu[] = [
+    'name' => 'FULL.config',
+    'endpoint' => 'full-config',
+  ];
+
+  return $menu;
 }
 
 function updateSettings(): void

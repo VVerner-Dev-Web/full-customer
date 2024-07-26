@@ -30,78 +30,50 @@
               <?php wp_nonce_field('full/ai/copywrite-generator'); ?>
               <input type="hidden" name="action" value="full/ai/copywrite-generator">
 
-              <table>
-                <tbody>
-                  <tr>
-                    <th>
-                      <label for="subject">Assunto</label>
-                    </th>
-                    <td>
-                      <input type="text" name="subject" id="subject" value="" class="custom-input" required>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <label for="seoKeyword">Palavra chave para SEO <small>(opcional)</small></label>
-                    </th>
-                    <td>
-                      <input type="text" name="seoKeyword" id="seoKeyword" value="" class="custom-input">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <label for="contentSize">Tamanho do conteúdo</label>
-                    </th>
-                    <td>
-                      <select name="contentSize" id="contentSize" class="custom-input" required>
-                        <option value="">Selecione</option>
-                        <option value="short">Curto - de 300 a 400 palavras</option>
-                        <option value="medium">Médio - de 600 a 800 palavras</option>
-                        <option value="large">Longo - de 800 a 1200 palavras</option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <label for="description">Detalhes</label>
-                    </th>
-                    <td>
-                      <textarea name="description" id="description" cols="30" rows="10" class="custom-input" placeholder="Descreva um pouco o assunto que você deseja abordar" style="min-height: 150px" required></textarea>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>
-                      <button class="full-primary-button">Gerar conteúdo</button>
-                    </th>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </form>
+              <h3 style="margin-top: 0">Criar novo blog</h3>
 
-            <form method="POST" id="copywrite-publish" style="padding: 16px; margin-top: 30px; display: none" class="full-widget-form">
-              <?php wp_nonce_field('full/ai/copywrite-publish'); ?>
-              <input type="hidden" name="action" value="full/ai/copywrite-publish">
-              <input type="text" name="post_title" id="post_title" class="hidden">
-              <textarea name="post_content" id="post_content" class="hidden"></textarea>
+              <h4>Selecione uma fonte</h4>
+              <p>Para começar a criar seu blog, vamos primeiro selecionar como você deseja gerar um blog.</p>
 
-              <div id="generated-content" style="margin-bottom: 20px">
-                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h1>
+              <ul class="segment-menu">
+                <li><a href="#model-video"><i class="tio-video-horizontal-outlined"></i> Vídeo</a></li>
+                <li><a href="#model-audio"><i class="tio-mic-outlined"></i> Áudio</a></li>
+                <li><a href="#model-text"><i class="tio-document-text-outlined"></i> Documento ou texto</a></li>
+                <li><a href="#model-url"><i class="tio-link"></i> Link da web</a></li>
+              </ul>
 
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione illum ipsam alias pariatur ab, obcaecati debitis quisquam saepe tenetur earum eos exercitationem similique dolores. Illum, necessitatibus. Perspiciatis ea quasi veniam!</p>
-                <p>Expedita ea hic alias atque impedit numquam omnis debitis tenetur delectus, dolorum natus incidunt odio fuga aut. Eveniet distinctio reiciendis molestias! Quo veniam explicabo sunt labore alias veritatis ad reprehenderit.</p>
-                <p>Recusandae nulla rerum vitae ab architecto, ducimus vel officiis quas libero dolores a placeat dolorum iusto facere error ea, suscipit labore aperiam eveniet. Commodi sint labore voluptas ea tempora possimus.</p>
-                <p>Accusantium cupiditate, dolorum dignissimos libero exercitationem quidem architecto aspernatur sapiente officia non, nobis quaerat ea possimus temporibus deleniti! Aperiam sint consectetur nostrum aut exercitationem praesentium laborum et harum error omnis.</p>
-                <p>Error est veniam, aliquam repellendus magnam suscipit. Incidunt facere aspernatur nam distinctio earum ullam quaerat? Beatae dolores illum, neque quisquam culpa placeat unde facere voluptatem, voluptate ipsam sint nisi doloremque.</p>
+              <div class="segment-panel" id="model-video">
+
+                <div class="provider-grid">
+                  <?php for ($i = 0; $i < 6; $i++) : ?>
+                    <div class="provider-card">
+                      <img src="https://placehold.co/600x400" alt="logo">
+
+                      <h4>Título <?= $i ?></h4>
+                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus ex aspernatur, maiores facilis quidem veritatis.</p>
+
+                      <a href="#" class="provider-button">Gerar</a>
+                    </div>
+                  <?php endfor; ?>
+                </div>
+
+              </div>
+              <div class="segment-panel" id="model-audio">
+                #model-audio
+              </div>
+              <div class="segment-panel" id="model-text">
+                #model-text
+              </div>
+              <div class="segment-panel" id="model-url">
+                #model-url
               </div>
 
-              <button id="publish-trigger" class="full-primary-button">Criar post com conteúdo</button>
 
-              <div id="copywrite-writing">
-                <dotlottie-player src="https://lottie.host/c747577d-688e-49c6-899d-8eb891b91c05/nSRGmWyp6x.lottie" background="transparent" speed="1" style="width: 350px; height: 350px; margin: auto;" loop autoplay></dotlottie-player>
-              </div>
+              <br>
+              <br>
+              <br>
+              <br>
             </form>
-
           </div>
         </div>
 
@@ -109,3 +81,103 @@
     </div>
   </div>
 </div>
+
+<style>
+  #copywrite-generator {
+    padding: 1em;
+  }
+
+  .segment-menu {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px;
+    margin-bottom: 30px;
+    padding: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: rgb(248, 250, 253);
+    border-radius: 8px;
+    max-width: max(60%, 800px);
+  }
+
+  .segment-menu li {
+    flex: 1;
+    margin: 0;
+  }
+
+  .segment-menu li a {
+    padding: 8px 13px;
+    cursor: pointer;
+    border-radius: 8px;
+    text-decoration: none;
+    color: rgb(103, 119, 136);
+    line-height: 1;
+    display: block;
+    text-align: center;
+    transition: all 150ms ease;
+  }
+
+  .segment-menu li a.active {
+    color: rgb(30, 32, 34);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(140, 152, 164, 0.25) 0px 3px 6px 0px;
+  }
+
+  .segment-panel {
+    display: none;
+  }
+
+  .provider-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+
+  .provider-card {
+    border: .0625rem solid rgba(231, 234, 243, .7);
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+    transition: box-shadow 150ms ease;
+    cursor: pointer;
+  }
+
+  .provider-card:hover {
+    box-shadow: 0 .1875rem .75rem rgba(140, 152, 164, .25) !important
+  }
+
+  .provider-card img {
+    max-width: 100px;
+    object-fit: cover;
+  }
+
+  .provider-card h4 {
+    margin: 10px 0 5px;
+  }
+
+  .provider-card p {
+    margin-top: 0;
+  }
+
+  .provider-button {
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  jQuery(function($) {
+    const $segments = $('.segment-menu a');
+    const $segmentPanels = $('.segment-panel');
+
+    $segments.on('click', function() {
+      $segments.removeClass('active');
+      $(this).addClass('active');
+      $segmentPanels.hide();
+      $segmentPanels.filter($(this).attr('href')).show();
+    });
+
+    $segments.first().trigger('click');
+  });
+</script>
