@@ -151,8 +151,6 @@ function addMenuPage(): void
 
   $widgets = apply_filters('full-customer/active-widgets-menu', []);
 
-  error_log(print_r($widgets, true));
-
   uasort($widgets, function ($a, $b) {
     return strcmp($a['name'], $b['name']);
   });
