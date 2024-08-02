@@ -45,6 +45,7 @@ add_action('plugins_loaded', '\Full\Customer\Actions\initFullAccessWidget');
 if (License::isActive()) :
   add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
+  add_action('rest_api_init', ['\Full\Customer\Api\Copy', 'registerRoutes']);
 
   add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
   add_action('plugins_loaded', '\Full\Customer\Actions\startWidgets');

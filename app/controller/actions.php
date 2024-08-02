@@ -354,8 +354,8 @@ function startWidgets(): void
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
-    require_once FULL_CUSTOMER_APP . '/controller/ai-copy/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/ai-copy/actions.php';
+    require_once FULL_CUSTOMER_APP . '/controller/copy/Hooks.php';
+    require_once FULL_CUSTOMER_APP . '/controller/copy/TextGenerator.php';
   endif;
 
   if (fullCustomer()->isServiceEnabled('full-analytics')) :

@@ -6,17 +6,6 @@ use Full\Customer\Seo\Settings;
 
 defined('ABSPATH') || exit;
 
-function addMenuPages(array $menu): array
-{
-  $menu[] = [
-    'name' => 'FULL.seo',
-    'endpoint' => 'full-seo',
-  ];
-
-  return $menu;
-}
-
-
 function updateSettings(): void
 {
   check_ajax_referer('full/widget/content-settings');
