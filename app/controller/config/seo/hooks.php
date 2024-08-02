@@ -6,7 +6,6 @@ defined('ABSPATH') || exit;
 
 add_action('wp_ajax_full/widget/content-settings', 'Full\Customer\Seo\Actions\updateSettings');
 
-add_filter('full-customer/active-widgets-menu', 'Full\Customer\Seo\Actions\addMenuPages');
 add_action('admin_enqueue_scripts', 'Full\Customer\Seo\Actions\adminEnqueueScripts');
 
 add_action('wp_ajax_full/ai/list-images-missing-alt', 'Full\Customer\Seo\Actions\listImagesMissingAlt');
