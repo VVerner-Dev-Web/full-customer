@@ -2,7 +2,7 @@
 
 <div id="prompt-header">
   <div class="ai-logo prompt-header-item">
-    <img src="<?= fullGetImageUrl('logo-full-ai.png') ?>" alt="Logo FULL">
+    <img src="<?php echo esc_url(fullGetImageUrl('logo-full-ai.png')) ?>" alt="Logo FULL">
   </div>
   <div class="ai-menu prompt-header-item">
     <div class="active">
@@ -14,10 +14,10 @@
   </div>
   <div class="ai-usage prompt-header-item">
     <div class="progress-legend">
-      Uso de palavras <span data-quota="used"><?= $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?= $quota ? $quota->granted : '0' ?></span>
+      Uso de palavras <span data-quota="used"><?php echo $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?php echo $quota ? $quota->granted : '0' ?></span>
     </div>
     <div class="progress-bar">
-      <span class="progress" style="width: <?= $quota ? ($quota->used / $quota->granted) * 100 : 0 ?>%"></span>
+      <span class="progress" style="width: <?php echo $quota ? ($quota->used / $quota->granted) * 100 : 0 ?>%"></span>
     </div>
   </div>
 </div>

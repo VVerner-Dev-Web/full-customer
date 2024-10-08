@@ -107,7 +107,7 @@ class Menu
     <div id="login-logout-links" class="loginlinksdiv">
       <div id="tabs-panel-login-logout-links-all" class="tabs-panel tabs-panel-view-all tabs-panel-active">
         <ul id="login-logout-links-checklist" class="list:login-logout-links categorychecklist form-no-clear">
-          <?= walk_nav_menu_tree(array_map('wp_setup_nav_menu_item', $menu_items_object), 0, (object) ['walker' => $walker]); ?>
+          <?php echo walk_nav_menu_tree(array_map('wp_setup_nav_menu_item', $menu_items_object), 0, (object) ['walker' => $walker]); ?>
         </ul>
       </div>
       <p class="button-controls">

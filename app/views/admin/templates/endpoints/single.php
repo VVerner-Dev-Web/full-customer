@@ -28,12 +28,12 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
       <div class="templately-row align-center justify-between">
         <div class="templately-col">
           <div class="templately-items-header" style="text-align: left;">
-            <a href="<?= esc_url(fullGetTemplatesUrl('templates')) ?>" data-endpoint="templates" class="endpoint-nav" style="cursor: pointer">
+            <a href="<?php echo esc_url(fullGetTemplatesUrl('templates')) ?>" data-endpoint="templates" class="endpoint-nav" style="cursor: pointer">
               <i class="tio-arrow-backward"></i>
               Voltar
             </a>
 
-            <h1><?= $templateAsScript ? '{title}' : $item->title ?></h1>
+            <h1><?php echo $templateAsScript ? '{title}' : $item->title ?></h1>
           </div>
         </div>
       </div>
@@ -42,20 +42,20 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
       <div class="templately-col-8">
         <div class="templately-items-banner-wrapper">
           <div class="templately-items-banner">
-            <div class="templately-badge templately-<?= $templateAsScript ? '{priceTag}' : $item->priceTag ?> templately-details-banner-badge">
+            <div class="templately-badge templately-<?php echo $templateAsScript ? '{priceTag}' : $item->priceTag ?> templately-details-banner-badge">
               <span>
                 <?php if ($templateAsScript) : ?>
                   {priceTagTitle}
                 <?php else : ?>
-                  <?= $item->price > 0 ? 'Premium' : 'Grátis' ?>
+                  <?php echo $item->price > 0 ? 'Premium' : 'Grátis' ?>
                 <?php endif; ?>
               </span>
             </div>
-            <img src="<?= $templateAsScript ? '{thumbnailUrl}' : $item->thumbnailUrl ?>" alt="<?= $templateAsScript ? '{title}' : $item->title ?>">
+            <img src="<?php echo $templateAsScript ? '{thumbnailUrl}' : $item->thumbnailUrl ?>" alt="<?php echo $templateAsScript ? '{title}' : $item->title ?>">
           </div>
         </div>
         <div class="templately-item-description" style="text-align: left">
-          <?= $templateAsScript ? '{description}' : $item->description ?>
+          <?php echo $templateAsScript ? '{description}' : $item->description ?>
         </div>
       </div>
       <div class="templately-col-4">
@@ -63,7 +63,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
           <div class="templately-items-sidebar templately-item-widget" style="text-align: left">
             <ul>
               <li>
-                <span class="label">Categorias:</span> <?= $templateAsScript ? '{categoriesList}' : implode(', ', wp_list_pluck($item->categories, 'name')) ?>
+                <span class="label">Categorias:</span> <?php echo $templateAsScript ? '{categoriesList}' : implode(', ', wp_list_pluck($item->categories, 'name')) ?>
               </li>
               <li class="templately-details-price-wrapper">
                 <span class="label">Preço:</span>
@@ -71,7 +71,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
                   <?php if ($templateAsScript) : ?>
                     {priceTagTitle}
                   <?php else : ?>
-                    <?= $item->price > 0 ? 'Premium' : 'Grátis' ?>
+                    <?php echo $item->price > 0 ? 'Premium' : 'Grátis' ?>
                   <?php endif; ?>
                 </span>
               </li>
@@ -87,12 +87,12 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
             <?php else : ?>
 
               <?php if ($item->canBeInstalled) : ?>
-                <a class="templately-button tb-import tb-purchase" data-js="insert-item" data-item='<?= wp_json_encode($item) ?>' style="background-color: #eabc32; margin-right: 1em;">
+                <a class="templately-button tb-import tb-purchase" data-js="insert-item" data-item='<?php echo wp_json_encode($item) ?>' style="background-color: #eabc32; margin-right: 1em;">
                   <i class="tio-download-to" style="margin-right: 5px;"></i>
                   Inserir
                 </a>
               <?php else : ?>
-                <a target="_blank" href="<?= esc_url($item->purchaseUrl) ?>" class="templately-button tb-import tb-purchase" style="background-color: #eabc32">
+                <a target="_blank" href="<?php echo esc_url($item->purchaseUrl) ?>" class="templately-button tb-import tb-purchase" style="background-color: #eabc32">
                   <i class="tio-shopping-icon" style="margin-right: 5px;"></i>
                   Comprar
                 </a>
@@ -112,9 +112,9 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
               <div class="full-template-carousel">
                 <?php foreach ($item->gallery as $src) : ?>
                   <div class="templately-layouts-in-packs-item">
-                    <a href="<?= esc_url($src) ?>">
+                    <a href="<?php echo esc_url($src) ?>">
                       <div class="templately-layouts-in-packs-item-image">
-                        <img src="<?= $src ?>" alt="Imagem do template">
+                        <img src="<?php echo $src ?>" alt="Imagem do template">
                       </div>
                     </a>
                   </div>

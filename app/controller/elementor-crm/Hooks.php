@@ -74,7 +74,7 @@ class Hooks
     $version = getFullAssetsVersion();
     $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
-    wp_enqueue_style('full-admin-crm', $baseUrl . 'css/crm.css', $version);
+    wp_enqueue_style('full-admin-crm', $baseUrl . 'css/crm.css', [], $version);
     wp_enqueue_script('full-admin-crm', $baseUrl . 'js/admin-crm.js', ['jquery', 'jquery-ui-sortable', 'jquery-ui-draggable'], $version, true);
     wp_localize_script('full-admin-crm', 'fullCrm', [
       'stages' => $this->env->get('stages'),
@@ -166,7 +166,7 @@ class Hooks
       $fragments = [];
     endif;
 
-    $stages[$formId] = array_filter($formStages, fn ($row) => isset($row['name']) && $row['name']);
+    $stages[$formId] = array_filter($formStages, fn($row) => isset($row['name']) && $row['name']);
     $fragments[$formId] = array_filter(array_map('sanitize_text_field', $formFragments));
 
     $this->env->set('stages', $stages);

@@ -12,7 +12,7 @@ $quota = get_option('full/ai/quota', null)
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -71,12 +71,12 @@ $quota = get_option('full/ai/quota', null)
                       </td>
                     </tr>
 
-                    <tr class="resize <?= $worker->get('enableUploadResize') ? '' : 'hidden' ?>">
+                    <tr class="resize <?php echo $worker->get('enableUploadResize') ? '' : 'hidden' ?>">
                       <th>
                         <label for="resizeMaxSize">Tamanho máximo (em pixel)</label>
                       </th>
                       <td>
-                        <input type="text" name="resizeMaxSize" id="resizeMaxSize" value="<?= $worker->get('enableUploadResize') ? $worker->get('resizeMaxSize') : '' ?>" class="custom-input">
+                        <input type="text" name="resizeMaxSize" id="resizeMaxSize" value="<?php echo $worker->get('enableUploadResize') ? $worker->get('resizeMaxSize') : '' ?>" class="custom-input">
                       </td>
                     </tr>
 
@@ -116,15 +116,15 @@ $quota = get_option('full/ai/quota', null)
                       <tr>
                         <th>Imagens otimizadas</th>
                         <td>
-                          <?= $usage->done . _n(' imagem', ' imagens', $usage->done) ?>
+                          <?php echo $usage->done . _n(' imagem', ' imagens', $usage->done) ?>
                           <?php if ($usage->optimization > 0) : ?>
-                            - redução total de <?= $usage->readableOptimization ?>
+                            - redução total de <?php echo $usage->readableOptimization ?>
                           <?php endif; ?>
                         </td>
                       </tr>
                       <tr>
                         <th>Créditos disponíveis</th>
-                        <td><?= $usage->available . _n(' crédito', ' créditos', $usage->available) ?></td>
+                        <td><?php echo $usage->available . _n(' crédito', ' créditos', $usage->available) ?></td>
                       </tr>
                     </tbody>
                   </table>
@@ -137,7 +137,7 @@ $quota = get_option('full/ai/quota', null)
             <div class="full-tab-panel analytics-view" id="image-alt">
               <br>
               <p>
-                Uso de palavras <span data-quota="used"><?= $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?= $quota ? $quota->granted : '0' ?></span>
+                Uso de palavras <span data-quota="used"><?php echo $quota ? $quota->used : '0' ?></span> de <span data-quota="granted"><?php echo $quota ? $quota->granted : '0' ?></span>
               </p>
 
               <div id="image-alt-generator" class="full-widget-form" style="padding: 16px">

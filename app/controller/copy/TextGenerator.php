@@ -37,7 +37,7 @@ class TextGenerator
       'timeout'   => MINUTE_IN_SECONDS,
       'sslverify' => false,
       'headers'   => ['Content-type' => 'application/json'],
-      'body'      => json_encode([
+      'body'      => wp_json_encode([
         'site'      => site_url(),
         'model'     => $this->model,
         'prompt'    => $this->prompt,

@@ -2,7 +2,7 @@
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -258,20 +258,20 @@
                 $valid     = file_exists($filename);
 
                 if ($valid && $clearFile) :
-                  file_put_contents($filename, '');
+                  fullFileSystem()->put_contents($filename, '');
                 endif;
 
                 $validSize  = $valid && filesize($filename) < 500000;
-                $content    = $validSize ? file_get_contents($filename) : 'Conteúdo indisponível ou muito grande para ser carregado no navegador.'
+                $content    = $validSize ? fullFileSystem()->get_contents($filename) : 'Conteúdo indisponível ou muito grande para ser carregado no navegador.'
               ?>
                 <h3>Log de erros do WordPress</h3>
-                <p><a href="<?= esc_url(remove_query_arg(['show-logs', 'empty-file'])) ?>">Voltar para configurações</a></p>
+                <p><a href="<?php echo esc_url(remove_query_arg(['show-logs', 'empty-file'])) ?>">Voltar para configurações</a></p>
 
                 <div class="full-widget-form full-widget-logs">
-                  <?= wpautop(htmlspecialchars($content), true) ?>
+                  <?php echo esc_html(wpautop(htmlspecialchars($content), true)) ?>
                 </div>
 
-                <a href="<?= esc_url(add_query_arg('empty-file', 1)) ?>" class="show-logs" style="color: red">Limpar arquivo</a>
+                <a href="<?php echo esc_url(add_query_arg('empty-file', 1)) ?>" class="show-logs" style="color: red">Limpar arquivo</a>
 
                 <br>
                 <br>
@@ -329,7 +329,7 @@
                       <tr>
                         <th>
                           <button class="full-primary-button">Atualizar</button>
-                          <a href="<?= esc_url(add_query_arg('show-logs', 1)) ?>" class="show-logs <?= $worker->getConst('WP_DEBUG_LOG') ? '' : 'hidden' ?>">Ver logs</a>
+                          <a href="<?php echo esc_url(add_query_arg('show-logs', 1)) ?>" class="show-logs <?php echo $worker->getConst('WP_DEBUG_LOG') ? '' : 'hidden' ?>">Ver logs</a>
                         </th>
                         <td></td>
                       </tr>
@@ -340,16 +340,16 @@
 
                 <?php foreach ($worker->getSections() as $section) : ?>
 
-                  <h3><?= $section['name'] ?></h3>
-                  <p><?= $section['instructions'] ?></p>
+                  <h3><?php echo esc_html($section['name']) ?></h3>
+                  <p><?php echo esc_html($section['instructions']) ?></p>
 
-                  <form method="POST" id="full-<?= $section['key'] ?>" class="full-widget-form" style="margin-bottom: 60px; padding: 0; background-color: unset">
+                  <form method="POST" id="full-<?php echo esc_html($section['key']) ?>" class="full-widget-form" style="margin-bottom: 60px; padding: 0; background-color: unset">
                     <?php wp_nonce_field('full/widget/code/' . $section['callback']); ?>
-                    <input type="hidden" name="action" value="full/widget/code/<?= $section['callback'] ?>">
-                    <input type="hidden" name="code" value="<?= $section['key'] ?>">
+                    <input type="hidden" name="action" value="full/widget/code/<?php echo esc_html($section['callback']) ?>">
+                    <input type="hidden" name="code" value="<?php echo esc_html($section['key']) ?>">
 
-                    <textarea class="codemirror-code-value hidden" name="<?= $section['key'] ?>"><?= $worker->get($section['key']) ?></textarea>
-                    <textarea class="codemirror-code" data-mode="<?= $section['mode'] ?>"><?= $worker->get($section['key']) ?></textarea>
+                    <textarea class="codemirror-code-value hidden" name="<?php echo esc_html($section['key']) ?>"><?php echo esc_html($worker->get($section['key'])) ?></textarea>
+                    <textarea class="codemirror-code" data-mode="<?php echo esc_html($section['mode']) ?>"><?php echo esc_html($worker->get($section['key'])) ?></textarea>
                     <button class="full-primary-button" style="margin-top: 10px">Atualizar</button>
                   </form>
 
@@ -416,8 +416,8 @@
                       <td>
                         <select name="sidebarWidth" id="sidebarWidth" style="width: 100%">
                           <?php for ($i = 160; $i <= 300; $i += 20) : ?>
-                            <option value="<?= $i ?>" <?php selected($i, $worker->get('sidebarWidth')) ?>>
-                              <?= $i ?>px <?= 160 === $i ? '(tamanho padrão)' : '' ?>
+                            <option value="<?php echo esc_html($i) ?>" <?php selected($i, $worker->get('sidebarWidth')) ?>>
+                              <?php echo esc_html($i) ?>px <?php echo esc_html(160 === $i ? '(tamanho padrão)' : '') ?>
                             </option>
                           <?php endfor; ?>
                         </select>

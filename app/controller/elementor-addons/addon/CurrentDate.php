@@ -34,6 +34,6 @@ class CurrentDate extends Widget_Base
 
   protected function render()
   {
-    echo current_time(get_option('date_format', 'd/m/Y'));
+    echo esc_html(current_time(get_option('date_format', 'd/m/Y')));
   }
 }

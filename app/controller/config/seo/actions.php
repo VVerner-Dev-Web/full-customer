@@ -107,7 +107,7 @@ function imageAltGenerator(): void
   update_option('full/ai/quota', $response->quota);
 
   wp_send_json_success([
-    'content' => strip_tags(array_shift($response->content)),
+    'content' => wp_strip_all_tags(array_shift($response->content)),
     'quota'   => $response->quota
   ]);
 }
@@ -166,7 +166,7 @@ function metadescriptionGenerator(): void
   update_option('full/ai/quota', $response->quota);
 
   wp_send_json_success([
-    'content' => strip_tags(array_shift($response->content)),
+    'content' => wp_strip_all_tags(array_shift($response->content)),
     'quota'   => $response->quota
   ]);
 }

@@ -2,7 +2,7 @@
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -50,7 +50,7 @@
                               <span class="toggle-switch-indicator"></span>
                             </span>
                           </label>
-                          <small>Para editar o nome e descrição do gateway, <a href="<?= esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
+                          <small>Para editar o nome e descrição do gateway, <a href="<?php echo esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
                         </td>
                       </tr>
 
@@ -68,21 +68,21 @@
                         </td>
                       </tr>
 
-                      <tr class="whatsapp-checkout <?= $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
+                      <tr class="whatsapp-checkout <?php echo $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
                         <th>
                           <label for="whatsAppCheckoutNumber">Número para receber pedidos</label>
                         </th>
                         <td>
-                          <input type="text" name="whatsAppCheckoutNumber" placeholder="(00) 987.564.231" value="<?= $worker->get('whatsAppCheckoutNumber') ?>" class="custom-input" id="whatsAppCheckoutNumber" <?= $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>>
+                          <input type="text" name="whatsAppCheckoutNumber" placeholder="(00) 987.564.231" value="<?php echo $worker->get('whatsAppCheckoutNumber') ?>" class="custom-input" id="whatsAppCheckoutNumber" <?php echo $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>>
                         </td>
                       </tr>
 
-                      <tr class="whatsapp-checkout <?= $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
+                      <tr class="whatsapp-checkout <?php echo $worker->get('enableWhatsAppCheckout') ? '' : 'hidden' ?>">
                         <th>
                           <label for="whatsAppCheckoutMessage">Mensagem padrão</label><br>
                         </th>
                         <td>
-                          <textarea class="custom-input" style="min-height: 150px" name="whatsAppCheckoutMessage" id="whatsAppCheckoutMessage" cols="30" rows="10" <?= $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>><?= $worker->get('whatsAppCheckoutMessage') ?></textarea>
+                          <textarea class="custom-input" style="min-height: 150px" name="whatsAppCheckoutMessage" id="whatsAppCheckoutMessage" cols="30" rows="10" <?php echo $worker->get('enableWhatsAppCheckout') ? 'required' : '' ?>><?php echo $worker->get('whatsAppCheckoutMessage') ?></textarea>
                           <p style="margin-bottom: 0"><strong>Campos dinâmicos:</strong> {itens_do_carrinho}, {preco_total_carrinho}</p>
                         </td>
                       </tr>
@@ -98,7 +98,7 @@
                               <span class="toggle-switch-indicator"></span>
                             </span>
                           </label>
-                          <small>Para editar o nome e descrição do gateway, <a href="<?= esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer-estimate')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
+                          <small>Para editar o nome e descrição do gateway, <a href="<?php echo esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer-estimate')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
                         </td>
                       </tr>
 
@@ -158,21 +158,21 @@
                         </td>
                       </tr>
 
-                      <tr class="custom-tab <?= $worker->get('enableProductCustomTab') ? '' : 'hidden' ?>">
+                      <tr class="custom-tab <?php echo $worker->get('enableProductCustomTab') ? '' : 'hidden' ?>">
                         <th>
                           <label for="customProductTabName">Nome da aba</label>
                         </th>
                         <td>
-                          <input type="text" name="customProductTabName" d="customProductTabName" value="<?= $worker->get('customProductTabName') ?>" class="custom-input">
+                          <input type="text" name="customProductTabName" d="customProductTabName" value="<?php echo $worker->get('customProductTabName') ?>" class="custom-input">
                         </td>
                       </tr>
 
-                      <tr class="custom-tab <?= $worker->get('enableProductCustomTab') ? '' : 'hidden' ?>">
+                      <tr class="custom-tab <?php echo $worker->get('enableProductCustomTab') ? '' : 'hidden' ?>">
                         <th>
                           <label for="customProductTabContent">Conteúdo da aba</label>
                         </th>
                         <td>
-                          <textarea name="customProductTabContent" id="customProductTabContent" cols="30" rows="10" class="custom-input" style="min-height: 150px"><?= $worker->get('customProductTabContent') ?></textarea>
+                          <textarea name="customProductTabContent" id="customProductTabContent" cols="30" rows="10" class="custom-input" style="min-height: 150px"><?php echo $worker->get('customProductTabContent') ?></textarea>
                           <small>Para usuários avançados: Utilize o hook do_action('full-customer/woocommerce/custom-product-tab-content') para inserir conteúdos</small>
                         </td>
                       </tr>
@@ -182,8 +182,8 @@
                           <label for="orderReceivedPageCustomCode">Código para tela de obrigado</label>
                         </th>
                         <td>
-                          <textarea class="codemirror-code-value hidden" name="orderReceivedPageCustomCode"><?= $worker->get('orderReceivedPageCustomCode') ?></textarea>
-                          <textarea class="codemirror-code" data-mode="htmlmixed"><?= $worker->get('orderReceivedPageCustomCode') ?></textarea>
+                          <textarea class="codemirror-code-value hidden" name="orderReceivedPageCustomCode"><?php echo $worker->get('orderReceivedPageCustomCode') ?></textarea>
+                          <textarea class="codemirror-code" data-mode="htmlmixed"><?php echo $worker->get('orderReceivedPageCustomCode') ?></textarea>
                         </td>
                       </tr>
 
@@ -229,7 +229,7 @@
                           <label for="warningMessage">Mensagem de aviso</label>
                         </th>
                         <td>
-                          <input type="text" name="warningMessage" id="warningMessage" value="<?= $worker->get('warningMessage') ?>" class="custom-input">
+                          <input type="text" name="warningMessage" id="warningMessage" value="<?php echo $worker->get('warningMessage') ?>" class="custom-input">
                           <small>Utilize {valorMinimo}, {valorFaltante} como campos dinâmicos</small>
                         </td>
                       </tr>
@@ -239,7 +239,7 @@
                           <label for="appliedMessage">Mensagem de cupom desbloqueado</label>
                         </th>
                         <td>
-                          <input type="text" name="appliedMessage" id="appliedMessage" value="<?= $worker->get('appliedMessage') ?>" class="custom-input">
+                          <input type="text" name="appliedMessage" id="appliedMessage" value="<?php echo $worker->get('appliedMessage') ?>" class="custom-input">
                         </td>
                       </tr>
 
@@ -248,7 +248,7 @@
                           <label for="minimumAmount">Valor mínimo do carrinho</label>
                         </th>
                         <td>
-                          <input type="number" min="0" name="minimumAmount" id="minimumAmount" value="<?= $worker->get('minimumAmount') ?>" class="custom-input">
+                          <input type="number" min="0" name="minimumAmount" id="minimumAmount" value="<?php echo $worker->get('minimumAmount') ?>" class="custom-input">
                         </td>
                       </tr>
 
@@ -257,7 +257,7 @@
                           <label for="couponAmount">Desconto</label>
                         </th>
                         <td>
-                          <input type="text" name="couponAmount" id="couponAmount" value="<?= $worker->get('couponAmount') ?>" class="custom-input">
+                          <input type="text" name="couponAmount" id="couponAmount" value="<?php echo $worker->get('couponAmount') ?>" class="custom-input">
                         </td>
                       </tr>
 
@@ -319,7 +319,7 @@
                           <label for="successRedirect">Pagamentos bem sucedidos</label>
                         </th>
                         <td>
-                          <input type="url" name="successRedirect" id="successRedirect" value="<?= $worker->get('successRedirect') ?>" class="custom-input">
+                          <input type="url" name="successRedirect" id="successRedirect" value="<?php echo $worker->get('successRedirect') ?>" class="custom-input">
                           <small>Pedidos com status: Processando ou Concluído</small>
                         </td>
                       </tr>
@@ -329,7 +329,7 @@
                           <label for="errorRedirect">Pagamentos com erro</label>
                         </th>
                         <td>
-                          <input type="url" name="errorRedirect" id="errorRedirect" value="<?= $worker->get('errorRedirect') ?>" class="custom-input">
+                          <input type="url" name="errorRedirect" id="errorRedirect" value="<?php echo $worker->get('errorRedirect') ?>" class="custom-input">
                           <small>Pedidos com status: Malsucedido, Cancelado ou Reembolsado</small>
                         </td>
                       </tr>
@@ -339,7 +339,7 @@
                           <label for="pendingRedirect">Pagamentos pendente</label>
                         </th>
                         <td>
-                          <input type="url" name="pendingRedirect" id="pendingRedirect" value="<?= $worker->get('pendingRedirect') ?>" class="custom-input">
+                          <input type="url" name="pendingRedirect" id="pendingRedirect" value="<?php echo $worker->get('pendingRedirect') ?>" class="custom-input">
                           <small>Pedidos com status: Aguardando ou Pagamento pendente</small>
                         </td>
                       </tr>

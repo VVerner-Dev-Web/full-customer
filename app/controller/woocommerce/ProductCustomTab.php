@@ -38,7 +38,7 @@ class ProductCustomTab
   public function tabContent(): void
   {
     do_action('full-customer/woocommerce/custom-product-tab-content');
-    echo apply_filters('the_content', $this->env->get('customProductTabContent'));
+    echo esc_html(apply_filters('the_content', $this->env->get('customProductTabContent')));
   }
 }
 

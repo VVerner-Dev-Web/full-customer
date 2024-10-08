@@ -6,7 +6,6 @@ $worker = new Settings();
 $settings = $worker->getSinglePostSettings(get_the_ID());
 ?>
 
-
 <input type="hidden" name="fullUpdatingWhatsApp" value="1">
 
 <div>
@@ -22,14 +21,14 @@ $settings = $worker->getSinglePostSettings(get_the_ID());
 
 <div>
   <label for="full-whatsappNumber">Número de WhatsApp personalizado</label><br>
-  <input style="display:block; width: 100%" type="text" name="full[whatsappNumber]" id="full-whatsappNumber" value="<?= $settings->number ?>" placeholder="(00) 98765-4321">
+  <input style="display:block; width: 100%" type="text" name="full[whatsappNumber]" id="full-whatsappNumber" value="<?php echo $settings->number ?>" placeholder="(00) 98765-4321">
 </div>
 
 <br>
 
 <div>
   <label for="full-whatsappMessage">Mensagem personalizada para envio</label>
-  <input style="display:block; width: 100%" type="text" name="full[whatsappMessage]" id="full-whatsappMessage" value="<?= $settings->message ?>">
+  <input style="display:block; width: 100%" type="text" name="full[whatsappMessage]" id="full-whatsappMessage" value="<?php echo $settings->message ?>">
 </div>
 
 <br>

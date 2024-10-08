@@ -34,6 +34,6 @@ class LogoutUrl extends Widget_Base
 
   protected function render()
   {
-    echo '<a href="' . esc_url(wp_logout_url()) . '">Sair</a>';
+    echo esc_html('<a href="' . esc_url(wp_logout_url()) . '">Sair</a>');
   }
 }

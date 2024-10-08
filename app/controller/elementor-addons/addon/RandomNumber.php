@@ -34,6 +34,6 @@ class RandomNumber extends Widget_Base
 
   protected function render()
   {
-    echo random_int(0, 100);
+    echo esc_html(random_int(0, 100));
   }
 }

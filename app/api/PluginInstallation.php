@@ -78,7 +78,7 @@ class PluginInstallation extends FullCustomerController
 
   private function verifyFileOrigin(string $source): void
   {
-    $host = parse_url($source, PHP_URL_HOST);
+    $host = wp_parse_url($source, PHP_URL_HOST);
 
     $valid = $this->env->getCurrentEnv() === 'PRD' ?
       'painel.full.services' :

@@ -76,7 +76,7 @@ function activationAnalyticsHook(): void
   wp_remote_post($url, [
     'sslverify' => false,
     'headers'   => ['x-full' => 'Jkd0JeCPm8Nx', 'Content-Type' => 'application/json'],
-    'body'      => json_encode([
+    'body'      => wp_json_encode([
       'site_url'      => home_url(),
       'admin_email'   => get_bloginfo('admin_email'),
       'plugin_status' => 'active'
@@ -92,7 +92,7 @@ function deactivationAnalyticsHook(): void
   wp_remote_post($url, [
     'sslverify' => false,
     'headers'   => ['x-full' => 'Jkd0JeCPm8Nx', 'Content-Type' => 'application/json'],
-    'body'      => json_encode([
+    'body'      => wp_json_encode([
       'site_url'      => home_url(),
       'admin_email'   => get_bloginfo('admin_email'),
       'plugin_status' => 'inactive'
@@ -110,7 +110,7 @@ function addMenuPage(): void
     'manage_options',
     'full-connection',
     'fullGetAdminPageView',
-    'data:image/svg+xml;base64,' . base64_encode(file_get_contents(plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/img/menu-novo.svg')),
+    'data:image/svg+xml;base64,' . base64_encode(fullFileSystem()->get_contents(plugin_dir_url(FULL_CUSTOMER_FILE) . 'app/assets/img/menu-novo.svg')),
     0
   );
 
@@ -173,7 +173,7 @@ function adminEnqueueScripts(): void
   $baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE)) . 'app/assets/';
 
   if (isFullsAdminPage()) :
-    wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
+    wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css', [], '1.0.0');
     wp_enqueue_style('full-swal', $baseUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
     wp_enqueue_style('full-flickity', $baseUrl . 'vendor/flickity/flickity.min.css', [], '2.3.0');
     wp_enqueue_style('full-magnific-popup', $baseUrl . 'vendor/magnific-popup/magnific-popup.min.css', [], '1.0.0');
@@ -230,7 +230,7 @@ function notifyPluginError(): bool
     'headers'   => [
       'Content-Type'  => 'application/json',
     ],
-    'body'  => json_encode([
+    'body'  => wp_json_encode([
       'site_url'  => home_url(),
       'error'     => $error,
       'version'   => FULL_CUSTOMER_VERSION

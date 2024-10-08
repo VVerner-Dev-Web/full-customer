@@ -10,7 +10,7 @@ $worker = new Settings();
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -91,12 +91,12 @@ $worker = new Settings();
                     </td>
                   </tr>
 
-                  <tr class="password <?= $worker->get('enablePasswordProtection') ? '' : 'hidden' ?>">
+                  <tr class="password <?php echo $worker->get('enablePasswordProtection') ? '' : 'hidden' ?>">
                     <th>
                       <label for="sitePassword">Senha de acesso</label>
                     </th>
                     <td>
-                      <input type="password" name="sitePassword" id="sitePassword" value="<?= $worker->get('sitePassword') ?>" class="custom-input">
+                      <input type="password" name="sitePassword" id="sitePassword" value="<?php echo $worker->get('sitePassword') ?>" class="custom-input">
                     </td>
                   </tr>
 
@@ -127,7 +127,8 @@ $worker = new Settings();
 
             <?php if (current_user_can('manage_options')) :
               global $wp_version;
-              $server_software_raw = str_replace("/", " ", $_SERVER['SERVER_SOFTWARE']);
+              $server_software = isset($_SERVER['SERVER_SOFTWARE']) && $_SERVER['SERVER_SOFTWARE'] ? wp_unslash($_SERVER['SERVER_SOFTWARE']) : '';
+              $server_software_raw = str_replace("/", " ", $server_software);
               $server_software_parts = explode(" (", $server_software_raw);
               $server_software = ucfirst($server_software_parts[0]);
 
@@ -149,27 +150,27 @@ $worker = new Settings();
                   <tbody>
                     <tr>
                       <th>Servidor</th>
-                      <td><?= $server_software ?></td>
+                      <td><?php echo $server_software ?></td>
                     </tr>
                     <tr>
                       <th>PHP</th>
-                      <td><?= phpversion(); ?> (<?= php_sapi_name() ?>)</td>
+                      <td><?php echo phpversion(); ?> (<?php echo php_sapi_name() ?>)</td>
                     </tr>
                     <tr>
                       <th>Banco de dados</th>
-                      <td><?= $db_short_version !== '' && $db_short_version !== '0' ? $db_short_version : 'Não reconhecido' ?></td>
+                      <td><?php echo $db_short_version !== '' && $db_short_version !== '0' ? $db_short_version : 'Não reconhecido' ?></td>
                     </tr>
                     <tr>
                       <th>Versão do WordPress</th>
-                      <td><?= $wp_version ?></td>
+                      <td><?php echo $wp_version ?></td>
                     </tr>
                     <tr>
                       <th>Em modo de depuração? (WP_DEBUG)</th>
-                      <td><?= defined('WP_DEBUG') && WP_DEBUG ? 'Sim' : 'Não' ?></td>
+                      <td><?php echo defined('WP_DEBUG') && WP_DEBUG ? 'Sim' : 'Não' ?></td>
                     </tr>
                     <tr>
                       <th>Versão da FULL</th>
-                      <td><?= FULL_CUSTOMER_VERSION ?></td>
+                      <td><?php echo FULL_CUSTOMER_VERSION ?></td>
                     </tr>
                   </tbody>
                 </table>

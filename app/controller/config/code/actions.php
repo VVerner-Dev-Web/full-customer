@@ -102,14 +102,14 @@ function updateRobotsFile(): void
   $key = filter_input(INPUT_POST, 'code');
   $code = filter_input(INPUT_POST, $key);
 
-  file_put_contents(ABSPATH . '/robots.txt', $code);
+  fullFileSystem()->put_contents(ABSPATH . '/robots.txt', $code);
 
   wp_send_json_success();
 }
 
 function echoCodeWithComments(string $code): void
 {
-  echo '<!-- scripts adicionados pelo FULL.code -->' . $code . '<!-- /scripts adicionados pelo FULL.code -->';
+  echo esc_html('<!-- scripts adicionados pelo FULL.code -->' . $code . '<!-- /scripts adicionados pelo FULL.code -->');
 }
 
 function updateWpConfigFile(): void

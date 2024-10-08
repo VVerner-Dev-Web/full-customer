@@ -14,14 +14,12 @@ class Conversion
 
   public array $performance = [];
 
-  public function __construct()
-  {
-  }
+  public function __construct() {}
 
   public static function list(): array
   {
     global $wpdb;
-    $items = $wpdb->get_results('SELECT * FROM ' . Database::$conversionTable);
+    $items = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . Database::$conversionTable));
 
     return array_map(function ($item) {
       $cls = new self();

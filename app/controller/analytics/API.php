@@ -6,9 +6,7 @@ use DateTime;
 
 class API
 {
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -37,7 +35,7 @@ class API
     endif;
 
     $convId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $conv = array_filter(Conversion::list(), fn ($c) => $c->id === $convId);
+    $conv = array_filter(Conversion::list(), fn($c) => $c->id === $convId);
 
     if (!$conv) :
       wp_send_json_error();
@@ -237,7 +235,7 @@ class API
     $where = [];
 
     foreach ($journey['stages'] as $stage) :
-      $path  = parse_url($stage, PHP_URL_PATH);
+      $path  = wp_parse_url($stage, PHP_URL_PATH);
       $where[] = trailingslashit($path);
 
       $value = "SELECT COUNT(*) FROM full_user_journeys WHERE journey LIKE '\"" . implode('","', $where) . "\"%'";

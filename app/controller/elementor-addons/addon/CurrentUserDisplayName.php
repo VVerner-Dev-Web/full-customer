@@ -34,6 +34,6 @@ class CurrentUserDisplayName extends Widget_Base
 
   protected function render()
   {
-    echo is_user_logged_in() ? wp_get_current_user()->display_name : '';
+    echo esc_html(is_user_logged_in() ? wp_get_current_user()->display_name : '');
   }
 }

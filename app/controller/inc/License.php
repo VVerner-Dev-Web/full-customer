@@ -6,9 +6,7 @@ defined('ABSPATH') || exit;
 
 class License
 {
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -32,7 +30,7 @@ class License
     $response = wp_remote_post($url, [
       'sslverify' => false,
       'headers'   => ['Content-Type' => 'application/json'],
-      'body'      => json_encode([
+      'body'      => wp_json_encode([
         'site_url'  => home_url(),
       ])
     ]);

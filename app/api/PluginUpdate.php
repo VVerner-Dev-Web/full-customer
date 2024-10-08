@@ -44,7 +44,7 @@ class PluginUpdate extends FullCustomerController
       'headers' => [
         'Content-type' => 'application/json',
       ],
-      'body'  => json_encode(['token' => $token])
+      'body'  => wp_json_encode(['token' => $token])
     ]);
 
     $data = json_decode(wp_remote_retrieve_body($response));

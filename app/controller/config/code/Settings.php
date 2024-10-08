@@ -16,7 +16,7 @@ class Settings
   public function get(string  $prop)
   {
     if ('robots' === $prop) :
-      return file_exists(ABSPATH . '/robots.txt') ? file_get_contents(ABSPATH . '/robots.txt') : '';
+      return file_exists(ABSPATH . '/robots.txt') ? fullFileSystem()->get_contents(ABSPATH . '/robots.txt') : '';
     endif;
 
     return fullCustomer()->get(self::PREFIX . $prop);
@@ -114,7 +114,7 @@ class Settings
   private function getWpConfigContent(): string
   {
     $filename = ABSPATH . 'wp-config.php';
-    return is_writable($filename) ? file_get_contents($filename) : '';
+    return fullFileSystem()->is_writable($filename) ? fullFileSystem()->get_contents($filename) : '';
   }
 
   private function setWpConfigContent(string $content): bool
@@ -122,8 +122,8 @@ class Settings
     $done = false;
     $filename = ABSPATH . 'wp-config.php';
 
-    if (is_writable($filename)) :
-      $done = file_put_contents($filename, $content);
+    if (fullFileSystem()->is_writable($filename)) :
+      $done = fullFileSystem()->put_contents($filename, $content);
     endif;
 
     return (bool) $done;

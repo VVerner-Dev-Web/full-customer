@@ -9,7 +9,7 @@ $env = new Settings;
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -44,7 +44,7 @@ $env = new Settings;
                       <input type="hidden" name="action" value="full/analytics/report">
                       <input type="hidden" name="journey" value="0">
                       <?php wp_nonce_field('full/analytics/report') ?>
-                      <input type="text" name="period" id="dataPeriod" value="<?= date('d/m/Y', strtotime('-6 days')) . ' - ' .  current_time('d/m/Y') ?>">
+                      <input type="text" name="period" id="dataPeriod" value="<?php echo esc_html(date('d/m/Y', strtotime('-6 days')) . ' - ' .  current_time('d/m/Y')) ?>">
                     </form>
                   </div>
                 </div>
@@ -197,7 +197,7 @@ $env = new Settings;
                       <th><label for="trackingUsers">Acompanhar usuários logados?</label></th>
                       <td>
                         <label class="toggle-switch toggle-switch-sm" for="trackingUsers">
-                          <input type="checkbox" name="trackingUsers" value="1" class="toggle-switch-input" id="trackingUsers" <?= checked($env->get('trackingUsers')) ?>>
+                          <input type="checkbox" name="trackingUsers" value="1" class="toggle-switch-input" id="trackingUsers" <?php echo checked($env->get('trackingUsers')) ?>>
                           <span class="toggle-switch-label">
                             <span class="toggle-switch-indicator"></span>
                           </span>
@@ -207,7 +207,7 @@ $env = new Settings;
                     <tr>
                       <th><label for="trackingPeriod">Reter dados por quantos dias?</label></th>
                       <td>
-                        <input type="number" name="trackingPeriod" id="trackingPeriod" value="<?= $env->get('trackingPeriod') ?>" min="0" step="1"><br>
+                        <input type="number" name="trackingPeriod" id="trackingPeriod" value="<?php echo esc_html($env->get('trackingPeriod')) ?>" min="0" step="1"><br>
                         <small>Deixe em branco para não excluir dados antigos</small>
                       </td>
                     </tr>
@@ -303,9 +303,9 @@ $env = new Settings;
         <div style="margin-bottom: 15px">
           <label for="conversionElement">Localizador</label>
           <input type="text" name="conversionElement" id="conversionElement" class="large-text" required>
-          <span class="conversion-tutorial for-click" style="display: none">Insira o seletor CSS do botão <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-botao.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
-          <span class="conversion-tutorial for-submit" style="display: none">Insira o seletor CSS do formulário <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-form.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
-          <span class="conversion-tutorial for-view" style="display: none">Insira a URL que o visitante deve acessar <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-link.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-click" style="display: none">Insira o seletor CSS do botão <a href="<?php echo esc_url(fullGetImageUrl('analytics/tutorial-botao.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-submit" style="display: none">Insira o seletor CSS do formulário <a href="<?php echo esc_url(fullGetImageUrl('analytics/tutorial-form.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-view" style="display: none">Insira a URL que o visitante deve acessar <a href="<?php echo esc_url(fullGetImageUrl('analytics/tutorial-link.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
         </div>
 
         <button class="full-primary-button">Salvar</button>

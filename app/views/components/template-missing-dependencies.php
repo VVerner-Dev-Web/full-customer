@@ -6,8 +6,8 @@
     <ul>
       <?php foreach ($dependencies['inactive'] as $item) : ?>
         <li>
-          <a href="<?= esc_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
-            <?= $item->name ?>
+          <a href="<?php echo esc_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
+            <?php echo $item->name ?>
           </a>
         </li>
       <?php endforeach; ?>
@@ -20,8 +20,8 @@
     <ul>
       <?php foreach ($dependencies['uninstalled'] as $item) : ?>
         <li>
-          <a href="<?= escr_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
-            <?= $item->name ?>
+          <a href="<?php echo escr_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
+            <?php echo $item->name ?>
           </a>
         </li>
       <?php endforeach; ?>

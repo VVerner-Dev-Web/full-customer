@@ -49,7 +49,7 @@ class RecentPurchases
       $data = array_merge($data, $this->extractOrderData($order));
     endforeach;
 
-    file_put_contents($this->feedFilename, json_encode($data));
+    fullFileSystem()->put_contents($this->feedFilename, wp_json_encode($data));
   }
 
   private function extractOrderData(WC_Order $order): array
@@ -82,11 +82,11 @@ class RecentPurchases
   {
     $order = wc_get_order($orderId);
 
-    $data = json_decode(file_get_contents($this->feedFilename));
+    $data = json_decode(fullFileSystem()->get_contents($this->feedFilename));
     $data = array_merge($data, $this->extractOrderData($order));
     $data = array_slice($data, -20);
 
-    file_put_contents($this->feedFilename, json_encode($data));
+    fullFileSystem()->put_contents($this->feedFilename, wp_json_encode($data));
   }
 
   public function addPopup(): void
@@ -97,6 +97,11 @@ class RecentPurchases
     endif;
 
     $position = $this->env->get('ordersPopupPosition');
+
+    $container = '<div id="full-woo-orders-popup" class="full-woo-orders-popup full-social-proof-social ' . $position . '">
+      <span class="dismiss-woo-order-popup">&times;</span>
+      <div class="full-woo-orders-popup-inner"></div>
+    </div>';
 
     $template  = '<template id="full-woo-orders-popup-template">
     <div class="full-woo-orders-popup-inner"><div class="customer-information"><p>{name} {address} comprou <strong data-fragment="product"></strong> {orderDate}</p></div>{img}</div>
@@ -117,11 +122,7 @@ class RecentPurchases
     $template = str_replace('{orderDate}', ($orderDate ? $orderDate : ''), $template);
     $template = str_replace('{img}', ($productThumbnail ? $productThumbnail : ''), $template);
 
-    echo '<div id="full-woo-orders-popup" class="full-woo-orders-popup full-social-proof-social ' . $position . '">
-      <span class="dismiss-woo-order-popup">&times;</span>
-      <div class="full-woo-orders-popup-inner"></div>
-    </div>';
-    echo $template;
+    echo esc_html($container . $template);
   }
 
   public function enqueueScripts(): void

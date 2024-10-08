@@ -6,9 +6,7 @@ class Admin
 {
   const CRON_JOB = 'full/analytics/delete-expired';
 
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -44,7 +42,7 @@ class Admin
       )
     );
 
-    $wpdb->query("OPTIMIZE TABLE `" . Database::$table . "`");
+    $wpdb->query($wpdb->prepare("OPTIMIZE TABLE `" . Database::$table . "`"));
   }
 
   public function addMenuPages(array $menu): array

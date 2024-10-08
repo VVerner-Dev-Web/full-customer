@@ -35,7 +35,7 @@ class Importer
 
     require_once ABSPATH . '/wp-admin/includes/file.php';
     $temp_wp_json_file = wp_tempnam('elements-tk-import-');
-    file_put_contents($temp_wp_json_file, json_encode($localJson));
+    fullFileSystem()->put_contents($temp_wp_json_file, wp_json_encode($localJson));
 
     $result = $source->import_template(basename($temp_wp_json_file), $temp_wp_json_file);
 

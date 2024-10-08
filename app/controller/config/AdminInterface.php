@@ -42,7 +42,7 @@ class AdminInterface
     $position = is_rtl() ? 'right' : 'left';
     $width = $this->env->get('sidebarWidth') . 'px';
 
-    echo "<style>
+    $html = "<style>
       #wpcontent, #wpfooter {
         $margin: $width;
       }
@@ -63,6 +63,8 @@ class AdminInterface
         width: calc(100% - $width);
       }
     </style>";
+
+    echo esc_html($html);
   }
 
   public function disableDashboardWidgets(): void

@@ -10,7 +10,7 @@ $worker = new Settings();
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -47,14 +47,14 @@ $worker = new Settings();
                       </label>
                     </td>
                   </tr>
-                  <tr class="<?= $worker->get('enableChangeLoginUrl') ? '' : 'hidden' ?>">
+                  <tr class="<?php echo $worker->get('enableChangeLoginUrl') ? '' : 'hidden' ?>">
                     <th>
                       <label for="changedLoginUrl">Nova URL</label>
                     </th>
                     <td>
                       <div style="display: flex;align-items: center;gap: 1em;">
-                        <span><?= home_url('/') ?></span>
-                        <input type="text" name="changedLoginUrl" id="changedLoginUrl" value="<?= $worker->get('enableChangeLoginUrl') ? $worker->get('changedLoginUrl') : '' ?>" placeholder="entrar" class="custom-input">
+                        <span><?php echo home_url('/') ?></span>
+                        <input type="text" name="changedLoginUrl" id="changedLoginUrl" value="<?php echo $worker->get('enableChangeLoginUrl') ? $worker->get('changedLoginUrl') : '' ?>" placeholder="entrar" class="custom-input">
                       </div>
                     </td>
                   </tr>
@@ -90,8 +90,8 @@ $worker = new Settings();
                     </th>
                     <td>
                       <div style="display: flex;align-items: center;gap: 1em;">
-                        <span><?= home_url('/') ?></span>
-                        <input type="text" name="redirectAfterLogin" id="redirectAfterLogin" class="custom-input" value="<?= $worker->get('redirectAfterLogin') ?>">
+                        <span><?php echo home_url('/') ?></span>
+                        <input type="text" name="redirectAfterLogin" id="redirectAfterLogin" class="custom-input" value="<?php echo $worker->get('redirectAfterLogin') ?>">
                       </div>
                     </td>
                   </tr>
@@ -101,8 +101,8 @@ $worker = new Settings();
                     </th>
                     <td>
                       <div style="display: flex;align-items: center;gap: 1em;">
-                        <span><?= home_url('/') ?></span>
-                        <input type="text" name="redirectAfterLogout" id="redirectAfterLogout" class="custom-input" value="<?= $worker->get('redirectAfterLogout') ?>">
+                        <span><?php echo home_url('/') ?></span>
+                        <input type="text" name="redirectAfterLogout" id="redirectAfterLogout" class="custom-input" value="<?php echo $worker->get('redirectAfterLogout') ?>">
                       </div>
                     </td>
                   </tr>

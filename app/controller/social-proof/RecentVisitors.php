@@ -52,13 +52,15 @@ class RecentVisitors
   public function renderMetabox(): void
   {
     $current = get_post_meta(get_the_ID(), 'fullVisitorsState', true);
-    echo '
+    $html = '
     <label for="fullVisitorsState">Exibir popup de visitas recentes</label>
     <select name="fullVisitorsState" id="fullVisitorsState" style="style="width: 90%;margin-top: 10px;">
       <option value="on" ' . ($current === 'on' ? ' selected' : '') . '>Ativo</option>
       <option value="off" ' . ($current === 'off' ? ' selected' : '') . '>Inativo</option>
     </select>
     ';
+
+    echo esc_html($html);
   }
 
   public function updateVisitors(): void
@@ -73,7 +75,7 @@ class RecentVisitors
     $visitors = get_post_meta(get_the_ID(), 'full/visitors', true);
     $visitors = is_array($visitors) ? $visitors : [];
 
-    $visitors = array_filter($visitors, fn ($time) => $time < $limit);
+    $visitors = array_filter($visitors, fn($time) => $time < $limit);
     $visitors[] = $limit;
 
     update_post_meta(get_the_ID(), 'full/visitors', $visitors);
@@ -101,7 +103,7 @@ class RecentVisitors
 
     $img = $imageSrc ? '<img src="' . $imageSrc . '">' : '';
 
-    echo '
+    $html = '
     <div id="full-woo-visitors-popup" class="full-woo-orders-popup full-social-proof-social ' . $position . '">
       <span class="dismiss-woo-order-popup">&times;</span>
       <div class="full-woo-orders-popup-inner">
@@ -111,6 +113,8 @@ class RecentVisitors
         ' . $img . '
       </div>
     </div>';
+
+    echo esc_html($html);
   }
 
   public function enqueueScripts(): void

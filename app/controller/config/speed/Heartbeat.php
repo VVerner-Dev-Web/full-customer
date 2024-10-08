@@ -28,7 +28,7 @@ class Heartbeat
   public function modifyFrequency(array $settings): array
   {
     $url = ((isset($_SERVER['HTTPS']) ? "https" : "http")) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-    $request_path = parse_url($url, PHP_URL_PATH);
+    $request_path = wp_parse_url($url, PHP_URL_PATH);
     $currentPath = $request_path;
 
     $settings['minimalInterval'] = MINUTE_IN_SECONDS * 2;

@@ -71,7 +71,7 @@
 <script id="full-notice-api-script">
   jQuery(function($) {
     const $container = $('#full-notice-api');
-    const apiUrl = '<?= fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/alerts' ?>'
+    const apiUrl = '<?php echo esc_url(fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/alerts') ?>'
 
     $.get(apiUrl, function(data) {
       if (!data.message || localStorage.getItem('full-notice/' + data.id)) {

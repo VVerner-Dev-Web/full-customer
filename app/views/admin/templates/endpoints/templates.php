@@ -97,7 +97,7 @@ $index = 0;
 <script type="text/template" id="tpl-templately-item">
   <div class="templately-item templately-page-item" data-filter="{priceTag}" data-item='{json}'>
     <div class="templately-item-inner">
-      <a class="templately-item-image-hover-wrapper " href="<?= esc_url(fullGetTemplatesUrl('single')) ?>&item={id}">
+      <a class="templately-item-image-hover-wrapper " href="<?php echo esc_url(fullGetTemplatesUrl('single')) ?>&item={id}">
         <div class="templately-item-image-container ">
           <div class="templately-item-image-wrapper thumbnail-0">
             <div class="templately-badge templately-{priceTag}">
@@ -108,7 +108,7 @@ $index = 0;
         </div>
       </a>
       <div class="templately-item-details">
-        <a class="templately-title" href="<?= esc_url(fullGetTemplatesUrl('single')) ?>&item={id}" style="font-size: 15px; display: block; margin-bottom: 10px;">
+        <a class="templately-title" href="<?php echo esc_url(fullGetTemplatesUrl('single')) ?>&item={id}" style="font-size: 15px; display: block; margin-bottom: 10px;">
           <h4 style="margin: 0">
             {title}
           </h4>

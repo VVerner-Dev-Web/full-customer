@@ -48,7 +48,7 @@
           <div>
             <h3>Ops, nada encontrado</h3>
             <p>Para enviar seu primeiro modelo para o cloud, visite a página de modelos do Elementor e clique em "enviar para FULL."</p>
-            <a href="<?= esc_url(admin_url('edit.php?post_type=elementor_library&tabs_group=library')) ?>" class="full-primary-button">
+            <a href="<?php echo esc_url(admin_url('edit.php?post_type=elementor_library&tabs_group=library')) ?>" class="full-primary-button">
               Acessar
             </a>
           </div>

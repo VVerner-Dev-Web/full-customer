@@ -12,7 +12,7 @@ $posts = get_posts([
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -70,12 +70,12 @@ $posts = get_posts([
                       $inQueue = $post->post_status === 'full_queue';
                     ?>
                       <tr>
-                        <td><?= $inQueue ? $post->post_content : $post->post_title ?></td>
-                        <td><?= $post->queueId ?></td>
-                        <td><?= $inQueue ? 'Aguardando AI' : get_post_statuses()[$post->post_status] ?></td>
+                        <td><?php echo esc_html($inQueue ? $post->post_content : $post->post_title) ?></td>
+                        <td><?php echo esc_html($post->queueId) ?></td>
+                        <td><?php echo esc_html($inQueue ? 'Aguardando AI' : get_post_statuses()[$post->post_status]) ?></td>
                         <td>
                           <?php if (!$inQueue) : ?>
-                            <a href="<?= esc_url(get_edit_post_link($post)) ?>" target="_blank" rel="noopener noreferrer">Editar</a>
+                            <a href="<?php echo esc_url(get_edit_post_link($post)) ?>" target="_blank" rel="noopener noreferrer">Editar</a>
                           <?php endif; ?>
                         </td>
                       </tr>

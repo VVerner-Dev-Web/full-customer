@@ -42,11 +42,14 @@ class EstimateMode
 
   public function registerOrderStatus(): void
   {
+    /* translators: %s is replaced with the number of orders */
+    $label = _n_noop('Aguardando orçamento (%s)', 'Aguardando orçamentos (%s)');
+
     register_post_status('wc-full-estimate', [
       'label'    => 'Aguardando orçamento',
       'public'  => true,
       'show_in_admin_status_list' => true,
-      'label_count'  => _n_noop('Aguardando orçamento (%s)', 'Aguardando orçamentos (%s)')
+      'label_count'  => $label
     ]);
   }
 

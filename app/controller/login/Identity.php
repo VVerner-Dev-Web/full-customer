@@ -36,7 +36,7 @@ class Identity
       return;
     endif;
 
-    echo "<style>.login h1 a {background-image: url('" . get_site_icon_url(180) . "') !important}</style>";
+    echo esc_html("<style>.login h1 a {background-image: url('" . get_site_icon_url(180) . "') !important}</style>");
   }
 
   public function loginTitle(): string

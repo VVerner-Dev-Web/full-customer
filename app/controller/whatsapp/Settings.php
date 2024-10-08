@@ -31,7 +31,7 @@ class Settings
 
     return esc_url(add_query_arg([
       'phone' => '55' . preg_replace('/\D/', '', $settings->number ? $settings->number : $this->get('whatsappNumber')),
-      'text'  => strip_tags($settings->message ? $settings->message :  $this->get('whatsappMessage')),
+      'text'  => wp_strip_all_tags($settings->message ? $settings->message :  $this->get('whatsappMessage')),
     ], 'https://api.whatsapp.com/send'));
   }
 
@@ -39,7 +39,7 @@ class Settings
   {
     return esc_url(add_query_arg([
       'phone' => '55' . preg_replace('/\D/', '', $this->get('whatsappNumber')),
-      'text'  => strip_tags($this->get('whatsappMessage')),
+      'text'  => wp_strip_all_tags($this->get('whatsappMessage')),
     ], 'https://api.whatsapp.com/send'));
   }
 

@@ -15,7 +15,7 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-swal', $assetsUrl . 'vendor/sweetalert/sweetalert2.min.css', [], '11.4.35');
   wp_enqueue_style('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.css', [], '3.0.0');
   wp_enqueue_style('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.css', [], '1.0.0');
-  wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css');
+  wp_enqueue_style('full-icons', 'https://painel.full.services/wp-content/plugins/full/app/assets/vendor/icon-set/style.css', [], '1.0.0');
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
 
@@ -76,7 +76,7 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId): v
     $html = '<a href="' . esc_url(fullGetTemplatesUrl('cloud')) . '">Gerenciar</a>';
   endif;
 
-  echo  $html;
+  echo esc_html($html);
 }
 
 function editorFooter(): void
@@ -101,11 +101,8 @@ function _loadTemplatesViews(): void
     $content = ob_get_clean();
     $content = explode('_SCRIPTS_DIVIDER_', $content);
 
-    echo '<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . array_shift($content) . '</script>';
-
-    foreach ($content as $script) :
-      echo $script;
-    endforeach;
+    echo esc_html('<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . array_shift($content) . '</script>');
+    array_map('esc_html_e', $content);
   endforeach;
 }
 
@@ -116,11 +113,6 @@ function _loadIaViews(): void
   $content = ob_get_clean();
   $content = explode('_SCRIPTS_DIVIDER_', $content);
 
-  echo '<script  id="full-ai-prompt" type="text/template"> ';
-  echo array_shift($content);
-  echo '</script>';
-
-  foreach ($content as $script) :
-    echo $script;
-  endforeach;
+  echo esc_html('<script  id="full-ai-prompt" type="text/template"> ' . array_shift($content) . '</script>');
+  array_map('esc_html_e', $content);
 }

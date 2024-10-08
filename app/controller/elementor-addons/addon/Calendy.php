@@ -183,7 +183,7 @@ class Calendy extends Widget_Base
 
   protected function render_inline(array $config, array $rawSettings)
   {
-    echo '<div class="calendly-inline-widget" data-url="' . $config['url'] . '" data-resize="true" style="min-width:320px;height:700px;"></div>';
+    echo esc_html('<div class="calendly-inline-widget" data-url="' . $config['url'] . '" data-resize="true" style="min-width:320px;height:700px;"></div>');
   }
 
   protected function render_popup(array $config, array $rawSettings)
@@ -191,16 +191,16 @@ class Calendy extends Widget_Base
     $editor = isset($_REQUEST['action']) && $_REQUEST['action'] === 'elementor_ajax';
 
     if ($editor) {
-      echo 'Esta versão funciona apenas fora do editor do Elementor.';
+      esc_html_e('Esta versão funciona apenas fora do editor do Elementor.');
       return;
     }
 
-    echo '<script>window.onload = function() {Calendly.initBadgeWidget(' . json_encode($config) . ')}</script>';
+    echo esc_html('<script>window.onload = function() {Calendly.initBadgeWidget(' . wp_json_encode($config) . ')}</script>');
   }
 
   protected function render_link(array $config, array $rawSettings)
   {
     $style = $rawSettings['link_color'] ? 'color:' . $rawSettings['link_color'] . ';' : '';
-    echo '<a style="' . $style . '" href="" onclick=\'Calendly.initPopupWidget(' . json_encode($config) . ') ; return false;\'>' . $config['text'] . '</a>';
+    echo esc_html('<a style="' . $style . '" href="" onclick=\'Calendly.initPopupWidget(' . wp_json_encode($config) . ') ; return false;\'>' . $config['text'] . '</a>');
   }
 }

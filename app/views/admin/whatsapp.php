@@ -10,7 +10,7 @@ $worker = new Settings();
   <div class="templately-wrapper">
     <div class="templately-header">
       <div class="templately-logo">
-        <img src="<?= fullGetImageUrl('logo-novo.png') ?>" alt="Logo FULL">
+        <img src="<?php echo esc_url(fullGetImageUrl('logo-novo.png')) ?>" alt="Logo FULL">
       </div>
     </div>
 
@@ -48,34 +48,34 @@ $worker = new Settings();
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="whatsappNumber">Número de telefone</label>
                     </th>
                     <td>
-                      <input type="text" inputmode="numeric" name="whatsappNumber" id="whatsappNumber" value="<?= $worker->isButtonEnabled() ? $worker->get('whatsappNumber') : '' ?>" class="custom-input">
+                      <input type="text" inputmode="numeric" name="whatsappNumber" id="whatsappNumber" value="<?php echo $worker->isButtonEnabled() ? $worker->get('whatsappNumber') : '' ?>" class="custom-input">
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="whatsappMessage">Mensagem padrão para envio</label>
                     </th>
                     <td>
-                      <input type="text" name="whatsappMessage" id="whatsappMessage" value="<?= $worker->isButtonEnabled() ? $worker->get('whatsappMessage') : '' ?>" class="custom-input">
+                      <input type="text" name="whatsappMessage" id="whatsappMessage" value="<?php echo $worker->isButtonEnabled() ? $worker->get('whatsappMessage') : '' ?>" class="custom-input">
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="whatsappLogoSize">Tamanho do ícone (em pixels)</label>
                     </th>
                     <td>
-                      <input type="number" step="1" min="0" name="whatsappLogoSize" id="whatsappLogoSize" value="<?= $worker->isButtonEnabled() ? $worker->get('whatsappLogoSize') : '' ?>" class="custom-input">
+                      <input type="number" step="1" min="0" name="whatsappLogoSize" id="whatsappLogoSize" value="<?php echo $worker->isButtonEnabled() ? $worker->get('whatsappLogoSize') : '' ?>" class="custom-input">
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="whatsappPosition">Posição na tela</label>
                     </th>
@@ -88,7 +88,7 @@ $worker = new Settings();
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="displayCondition">Local de exibição</label>
                     </th>
@@ -109,35 +109,35 @@ $worker = new Settings();
                     <td>Na página de edição do conteúdo, procure por "FULL.whatsapp" e controle a visibilidade do botão</td>
                   </tr>
 
-                  <tr class="displayConditionCpt <?= $worker->get('displayCondition') === 'cpt' ? '' : 'hidden' ?>">
+                  <tr class="displayConditionCpt <?php echo $worker->get('displayCondition') === 'cpt' ? '' : 'hidden' ?>">
                     <th style="vertical-align: top">
                       <label for="validCpt">Local de exibição</label>
                     </th>
                     <td>
                       <?php foreach (get_post_types(['public' => true], 'objects') as $cpt) : ?>
-                        <label class="toggle-switch toggle-switch-sm" for="validCpt-<?= $cpt->name ?>">
-                          <input type="checkbox" name="validCpt[]" value="<?= $cpt->name ?>" class="toggle-switch-input" id="validCpt-<?= $cpt->name ?>" <?php checked($worker->isButtonEnabledForPostType($cpt->name)) ?>>
+                        <label class="toggle-switch toggle-switch-sm" for="validCpt-<?php echo $cpt->name ?>">
+                          <input type="checkbox" name="validCpt[]" value="<?php echo $cpt->name ?>" class="toggle-switch-input" id="validCpt-<?php echo $cpt->name ?>" <?php checked($worker->isButtonEnabledForPostType($cpt->name)) ?>>
                           <span class="toggle-switch-label">
                             <span class="toggle-switch-indicator"></span>
                           </span>
                           <span class="toggle-switch-content">
-                            <?= $cpt->label ?>
+                            <?php echo $cpt->label ?>
                           </span>
                         </label>
                       <?php endforeach; ?>
                     </td>
                   </tr>
 
-                  <tr class="whatsapp <?= $worker->isButtonEnabled() ? '' : 'hidden' ?>">
+                  <tr class="whatsapp <?php echo $worker->isButtonEnabled() ? '' : 'hidden' ?>">
                     <th>
                       <label for="whatsappLogo">Ícone para exibição</label>
                     </th>
                     <td>
                       <div class="icons-container">
                         <?php for ($i = 1; $i <= 3; $i++) :  $pad = str_pad($i, 3, '0', STR_PAD_LEFT) ?>
-                          <input type="radio" name="whatsappLogo" id="whatsappLogo-<?= $pad ?>" value="<?= $pad ?>" <?php checked($pad, $worker->get('whatsappLogo')) ?>>
-                          <label for="whatsappLogo-<?= $pad ?>">
-                            <img src="<?= $worker->getLogoUrl($pad) ?>" alt="Logo do WhatsApp">
+                          <input type="radio" name="whatsappLogo" id="whatsappLogo-<?php echo $pad ?>" value="<?php echo $pad ?>" <?php checked($pad, $worker->get('whatsappLogo')) ?>>
+                          <label for="whatsappLogo-<?php echo $pad ?>">
+                            <img src="<?php echo $worker->getLogoUrl($pad) ?>" alt="Logo do WhatsApp">
                           </label>
                         <?php endfor; ?>
                       </div>

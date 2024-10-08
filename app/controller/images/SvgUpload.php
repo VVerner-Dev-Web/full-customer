@@ -59,7 +59,7 @@ class SvgUpload
         $file['error'] = 'This SVG file could not be sanitized, so, was not uploaded for security reasons.';
       endif;
 
-      file_put_contents($tmpName, $sanitized);
+      fullFileSystem()->put_contents($tmpName, $sanitized);
     endif;
 
     return $file;
@@ -104,12 +104,10 @@ class SvgUpload
 
   public function getAttachmentUrl(): void
   {
-    $url = '';
     $id = (isset($_REQUEST['attachmentID']) ? $_REQUEST['attachmentID'] : '');
 
     if ($id) {
-      $url = wp_get_attachment_url($id);
-      echo  $url;
+      esc_url(wp_get_attachment_url($id));
       die;
     }
   }

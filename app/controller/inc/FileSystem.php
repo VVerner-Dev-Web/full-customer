@@ -38,7 +38,7 @@ class FileSystem
       throw new Exception('Não foi possível apagar todo o temp dir');
     endif;
 
-    mkdir($this->getTemporaryDirectoryPath());
+    fullFileSystem()->mkdir($this->getTemporaryDirectoryPath());
   }
 
   public function deleteTemporaryDirectory(): void
@@ -63,10 +63,7 @@ class FileSystem
 
     endif;
 
-    return @rename(
-      $originPath,
-      $destinationPath
-    );
+    return fullFileSystem()->move($originPath, $destinationPath, true);
   }
 
   public function copyFile(string $originPath, string $destinationPath): bool
@@ -88,7 +85,7 @@ class FileSystem
     $zipFile->openFile($zipFilePath)->extractTo($destinationPath)->close();
 
     if ($deleteAfterExtract) :
-      unlink($zipFilePath);
+      wp_delete_file($zipFilePath);
     endif;
 
     return true;
@@ -106,18 +103,12 @@ class FileSystem
 
   public function deleteDirectory(string $path): bool
   {
-    $files = $this->scanDir($path);
-
-    foreach ($files as $file) :
-      is_dir($file) ? $this->deleteDirectory($file) : $this->deleteFile($file);
-    endforeach;
-
-    return @rmdir($path);
+    return fullFileSystem()->rmdir($path, true);
   }
 
   public function deleteFile(string $path): bool
   {
-    return @unlink($path);
+    return wp_delete_file($path);
   }
 
   public function downloadExternalResource(string $source, string $filename): string
@@ -127,7 +118,7 @@ class FileSystem
     $path = $this->getTemporaryDirectoryPath() . DIRECTORY_SEPARATOR . $filename;
 
     if (file_exists($path)) :
-      $this->deleteFile($path);
+      wp_delete_file($path);
     endif;
 
     $file = fopen($path, 'a');

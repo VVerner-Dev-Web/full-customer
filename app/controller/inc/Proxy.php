@@ -36,7 +36,7 @@ class Proxy
       'headers'   => [
         'Content-type'  => 'application/json'
       ],
-      'body'      => json_encode([
+      'body'      => wp_json_encode([
         'siteAddress'   => home_url(),
         'payload'       => $payload
       ])
@@ -113,7 +113,7 @@ class Proxy
         'themeURI'      => $theme->ThemeURI,
         'version'       => $theme->Version,
         'description'   => $theme->Description,
-        'author'        => strip_tags($theme->Author),
+        'author'        => wp_strip_all_tags($theme->Author),
         'key'           => $theme->get_stylesheet(),
         'parent'        => $parentTheme ? $parentTheme->Name : null,
         'status'        => $currentTheme->get_stylesheet() === $theme->get_stylesheet() ? 'active' : 'inactive'

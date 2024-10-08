@@ -34,6 +34,6 @@ class CurrentTime extends Widget_Base
 
   protected function render()
   {
-    echo current_time(get_option('time_format', 'H:i:s'));
+    echo esc_html(current_time(get_option('time_format', 'H:i:s')));
   }
 }
