@@ -169,13 +169,13 @@ class Calendy extends Widget_Base
       'text'  => $settings['link_text'],
       'color' => $settings['color_button'],
       'textColor' => $settings['color_text'],
-      'url'   => add_query_arg([
+      'url'   => esc_url(add_query_arg([
         'hide_gdpr_banner' => $settings['cookies'] === 'yes' ? 0 : 1,
         'hide_event_type_details' => $settings['event_details'] === 'yes' ? 0 : 1,
         'background_color' => str_replace('#', '', $settings['color_bg']),
         'text_color' => str_replace('#', '', $settings['color_text']),
         'primary_color' => str_replace('#', '', $settings['color_button']),
-      ], $settings['embed_url']['url'])
+      ], $settings['embed_url']['url']))
     ];
 
     $this->$render($config, $settings);

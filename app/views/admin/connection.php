@@ -107,7 +107,7 @@
       <?php endif; ?>
 
       <div id="full-connection-validate">
-        <a href="<?= add_query_arg('full', 'verify_license') ?>">
+        <a href="<?= esc_url(admin_url('admin.php?page=full-connection&full=verify_license')) ?>">
           Verificar licença PRO
         </a>
       </div>

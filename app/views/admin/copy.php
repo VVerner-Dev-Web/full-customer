@@ -75,7 +75,7 @@ $posts = get_posts([
                         <td><?= $inQueue ? 'Aguardando AI' : get_post_statuses()[$post->post_status] ?></td>
                         <td>
                           <?php if (!$inQueue) : ?>
-                            <a href="<?= get_edit_post_link($post) ?>" target="_blank" rel="noopener noreferrer">Editar</a>
+                            <a href="<?= esc_url(get_edit_post_link($post)) ?>" target="_blank" rel="noopener noreferrer">Editar</a>
                           <?php endif; ?>
                         </td>
                       </tr>

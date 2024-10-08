@@ -4,7 +4,7 @@
   <div class="templately-nav-wrapper templately-clouds-menu templately-nav-sidebar">
     <ul class="">
       <li class="tn-item nav-item-clouds <?= 'cloud' === $section  ? 'nav-item-active' : '' ?>">
-        <a href="<?= add_query_arg(['section' => 'cloud']) ?>">
+        <a href="<?= esc_url(add_query_arg(['section' => 'cloud'])) ?>">
           <i class="tio-cloud-outlined"></i>
           Meu Cloud
         </a>

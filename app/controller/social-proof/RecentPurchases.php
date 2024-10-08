@@ -136,7 +136,7 @@ class RecentPurchases
     wp_enqueue_script('full-social-proof', $baseUrl . 'js/social-proof.js', ['jquery'], $version, true);
 
     wp_localize_script('full-social-proof', 'socialProofFeed', [
-      'url' => add_query_arg('v', uniqid(), $this->feedUrl),
+      'url' => esc_url(add_query_arg('v', uniqid(), $this->feedUrl)),
       'mapPin' => $baseUrl . 'img/location-pin.png'
     ]);
   }

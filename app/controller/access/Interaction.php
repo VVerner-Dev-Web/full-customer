@@ -4,9 +4,7 @@ namespace Full\Customer\Access;
 
 class Interaction
 {
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -47,9 +45,9 @@ class Interaction
     endif;
 
     $userId = filter_input(INPUT_POST, 'userId', FILTER_VALIDATE_INT);
-    $url = add_query_arg([
+    $url = esc_url(add_query_arg([
       'fta' => Authentication::generateAccessToken($userId)
-    ], admin_url());
+    ], admin_url()));
 
     wp_send_json_success($url);
   }

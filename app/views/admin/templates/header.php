@@ -7,14 +7,14 @@
     <ul class="templately-nav">
       <?php if ($full->isServiceEnabled('full-templates')) : ?>
         <li class="tn-item templately-nav-item <?= 'templates' === $endpointView ? 'templately-nav-active' : '' ?>">
-          <a href="<?= fullGetTemplatesUrl('templates') ?>" data-endpoint="templates">
+          <a href="<?= esc_url(fullGetTemplatesUrl('templates')) ?>" data-endpoint="templates">
             Templates
           </a>
         </li>
       <?php endif; ?>
       <?php if ($full->isServiceEnabled('full-cloud')) : ?>
         <li class="tn-item templately-nav-item <?= 'cloud' === $endpointView ? 'templately-nav-active' : '' ?>">
-          <a href="<?= fullGetTemplatesUrl('cloud') ?>" data-endpoint="cloud">
+          <a href="<?= esc_url(fullGetTemplatesUrl('cloud')) ?>" data-endpoint="cloud">
             Cloud
           </a>
         </li>

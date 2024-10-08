@@ -9,9 +9,7 @@ class Authentication
 {
   const USER_ROLE = 'full_temporary_access';
 
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -48,7 +46,7 @@ class Authentication
     wp_set_auth_cookie($user->ID);
     do_action('wp_login', $user->user_login, $user);
 
-    wp_redirect(remove_query_arg('fta'));
+    wp_redirect(esc_url(remove_query_arg('fta')));
     exit;
   }
 

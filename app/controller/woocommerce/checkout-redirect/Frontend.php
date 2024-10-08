@@ -45,7 +45,7 @@ class Frontend
     endforeach;
 
     if ($redirectUrl) :
-      wp_safe_redirect(add_query_arg('orderId', $order->get_id(), $redirectUrl));
+      wp_safe_redirect(esc_url(add_query_arg('orderId', $order->get_id(), $redirectUrl)));
       exit;
     endif;
   }

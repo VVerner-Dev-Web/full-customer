@@ -303,9 +303,9 @@ $env = new Settings;
         <div style="margin-bottom: 15px">
           <label for="conversionElement">Localizador</label>
           <input type="text" name="conversionElement" id="conversionElement" class="large-text" required>
-          <span class="conversion-tutorial for-click" style="display: none">Insira o seletor CSS do botão <a href="<?= fullGetImageUrl('analytics/tutorial-botao.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
-          <span class="conversion-tutorial for-submit" style="display: none">Insira o seletor CSS do formulário <a href="<?= fullGetImageUrl('analytics/tutorial-form.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
-          <span class="conversion-tutorial for-view" style="display: none">Insira a URL que o visitante deve acessar <a href="<?= fullGetImageUrl('analytics/tutorial-link.webp') ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-click" style="display: none">Insira o seletor CSS do botão <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-botao.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-submit" style="display: none">Insira o seletor CSS do formulário <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-form.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
+          <span class="conversion-tutorial for-view" style="display: none">Insira a URL que o visitante deve acessar <a href="<?= esc_url(fullGetImageUrl('analytics/tutorial-link.webp')) ?>" target="_blank" rel="noopener noreferrer">Ver exemplo</a></span>
         </div>
 
         <button class="full-primary-button">Salvar</button>

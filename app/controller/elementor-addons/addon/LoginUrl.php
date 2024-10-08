@@ -34,6 +34,6 @@ class LoginUrl extends Widget_Base
 
   protected function render()
   {
-    echo '<a href="' . wp_login_url() . '">Entrar</a>';
+    echo '<a href="' . esc_url(wp_login_url()) . '">Entrar</a>';
   }
 }

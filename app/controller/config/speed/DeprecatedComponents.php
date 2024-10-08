@@ -71,7 +71,7 @@ class DeprecatedComponents
   public function removeAssetsVersionNumber(string $src): string
   {
     if (!is_user_logged_in() && strpos($src, '?ver=') !== false) :
-      $src = remove_query_arg('ver', $src);
+      $src = esc_url(remove_query_arg('ver', $src));
     endif;
 
     return $src;
@@ -89,9 +89,7 @@ class DeprecatedComponents
     wp_deregister_style('dashicons');
   }
 
-  public function removeEmojis(): void
-  {
-  }
+  public function removeEmojis(): void {}
 
   public function removeJqueryMigrate($scripts): void
   {

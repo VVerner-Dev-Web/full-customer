@@ -405,7 +405,7 @@ class ElementorTemplates extends FullCustomerController
 
     return new WP_REST_Response([
       'postId'  => $postId,
-      'button'  => '<a href="' . fullGetTemplatesUrl('cloud') . '">Gerenciar</a>'
+      'button'  => '<a href="' . esc_url(fullGetTemplatesUrl('cloud')) . '">Gerenciar</a>'
     ]);
   }
 

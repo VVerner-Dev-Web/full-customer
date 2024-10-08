@@ -50,7 +50,7 @@
                               <span class="toggle-switch-indicator"></span>
                             </span>
                           </label>
-                          <small>Para editar o nome e descrição do gateway, <a href="<?= admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer') ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
+                          <small>Para editar o nome e descrição do gateway, <a href="<?= esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
                         </td>
                       </tr>
 
@@ -98,7 +98,7 @@
                               <span class="toggle-switch-indicator"></span>
                             </span>
                           </label>
-                          <small>Para editar o nome e descrição do gateway, <a href="<?= admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer-estimate') ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
+                          <small>Para editar o nome e descrição do gateway, <a href="<?= esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=full-customer-estimate')) ?>" target="_blank" rel="noopener noreferrer">clique aqui</a></small>
                         </td>
                       </tr>
 

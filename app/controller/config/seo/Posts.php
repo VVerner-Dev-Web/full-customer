@@ -63,7 +63,7 @@ class Posts
 
     $url  = admin_url('admin.php?action=full_duplicator&post=' . $post->ID);
     $url  = wp_nonce_url($url, 'full_duplicator');
-    $actions['full_duplicator'] = sprintf('<a href="%s" title="%s">%s</a>', $url, 'FULL.duplica', 'FULL.duplica');
+    $actions['full_duplicator'] = sprintf('<a href="%s" title="%s">%s</a>', esc_url($url), 'FULL.duplica', 'FULL.duplica');
 
     return $actions;
   }

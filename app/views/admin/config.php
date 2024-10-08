@@ -265,13 +265,13 @@
                 $content    = $validSize ? file_get_contents($filename) : 'Conteúdo indisponível ou muito grande para ser carregado no navegador.'
               ?>
                 <h3>Log de erros do WordPress</h3>
-                <p><a href="<?= remove_query_arg(['show-logs', 'empty-file']) ?>">Voltar para configurações</a></p>
+                <p><a href="<?= esc_url(remove_query_arg(['show-logs', 'empty-file'])) ?>">Voltar para configurações</a></p>
 
                 <div class="full-widget-form full-widget-logs">
                   <?= wpautop(htmlspecialchars($content), true) ?>
                 </div>
 
-                <a href="<?= add_query_arg('empty-file', 1) ?>" class="show-logs" style="color: red">Limpar arquivo</a>
+                <a href="<?= esc_url(add_query_arg('empty-file', 1)) ?>" class="show-logs" style="color: red">Limpar arquivo</a>
 
                 <br>
                 <br>
@@ -329,7 +329,7 @@
                       <tr>
                         <th>
                           <button class="full-primary-button">Atualizar</button>
-                          <a href="<?= add_query_arg('show-logs', 1) ?>" class="show-logs <?= $worker->getConst('WP_DEBUG_LOG') ? '' : 'hidden' ?>">Ver logs</a>
+                          <a href="<?= esc_url(add_query_arg('show-logs', 1)) ?>" class="show-logs <?= $worker->getConst('WP_DEBUG_LOG') ? '' : 'hidden' ?>">Ver logs</a>
                         </th>
                         <td></td>
                       </tr>

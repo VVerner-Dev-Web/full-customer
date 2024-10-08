@@ -73,7 +73,7 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId): v
   $html    = '<a href="#" data-js="send-to-cloud" data-post="' . $postId . '">Enviar para FULL.</a>';
 
   if ($cloudId && TemplateManager::instance()->getCloudItem($cloudId)) :
-    $html = '<a href="' . fullGetTemplatesUrl('cloud') . '">Gerenciar</a>';
+    $html = '<a href="' . esc_url(fullGetTemplatesUrl('cloud')) . '">Gerenciar</a>';
   endif;
 
   echo  $html;

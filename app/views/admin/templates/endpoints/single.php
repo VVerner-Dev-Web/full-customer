@@ -28,7 +28,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
       <div class="templately-row align-center justify-between">
         <div class="templately-col">
           <div class="templately-items-header" style="text-align: left;">
-            <a href="<?= fullGetTemplatesUrl('templates') ?>" data-endpoint="templates" class="endpoint-nav" style="cursor: pointer">
+            <a href="<?= esc_url(fullGetTemplatesUrl('templates')) ?>" data-endpoint="templates" class="endpoint-nav" style="cursor: pointer">
               <i class="tio-arrow-backward"></i>
               Voltar
             </a>
@@ -92,7 +92,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
                   Inserir
                 </a>
               <?php else : ?>
-                <a target="_blank" href="<?= $item->purchaseUrl ?>" class="templately-button tb-import tb-purchase" style="background-color: #eabc32">
+                <a target="_blank" href="<?= esc_url($item->purchaseUrl) ?>" class="templately-button tb-import tb-purchase" style="background-color: #eabc32">
                   <i class="tio-shopping-icon" style="margin-right: 5px;"></i>
                   Comprar
                 </a>
@@ -112,7 +112,7 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
               <div class="full-template-carousel">
                 <?php foreach ($item->gallery as $src) : ?>
                   <div class="templately-layouts-in-packs-item">
-                    <a href="<?= $src ?>">
+                    <a href="<?= esc_url($src) ?>">
                       <div class="templately-layouts-in-packs-item-image">
                         <img src="<?= $src ?>" alt="Imagem do template">
                       </div>

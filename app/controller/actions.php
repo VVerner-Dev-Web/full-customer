@@ -46,7 +46,7 @@ function forceLicenseCheck(): void
 
   License::updateStatus();
 
-  wp_safe_redirect(remove_query_arg('full'));
+  wp_safe_redirect(esc_url(remove_query_arg('full')));
 }
 
 function verifySiteConnection(): void

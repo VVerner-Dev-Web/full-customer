@@ -29,18 +29,18 @@ class Settings
   {
     $settings = $this->getSinglePostSettings($postId);
 
-    return add_query_arg([
+    return esc_url(add_query_arg([
       'phone' => '55' . preg_replace('/\D/', '', $settings->number ? $settings->number : $this->get('whatsappNumber')),
       'text'  => strip_tags($settings->message ? $settings->message :  $this->get('whatsappMessage')),
-    ], 'https://api.whatsapp.com/send');
+    ], 'https://api.whatsapp.com/send'));
   }
 
   public function getUrl(): string
   {
-    return add_query_arg([
+    return esc_url(add_query_arg([
       'phone' => '55' . preg_replace('/\D/', '', $this->get('whatsappNumber')),
       'text'  => strip_tags($this->get('whatsappMessage')),
-    ], 'https://api.whatsapp.com/send');
+    ], 'https://api.whatsapp.com/send'));
   }
 
   public function getLogoUrl(string $id = null): string
