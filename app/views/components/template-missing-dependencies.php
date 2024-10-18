@@ -20,7 +20,7 @@
     <ul>
       <?php foreach ($dependencies['uninstalled'] as $item) : ?>
         <li>
-          <a href="<?php echo escr_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
+          <a href="<?php echo esc_url($item->url) ?>" target="_blank" rel="noopener noreferrer">
             <?php echo $item->name ?>
           </a>
         </li>

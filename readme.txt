@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.23 = 
+= 3.1.24 = 
 
-* Corrigido problemas de segurança referentes a CVE
+* Corrigido um bug em que. ao tentar instalar um template sem as dependências, a importação falhava
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
