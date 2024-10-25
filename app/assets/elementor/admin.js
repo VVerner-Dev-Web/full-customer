@@ -89,7 +89,9 @@
       search: getCurrentSearch(),
       types: getCurrentTypesFilter(),
       segment: getCurrentSegmentFiler(),
-      search: $("#template-searcher input").val().trim(),
+      search: $("#template-searcher input").val()
+        ? $("#template-searcher input").val().trim()
+        : "",
     };
 
     const endpoint =
@@ -239,7 +241,6 @@
     let fetching = false;
     let eventsInterval = setInterval(() => {
       if (fetching) {
-        console.log("to soon");
         return;
       }
 

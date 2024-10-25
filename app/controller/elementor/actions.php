@@ -98,11 +98,17 @@ function _loadTemplatesViews(): void
   foreach ($endpoints as $endpointView) :
     ob_start();
     require FULL_CUSTOMER_APP . '/views/admin/templates.php';
-    $content = ob_get_clean();
-    $content = explode('_SCRIPTS_DIVIDER_', $content);
 
-    echo esc_html('<script type="text/template" class="full-templates" data-endpoint="' . $endpointView . '">' . array_shift($content) . '</script>');
-    array_map('esc_html_e', $content);
+    $content = explode('<script', ob_get_clean());
+
+    $template = array_shift($content);
+
+    echo '<template class="full-templates" data-endpoint="' . $endpointView . '">' . $template . '</template>';
+
+    foreach ($content ?? [] as $script) {
+      echo '<script' . $script;
+    }
+
   endforeach;
 }
 
@@ -110,9 +116,6 @@ function _loadIaViews(): void
 {
   ob_start();
   require FULL_CUSTOMER_APP . '/views/ai/prompt.php';
-  $content = ob_get_clean();
-  $content = explode('_SCRIPTS_DIVIDER_', $content);
 
-  echo esc_html('<script  id="full-ai-prompt" type="text/template"> ' . array_shift($content) . '</script>');
-  array_map('esc_html_e', $content);
+  echo '<template id="full-ai-prompt"> ' . ob_get_clean() . '</template>';
 }

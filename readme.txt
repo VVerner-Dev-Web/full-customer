@@ -4,7 +4,7 @@ Tags: full, elementor, security, tool, manage-multiple-sites
 Requires at least: 6.3
 Tested up to: 6.6.2
 Requires PHP: 7.4
-Stable tag: 3.1.23
+Stable tag: 3.1.25
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,8 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.24 = 
+= 3.1.25 = 
 
-* Corrigido um bug em que. ao tentar instalar um template sem as dependências, a importação falhava
+* Corrigido um bug em que os templates não estava abrindo no editor do Elementor
+* Removido alguns logs que existiam no editor do Elementor
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)

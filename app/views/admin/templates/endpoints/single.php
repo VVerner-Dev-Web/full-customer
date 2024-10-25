@@ -130,10 +130,6 @@ $item   = $templateAsScript ? null : TemplateManager::instance()->getItem($itemI
     </div>
   </div>
 
-  <?php if ($templateAsScript) : ?>
-    _SCRIPTS_DIVIDER_
-  <?php endif; ?>
-
   <script type="text/template" id="tpl-single-button-insert-item">
     <a class="templately-button tb-import tb-purchase" data-js="insert-item" data-item='{json}' style="background-color: #eabc32; margin-right: 1em;">
       <i class="tio-download-to" style="margin-right: 5px;"></i>

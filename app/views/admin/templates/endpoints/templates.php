@@ -1,7 +1,4 @@
 <?php
-
-use Full\Customer\Elementor\TemplateManager;
-
 $maxVisibleItens = 4;
 $index = 0;
 ?>
@@ -89,10 +86,6 @@ $index = 0;
     </div>
   </div>
 </div>
-
-<?php if (isset($templateAsScript)) : ?>
-  _SCRIPTS_DIVIDER_
-<?php endif; ?>
 
 <script type="text/template" id="tpl-templately-item">
   <div class="templately-item templately-page-item" data-filter="{priceTag}" data-item='{json}'>

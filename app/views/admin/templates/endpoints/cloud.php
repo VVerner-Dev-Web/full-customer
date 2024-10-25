@@ -30,10 +30,6 @@
   <?php require_once FULL_CUSTOMER_APP . '/views/admin/templates/cloud/' . $section . '.php'; ?>
 </div>
 
-<?php if (isset($templateAsScript)) : ?>
-  _SCRIPTS_DIVIDER_
-<?php endif; ?>
-
 <script type="text/template" id="tpl-templately-cloud-item">
   <div class="templately-table-row single-cloud-item" data-item='{json}'>
     <div class="templately-table-column ">

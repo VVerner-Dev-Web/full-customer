@@ -70,8 +70,6 @@
   </div>
 </div>
 
-_SCRIPTS_DIVIDER_
-
 <script type="text/template" id="full-ai-prompt-template">
   <div class="single-prompt-template" data-template='{json}'>
     <h3>{title}</h3>

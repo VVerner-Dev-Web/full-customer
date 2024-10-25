@@ -367,9 +367,6 @@ jQuery(function ($) {
     }).then((result) => {
       if (result.isDenied) {
         const $tr = $(this).closest("tr");
-
-        console.log($tr.data("conversion"));
-
         $.post(
           ajaxurl,
           {

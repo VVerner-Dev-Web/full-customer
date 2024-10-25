@@ -70,8 +70,6 @@ jQuery(function ($) {
         .find(".full-woo-orders-popup-inner")
         .replaceWith($content);
 
-      console.log();
-
       if ($recentPurchasePopup.find("#full-map") && item.location) {
         const [long, lat] = item.location.split(",");
         createMap(long, lat);

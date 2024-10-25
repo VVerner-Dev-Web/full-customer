@@ -2,7 +2,6 @@ jQuery(function ($) {
   $(".select2").select2({});
 
   $("#userLocation, #productThumbnail").on("change", function () {
-    console.log($(this).is(":checked"));
     if (!$(this).is(":checked")) {
       return;
     }
