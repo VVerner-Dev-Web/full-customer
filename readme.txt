@@ -1,10 +1,10 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
+Stable tag: 3.1.26
 Requires at least: 6.3
-Tested up to: 6.6.2
+Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 3.1.25
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -56,7 +56,7 @@ O plugin ativado continuará funcionando sem problemas.
 
 = Requisitos =
 
-* PHP com versão 7.4 ou mais recente. PHP 8.2 é a versão recomendada atualmente.
+* PHP com versão 7.4 ou mais recente. PHP 8.3 é a versão recomendada atualmente.
 * MySQL com versão 5.6 ou mais recente, OU MariaDB com versão 10.1 ou mais recente
 
 == Screenshots ==
@@ -65,9 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.25 = 
+= 3.1.26 = 
 
-* Corrigido um bug em que os templates não estava abrindo no editor do Elementor
-* Removido alguns logs que existiam no editor do Elementor
+* Atualização de segurança
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
