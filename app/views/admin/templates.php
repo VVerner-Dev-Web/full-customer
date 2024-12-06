@@ -3,11 +3,15 @@
 $full = fullCustomer();
 
 if (!isset($endpointView)) :
-  $endpointView = filter_input(INPUT_GET, 'endpoint') ? filter_input(INPUT_GET, 'endpoint') : 'templates';
+  $endpointView = filter_input(INPUT_GET, 'endpoint') ? filter_input(INPUT_GET, 'endpoint') : '';
 endif;
 
 if (!$full->isServiceEnabled('full-templates')) :
   $endpointView = 'cloud';
+endif;
+
+if (!in_array($endpointView, ['templates', 'cloud', 'single'])) :
+  $endpointView = 'templates';
 endif;
 
 ?>
