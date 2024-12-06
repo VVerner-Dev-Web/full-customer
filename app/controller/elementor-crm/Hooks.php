@@ -184,22 +184,32 @@ class Hooks
 
     $formId = sanitize_text_field(filter_input(INPUT_POST, 'formId'));
 
-    $sql  = " SELECT meta_value FROM {$wpdb->postmeta}  ";
-    $sql .= " WHERE `meta_key` = '" . Form_Snapshot_Repository::POST_META_KEY . "'";
-    $sql .= " AND meta_value LIKE '%\"id\":\"$formId\"%';";
+    if (empty($formId) || !preg_match('/^[a-zA-Z0-9_-]+$/', $formId)) {
+      wp_send_json_error('Invalid form ID.');
+    }
 
-    $data = $wpdb->get_col($sql);
-    $data = is_array($data) ? array_map('json_decode', $data) : [];
+    $formIdPattern = "%\"id\":\"$formId\"%";
+    $query = "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value LIKE %s;";
+    $query = $wpdb->prepare($query, Form_Snapshot_Repository::POST_META_KEY, $formIdPattern);
 
+    $data = $wpdb->get_col($query);
     $fields = [];
 
-    foreach ($data as $snapshots) :
-      foreach ($snapshots as $form) :
-        foreach ($form->fields as $field) :
-          $fields[$field->id] = $field->label;
-        endforeach;
-      endforeach;
-    endforeach;
+    if (is_array($data)) {
+      foreach ($data as $snapshotJson) {
+        $snapshots = json_decode($snapshotJson);
+
+        if (json_last_error() === JSON_ERROR_NONE && is_array($snapshots)) {
+          foreach ($snapshots as $form) {
+            if (isset($form->fields) && is_array($form->fields)) {
+              foreach ($form->fields as $field) {
+                $fields[$field->id] = $field->label;
+              }
+            }
+          }
+        }
+      }
+    }
 
     wp_send_json($fields);
   }
