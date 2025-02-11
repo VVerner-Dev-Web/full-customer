@@ -1,7 +1,7 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 3.1.26
+Stable tag: 3.1.27
 Requires at least: 6.3
 Tested up to: 6.7.1
 Requires PHP: 7.4
