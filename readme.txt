@@ -65,7 +65,7 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.26 = 
+= 3.1.27 = 
 
 * Atualização de segurança
 
