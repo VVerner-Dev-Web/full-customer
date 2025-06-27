@@ -1,9 +1,9 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 3.1.27
+Stable tag: 3.2.0
 Requires at least: 6.3
-Tested up to: 6.7.1
+Tested up to: 6.8.1
 Requires PHP: 7.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -65,8 +65,10 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.1.27 = 
+= 3.2.0 = 
 
-* Atualização de segurança
+* Removido API de alertas que foi descontinuada
+* Atualização no fluxo de ativação
+* Atualizado versão de testes aprovada do WordPress
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
