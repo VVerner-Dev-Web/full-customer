@@ -29,15 +29,6 @@ function insertAdminNotice(): void
   endif;
 }
 
-function insertAdminApiNotice(): void
-{
-  $file = FULL_CUSTOMER_APP . '/views/admin/notice-api.php';
-
-  if (file_exists($file) && current_user_can('manage_options')) :
-    require_once $file;
-  endif;
-}
-
 function forceLicenseCheck(): void
 {
   if (filter_input(INPUT_GET, 'full') !== 'verify_license') :
