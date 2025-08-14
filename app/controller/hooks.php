@@ -18,7 +18,6 @@ add_action('rest_api_init', ['\Full\Customer\Api\Health', 'registerRoutes']);
 
 add_action('admin_init', '\Full\Customer\Actions\forceLicenseCheck');
 
-add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');

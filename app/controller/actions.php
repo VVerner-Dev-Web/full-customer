@@ -6,19 +6,6 @@ use Full\Customer\License;
 
 defined('ABSPATH') || exit;
 
-function insertFooterNote(): void
-{
-  $full = fullCustomer();
-  $file = FULL_CUSTOMER_APP . '/views/footer/note.php';
-
-  $settings = $full->get('whitelabel_settings');
-  $enabled = is_array($settings) && isset($settings['allow_backlink']) ? $settings['allow_backlink'] !== 'no' : true;
-
-  if ($enabled && file_exists($file)) :
-    require_once $file;
-  endif;
-}
-
 function insertAdminNotice(): void
 {
   $full = fullCustomer();
