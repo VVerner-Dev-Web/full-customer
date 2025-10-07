@@ -1,9 +1,9 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 3.2.0
+Stable tag: 3.4.0
 Requires at least: 6.3
-Tested up to: 6.8.1
+Tested up to: 6.8.3
 Requires PHP: 7.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -12,7 +12,7 @@ Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para
 
 == Description ==
 
-O plugin FULL - CLiente é uma poderosa ferramenta desenvolvida pela FULL para otimizar e aprimorar a experiência de gerenciamento do seu site WordPress. 
+O plugin FULL - Cliente é uma poderosa ferramenta desenvolvida pela FULL para otimizar e aprimorar a experiência de gerenciamento do seu site WordPress. 
 
 Com uma série de extensões e funcionalidades inovadoras, o plugin oferece soluções abrangentes para diversas necessidades, desde segurança até a criação de conteúdo dinâmico.
 
@@ -65,10 +65,9 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.2.0 = 
+= 3.4.0 = 
 
-* Removido API de alertas que foi descontinuada
-* Atualização no fluxo de ativação
-* Atualizado versão de testes aprovada do WordPress
+* Alterada a URL de conexão com a API da FULL.
+* Atualizado versão aprovada do WordPress
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
