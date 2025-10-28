@@ -37,3 +37,5 @@ require_once FULL_CUSTOMER_APP . '/controller/actions.php';
 require_once FULL_CUSTOMER_APP . '/controller/filters.php';
 require_once FULL_CUSTOMER_APP . '/controller/helpers.php';
 require_once FULL_CUSTOMER_APP . '/controller/upgrade.php';
+
+require_once FULL_CUSTOMER_APP . '/controller/updates.php';
