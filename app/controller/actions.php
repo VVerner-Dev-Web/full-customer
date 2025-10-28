@@ -133,8 +133,8 @@ function addMenuPage(): void
 
   add_submenu_page(
     'full-connection',
-    'Integrações',
-    'Integrações',
+    'Planos',
+    'Planos',
     'manage_options',
     'full-store',
     'fullGetAdminPageView'
@@ -176,10 +176,6 @@ function adminEnqueueScripts(): void
   endif;
 
   wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
-
-  if ('store' === fullAdminPageEndpoint()) :
-    wp_enqueue_script('full-store', $baseUrl . 'js/admin-store.js', ['jquery'], $version, true);
-  endif;
 
   wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], $version, true);
   wp_localize_script('full-admin', 'FULL', fullGetLocalize());

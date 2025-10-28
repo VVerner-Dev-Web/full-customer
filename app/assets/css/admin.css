@@ -1,3 +1,8 @@
+#full-store-embed {
+  width: 100%;
+  height: calc(100vh - 102px);
+}
+
 .full-tab-nav {
   margin: 0;
   display: flex;
@@ -111,6 +116,7 @@ a.full-modal-close {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  user-select: none;
 }
 
 #template-searcher {

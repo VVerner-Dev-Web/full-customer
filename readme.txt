@@ -65,9 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.4.0 = 
+= 3.4.1 = 
 
-* Alterada a URL de conexão com a API da FULL.
-* Atualizado versão aprovada do WordPress
+* Página de integrações removida em prol da página de planos
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
