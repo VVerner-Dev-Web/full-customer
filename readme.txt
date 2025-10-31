@@ -1,7 +1,7 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 Requires at least: 6.3
 Tested up to: 6.8.3
 Requires PHP: 7.4
@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.4.2 = 
+= 3.4.3 = 
 
-* Servidor de atualização
+* Corrigido escs errados
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
