@@ -268,7 +268,7 @@
                 <p><a href="<?php echo esc_url(remove_query_arg(['show-logs', 'empty-file'])) ?>">Voltar para configurações</a></p>
 
                 <div class="full-widget-form full-widget-logs">
-                  <?php echo esc_html(wpautop(htmlspecialchars($content), true)) ?>
+                  <?php echo wpautop(htmlspecialchars($content), true) ?>
                 </div>
 
                 <a href="<?php echo esc_url(add_query_arg('empty-file', 1)) ?>" class="show-logs" style="color: red">Limpar arquivo</a>
@@ -340,16 +340,16 @@
 
                 <?php foreach ($worker->getSections() as $section) : ?>
 
-                  <h3><?php echo esc_html($section['name']) ?></h3>
-                  <p><?php echo esc_html($section['instructions']) ?></p>
+                  <h3><?php echo $section['name'] ?></h3>
+                  <p><?php echo $section['instructions'] ?></p>
 
-                  <form method="POST" id="full-<?php echo esc_html($section['key']) ?>" class="full-widget-form" style="margin-bottom: 60px; padding: 0; background-color: unset">
+                  <form method="POST" id="full-<?php echo $section['key'] ?>" class="full-widget-form" style="margin-bottom: 60px; padding: 0; background-color: unset">
                     <?php wp_nonce_field('full/widget/code/' . $section['callback']); ?>
-                    <input type="hidden" name="action" value="full/widget/code/<?php echo esc_html($section['callback']) ?>">
-                    <input type="hidden" name="code" value="<?php echo esc_html($section['key']) ?>">
+                    <input type="hidden" name="action" value="full/widget/code/<?php echo $section['callback'] ?>">
+                    <input type="hidden" name="code" value="<?php echo $section['key'] ?>">
 
-                    <textarea class="codemirror-code-value hidden" name="<?php echo esc_html($section['key']) ?>"><?php echo esc_html($worker->get($section['key'])) ?></textarea>
-                    <textarea class="codemirror-code" data-mode="<?php echo esc_html($section['mode']) ?>"><?php echo esc_html($worker->get($section['key'])) ?></textarea>
+                    <textarea class="codemirror-code-value hidden" name="<?php echo $section['key'] ?>"><?php echo $worker->get($section['key']) ?></textarea>
+                    <textarea class="codemirror-code" data-mode="<?php echo $section['mode'] ?>"><?php echo $worker->get($section['key']) ?></textarea>
                     <button class="full-primary-button" style="margin-top: 10px">Atualizar</button>
                   </form>
 
@@ -416,8 +416,8 @@
                       <td>
                         <select name="sidebarWidth" id="sidebarWidth" style="width: 100%">
                           <?php for ($i = 160; $i <= 300; $i += 20) : ?>
-                            <option value="<?php echo esc_html($i) ?>" <?php selected($i, $worker->get('sidebarWidth')) ?>>
-                              <?php echo esc_html($i) ?>px <?php echo esc_html(160 === $i ? '(tamanho padrão)' : '') ?>
+                            <option value="<?php echo $i ?>" <?php selected($i, $worker->get('sidebarWidth')) ?>>
+                              <?php echo $i ?>px <?php echo 160 === $i ? '(tamanho padrão)' : '' ?>
                             </option>
                           <?php endfor; ?>
                         </select>

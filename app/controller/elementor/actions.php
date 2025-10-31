@@ -76,7 +76,7 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId): v
     $html = '<a href="' . esc_url(fullGetTemplatesUrl('cloud')) . '">Gerenciar</a>';
   endif;
 
-  echo esc_html($html);
+  echo $html;
 }
 
 function editorFooter(): void

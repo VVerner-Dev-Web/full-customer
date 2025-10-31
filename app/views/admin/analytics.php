@@ -44,7 +44,7 @@ $env = new Settings;
                       <input type="hidden" name="action" value="full/analytics/report">
                       <input type="hidden" name="journey" value="0">
                       <?php wp_nonce_field('full/analytics/report') ?>
-                      <input type="text" name="period" id="dataPeriod" value="<?php echo esc_html(date('d/m/Y', strtotime('-6 days')) . ' - ' .  current_time('d/m/Y')) ?>">
+                      <input type="text" name="period" id="dataPeriod" value="<?php echo date('d/m/Y', strtotime('-6 days')) . ' - ' .  current_time('d/m/Y') ?>">
                     </form>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ $env = new Settings;
                     <tr>
                       <th><label for="trackingPeriod">Reter dados por quantos dias?</label></th>
                       <td>
-                        <input type="number" name="trackingPeriod" id="trackingPeriod" value="<?php echo esc_html($env->get('trackingPeriod')) ?>" min="0" step="1"><br>
+                        <input type="number" name="trackingPeriod" id="trackingPeriod" value="<?php echo $env->get('trackingPeriod') ?>" min="0" step="1"><br>
                         <small>Deixe em branco para não excluir dados antigos</small>
                       </td>
                     </tr>

@@ -60,7 +60,7 @@ class RecentVisitors
     </select>
     ';
 
-    echo esc_html($html);
+    echo $html;
   }
 
   public function updateVisitors(): void
@@ -114,7 +114,7 @@ class RecentVisitors
       </div>
     </div>';
 
-    echo esc_html($html);
+    echo $html;
   }
 
   public function enqueueScripts(): void

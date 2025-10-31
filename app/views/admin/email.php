@@ -39,7 +39,7 @@ $worker = new Settings();
                       <label for="senderName">Forçar nome do remetente</label>
                     </th>
                     <td>
-                      <input type="text" name="senderName" id="senderName" value="<?php echo esc_html($worker->get('senderName')) ?>" class="custom-input">
+                      <input type="text" name="senderName" id="senderName" value="<?php echo $worker->get('senderName') ?>" class="custom-input">
                     </td>
                   </tr>
                   <tr>
@@ -47,7 +47,7 @@ $worker = new Settings();
                       <label for="senderEmail">Forçar email do remetente</label>
                     </th>
                     <td>
-                      <input type="email" name="senderEmail" id="senderEmail" value="<?php echo esc_html($worker->get('senderEmail')) ?>" class="custom-input">
+                      <input type="email" name="senderEmail" id="senderEmail" value="<?php echo $worker->get('senderEmail') ?>" class="custom-input">
                     </td>
                   </tr>
 
@@ -64,7 +64,7 @@ $worker = new Settings();
                       </label>
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpHost">Servidor</label>
                     </th>
@@ -72,7 +72,7 @@ $worker = new Settings();
                       <input type="text" name="smtpHost" id="smtpHost" value="<?php echo $worker->get('enableSmtp') ? $worker->get('smtpHost') : '' ?>" class="custom-input">
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpPort">Porta</label>
                     </th>
@@ -80,7 +80,7 @@ $worker = new Settings();
                       <input type="number" step="1" name="smtpPort" id="smtpPort" value="<?php echo $worker->get('enableSmtp') ? $worker->get('smtpPort') : '' ?>" class="custom-input">
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpSecurity">Criptografia</label>
                     </th>
@@ -92,7 +92,7 @@ $worker = new Settings();
                       </select>
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpUser">Usuário</label>
                     </th>
@@ -100,7 +100,7 @@ $worker = new Settings();
                       <input type="text" name="smtpUser" id="smtpUser" value="<?php echo $worker->get('enableSmtp') ? $worker->get('smtpUser') : '' ?>" class="custom-input">
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpPassword">Senha</label>
                     </th>
@@ -108,7 +108,7 @@ $worker = new Settings();
                       <input type="password" name="smtpPassword" id="smtpPassword" value="<?php echo $worker->get('enableSmtp') ? $worker->get('smtpPassword') : '' ?>" class="custom-input" autocomplete="off">
                     </td>
                   </tr>
-                  <tr class="smtp <?php echo esc_html($worker->get('enableSmtp') ? '' : 'hidden') ?>">
+                  <tr class="smtp <?php echo $worker->get('enableSmtp') ? '' : 'hidden' ?>">
                     <th>
                       <label for="smtpDebug">Ativar debug?</label>
                     </th>

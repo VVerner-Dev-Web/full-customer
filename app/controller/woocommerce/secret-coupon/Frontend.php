@@ -87,7 +87,7 @@ class Frontend
     $alertClass = $missingAmount ? 'coupon-pending' : 'coupon-applied';
     $message = str_replace(['{valorMinimo}', '{valorFaltante}'], [wc_price($minAmount), wc_price($missingAmount)], $message);
 
-    echo esc_html('<div id="full-cart-secret-coupon" class="woocommerce-message ' . $alertClass . '" role="alert">' . $message . '</div>');
+    echo '<div id="full-cart-secret-coupon" class="woocommerce-message ' . $alertClass . '" role="alert">' . $message . '</div>';
   }
 
   private function getMissingAmount(): float

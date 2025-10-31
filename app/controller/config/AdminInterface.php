@@ -64,7 +64,7 @@ class AdminInterface
       }
     </style>";
 
-    echo esc_html($html);
+    echo $html;
   }
 
   public function disableDashboardWidgets(): void

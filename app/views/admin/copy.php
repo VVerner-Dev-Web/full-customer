@@ -70,9 +70,9 @@ $posts = get_posts([
                       $inQueue = $post->post_status === 'full_queue';
                     ?>
                       <tr>
-                        <td><?php echo esc_html($inQueue ? $post->post_content : $post->post_title) ?></td>
-                        <td><?php echo esc_html($post->queueId) ?></td>
-                        <td><?php echo esc_html($inQueue ? 'Aguardando AI' : get_post_statuses()[$post->post_status]) ?></td>
+                        <td><?php echo $inQueue ? $post->post_content : $post->post_title ?></td>
+                        <td><?php echo $post->queueId ?></td>
+                        <td><?php echo $inQueue ? 'Aguardando AI' : get_post_statuses()[$post->post_status] ?></td>
                         <td>
                           <?php if (!$inQueue) : ?>
                             <a href="<?php echo esc_url(get_edit_post_link($post)) ?>" target="_blank" rel="noopener noreferrer">Editar</a>
@@ -89,14 +89,6 @@ $posts = get_posts([
 
                 <p>Em breve!</p>
 
-                <!-- <div class="provider-grid">
-                  <div class="provider-card">
-                    <img src="https://placehold.co/600x400" alt="logo">
-                    <h4>Título </h4>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus ex aspernatur, maiores facilis quidem veritatis.</p>
-                    <a href="#" class="provider-button">Gerar</a>
-                  </div>
-                </div> -->
               </div>
 
               <br>

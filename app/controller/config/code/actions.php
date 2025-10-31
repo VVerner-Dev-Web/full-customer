@@ -109,7 +109,7 @@ function updateRobotsFile(): void
 
 function echoCodeWithComments(string $code): void
 {
-  echo esc_html('<!-- scripts adicionados pelo FULL.code -->' . $code . '<!-- /scripts adicionados pelo FULL.code -->');
+  echo '<!-- scripts adicionados pelo FULL.code -->' . $code . '<!-- /scripts adicionados pelo FULL.code -->';
 }
 
 function updateWpConfigFile(): void

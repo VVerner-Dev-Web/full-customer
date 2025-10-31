@@ -38,7 +38,7 @@ $forms = $worker->getForms();
                     <select name="formId" id="formId" required>
                       <option value="">Selecione um formulário</option>
                       <?php foreach ($forms as $index => $form) : ?>
-                        <option value="<?php echo esc_html($index) ?>"><?php echo esc_html($form) ?></option>
+                        <option value="<?php echo $index ?>"><?php echo $form ?></option>
                       <?php endforeach; ?>
                     </select>
                   </div>

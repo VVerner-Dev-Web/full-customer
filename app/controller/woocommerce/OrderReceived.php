@@ -27,7 +27,7 @@ class OrderReceived
 
   public function insertCode(): void
   {
-    echo esc_html($this->env->get('orderReceivedPageCustomCode'));
+    echo $this->env->get('orderReceivedPageCustomCode');
   }
 }
 

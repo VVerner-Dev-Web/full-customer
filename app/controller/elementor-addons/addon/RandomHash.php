@@ -34,6 +34,6 @@ class RandomHash extends Widget_Base
 
   protected function render()
   {
-    echo esc_html(strtoupper(bin2hex(random_bytes(5))));
+    echo strtoupper(bin2hex(random_bytes(5)));
   }
 }

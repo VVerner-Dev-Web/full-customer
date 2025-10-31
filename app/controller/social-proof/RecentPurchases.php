@@ -122,7 +122,7 @@ class RecentPurchases
     $template = str_replace('{orderDate}', ($orderDate ? $orderDate : ''), $template);
     $template = str_replace('{img}', ($productThumbnail ? $productThumbnail : ''), $template);
 
-    echo esc_html($container . $template);
+    echo $container . $template;
   }
 
   public function enqueueScripts(): void
