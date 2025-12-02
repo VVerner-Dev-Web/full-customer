@@ -47,10 +47,12 @@ function editorAfterEnqueueScripts(): void
 
 function addMenuPages(array $menu): array
 {
-  $menu[] = [
-    'name' => fullCustomer()->isServiceEnabled('full-templates') ? 'FULL.templates' : 'FULL.cloud',
-    'endpoint' => 'full-templates'
-  ];
+  if (get_option('full/template-status', 0)) {
+    $menu[] = [
+      'name' => fullCustomer()->isServiceEnabled('full-templates') ? 'FULL.templates' : 'FULL.cloud',
+      'endpoint' => 'full-templates'
+    ];
+  }
 
   return $menu;
 }

@@ -6,6 +6,9 @@ defined('ABSPATH') || exit;
 
 function manageElementorLibraryPostsColumns(array $columns): array
 {
-  $columns['full_templates'] = 'FULL.templates';
+  if (get_option('full/template-status', 0)) {
+    $columns['full_templates'] = 'FULL.templates';
+  }
+
   return $columns;
 }
