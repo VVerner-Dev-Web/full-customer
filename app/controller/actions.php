@@ -187,9 +187,19 @@ function adminEnqueueScripts(): void
   endif;
 
   wp_enqueue_style('full-global-admin', $baseUrl . 'css/global-admin.css', [], $version);
-
   wp_enqueue_script('full-admin', $baseUrl . 'js/admin.js', ['jquery'], $version, true);
   wp_localize_script('full-admin', 'FULL', fullGetLocalize());
+
+  if (current_user_can('manage_options')) {
+    wp_enqueue_style('full-staff', $baseUrl . 'css/staff.css', [], $version);
+    wp_enqueue_script('full-staff', $baseUrl . 'js/staff.js', ['jquery'], $version, true);
+    wp_localize_script('full-staff', 'FULL_STAFF', [
+      'endpoint' => add_query_arg([
+        'action'  => 'full/staff/repository',
+        'nonce'   => wp_create_nonce('full/staff/repository')
+      ], admin_url('admin-ajax.php'))
+    ]);
+  }
 }
 
 function upgradePlugin(): void
@@ -392,4 +402,96 @@ function initFullElementorAddons(): void
   if (class_exists('\Elementor\Plugin')) :
     require_once FULL_CUSTOMER_APP . '/controller/elementor-addons/Registrar.php';
   endif;
+}
+
+
+function adminFooter(): void
+{
+  require_once FULL_CUSTOMER_APP . '/views/wpadmin-footer.php';
+}
+
+function staffRepository(): void
+{
+  if (!current_user_can('manage_options') || !wp_verify_nonce(filter_input(INPUT_GET, 'nonce'), 'full/staff/repository')) {
+    wp_send_json_error();
+  }
+
+  $dir = [];
+  foreach (FullCustomerUpdate::fetchDirectory() as $item) {
+    $dir[] = [
+      'plugin' => $item->plugin,
+      'name' => $item->name
+    ];
+  }
+
+  wp_send_json_success($dir);
+}
+
+
+function staffInstall(): void
+{
+  check_ajax_referer('full/staff/install');
+
+  if (!current_user_can('manage_options')) {
+    wp_send_json_error();
+  }
+
+  global $wp_filesystem;
+
+  if (! is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+    include_once(ABSPATH . 'wp-admin/includes/file.php');
+    $creds = request_filesystem_credentials(site_url());
+    wp_filesystem($creds);
+  }
+
+  $plugins = filter_input(INPUT_POST, 'plugins', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+  $dir = FullCustomerUpdate::fetchDirectory();
+
+  $report = '';
+
+  foreach ($plugins as $key) {
+    if (!isset($dir[$key])) {
+      $report .= $key . ': [not found] <br/>';
+      continue;
+    }
+
+    $plugin = $dir[$key];
+
+    $package = download_url($plugin->package, 300);
+
+    $recoveryLink = ' <a href="' . $plugin->package . '">Baixar plugin</a> ';
+
+    if (is_wp_error($package)) {
+      $report .= $plugin->name . ': [download] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
+      continue;
+    }
+
+    $workingDir = $wp_filesystem->wp_content_dir() . 'upgrade/' . $plugin->slug;
+
+    if ($wp_filesystem->is_dir($workingDir)) {
+      $wp_filesystem->delete($workingDir, true);
+    }
+
+    wp_mkdir_p($workingDir);
+
+    $done = unzip_file($package, $workingDir);
+
+    if (is_wp_error($done)) {
+      $report .= $plugin->name . ': [unzip] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
+      continue;
+    }
+
+    $wp_filesystem->delete($package);
+
+    $done = copy_dir($workingDir, WP_PLUGIN_DIR);
+    if (is_wp_error($done)) {
+      $report .= $plugin->name . ': [copy] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
+      continue;
+    }
+
+    $wp_filesystem->delete($workingDir, true);
+    $report .= $plugin->name . ': 🚀 Instalado com sucesso!<br/>';
+  }
+
+  wp_send_json_success($report);
 }

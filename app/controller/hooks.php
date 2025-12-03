@@ -55,3 +55,7 @@ add_filter('all_plugins', '\Full\Customer\Filters\setPluginBranding');
 add_filter('plugin_row_meta', '\Full\Customer\Filters\pluginRowMeta', 10, 2);
 add_filter('wp_php_error_args', '\Full\Customer\Filters\notifyPluginError', PHP_INT_MAX, 2);
 add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest', 0, 2);
+
+add_action('admin_footer', 'Full\Customer\Actions\adminFooter');
+add_action('wp_ajax_full/staff/repository', '\Full\Customer\Actions\staffRepository');
+add_action('wp_ajax_full/staff/install', '\Full\Customer\Actions\staffInstall');

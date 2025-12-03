@@ -99,7 +99,7 @@ class FullCustomerUpdate
     return $transient;
   }
 
-  private function fetchDirectory(): array
+  public static function fetchDirectory(): array
   {
     $file = self::repositoryFilename();
     $updatedAt = file_exists($file) ? filemtime($file) : 0;
@@ -107,7 +107,7 @@ class FullCustomerUpdate
     $directory = time() - $updatedAt < HOUR_IN_SECONDS ? json_decode(file_get_contents($file)) : [];
 
     if (!empty($directory)) {
-      return $this->fixJsonParse($directory);
+      return self::fixJsonParse($directory);
     }
 
     $conn = fullGetSiteConnectionData() ?: null;
@@ -139,7 +139,7 @@ class FullCustomerUpdate
 
     file_put_contents($file, wp_json_encode($data));
 
-    return $this->fixJsonParse($data);
+    return self::fixJsonParse($data);
   }
 
   private function fetchPluginLicense(string $pluginSlug, string $infoUrl): string
@@ -181,7 +181,7 @@ class FullCustomerUpdate
     return $license;
   }
 
-  private function fixJsonParse(array $data): array
+  private static function fixJsonParse(array $data): array
   {
     $directory = [];
 
