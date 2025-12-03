@@ -110,6 +110,10 @@
         <a href="<?php echo esc_url(admin_url('admin.php?page=full-connection&full=verify_license')) ?>">
           Verificar licença PRO
         </a>
+        |
+        <a href="<?php echo esc_url(admin_url('admin.php?page=full-connection&full=repo_clear')) ?>">
+          Atualizar repositório
+        </a>
       </div>
 
     </div>

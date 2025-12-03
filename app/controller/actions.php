@@ -3,6 +3,7 @@
 namespace Full\Customer\Actions;
 
 use Full\Customer\License;
+use FullCustomerUpdate;
 
 defined('ABSPATH') || exit;
 
@@ -31,13 +32,23 @@ function insertAdminNotice(): void
 
 function forceLicenseCheck(): void
 {
-  if (filter_input(INPUT_GET, 'full') !== 'verify_license') :
-    return;
-  endif;
+  if (filter_input(INPUT_GET, 'full') === 'verify_license') {
+    License::updateStatus();
 
-  License::updateStatus();
+    wp_safe_redirect(esc_url(remove_query_arg('full')));
+    exit;
+  }
 
-  wp_safe_redirect(esc_url(remove_query_arg('full')));
+  if (filter_input(INPUT_GET, 'full') === 'repo_clear') {
+    @unlink(FullCustomerUpdate::repositoryFilename());
+
+    global $wpdb;
+
+    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '%full/plugin-license%'");
+
+    wp_safe_redirect(esc_url(remove_query_arg('full')));
+    exit;
+  }
 }
 
 function verifySiteConnection(): void

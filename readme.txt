@@ -1,9 +1,9 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 Requires at least: 6.3
-Tested up to: 6.8.3
+Tested up to: 6.9
 Requires PHP: 7.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -65,8 +65,8 @@ O plugin ativado continuará funcionando sem problemas.
 
 == Changelog ==
 
-= 3.4.4 = 
+= 3.4.5 = 
 
-* exibição condicional para full.templates
+* servidor de atualização de plugins
 
 [Veja o changelog completo aqui](https://painel.full.services/full-customer-changelog/)
