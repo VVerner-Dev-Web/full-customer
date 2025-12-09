@@ -4,6 +4,7 @@ namespace Full\Customer\Actions;
 
 use Full\Customer\License;
 use FullCustomerUpdate;
+use WP_REST_Request;
 
 defined('ABSPATH') || exit;
 
@@ -191,12 +192,25 @@ function adminEnqueueScripts(): void
   wp_localize_script('full-admin', 'FULL', fullGetLocalize());
 
   if (current_user_can('manage_options')) {
+    $id = wp_generate_uuid4();
+
     wp_enqueue_style('full-staff', $baseUrl . 'css/staff.css', [], $version);
     wp_enqueue_script('full-staff', $baseUrl . 'js/staff.js', ['jquery'], $version, true);
     wp_localize_script('full-staff', 'FULL_STAFF', [
-      'endpoint' => add_query_arg([
+      'wpPluginsUrl' => admin_url('plugins.php'),
+      'repository' => add_query_arg([
         'action'  => 'full/staff/repository',
         'nonce'   => wp_create_nonce('full/staff/repository')
+      ], admin_url('admin-ajax.php')),
+      'installPlugin' => add_query_arg([
+        'id'      => $id,
+        'action'  => 'full/staff/install-plugin',
+        'nonce'   => wp_create_nonce('full/staff/install-plugin')
+      ], admin_url('admin-ajax.php')),
+      'installPluginProgress' => add_query_arg([
+        'id'      => $id,
+        'action'  => 'full/staff/install-plugin/progress',
+        'nonce'   => wp_create_nonce('full/staff/install-plugin/progress')
       ], admin_url('admin-ajax.php'))
     ]);
   }
@@ -427,71 +441,118 @@ function staffRepository(): void
   wp_send_json_success($dir);
 }
 
-
-function staffInstall(): void
+function enqueueInstallationProgress(string $processId, string $plugin, string $message): void
 {
-  check_ajax_referer('full/staff/install');
+  $progress = getInstallationProgress($processId);
 
-  if (!current_user_can('manage_options')) {
-    wp_send_json_error();
+  if (!isset($progress[$plugin])) {
+    $progress[$plugin] = [];
   }
+
+  $progress[$plugin][] = $message;
+
+  set_transient($processId, $progress, HOUR_IN_SECONDS);
+}
+
+function getInstallationProgress(string $processId): array
+{
+  return get_transient($processId) ?: [];
+}
+
+function staffInstallPlugin(): void
+{
+  if (!current_user_can('manage_options') || !wp_verify_nonce(filter_input(INPUT_GET, 'nonce'), 'full/staff/install-plugin')) {
+    wp_send_json_error('Sem permissão');
+  }
+
+  require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
   global $wp_filesystem;
 
-  if (! is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+  if (!is_a($wp_filesystem, 'WP_Filesystem_Base')) {
     include_once(ABSPATH . 'wp-admin/includes/file.php');
     $creds = request_filesystem_credentials(site_url());
     wp_filesystem($creds);
   }
 
-  $plugins = filter_input(INPUT_POST, 'plugins', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-  $dir = FullCustomerUpdate::fetchDirectory();
+  $id  = filter_input(INPUT_GET, 'id') ?? uniqid();
+  $dir = FullCustomerUpdate::fetchDirectory(cache: false);
+  $key = filter_input(INPUT_POST, 'plugin') ?? '';
+  $plugin = $dir[$key] ?? null;
 
-  $report = '';
-
-  foreach ($plugins as $key) {
-    if (!isset($dir[$key])) {
-      $report .= $key . ': [not found] <br/>';
-      continue;
-    }
-
-    $plugin = $dir[$key];
-
-    $package = download_url($plugin->package, 300);
-
-    $recoveryLink = ' <a href="' . $plugin->package . '">Baixar plugin</a> ';
-
-    if (is_wp_error($package)) {
-      $report .= $plugin->name . ': [download] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
-      continue;
-    }
-
-    $workingDir = $wp_filesystem->wp_content_dir() . 'upgrade/' . $plugin->slug;
-
-    if ($wp_filesystem->is_dir($workingDir)) {
-      $wp_filesystem->delete($workingDir, true);
-    }
-
-    wp_mkdir_p($workingDir);
-
-    $done = unzip_file($package, $workingDir);
-
-    if (is_wp_error($done)) {
-      $report .= $plugin->name . ': [unzip] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
-      continue;
-    }
-
-    $wp_filesystem->delete($package);
-
-    $done = copy_dir($workingDir, WP_PLUGIN_DIR);
-    if (is_wp_error($done)) {
-      $report .= $plugin->name . ': [copy] ' . $done->get_error_message() .  $recoveryLink . '<br/>';
-      continue;
-    }
-
-    $wp_filesystem->delete($workingDir, true);
-    $report .= $plugin->name . ': 🚀 Instalado com sucesso!<br/>';
+  if (!$plugin) {
+    wp_send_json_error('Plugin não localizado');
   }
 
-  wp_send_json_success($report);
+  enqueueInstallationProgress($id, $key, 'Iniciando instalação do plugin ' . $plugin->name . '...');
+
+  if ($plugin->dependencies) {
+    enqueueInstallationProgress($id, $key, 'Verificando dependências...');
+
+    foreach ($plugin->dependencies as $dep) {
+      $request = new WP_REST_Request('POST', '/wp/v2/plugins');
+      $request->set_param('slug', $dep);
+      $request->set_param('status', 'active');
+      $request->set_param('context', 'edit');
+
+      enqueueInstallationProgress($id, $key, 'Instalando dependência ' . $dep);
+      rest_do_request($request);
+    }
+  }
+
+  enqueueInstallationProgress($id, $key, 'Dependências validadas. Iniciando processo do plugin principal');
+
+  $recoveryLink = ' <a href="' . $plugin->package . '">Baixar plugin</a> ';
+  $package = download_url($plugin->package, 300);
+
+  if (is_wp_error($package)) {
+    wp_send_json_error('[download] ' . $package->get_error_message() .  $recoveryLink);
+  }
+
+  enqueueInstallationProgress($id, $key, 'Arquivo baixado. Iniciando descompactação...');
+
+  $workingDir = $wp_filesystem->wp_content_dir() . 'upgrade/' . $plugin->slug;
+
+  if ($wp_filesystem->is_dir($workingDir)) {
+    $wp_filesystem->delete($workingDir, true);
+  }
+
+  wp_mkdir_p($workingDir);
+
+  $done = unzip_file($package, $workingDir);
+
+  if (is_wp_error($done)) {
+    wp_send_json_error('[unzip] ' . $done->get_error_message() .  $recoveryLink);
+  }
+
+  enqueueInstallationProgress($id, $key, 'Arquivo descompactado. Iniciando a transferência...');
+
+  $wp_filesystem->delete($package);
+
+  $done = copy_dir($workingDir, WP_PLUGIN_DIR);
+  if (is_wp_error($done)) {
+    wp_send_json_error('[copy] ' . $done->get_error_message() .  $recoveryLink);
+  }
+
+  $wp_filesystem->delete($workingDir, true);
+
+  $pluginActivationPath = trailingslashit(WP_PLUGIN_DIR) . $plugin->plugin;
+
+  enqueueInstallationProgress($id, $key, 'Arquivo transferido. Solicitando ativação do plugin no WordPress');
+
+  if (!is_plugin_active($pluginActivationPath)) {
+    activate_plugin($pluginActivationPath);
+  }
+
+  wp_send_json_success();
+}
+
+function staffInstallPluginProgress(): void
+{
+  $id  = filter_input(INPUT_GET, 'id') ?? uniqid();
+  $key = filter_input(INPUT_POST, 'plugin') ?? '';
+
+  $progress = getInstallationProgress($id)[$key] ?? [];
+
+  wp_send_json_success('> ' . implode('<br>> ', $progress));
 }

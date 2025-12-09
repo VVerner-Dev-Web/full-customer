@@ -38,23 +38,67 @@ jQuery(function ($) {
 
     const $form = $(this);
     const $btn = $form.find("button");
-    $btn.addClass("loading");
+    const $checked = $form.find('input[name="plugins[]"]:checked');
 
-    $responseContainer.html(
-      "O processo de instalação pode demorar um pouquinho, aproveite para tomar um café."
-    );
+    if (!$checked.length) {
+      $responseContainer.html("Selecione pelo menos um plugin.");
+      return;
+    }
 
-    $.post(ajaxurl, $form.serialize(), function (response) {
-      $btn.removeClass("loading");
-      $form[0].reset();
-      $responseContainer.html(response.data);
-    });
+    const queue = $checked.map((i, el) => el.value).get();
+
+    //TOPDO: pensar
+    // $btn.addClass("loading").prop("disabled", true);
+    installNext(queue, []);
   });
+
+  function installNext(queue, installed = []) {
+    if (!queue.length) {
+      alert("Todos os plugins finalizados");
+      location.href = FULL_STAFF.wpPluginsUrl;
+      return;
+    }
+
+    const plugin = queue.shift();
+    let reportId = "report-" + queue.length;
+
+    $responseContainer.append(`<strong>${plugin}</strong>...`);
+    $responseContainer.append('<div class="' + reportId + '"></div>');
+
+    let interval = setInterval(function () {
+      $.post(FULL_STAFF.installPluginProgress, { plugin: plugin }).done(
+        function (response) {
+          if (response.success) {
+            $responseContainer.find("." + reportId).html(response.data);
+          }
+        }
+      );
+    }, 2000);
+
+    $.post(FULL_STAFF.installPlugin, { plugin: plugin })
+      .done(function (response) {
+        if (!response.success) {
+          $responseContainer.append(`❌ ${response.data}<br>`);
+        } else {
+          installed.push(plugin);
+          $responseContainer.append(`✅ ${plugin} instalado<br>`);
+        }
+
+        installNext(queue, installed);
+      })
+      .fail(function () {
+        $responseContainer.append(`❌ Falha crítica em ${plugin}<br>`);
+        installNext(queue, installed);
+      })
+      .always(function () {
+        clearInterval(interval);
+      });
+  }
 
   $(window).on("full/staff-modal/opened", function () {
     $repositoryContainer.html("Buscando plugins...");
 
-    $.get(FULL_STAFF.endpoint, function ({ success, data }) {
+    $.get(FULL_STAFF.repository, function ({ success, data }) {
       if (!success || !data.length) {
         $repositoryContainer.html("Nenhum plugin encontrado");
         return;

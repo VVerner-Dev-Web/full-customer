@@ -97,14 +97,14 @@ class FullCustomerUpdate
     return $transient;
   }
 
-  public static function fetchDirectory(): array
+  public static function fetchDirectory(bool $cache = true): array
   {
     $file = self::repositoryFilename();
     $updatedAt = file_exists($file) ? filemtime($file) : 0;
 
     $directory = time() - $updatedAt < HOUR_IN_SECONDS ? json_decode(file_get_contents($file)) : [];
 
-    if (!empty($directory)) {
+    if (!empty($directory) && $cache) {
       return self::fixJsonParse($directory);
     }
 
@@ -144,8 +144,8 @@ class FullCustomerUpdate
   {
     $license = get_option('full/plugin-license/' . $pluginSlug, null);
 
-    if ($license && current_time('timestamp') > $license['expireAt']) {
-      return $license->license;
+    if ($license && $license['expireAt'] > current_time('timestamp')) {
+      return $license['license'];
     }
 
     $conn = fullGetSiteConnectionData() ?: null;

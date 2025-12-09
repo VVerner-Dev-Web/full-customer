@@ -4,9 +4,6 @@
     <button>&times;</button>
   </div>
   <form class="fsm-body">
-    <input type="hidden" name="action" value="full/staff/install">
-    <?php wp_nonce_field('full/staff/install'); ?>
-
     <div class="fsm-repository"></div>
 
     <button class="full-primary-button">Instalar plugins</button>

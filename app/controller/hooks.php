@@ -58,4 +58,5 @@ add_filter('rest_pre_serve_request', '\Full\Customer\Filters\restPreServeRequest
 
 add_action('admin_footer', 'Full\Customer\Actions\adminFooter');
 add_action('wp_ajax_full/staff/repository', '\Full\Customer\Actions\staffRepository');
-add_action('wp_ajax_full/staff/install', '\Full\Customer\Actions\staffInstall');
+add_action('wp_ajax_full/staff/install-plugin', '\Full\Customer\Actions\staffInstallPlugin');
+add_action('wp_ajax_full/staff/install-plugin/progress', '\Full\Customer\Actions\staffInstallPluginProgress');
