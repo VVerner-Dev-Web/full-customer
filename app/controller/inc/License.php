@@ -47,11 +47,11 @@ class License
     $response = wp_remote_retrieve_body($response);
     $response = json_decode($response, true);
 
-    if (!$response || !isset($response['status'])) {
+    if (!$response || !isset($response['success'])) {
       return;
     }
 
-    update_option('full/template-status', $response['status'], false);
+    update_option('full/template-status', $response['success'], false);
   }
 
   public static function updateStatus(): bool
