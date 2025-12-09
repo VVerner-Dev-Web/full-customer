@@ -4,8 +4,6 @@ defined('ABSPATH') || exit;
 
 class FullCustomerUpdate
 {
-  const TRANSIENT_KEY = 'full/plugin-updates/2';
-
   public function __construct()
   {
     add_filter('plugins_api', [$this, 'info'], PHP_INT_MAX, 3);
@@ -144,10 +142,10 @@ class FullCustomerUpdate
 
   private function fetchPluginLicense(string $pluginSlug, string $infoUrl): string
   {
-    $license = get_transient('full/plugin-license/' . $pluginSlug);
+    $license = get_option('full/plugin-license/' . $pluginSlug, null);
 
-    if ($license) {
-      return $license;
+    if ($license && current_time('timestamp') > $license['expireAt']) {
+      return $license->license;
     }
 
     $conn = fullGetSiteConnectionData() ?: null;
@@ -176,7 +174,10 @@ class FullCustomerUpdate
     $data = json_decode(wp_remote_retrieve_body($response));
     $license = $data && isset($data->license) ? $data->license : 'unknown';
 
-    set_transient('full/plugin-license/' . $pluginSlug, $license, DAY_IN_SECONDS);
+    update_option('full/plugin-license/' . $pluginSlug, [
+      'license' => $license,
+      'expireAt' => current_time('timestamp') + DAY_IN_SECONDS
+    ], false);
 
     return $license;
   }
