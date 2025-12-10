@@ -11,8 +11,6 @@
  * Author URI:          https://full.services/
  * License:             GPL v3 or later
  * License URI:         https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:         full-customer
- * Domain Path:         /app/i18n
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) :
