@@ -160,7 +160,7 @@ class FullCustomerStaffRepository
     $id  = filter_input(INPUT_GET, 'id') ?? uniqid();
     $key = filter_input(INPUT_POST, 'plugin') ?? '';
 
-    $progress = getInstallationProgress($id)[$key] ?? [];
+    $progress = $this->getInstallationProgress($id)[$key] ?? [];
 
     wp_send_json_success('> ' . implode('<br>> ', $progress));
   }
