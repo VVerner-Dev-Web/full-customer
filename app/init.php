@@ -12,7 +12,6 @@ require_once FULL_CUSTOMER_APP . '/api/Connection.php';
 require_once FULL_CUSTOMER_APP . '/api/Copy.php';
 require_once FULL_CUSTOMER_APP . '/api/Env.php';
 require_once FULL_CUSTOMER_APP . '/api/Health.php';
-require_once FULL_CUSTOMER_APP . '/api/Login.php';
 require_once FULL_CUSTOMER_APP . '/api/PluginInstallation.php';
 require_once FULL_CUSTOMER_APP . '/api/ElementorTemplates.php';
 require_once FULL_CUSTOMER_APP . '/api/ElementorAi.php';
