@@ -34,7 +34,6 @@ function updateSettings(): void
 
   $worker->set('useImagify', filter_input(INPUT_POST, 'useImagify', FILTER_VALIDATE_BOOL));
   $worker->set('enableUploadResize', filter_input(INPUT_POST, 'enableUploadResize', FILTER_VALIDATE_BOOL));
-  $worker->set('enableSvgUpload', filter_input(INPUT_POST, 'enableSvgUpload', FILTER_VALIDATE_BOOL));
   $worker->set('resizeMaxSize', filter_input(INPUT_POST, 'resizeMaxSize', FILTER_VALIDATE_INT));
 
   wp_send_json_success();

@@ -4,8 +4,6 @@ use Full\Customer\License;
 
 defined('ABSPATH') || exit;
 
-require_once dirname(FULL_CUSTOMER_FILE) . '/vendor/autoload.php';
-
 require_once FULL_CUSTOMER_APP . '/controller/inc/License.php';
 
 require_once FULL_CUSTOMER_APP . '/api/Controller.php';

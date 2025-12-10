@@ -82,19 +82,6 @@ $quota = get_option('full/ai/quota', null)
 
                     <tr>
                       <th>
-                        <label for="enableSvgUpload">Permitir upload de .SVG?</label>
-                      </th>
-                      <td>
-                        <label class="toggle-switch toggle-switch-sm" for="enableSvgUpload">
-                          <input type="checkbox" name="enableSvgUpload" value="1" class="toggle-switch-input" id="enableSvgUpload" <?php checked($worker->get('enableSvgUpload')) ?>>
-                          <span class="toggle-switch-label">
-                            <span class="toggle-switch-indicator"></span>
-                          </span>
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
                         <button class="full-primary-button">Atualizar</button>
                       </th>
                       <td></td>
