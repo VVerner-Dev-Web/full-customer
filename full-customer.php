@@ -9,8 +9,6 @@
  * Requires PHP:        7.4
  * Author:              FULL.
  * Author URI:          https://full.services/
- * License:             GPL v3 or later
- * License URI:         https://www.gnu.org/licenses/gpl-3.0.html
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) :

@@ -5,8 +5,6 @@ Stable tag: 3.4.7
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.4
-License: GPL v3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins
 
