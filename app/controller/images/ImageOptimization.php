@@ -60,7 +60,7 @@ class ImageOptimization
       }
     endif;
 
-    $url  = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/image-optimization';
+    $url  = getFullDashboardApiUrl('-customer/v1/image-optimization');
 
     $payload = [
       'site'      => home_url(),
@@ -84,8 +84,7 @@ class ImageOptimization
 
   public static function getUsage(): ?stdClass
   {
-    $url  = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/image-optimization-usage';
-
+    $url  = getFullDashboardApiUrl('-customer/v1/image-optimization-usage');
     $payload = [
       'site' => home_url()
     ];

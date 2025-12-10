@@ -4,6 +4,17 @@ use Full\Customer\License;
 
 defined('ABSPATH') || exit;
 
+function getFullEnv(): string
+{
+  return strtoupper(defined('FULL_CUSTOMER') ? FULL_CUSTOMER : 'PRD');
+}
+
+function getFullDashboardApiUrl(string $endpoint = ''): string
+{
+  $url = 'DEV' === getFullEnv() ? 'https://full.dev/wp-json/full' : 'https://api.full.services/wp-json/full';
+  return $url . $endpoint;
+}
+
 function fullIsCorrectlyConnected(): bool
 {
   $code = (int) get_transient('full/connected');
@@ -52,7 +63,7 @@ function fullGetImageUrl(string $image): string
 
 function getFullAssetsVersion(): string
 {
-  return 'PRD' === fullGetEnv() ? FULL_CUSTOMER_VERSION : uniqid();
+  return 'PRD' === getFullEnv() ? FULL_CUSTOMER_VERSION : uniqid();
 }
 
 function isFullsAdminPage(): bool
@@ -61,20 +72,14 @@ function isFullsAdminPage(): bool
   return $page !== null && strpos($page, 'full-') === 0;
 }
 
-function fullGetEnv(): string
-{
-  return fullCustomer()->getCurrentEnv();
-}
-
 function fullGetLocalize(): array
 {
   $env     = fullCustomer();
-
   return [
     'rest_url'      => trailingslashit(rest_url()),
     'auth'          => wp_create_nonce('wp_rest'),
     'user_login'    => wp_get_current_user()->user_login,
-    'dashboard_url' => $env->getFullDashboardApiUrl() . '-customer/v1/',
+    'dashboard_url' => getFullDashboardApiUrl('-customer/v1/'),
     'site_url'      => site_url(),
     'store_url'     => 'https://full.services',
     'ai_icon'       => fullGetImageUrl('icon-logo-full-ai.png'),
@@ -88,8 +93,7 @@ function fullGetSiteConnectionData()
   $response = get_transient('full/site-connection-data');
 
   if (!$response || 'full-connection' === filter_input(INPUT_GET, 'page')) :
-    $full = fullCustomer();
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/connect-site';
+    $url  = getFullDashboardApiUrl('-customer/v1/connect-site');
 
     $request  = wp_remote_get($url, [
       'sslverify' => false,
@@ -99,6 +103,7 @@ function fullGetSiteConnectionData()
 
     $response = wp_remote_retrieve_body($request);
     $response = json_decode($response);
+    $data = is_array($response) && $response['success'] ? $response : null;
 
     set_transient('full/site-connection-data', $response, DAY_IN_SECONDS);
   endif;

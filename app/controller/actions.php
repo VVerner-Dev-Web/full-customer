@@ -73,8 +73,7 @@ function verifySiteConnection(): void
 
 function activationAnalyticsHook(): void
 {
-  $full  = fullCustomer();
-  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
+  $url   = getFullDashboardApiUrl('-customer/v1/analytics');
 
   wp_remote_post($url, [
     'sslverify' => false,
@@ -89,8 +88,7 @@ function activationAnalyticsHook(): void
 
 function deactivationAnalyticsHook(): void
 {
-  $full  = fullCustomer();
-  $url   = $full->getFullDashboardApiUrl() . '-customer/v1/analytics';
+  $url   = getFullDashboardApiUrl('-customer/v1/analytics');
 
   wp_remote_post($url, [
     'sslverify' => false,
@@ -220,8 +218,7 @@ function notifyPluginError(): bool
     return false;
   endif;
 
-  $full = fullCustomer();
-  $url  = $full->getFullDashboardApiUrl() . '-customer/v1/error';
+  $url  = getFullDashboardApiUrl('-customer/v1/error');
 
   wp_remote_post($url, [
     'sslverify' => false,

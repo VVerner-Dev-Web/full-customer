@@ -32,7 +32,7 @@ class TextGenerator
 
   private function requestGeneration(): array
   {
-    $url      = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/copy/generate';
+    $url      = getFullDashboardApiUrl('-customer/v1/copy/generate');
     $request  = wp_remote_post($url, [
       'timeout'   => MINUTE_IN_SECONDS,
       'sslverify' => false,

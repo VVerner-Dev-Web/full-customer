@@ -38,9 +38,7 @@ class FullCustomerUpdate
 
   public function filterRequestArgs(array $args, string $url)
   {
-    $fullUrl = fullCustomer()->getFullDashboardApiUrl();
-
-    if (strpos($url, $fullUrl) !== false) {
+    if (strpos($url, getFullDashboardApiUrl()) !== false) {
       $args['reject_unsafe_urls'] = false;
       $args['sslverify'] = false;
     }
@@ -110,7 +108,7 @@ class FullCustomerUpdate
 
     $conn = fullGetSiteConnectionData() ?: null;
 
-    $url = untrailingslashit(fullCustomer()->getFullDashboardApiUrl()) . '/v1/plugin/directory';
+    $url = getFullDashboardApiUrl('/v1/plugin/directory');
     $url = add_query_arg([
       'userEmail' => $conn?->connection_email
     ], $url);

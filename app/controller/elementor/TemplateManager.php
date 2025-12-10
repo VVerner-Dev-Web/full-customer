@@ -32,8 +32,7 @@ class TemplateManager
 
   public function getItem(int $itemId): ?stdClass
   {
-    $full = fullCustomer();
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/single-template/' . $itemId;
+    $url  = getFullDashboardApiUrl('-customer/v1/single-template/' . $itemId);
 
     $payload = [
       'site'  => site_url(),
@@ -53,8 +52,7 @@ class TemplateManager
     $item = get_transient('full/cloud/' . $itemId);
 
     if (!$item) :
-      $full = fullCustomer();
-      $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud/';
+      $url  = getFullDashboardApiUrl('-customer/v1/template/cloud/');
 
       $payload = [
         'site'  => site_url(),

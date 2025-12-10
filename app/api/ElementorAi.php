@@ -38,7 +38,7 @@ class ElementorAi extends FullCustomerController
       'template'  => $request->get_param('template'),
     ];
 
-    $url      = $full->getFullDashboardApiUrl() . '-customer/v1/ai';
+    $url      = getFullDashboardApiUrl('-customer/v1/ai');
     $request  = wp_remote_post($url, [
       'sslverify' => false,
       'body'      => $payload,

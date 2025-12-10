@@ -356,8 +356,6 @@ class ElementorTemplates extends FullCustomerController
 
   public function builderSendToCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full   = fullCustomer();
-
     $type    = $request->get_param('templateType') ? $request->get_param('templateType') : 'page';
     $content = $request->get_param('templateContent');
 
@@ -372,7 +370,7 @@ class ElementorTemplates extends FullCustomerController
       'json'  => fullJsonEncode(['type' => $type, 'content' => $content])
     ];
 
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';
+    $url  = getFullDashboardApiUrl('-customer/v1/template/cloud');
 
     $request  = wp_remote_post($url, ['sslverify' => false, 'body' => $payload]);
     $response = wp_remote_retrieve_body($request);
@@ -383,7 +381,6 @@ class ElementorTemplates extends FullCustomerController
 
   public function sendToCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full     = fullCustomer();
     $postId   = (int) $request->get_param('post_id');
     $worker   = new Exporter();
     $payload  = [
@@ -393,7 +390,7 @@ class ElementorTemplates extends FullCustomerController
       'json'  => $worker->export($postId)
     ];
 
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud';
+    $url  = getFullDashboardApiUrl('-customer/v1/template/cloud');
 
     $request  = wp_remote_post($url, ['sslverify' => false, 'body' => $payload]);
     $response = wp_remote_retrieve_body($request);
@@ -410,7 +407,6 @@ class ElementorTemplates extends FullCustomerController
 
   public function deleteFromCloud(WP_REST_Request $request): WP_REST_Response
   {
-    $full   = fullCustomer();
     $cloudId = (int) $request->get_param('item_id');
 
     if ($cloudId === 0) :
@@ -422,7 +418,7 @@ class ElementorTemplates extends FullCustomerController
       'id'    => $cloudId
     ];
 
-    $url  = $full->getFullDashboardApiUrl() . '-customer/v1/template/cloud/';
+    $url  = getFullDashboardApiUrl('-customer/v1/template/cloud/');
 
     $request  = wp_remote_request($url, [
       'method'    => 'delete',

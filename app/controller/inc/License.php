@@ -30,7 +30,7 @@ class License
 
   public function updateTemplatesStatus(): void
   {
-    $url   = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/license-templates';
+    $url   = getFullDashboardApiUrl('-customer/v1/license-templates');
 
     $response = wp_remote_post($url, [
       'sslverify' => false,
@@ -56,7 +56,7 @@ class License
 
   public static function updateStatus(): bool
   {
-    $url   = fullCustomer()->getFullDashboardApiUrl() . '-customer/v1/license';
+    $url   = getFullDashboardApiUrl('-customer/v1/license');
 
     $response = wp_remote_post($url, [
       'sslverify' => false,

@@ -34,10 +34,7 @@ class PluginUpdate extends FullCustomerController
   public function receivedValidUpdateToken(WP_REST_Request $request): bool
   {
     $token = $request->get_header('x-full');
-    $env   = $request->get_header('x-env') ? strtoupper($request->get_header('x-env')) : 'PRD';
-
-    $uri   = $this->env->getFullDashboardApiUrl($env);
-    $uri  .= '-customer/v1/valid-update-plugin-token';
+    $uri  = getFullDashboardApiUrl('-customer/v1/valid-update-plugin-token');
 
     $response = wp_remote_post($uri, [
       'sslverify' => false,

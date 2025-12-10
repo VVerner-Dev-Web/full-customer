@@ -127,7 +127,7 @@ class PluginInstallation extends FullCustomerController
   {
     $host = wp_parse_url($source, PHP_URL_HOST);
 
-    $valid = $this->env->getCurrentEnv() === 'PRD' ?
+    $valid = getFullEnv() === 'PRD' ?
       'painel.full.services' :
       'full.dev';
 

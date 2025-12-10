@@ -31,33 +31,11 @@ class FullCustomer
     return (bool) $this->get('dashboard_url');
   }
 
-  public function getFullDashboardApiUrl(string $env = null): string
-  {
-    $env = $env ? strtoupper($env) : $this->getCurrentEnv();
-    switch ($env):
-      case 'DEV':
-        $uri = 'https://full.dev/wp-json/full';
-        break;
-      case 'STG':
-        $uri = 'https://somosafull.com.br/wp-json/full';
-        break;
-      default:
-        $uri = 'https://api.full.services/wp-json/full';
-    endswitch;
-
-    return $uri;
-  }
-
-  public function getCurrentEnv(): string
-  {
-    return defined('FULL_CUSTOMER') ? FULL_CUSTOMER : 'PRD';
-  }
-
   public function setEnabledServices(array $services): void
   {
     $this->set('enabled_services', array_values($services));
 
-    $url     = $this->getFullDashboardApiUrl() . '-customer/v1/widgets';
+    $url     = getFullDashboardApiUrl('-customer/v1/widgets');
     $payload = [
       'site'  => site_url(),
       'widgets' => $this->getEnabledServices(),
@@ -113,6 +91,6 @@ class FullCustomer
 
   private function optionEnvSuffix(): string
   {
-    return 'PRD' === $this->getCurrentEnv() ? '' : 'dev-';
+    return 'PRD' === getFullEnv() ? '' : 'dev-';
   }
 }

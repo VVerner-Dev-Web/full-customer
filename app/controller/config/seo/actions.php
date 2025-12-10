@@ -82,13 +82,12 @@ function imageAltUpdate(): void
 
 function imageAltGenerator(): void
 {
-  $full    = fullCustomer();
   $payload = [
     'site'     => site_url(),
     'imageUrl' => wp_get_attachment_url(filter_input(INPUT_POST, 'attachmentId', FILTER_VALIDATE_INT)),
   ];
 
-  $url      = $full->getFullDashboardApiUrl() . '-customer/v1/ai/image-alt-generator';
+  $url      = getFullDashboardApiUrl('-customer/v1/ai/image-alt-generator');
   $request  = wp_remote_post($url, [
     'sslverify' => false,
     'body'      => $payload,
@@ -143,13 +142,12 @@ function metadescriptionGenerator(): void
 {
   check_ajax_referer('full/ai/metadescription-generator');
 
-  $full    = fullCustomer();
   $payload = [
     'site'    => site_url(),
     'content' => apply_filters('the_content', get_post_field('post_content', filter_input(INPUT_POST, 'postId'))),
   ];
 
-  $url      = $full->getFullDashboardApiUrl() . '-customer/v1/ai/metadescription-generator';
+  $url      = getFullDashboardApiUrl('-customer/v1/ai/metadescription-generator');
   $request  = wp_remote_post($url, [
     'sslverify' => false,
     'body'      => $payload,
