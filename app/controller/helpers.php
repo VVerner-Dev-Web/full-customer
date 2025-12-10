@@ -15,17 +15,26 @@ function getFullDashboardApiUrl(string $endpoint = ''): string
   return $url . $endpoint;
 }
 
-function fullIsCorrectlyConnected(): bool
+function isFullConnected(): bool
 {
-  $code = (int) get_transient('full/connected');
-  $code = 0;
+  return getFullConnectionData()?->success ?? false;
+}
 
-  if (!$code) :
-    $code = isSiteConnectedOnFull() && fullCustomer()->hasDashboardUrl() ? 1 : -1;
-    set_transient('full/connected', $code, DAY_IN_SECONDS);
-  endif;
+function getFullConnectionData(): ?stdClass
+{
+  $data = get_transient('full/site-connection-data');
 
-  return $code > 0;
+  if (!$data || 'full-connection' === filter_input(INPUT_GET, 'page')) {
+    $request  = wp_remote_get(getFullDashboardApiUrl('-customer/v1/connect-site'));
+    $response = wp_remote_retrieve_body($request);
+    $response = json_decode($response, true);
+
+    $data = is_array($response) && $response['success'] ? (object) $response : null;
+
+    set_transient('full/site-connection-data', $data, DAY_IN_SECONDS);
+  }
+
+  return $data;
 }
 
 function fullCustomer(): FullCustomer
@@ -86,40 +95,6 @@ function fullGetLocalize(): array
     'full_pro'      => License::isActive(),
     'enabled_services' => array_values($env->getEnabledServices()),
   ];
-}
-
-function fullGetSiteConnectionData()
-{
-  $response = get_transient('full/site-connection-data');
-
-  if (!$response || 'full-connection' === filter_input(INPUT_GET, 'page')) :
-    $url  = getFullDashboardApiUrl('-customer/v1/connect-site');
-
-    $request  = wp_remote_get($url, [
-      'sslverify' => false,
-      'headers'   => ['Content-type' => 'application/json'],
-      'body'      => ['site_url' => site_url()]
-    ]);
-
-    $response = wp_remote_retrieve_body($request);
-    $response = json_decode($response);
-    $data = is_array($response) && $response['success'] ? $response : null;
-
-    set_transient('full/site-connection-data', $response, DAY_IN_SECONDS);
-  endif;
-
-  return $response;
-}
-
-function isSiteConnectedOnFull(): bool
-{
-  $connectionTest = fullGetSiteConnectionData();
-
-  if ($connectionTest && $connectionTest->success) :
-    fullCustomer()->set('dashboard_url', $connectionTest->dashboard_url);
-  endif;
-
-  return $connectionTest && $connectionTest->success;
 }
 
 function fullGetTemplatesUrl(string $endpoint = ''): string

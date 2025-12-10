@@ -35,5 +35,7 @@ require_once FULL_CUSTOMER_APP . '/controller/filters.php';
 require_once FULL_CUSTOMER_APP . '/controller/helpers.php';
 require_once FULL_CUSTOMER_APP . '/controller/upgrade.php';
 
+require_once FULL_CUSTOMER_APP . '/controller/FullCustomerHttp.php';
+require_once FULL_CUSTOMER_APP . '/controller/FullCustomerConnection.php';
 require_once FULL_CUSTOMER_APP . '/controller/FullCustomerUpdate.php';
 require_once FULL_CUSTOMER_APP . '/controller/FullCustomerStaffRepository.php';

@@ -29,81 +29,31 @@
     </div>
 
     <div class="col-login">
-      <?php if (fullIsCorrectlyConnected()) : ?>
+      <?php if (isFullConnected()) : ?>
 
         <div id="full-connect" class="full-form">
           <h2>
             Site conectado!
           </h2>
 
-          <p>Aproveite o melhor que a FULL. tem para aproveitar em seu site </p>
-          <a href="<?php echo esc_url($full->get('dashboard_url')) ?>" class="full-primary-button full-button-block" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem">Acessar painel</a>
+          <p>Site conectado com a conta <strong><?= getFullConnectionData()->connection_email; ?></strong></p>
+          <a href="<?= getFullConnectionData()->dashboard_url; ?>" class="full-primary-button full-button-block" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem">Acessar painel</a>
         </div>
 
       <?php else : ?>
 
-        <?php if ($full->hasDashboardUrl()) : ?>
-          <div class="full-disconnected-notice">
-            📢 Site desconectado, conecte-o novamente abaixo.
-          </div>
-          <?php $full->set('dashboard_url', null); ?>
-        <?php endif; ?>
+        <form id="full-connect" class="full-form">
+          <input type="hidden" name="action" value="full/connect-site">
+          <?php wp_nonce_field('full/connect-site'); ?>
 
-        <ul id="form-nav" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" href="#full-connect">Conectar site</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#full-register">Criar conta</a>
-          </li>
-        </ul>
-
-        <form id="full-connect" class="full-form form-nav-toggle">
-          <h2>Conectar</h2>
           <label for="customer-email">
             <span>Seu e-mail no painel FULL.</span>
             <input placeholder="Insira seu e-mail de acesso" type="email" name="email" id="customer-email" autocomplete="email" required>
           </label>
 
-          <label for="customer-password" style="display: none; margin-top: 1rem">
-            <span>Sua senha no WordPress</span>
-            <input placeholder="Insira a senha de acesso ao painel WP" type="password" name="password" id="customer-password" autocomplete="off">
-          </label>
-
           <button class="full-primary-button full-button-block">Realizar conexão</button>
         </form>
 
-        <form id="full-register" class="full-form form-nav-toggle" style="display: none">
-          <h2>Cadastro na FULL.</h2>
-
-          <label for="register-email">
-            <span>Seu nome</span>
-            <input type="text" name="name" id="register-name" autocomplete="name" required>
-          </label>
-
-          <label for="register-email" style="margin-top: 1rem">
-            <span>Seu e-mail</span>
-            <input type="email" name="email" id="register-email" autocomplete="email" required>
-          </label>
-
-          <label for="register-password" style="margin-top: 1rem">
-            <span>Senha</span>
-            <input type="password" name="password" id="register-password" autocomplete="new-password">
-          </label>
-
-          <label class="toggle-switch" for="register-try_connect" style="margin-top: 1rem">
-            <input type="checkbox" name="try_connect" value="1" class="toggle-switch-input" id="register-try_connect">
-            <span class="toggle-switch-label">
-              <span class="toggle-switch-indicator"></span>
-            </span>
-            <span class="toggle-switch-content">
-              <span style="display: block;">Conectar site</span>
-              <small class="d-block text-muted">Tentar conectar o site automaticamente após registro na FULL.</small>
-            </span>
-          </label>
-
-          <button class="full-primary-button full-button-block">Realizar conexão</button>
-        </form>
       <?php endif; ?>
 
       <div id="full-connection-validate">

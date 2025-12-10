@@ -56,7 +56,7 @@ function pluginRowMeta(array $meta, string $plugin): array
   $pageUrl = esc_url(admin_url('options-general.php?page=full-connection'));
 
   $meta[] = '<a href="' . $pageUrl .  '">Configurações</a>';
-  $meta[] = isSiteConnectedOnFull() ? 'Site conectado!' : '<a href="' . $pageUrl . '">Conectar site</a>';
+  $meta[] = isFullConnected() ? 'Site conectado!' : '<a href="' . $pageUrl . '">Conectar site</a>';
 
   return $meta;
 }

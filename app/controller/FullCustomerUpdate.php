@@ -8,7 +8,6 @@ class FullCustomerUpdate
   {
     add_filter('plugins_api', [$this, 'info'], PHP_INT_MAX, 3);
     add_filter('site_transient_update_plugins', [$this, 'pluginUpdate'], PHP_INT_MAX);
-    add_filter('http_request_args', [$this, 'filterRequestArgs'], PHP_INT_MAX, 2);
 
     add_action('after_plugin_row_meta', [$this, 'afterPluginRow'], 10, 2);
   }
@@ -34,16 +33,6 @@ class FullCustomerUpdate
         'additional_classes' => ['notice-alt', 'inline'],
       ]);
     }
-  }
-
-  public function filterRequestArgs(array $args, string $url)
-  {
-    if (strpos($url, getFullDashboardApiUrl()) !== false) {
-      $args['reject_unsafe_urls'] = false;
-      $args['sslverify'] = false;
-    }
-
-    return $args;
   }
 
   public function info($response, $action, $args)
@@ -106,7 +95,7 @@ class FullCustomerUpdate
       return self::fixJsonParse($directory);
     }
 
-    $conn = fullGetSiteConnectionData() ?: null;
+    $conn = getFullConnectionData() ?: null;
 
     $url = getFullDashboardApiUrl('/v1/plugin/directory');
     $url = add_query_arg([
@@ -146,7 +135,7 @@ class FullCustomerUpdate
       return $license['license'];
     }
 
-    $conn = fullGetSiteConnectionData() ?: null;
+    $conn = getFullConnectionData() ?: null;
 
     if (!$conn) {
       return 'disconnected';

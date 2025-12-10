@@ -21,16 +21,6 @@ function insertFooterNote(): void
   endif;
 }
 
-function insertAdminNotice(): void
-{
-  $full = fullCustomer();
-  $file = FULL_CUSTOMER_APP . '/views/admin/notice.php';
-
-  if (!$full->hasDashboardUrl() && file_exists($file)) :
-    require_once $file;
-  endif;
-}
-
 function forceLicenseCheck(): void
 {
   if (filter_input(INPUT_GET, 'full') === 'verify_license') {
@@ -61,7 +51,7 @@ function verifySiteConnection(): void
     return;
   endif;
 
-  $response = fullGetSiteConnectionData();
+  $response = getFullConnectionData();
 
   if ($response && $response->success) :
     $full->set('connection_email', sanitize_email($response->connection_email));
@@ -115,7 +105,7 @@ function addMenuPage(): void
     0
   );
 
-  $connectionOk   = fullIsCorrectlyConnected();
+  $connectionOk   = isFullConnected();
   $cls = $connectionOk ? 'success' : 'error';
   $text = $connectionOk ? 'conectado' : 'desconectado';
 

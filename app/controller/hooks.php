@@ -11,7 +11,6 @@ register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\verifySiteC
 register_activation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\activationAnalyticsHook');
 register_deactivation_hook(FULL_CUSTOMER_FILE, '\Full\Customer\Actions\deactivationAnalyticsHook');
 
-add_action('rest_api_init', ['\Full\Customer\Api\Login', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\PluginInstallation', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Connection', 'registerRoutes']);
 add_action('rest_api_init', ['\Full\Customer\Api\Health', 'registerRoutes']);
@@ -21,7 +20,6 @@ add_action('admin_init', '\Full\Customer\Actions\forceLicenseCheck');
 add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
-add_action('admin_notices', '\Full\Customer\Actions\insertAdminNotice');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 
 add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
