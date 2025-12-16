@@ -14,11 +14,11 @@ function versionsWithUpgrade(array $versions): array
   return $versions;
 }
 
-function setPluginBranding(array $plugins): array
+function setPluginBranding($plugins): array
 {
   $key    = plugin_basename(FULL_CUSTOMER_FILE);
 
-  if (!isset($plugins[$key])) :
+  if (!is_array($plugins) || !isset($plugins[$key])) :
     return $plugins;
   endif;
 
