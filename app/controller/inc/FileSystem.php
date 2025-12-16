@@ -3,7 +3,7 @@
 namespace Full\Customer;
 
 use Exception;
-use PhpZip\ZipFile;
+use ZipArchive;
 
 defined('ABSPATH') || exit;
 
@@ -80,9 +80,7 @@ class FileSystem
       set_time_limit(600);
     endif;
 
-    $zipFile = new ZipFile();
-
-    $zipFile->openFile($zipFilePath)->extractTo($destinationPath)->close();
+    unzip_file($zipFilePath, $destinationPath);
 
     if ($deleteAfterExtract) :
       wp_delete_file($zipFilePath);
@@ -97,9 +95,34 @@ class FileSystem
       set_time_limit(600);
     endif;
 
-    $zipFile = new ZipFile();
-    $zipFile->addDirRecursive($sourcePath, '', \PhpZip\Constants\ZipCompressionMethod::DEFLATED)->saveAsFile($outputZipPath)->close();
+    $zip = new ZipArchive();
+
+    if ($zip->open($outputZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+      return;
+    }
+
+    $this->addFolderToZip($sourcePath, $zip, basename($sourcePath));
+
+    $zip->close();
   }
+
+  private function addFolderToZip(string $folder, ZipArchive $zip, string $base = '')
+  {
+    $folder = trailingslashit($folder);
+    $files  = array_diff(scandir($folder), ['.', '..']);
+
+    foreach ($files as $file) {
+      $path = $folder . $file;
+
+      if (is_dir($path)) {
+        $zip->addEmptyDir("$base$file/");
+        $this->addFolderToZip($path . '/', $zip, "$base$file/");
+      } else {
+        $zip->addFile($path, "$base$file");
+      }
+    }
+  }
+
 
   public function deleteDirectory(string $path): bool
   {
