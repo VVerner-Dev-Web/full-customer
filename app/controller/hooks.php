@@ -3,7 +3,6 @@
 namespace Full\Customer\Hooks;
 
 use Full\Customer\License;
-use Full\Customer\Proxy;
 
 defined('ABSPATH') || exit;
 
@@ -21,9 +20,6 @@ add_action('wp_footer', '\Full\Customer\Actions\insertFooterNote');
 add_action('admin_menu', '\Full\Customer\Actions\addMenuPage');
 add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts');
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
-
-add_action('wp', ['\Full\Customer\Proxy', 'enqueueCreateHook']);
-add_action(Proxy::CRON_JOB_NAME, ['\Full\Customer\Proxy', 'cronJob']);
 
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorAddons');
