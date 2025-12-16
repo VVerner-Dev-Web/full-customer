@@ -40,9 +40,16 @@ class FullCustomerConnection
     }
 
     $panelEmail = sanitize_email(filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) ?? '');
+    $password   = \WP_Application_Passwords::create_new_application_password(get_current_user_id(), ['name' => 'FULL. Site Connection ' . uniqid()]);
+
+    $password = is_array($password) && isset($password[0]) ? $password[0] : null;
 
     if (!$panelEmail) {
       wp_send_json_error('Por favor, insira um e-mail válido.');
+    }
+
+    if (!$password) {
+      wp_send_json_error('Por favor, realize a conexão pelo painel da FULL.');
     }
 
     $url = getFullDashboardApiUrl('-customer/v1/connect-site');
@@ -50,7 +57,11 @@ class FullCustomerConnection
       'headers'   => ['Accept' => 'application/json', 'Content-Type' => 'application/json'],
       'timeout'   => 15,
       'body'      => wp_json_encode([
-        'customer' => $panelEmail,
+        'email' => $panelEmail,
+        'user' => wp_get_current_user()->user_email,
+        'password' => $password,
+        'password_origin' => 'application_password',
+        'site_url' => home_url(),
       ])
     ]);
 

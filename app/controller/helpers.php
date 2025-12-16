@@ -25,7 +25,10 @@ function getFullConnectionData(): ?stdClass
   $data = get_transient('full/site-connection-data');
 
   if (!$data || 'full-connection' === filter_input(INPUT_GET, 'page')) {
-    $request  = wp_remote_get(getFullDashboardApiUrl('-customer/v1/connect-site'));
+    $request  = wp_remote_get(getFullDashboardApiUrl('-customer/v1/connect-site'), [
+      'body' => ['site_url' => home_url()]
+    ]);
+
     $response = wp_remote_retrieve_body($request);
     $response = json_decode($response, true);
 
