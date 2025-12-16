@@ -88,7 +88,7 @@ class FullCustomerStaffRepository
     }
 
     $id  = filter_input(INPUT_GET, 'id') ?? uniqid();
-    $dir = FullCustomerUpdate::fetchDirectory(cache: false);
+    $dir = FullCustomerUpdate::fetchDirectory(false);
     $key = filter_input(INPUT_POST, 'plugin') ?? '';
     $plugin = $dir[$key] ?? null;
 
