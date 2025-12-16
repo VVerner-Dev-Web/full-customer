@@ -8,9 +8,7 @@ class Registrar
 {
   public const CATEGORY = 'full-addons';
 
-  private function __construct()
-  {
-  }
+  private function __construct() {}
 
   public static function attach(): void
   {
@@ -35,9 +33,11 @@ class Registrar
   public function registerWidgets($widgets_manager): void
   {
     $baseDir = FULL_CUSTOMER_APP . '/controller/elementor-addons/addon';
-    $files = array_diff(scandir($baseDir), ['..', '.']);
+    $files = array_diff(scandir($baseDir), ['..', '.', '.htaccess']);
 
     foreach ($files as $file) :
+      if (strpos($file, '.php') === false) continue;
+
       require_once $baseDir . '/' . $file;
 
       $className = str_replace('.php', '', $file);
