@@ -17,7 +17,8 @@ function getFullDashboardApiUrl(string $endpoint = ''): string
 
 function isFullConnected(): bool
 {
-  return getFullConnectionData()?->success ?? false;
+  $data = getFullConnectionData();
+  return is_null($data) ? false : $data->success;
 }
 
 function getFullConnectionData(): ?stdClass

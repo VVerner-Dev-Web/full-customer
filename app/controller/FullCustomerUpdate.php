@@ -96,10 +96,9 @@ class FullCustomerUpdate
     }
 
     $conn = getFullConnectionData() ?: null;
-
     $url = getFullDashboardApiUrl('/v1/plugin/directory');
     $url = add_query_arg([
-      'userEmail' => $conn?->connection_email
+      'userEmail' => is_null($conn) ? '' : $conn->connection_email
     ], $url);
 
     $response = wp_remote_get($url, [
