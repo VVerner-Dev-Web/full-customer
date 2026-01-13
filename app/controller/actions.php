@@ -237,17 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-security')) :
-    require_once FULL_CUSTOMER_APP . '/controller/security/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/Settings.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/security/Feeds.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/LastLoginColumn.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/PasswordProtection.php';
-    require_once FULL_CUSTOMER_APP . '/controller/security/UsersOnlyMode.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-woocommerce')) :
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/woocommerce/actions.php';
