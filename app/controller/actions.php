@@ -237,13 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-email')) :
-    require_once FULL_CUSTOMER_APP . '/controller/email/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/email/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/email/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/email/SMTP.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-images')) :
     require_once FULL_CUSTOMER_APP . '/controller/images/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/images/actions.php';
