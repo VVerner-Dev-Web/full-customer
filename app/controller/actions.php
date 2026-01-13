@@ -237,17 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-analytics')) :
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/Database.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/Assets.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/PageView.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/Conversion.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/ConversionTracker.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/API.php';
-    require_once FULL_CUSTOMER_APP . '/controller/analytics/Admin.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-social-proof')) :
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentPurchases.php';
