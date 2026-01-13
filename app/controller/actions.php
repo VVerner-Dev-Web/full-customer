@@ -237,31 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-woocommerce')) :
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/Settings.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Frontend.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/secret-coupon/Admin.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Admin.php';
-    require_once FULL_CUSTOMER_APP . '/controller/woocommerce/checkout-redirect/Frontend.php';
-
-    if (function_exists('WC')) :
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/EstimateMode.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/HidePrices.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/OrderReceived.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/ProductCustomTab.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/ProductReviews.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/TestPaymentGateway.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/AutocompleteOrders.php';
-      require_once FULL_CUSTOMER_APP . '/controller/woocommerce/WhatsAppCheckout.php';
-    endif;
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
     require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Hooks.php';
