@@ -237,12 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-whatsapp')) :
-    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/whatsapp/Settings.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
     require_once FULL_CUSTOMER_APP . '/controller/copy/Hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/copy/TextGenerator.php';
