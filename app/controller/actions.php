@@ -237,32 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-config')) :
-    require_once FULL_CUSTOMER_APP . '/controller/config/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/AdminInterface.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Posts.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Links.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/seo/Comments.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/config/code/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/code/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/code/Settings.php';
-
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/DeprecatedComponents.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/BlockBasedFeatures.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Revisions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/config/speed/Heartbeat.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-security')) :
     require_once FULL_CUSTOMER_APP . '/controller/security/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/security/actions.php';
