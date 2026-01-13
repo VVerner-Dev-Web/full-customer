@@ -237,11 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-ai-copy')) :
-    require_once FULL_CUSTOMER_APP . '/controller/copy/Hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/copy/TextGenerator.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-analytics')) :
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Settings.php';
     require_once FULL_CUSTOMER_APP . '/controller/analytics/Database.php';
