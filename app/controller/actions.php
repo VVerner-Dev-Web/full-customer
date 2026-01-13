@@ -226,17 +226,6 @@ function notifyPluginError(): bool
   return true;
 }
 
-function initFullAccessWidget(): void
-{
-  if (fullCustomer()->isServiceEnabled('full-access')) :
-    require_once FULL_CUSTOMER_APP . '/controller/access/Authentication.php';
-    require_once FULL_CUSTOMER_APP . '/controller/access/RegistrationFields.php';
-    require_once FULL_CUSTOMER_APP . '/controller/access/Interaction.php';
-  endif;
-}
-
-function startWidgets(): void {}
-
 function initFullElementorTemplates(): void
 {
   if (class_exists('\Elementor\Plugin')) :

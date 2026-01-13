@@ -24,8 +24,6 @@ require_once FULL_CUSTOMER_APP . '/controller/inc/RemoteLogin.php';
 if (License::isActive()) :
   require_once FULL_CUSTOMER_APP . '/api/PluginUpdate.php';
   require_once FULL_CUSTOMER_APP . '/api/Whitelabel.php';
-
-  require_once FULL_CUSTOMER_APP . '/controller/security/Firewall.php';
 endif;
 
 require_once FULL_CUSTOMER_APP . '/controller/hooks.php';
