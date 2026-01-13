@@ -237,14 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-images')) :
-    require_once FULL_CUSTOMER_APP . '/controller/images/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/images/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/images/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/images/UploadResizer.php';
-    require_once FULL_CUSTOMER_APP . '/controller/images/ImageOptimization.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-config')) :
     require_once FULL_CUSTOMER_APP . '/controller/config/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/config/actions.php';
