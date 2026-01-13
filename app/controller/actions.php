@@ -235,15 +235,7 @@ function initFullAccessWidget(): void
   endif;
 }
 
-function startWidgets(): void
-{
-  if (fullCustomer()->isServiceEnabled('full-social-proof')) :
-    require_once FULL_CUSTOMER_APP . '/controller/social-proof/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentPurchases.php';
-    require_once FULL_CUSTOMER_APP . '/controller/social-proof/RecentVisitors.php';
-    require_once FULL_CUSTOMER_APP . '/controller/social-proof/Admin.php';
-  endif;
-}
+function startWidgets(): void {}
 
 function initFullElementorTemplates(): void
 {
