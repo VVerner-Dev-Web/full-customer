@@ -237,17 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-login')) :
-    require_once FULL_CUSTOMER_APP . '/controller/login/hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/actions.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/Url.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/Identity.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/Menu.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/LogoutRedirect.php';
-    require_once FULL_CUSTOMER_APP . '/controller/login/LoginRedirect.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-email')) :
     require_once FULL_CUSTOMER_APP . '/controller/email/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/email/actions.php';
