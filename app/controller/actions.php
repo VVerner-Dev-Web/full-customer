@@ -237,12 +237,6 @@ function initFullAccessWidget(): void
 
 function startWidgets(): void
 {
-  if (fullCustomer()->isServiceEnabled('full-elementor-crm')) :
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Settings.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Hooks.php';
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-crm/Leads.php';
-  endif;
-
   if (fullCustomer()->isServiceEnabled('full-whatsapp')) :
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/hooks.php';
     require_once FULL_CUSTOMER_APP . '/controller/whatsapp/actions.php';
