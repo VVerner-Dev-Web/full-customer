@@ -9,7 +9,7 @@ class Importer
   private string $name;
   private array $localJson;
 
-  public function __construct(string $name, string $filename = null, array $localJson = null)
+  public function __construct(string $name, ?string $filename = null, ?array $localJson = null)
   {
     $this->name = $name;
 

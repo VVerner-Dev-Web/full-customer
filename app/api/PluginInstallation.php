@@ -3,7 +3,6 @@
 namespace Full\Customer\Api;
 
 use Exception;
-use Full\Customer\FileSystem;
 use \FullCustomerController;
 use \WP_REST_Server;
 use \WP_REST_Request;
@@ -16,14 +15,6 @@ class PluginInstallation extends FullCustomerController
 {
   private $pluginDir = null;
   private $pluginFile = null;
-  private FileSystem $fileSystem;
-
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->fileSystem = new FileSystem();
-  }
 
   public static function registerRoutes(): void
   {
@@ -160,7 +151,8 @@ class PluginInstallation extends FullCustomerController
       throw new Exception('Não foi possível fazer o download do zip do plugin');
     endif;
 
-    $this->fileSystem->extractZip($zipFile, $unzipDir, true);
+    unzip_file($zipFile, $unzipDir);
+    wp_delete_file($zipFile);
 
     $scan = scandir($unzipDir);
     $scan = $scan ? array_diff($scan, ['.', '..', '__MACOSX']) : [];
@@ -176,11 +168,17 @@ class PluginInstallation extends FullCustomerController
 
   private function movePluginFiles(string $origin): void
   {
-    $moved = $this->fileSystem->moveFile($origin, $this->getPluginActivationDir());
+    $destinationPath = $this->getPluginActivationDir();
 
-    if (!$moved) :
+    if (is_dir($destinationPath)) {
+      fullFileSystem()->rmdir($destinationPath, true);
+    }
+
+    $moved = fullFileSystem()->move($origin, $destinationPath, true);
+
+    if (!$moved) {
       throw new Exception('Não foi possível mover os arquivos do plugin para o diretório do WordPress');
-    endif;
+    }
   }
 
   private function activatePlugin(): ?WP_Error

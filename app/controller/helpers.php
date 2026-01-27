@@ -121,8 +121,16 @@ function fullFileSystem()
 {
   global $wp_filesystem;
 
+  require_once(ABSPATH . 'wp-admin/includes/plugin.php');
   require_once(ABSPATH . '/wp-admin/includes/file.php');
+
   WP_Filesystem();
+
+  if (!is_a($wp_filesystem, 'WP_Filesystem_Base')) {
+    include_once(ABSPATH . 'wp-admin/includes/file.php');
+    $creds = request_filesystem_credentials(site_url());
+    WP_Filesystem($creds);
+  }
 
   return $wp_filesystem;
 }

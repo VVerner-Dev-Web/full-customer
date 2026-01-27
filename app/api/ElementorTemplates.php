@@ -5,7 +5,6 @@ namespace Full\Customer\Api;
 use Full\Customer\Elementor\Exporter;
 use Full\Customer\Elementor\Importer;
 use Full\Customer\Elementor\TemplateManager;
-use Full\Customer\FileSystem;
 use \FullCustomerController;
 use stdClass;
 use \WP_REST_Server;
@@ -472,13 +471,21 @@ class ElementorTemplates extends FullCustomerController
       return [];
     endif;
 
-    $fs = new FileSystem;
-    $fs->extractZip(
-      $zipFile,
-      $unzipDir
-    );
+    fullFileSystem();
+    unzip_file($zipFile, $unzipDir);
 
-    return is_dir($unzipDir . DIRECTORY_SEPARATOR . 'templates') ? $fs->scanDir($unzipDir . DIRECTORY_SEPARATOR . 'templates') : [];
+    $path = $unzipDir . DIRECTORY_SEPARATOR . 'templates';
+    $templates = [];
+
+    if (is_dir($path)) {
+      $path  = trailingslashit(realpath($path));
+      $path  = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+      $flags = defined('GLOB_BRACE') ? GLOB_MARK | GLOB_BRACE : 0;
+
+      $templates = glob($path . '{,.}[!.,!..]*', $flags);
+    }
+
+    return  $templates;;
   }
 
   private function verifyMissingDependencies(stdClass $item): ?array

@@ -44,6 +44,8 @@ class TemplateManager
 
     $item  = json_decode($response);
 
+    $item->canBeInstalled = true;
+
     return $item && isset($item->id) ? $item : null;
   }
 
