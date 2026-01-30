@@ -19,10 +19,6 @@ function editorBeforeEnqueueStyles(): void
   wp_enqueue_style('full-admin', $assetsUrl . 'css/admin.css', [], $version);
   wp_enqueue_style('full-elementor', $assetsUrl . 'elementor/editor.css', [], $version);
 
-  if (fullCustomer()->isServiceEnabled('full-ai-elementor')) :
-    wp_enqueue_style('full-elementor-ai', $assetsUrl . 'elementor/ai.css', [], $version);
-  endif;
-
   wp_enqueue_style('full-global-admin', $assetsUrl . 'css/global-admin.css', [], $version);
 }
 
@@ -35,10 +31,6 @@ function editorAfterEnqueueScripts(): void
   wp_enqueue_script('full-flickity', $assetsUrl . 'vendor/flickity/flickity.min.js', ['jquery'], '3.0.0', true);
   wp_enqueue_script('full-magnific-popup', $assetsUrl . 'vendor/magnific-popup/magnific-popup.min.js', ['jquery'], '1.0.0', true);
   wp_enqueue_script('full-elementor', $assetsUrl . 'elementor/editor.js', ['jquery'], $version, true);
-
-  if (fullCustomer()->isServiceEnabled('full-ai-elementor')) :
-    wp_enqueue_script('full-elementor-ai', $assetsUrl . 'elementor/ai.js', ['jquery'], $version, true);
-  endif;
 
   wp_enqueue_script('full-admin-elementor', $assetsUrl . 'elementor/admin.js', ['jquery'], $version, true);
 
@@ -84,7 +76,6 @@ function manageElementorLibraryPostsCustomColumn(string $column, int $postId): v
 function editorFooter(): void
 {
   _loadTemplatesViews();
-  _loadIaViews();
 }
 
 function _loadTemplatesViews(): void
@@ -112,12 +103,4 @@ function _loadTemplatesViews(): void
     }
 
   endforeach;
-}
-
-function _loadIaViews(): void
-{
-  ob_start();
-  require FULL_CUSTOMER_APP . '/views/ai/prompt.php';
-
-  echo '<template id="full-ai-prompt"> ' . ob_get_clean() . '</template>';
 }

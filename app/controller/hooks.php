@@ -25,7 +25,6 @@ add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates'
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorAddons');
 
 add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerRoutes']);
-add_action('rest_api_init', ['\Full\Customer\Api\ElementorAi', 'registerRoutes']);
 
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
