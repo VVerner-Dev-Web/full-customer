@@ -22,7 +22,6 @@ add_action('admin_enqueue_scripts', '\Full\Customer\Actions\adminEnqueueScripts'
 add_action('shutdown', '\Full\Customer\Actions\notifyPluginError');
 
 add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorTemplates');
-add_action('plugins_loaded', '\Full\Customer\Actions\initFullElementorAddons');
 
 add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerRoutes']);
 

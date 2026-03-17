@@ -237,10 +237,3 @@ function initFullElementorTemplates(): void
     require_once FULL_CUSTOMER_APP . '/controller/elementor/Exporter.php';
   endif;
 }
-
-function initFullElementorAddons(): void
-{
-  if (class_exists('\Elementor\Plugin')) :
-    require_once FULL_CUSTOMER_APP . '/controller/elementor-addons/Registrar.php';
-  endif;
-}
