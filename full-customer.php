@@ -1,7 +1,7 @@
 <?php defined('ABSPATH') || exit;
 
 /**
- * Plugin Name:         FULL - Cliente
+ * Plugin Name:         FULL.Cliente
  * Description:         Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins.
  * Version:             3.5.2
  * Requires at least:   6.3

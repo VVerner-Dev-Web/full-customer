@@ -28,13 +28,8 @@ add_action('rest_api_init', ['\Full\Customer\Api\ElementorTemplates', 'registerR
 add_filter('wp_is_application_passwords_available', '__return_true', PHP_INT_MAX);
 add_filter('wp_is_application_passwords_available_for_user', '__return_true', PHP_INT_MAX);
 
-add_action('rest_api_init', ['\Full\Customer\Api\Widgets', 'registerRoutes']);
-
 if (License::isActive()) :
-  add_action('rest_api_init', ['\Full\Customer\Api\PluginUpdate', 'registerRoutes']);
   add_action('rest_api_init', ['\Full\Customer\Api\Whitelabel', 'registerRoutes']);
-  add_action('rest_api_init', ['\Full\Customer\Api\Copy', 'registerRoutes']);
-
   add_action('plugins_loaded', '\Full\Customer\Actions\upgradePlugin');
 endif;
 
