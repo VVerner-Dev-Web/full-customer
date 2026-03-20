@@ -2,17 +2,7 @@
 
 namespace Full\Customer\Filters;
 
-use WP_REST_Response;
-
 defined('ABSPATH') || exit;
-
-function versionsWithUpgrade(array $versions): array
-{
-  $versions[] = '0.0.9';
-  $versions[] = '0.1.1';
-
-  return $versions;
-}
 
 function setPluginBranding($plugins): array
 {
@@ -72,38 +62,4 @@ function notifyPluginError(array $args, array $error): array
   update_option('full_customer_last_error', $error, false);
 
   return $args;
-}
-
-function restPreServeRequest(bool $served, WP_REST_Response $response): bool
-{
-  if ($served) :
-    return $served;
-  endif;
-
-  $buffer   = null;
-
-  foreach (array_keys($response->get_headers()) as $header) :
-    if ('x-full' !== strtolower($header)) :
-      continue;
-    endif;
-
-    $buffer   = $response->get_data();
-    break;
-  endforeach;
-
-  if (!is_string($buffer)) :
-    return $served;
-  endif;
-
-  echo $buffer;
-  return true;
-}
-
-function autoupdate($update, $item = null)
-{
-  if ($item && 'full-customer' === $item->slug) :
-    $update = true;
-  endif;
-
-  return $update;
 }

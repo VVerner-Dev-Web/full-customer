@@ -71,7 +71,7 @@ jQuery(function ($) {
           if (response.success) {
             $responseContainer.find("." + reportId).html(response.data);
           }
-        }
+        },
       );
     }, 2000);
 

@@ -8,6 +8,59 @@ class FullCustomerConnection
   {
     add_action('admin_notices', [$this, 'connectionNotice']);
     add_action('wp_ajax_full/connect-site', [$this, 'connectSite']);
+
+    register_activation_hook(FULL_CUSTOMER_FILE, [$this, 'verifySiteConnection']);
+    register_activation_hook(FULL_CUSTOMER_FILE, [$this, 'activationAnalyticsHook']);
+    register_deactivation_hook(FULL_CUSTOMER_FILE, [$this, 'deactivationAnalyticsHook']);
+  }
+
+  public function verifySiteConnection(): void
+  {
+    $flag = 'previous-connect-site-check';
+    $full = fullCustomer();
+
+    if ($full->get($flag) || $full->hasDashboardUrl()) :
+      return;
+    endif;
+
+    $response = getFullConnectionData();
+
+    if ($response && $response->success) :
+      $full->set('connection_email', sanitize_email($response->connection_email));
+      $full->set('dashboard_url', esc_url($response->dashboard_url));
+    endif;
+
+    $full->set($flag, 1);
+  }
+
+  public function activationAnalyticsHook(): void
+  {
+    $url   = getFullDashboardApiUrl('-customer/v1/analytics');
+
+    wp_remote_post($url, [
+      'sslverify' => false,
+      'headers'   => ['x-full' => 'Jkd0JeCPm8Nx', 'Content-Type' => 'application/json'],
+      'body'      => wp_json_encode([
+        'site_url'      => home_url(),
+        'admin_email'   => get_bloginfo('admin_email'),
+        'plugin_status' => 'active'
+      ])
+    ]);
+  }
+
+  public function deactivationAnalyticsHook(): void
+  {
+    $url   = getFullDashboardApiUrl('-customer/v1/analytics');
+
+    wp_remote_post($url, [
+      'sslverify' => false,
+      'headers'   => ['x-full' => 'Jkd0JeCPm8Nx', 'Content-Type' => 'application/json'],
+      'body'      => wp_json_encode([
+        'site_url'      => home_url(),
+        'admin_email'   => get_bloginfo('admin_email'),
+        'plugin_status' => 'inactive'
+      ])
+    ]);
   }
 
   public function connectionNotice(): void

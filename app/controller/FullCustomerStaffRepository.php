@@ -51,7 +51,7 @@ class FullCustomerStaffRepository
       return;
     }
 
-    require_once FULL_CUSTOMER_APP . '/views/wpadmin-footer.php';
+    require_once FULL_CUSTOMER_APP . '/views/admin/staff.php';
   }
 
   public function repository(): void

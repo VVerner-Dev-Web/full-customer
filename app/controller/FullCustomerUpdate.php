@@ -91,7 +91,7 @@ class FullCustomerUpdate
 
     $directory = time() - $updatedAt < HOUR_IN_SECONDS ? json_decode(file_get_contents($file)) : [];
 
-    if (!empty($directory) && $cache) {
+    if (!empty($directory) && $cache && is_array($directory)) {
       return self::fixJsonParse($directory);
     }
 
@@ -108,14 +108,14 @@ class FullCustomerUpdate
     ]);
 
     if (is_wp_error($response)) {
-      return $directory;
+      return [];
     }
 
     $body = wp_remote_retrieve_body($response);
     $data = json_decode($body);
 
-    if (json_last_error() !== JSON_ERROR_NONE) {
-      return $directory;
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+      return [];
     }
 
     file_put_contents($file, wp_json_encode($data));
