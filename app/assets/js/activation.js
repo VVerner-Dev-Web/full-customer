@@ -29,7 +29,7 @@ jQuery(document).ready(function ($) {
       let button = `<button class="button btn-install"  data-index="${plugin.plugin}"  data-name="${plugin.name}">Solicitar ativação</button>`;
       let licenseBadge = "";
 
-      if (!plugin.balance.available) {
+      if (!plugin.balance?.available) {
         button = `<a class="button btn-manage" href="https://full.services" target="_blank" rel="noopener noreferrer">Comprar licença</a>`;
       }
 
