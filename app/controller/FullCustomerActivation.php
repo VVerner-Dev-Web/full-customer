@@ -62,8 +62,7 @@ class FullCustomerActivation
     }
 
     $dir = array_map([$this, 'localPluginInfo'], FullCustomerUpdate::fetchDirectory(false));
-
-    $dir = array_filter($dir, fn($plugin) => !str_contains($plugin->plugin, 'full-customer'));
+    $dir = array_filter($dir, fn($plugin) => !str_contains($plugin->plugin, 'full-customer') && !$plugin->is_addon);
 
     wp_send_json_success(array_values($dir));
   }
