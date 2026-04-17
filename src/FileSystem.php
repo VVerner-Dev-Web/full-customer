@@ -29,7 +29,6 @@ final class FileSystem
     return $path;
   }
 
-
   public function getUrl(string $relative_path): string
   {
     if (!isset($this->baseUrl)) {
@@ -43,6 +42,12 @@ final class FileSystem
   {
     $full_path = $this->resolvePath($relative_path);
     return $this->core()->get_contents($full_path);
+  }
+
+  public function delete(string $relative_path, bool $recursive = false)
+  {
+    $full_path = $this->resolvePath($relative_path);
+    return $this->core()->delete($full_path, $recursive);
   }
 
   public function putContents(string $relative_path, $contents, $mode = false)

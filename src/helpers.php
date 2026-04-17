@@ -1,5 +1,7 @@
 <?php
 
+use FC\DashboardAPI;
+
 function fcElementDataFragments(string $fragment, string $target, array $args = []): string
 {
   return sprintf(
@@ -8,4 +10,9 @@ function fcElementDataFragments(string $fragment, string $target, array $args = 
     $target,
     wp_json_encode($args)
   );
+}
+
+function fcDashboardAPI(): DashboardAPI
+{
+  return new DashboardAPI();
 }

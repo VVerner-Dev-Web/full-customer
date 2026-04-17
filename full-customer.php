@@ -23,6 +23,7 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
   define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.0-001');
   define('FULL_CUSTOMER_FILE', __FILE__);
   define('FULL_CUSTOMER_PATH', __DIR__);
+  define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? 'https://full.dev/wp-json/fc-ai' : 'https://api.full.services/wp-json/fc-ai');
 
   require_once 'vendor/autoload.php';
 

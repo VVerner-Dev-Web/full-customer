@@ -1,0 +1,12 @@
+-> conexão
+  -> ao abrir o chat, mostrar "você não esta conectado" informe seu email...
+  -> roda fluxo de conexão 
+  -> salva no usuário
+  -> refresh nos fragments
+  # para conexão, vamos fazer o post no painel para ver se tem usuário no painel, se não houver retornar erro.
+  # se o usuário existir, só salva como user_meta o email de conexão do usuário (a conexão é por usuário, não da para usar option)
+
+-> solicitar ativação
+
+
+

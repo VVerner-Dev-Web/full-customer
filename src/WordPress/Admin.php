@@ -4,7 +4,7 @@ namespace FC\WordPress;
 
 use FC\FileSystem;
 
-class AdminPages
+class Admin
 {
   private array $manifest = [];
 

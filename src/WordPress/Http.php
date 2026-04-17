@@ -1,8 +1,12 @@
 <?php
 
-defined('ABSPATH') || exit;
+namespace FC\WordPress;
 
-class FullCustomerHttp
+use FC\Services\Connection;
+use FC\User;
+use WP_REST_Response;
+
+class Http
 {
   public function __construct()
   {
@@ -15,10 +19,10 @@ class FullCustomerHttp
 
   public function filterRequestArgs(array $args, $url): array
   {
-    if (is_string($url) && $url && strpos($url, getFullDashboardApiUrl()) !== false) {
-      $args['reject_unsafe_urls'] = 'PRD' === getFullEnv();
-      $args['sslverify'] = 'PRD' === getFullEnv();
-      $args['headers']['X-Full-Site'] = trailingslashit(home_url());
+    if (is_string($url) && $url && strpos($url, FULL_CUSTOMER_API_URL) !== false) {
+      $args['reject_unsafe_urls'] = FULL_CUSTOMER_DEV === false;
+      $args['sslverify'] = FULL_CUSTOMER_DEV === false;
+      $args['headers']['X-Full-Signature'] = Connection::getConnectionToken();
     }
 
     return $args;
@@ -47,5 +51,3 @@ class FullCustomerHttp
     return true;
   }
 }
-
-new FullCustomerHttp();

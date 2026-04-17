@@ -1,9 +1,15 @@
 <?php
 
 use FC\FileSystem;
+use FC\User;
 
 $fs = FileSystem::instance();
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : 'dashboard';
+
+if (!User::instance()->isConnected()) {
+  $page = 'connection';
+}
+
 ?>
 
 <div id="full-customer-root">

@@ -2,3 +2,4 @@
 dev.php
 node_modules
 assets/dist/*
+conn.ex.json

@@ -2,13 +2,13 @@
 
 namespace FC;
 
-use FC\WordPress\AdminPages;
+use FC\Services\Connection;
+use FC\WordPress\Admin;
+use FC\WordPress\Http;
 use FC\WordPress\Rest;
 
 class Root
 {
-  private array $classes = [];
-
   public function init(): void
   {
     $this->files();
@@ -22,7 +22,12 @@ class Root
 
   private function classes(): void
   {
-    new AdminPages;
+    // WORDPRESS
+    new Admin;
     new Rest;
+    new Http;
+
+    // SERVICES;
+    new Connection;
   }
 }

@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
             req.callback(html);
           }
 
-          // Evento individual por fragmento
           root.dispatchEvent(
             new CustomEvent("full-fragment/processed", {
               detail: {
@@ -127,7 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
     [
       {
         fragment: "DashboardFullPage",
-        args: {},
+        args: {
+          page: appContainer.getAttribute("data-page"),
+        },
         callback: (html) => {
           appContainer.innerHTML = html;
         },
