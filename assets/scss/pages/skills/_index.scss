@@ -1,0 +1,729 @@
+@use '../../abstratos/variaveis' as *;
+
+// Pagina de Habilidades
+
+// Secao superior com fundo gradiente
+.fs-habilidades-topo {
+  position: relative;
+  background: $white;
+  padding: 42px 32px 0;
+  overflow: hidden;
+
+  // Fundo gradiente amarelo decorativo
+  &__fundo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.6;
+    background:
+      radial-gradient(ellipse 800px 400px at 10% 20%, rgba(255, 217, 16, 0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 500px at 85% 40%, rgba(255, 217, 16, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 350px at 50% 0%, rgba(255, 215, 0, 0.20) 0%, transparent 60%),
+      linear-gradient(180deg, #FFFDF0 0%, $white 80%);
+  }
+
+  &__conteudo {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+  }
+
+}
+
+// Link de voltar
+.fs-link-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: $gray-500;
+  line-height: 1.4;
+  text-decoration: none;
+
+  &:hover {
+    color: $gray-700;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Area de titulo da pagina
+.fs-habilidades-titulo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 687px;
+
+  &__cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 500;
+      color: $gray-950;
+      line-height: 1.2;
+      margin: 0;
+    }
+  }
+
+  &__desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: $gray-600;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+}
+
+// Wrapper das abas com setas de navegacao
+.fs-habilidades-abas-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &__seta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: $white;
+    border: 1px solid $border-color;
+    color: $gray-700;
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1;
+
+    &:hover {
+      background: $gray-100;
+    }
+
+    &--esq {
+      margin-right: 8px;
+    }
+
+    &--dir {
+      margin-left: 8px;
+    }
+  }
+}
+
+// Navegacao por abas (sobrescritas do Bootstrap)
+.fs-habilidades-abas {
+  display: flex;
+  align-items: center;
+  border-bottom: none;
+  flex: 1;
+  min-width: 0;
+
+  .nav-item {
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: $gray-500;
+    line-height: 1.4;
+    text-decoration: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    background: none;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover {
+      color: $gray-700;
+      border-bottom-color: transparent;
+    }
+
+    &.active {
+      font-weight: 600;
+      color: $gray-700;
+      border-bottom-color: $yellow-primary;
+      background: none;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+}
+
+// Conteudo de aba "Em breve"
+.fs-aba-embreve {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 88px 0;
+
+  &__cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__icone {
+    width: 42px;
+    height: 42px;
+    background: $yellow-primary;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__titulo {
+    font-size: 24px;
+    font-weight: 500;
+    color: $gray-950;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 14px;
+    color: $gray-500;
+    line-height: 1.4;
+    text-align: center;
+    max-width: 386px;
+    margin: 0;
+  }
+
+  &__cartao {
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    padding: 24px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    width: 100%;
+    max-width: 434px;
+  }
+
+  &__lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $gray-700;
+    line-height: 1.4;
+
+    img, svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 16px;
+    background: $yellow-primary;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    font-weight: 500;
+    color: #182230;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background: $yellow-gold;
+    }
+  }
+
+}
+
+// Secao de grade
+.fs-habilidades-grade {
+  background: #F5F7FB;
+  padding: 32px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__linha {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+}
+
+// Cartao de plugin
+.fs-cartao-plugin {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+
+  &--bloqueado {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(233, 236, 240, 0.5);
+    box-shadow: none;
+
+    .fs-cartao-plugin__info,
+    .fs-cartao-plugin__progresso {
+      opacity: 0.5;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__logo {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    object-fit: cover;
+
+    &--circular {
+      border-radius: 50%;
+      border: 1px solid $border-color;
+    }
+  }
+
+  &__detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__titulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1D2939;
+    line-height: 24px;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: $gray-500;
+    line-height: 20px;
+    margin: 0;
+  }
+
+  &__progresso {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__barra-progresso {
+    flex: 1;
+    height: 6px;
+    background: #EAECF0;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__barra-preenchimento {
+    height: 100%;
+    background: $yellow-gold;
+    border-radius: 10px;
+  }
+
+  &__texto-progresso {
+    font-size: 12px;
+    font-weight: 500;
+    color: $gray-500;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  &__divisor {
+    width: 100%;
+    height: 1px;
+    background: $border-color;
+  }
+
+  &__rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__titulo-linha {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__titulo-sep {
+    width: 1px;
+    height: 17px;
+    background: $border-color;
+    flex-shrink: 0;
+  }
+
+  &__addons-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $gold-text;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
+
+// Acao de bloqueio/desbloqueio
+.fs-acao-bloqueio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #98A2B3;
+  line-height: 18px;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+
+  &--desbloquear {
+    color: $gray-700;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+// Emblemas
+.fs-emblema {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+
+  &--sucesso {
+    background: #D1FADF;
+    color: #039855;
+  }
+
+  &--perigo {
+    background: #FFE5E2;
+    color: #E43B25;
+  }
+
+  &--aviso {
+    background: $yellow-light-bg;
+    color: #A67102;
+  }
+
+  &--pequeno {
+    font-size: 11px;
+    padding: 1px 7px;
+  }
+
+  &__ponto {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+}
+
+// Botao de ativar
+.fs-btn-ativar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  height: 32px;
+  background: $yellow-primary;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 500;
+  color: #182230;
+  line-height: 1.4;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $yellow-gold;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Paginacao
+.fs-paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  &__numeros {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__num {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    font-weight: 500;
+    color: $gray-500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: none;
+
+    &--ativo {
+      background: $white;
+      border: 1px solid $border-color;
+      color: $gray-700;
+    }
+
+    &:hover:not(&--ativo) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &__proximo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__texto {
+    font-size: 14px;
+    font-weight: 500;
+    color: $gray-700;
+  }
+
+}
+
+// Faixa de CTA
+.fs-cta-destaque {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-radius: $radius-md;
+  border: 1px solid $gold-border;
+  background: linear-gradient(88deg, $gray-950 0%, $yellow-primary 151%);
+  overflow: hidden;
+
+  &__conteudo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 715px;
+  }
+
+  &__icone {
+    flex-shrink: 0;
+  }
+
+  &__texto {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: $white;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 12px;
+    font-weight: 400;
+    color: #EAECF0;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: $yellow-primary;
+    border-radius: $radius-sm;
+    font-size: 12px;
+    font-weight: 600;
+    color: $gray-950;
+    line-height: 1.4;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background: $yellow-gold;
+    }
+  }
+
+}
+
+// Modal de Addons
+.fs-modal-addons {
+  max-width: 798px;
+
+  &__conteudo {
+    border-radius: $radius-md;
+    border: 1px solid $border-color;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    overflow: hidden;
+  }
+
+  &__cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: none;
+  }
+
+  &__titulo-grupo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__titulo {
+    font-size: 20px;
+    font-weight: 500;
+    color: $gray-950;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  &__corpo {
+    background: $gray-100;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  &__card {
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    padding: 24px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__card-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__card-logo {
+    height: 32px;
+    width: 170px;
+    object-fit: contain;
+    object-position: left center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: $bp-mobile) {
+    max-width: 100%;
+    margin: 16px;
+
+    &__corpo {
+      padding: 16px;
+      gap: 16px;
+    }
+
+    &__card {
+      padding: 16px;
+      gap: 16px;
+    }
+  }
+}

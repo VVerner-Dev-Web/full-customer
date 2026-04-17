@@ -1,0 +1,21 @@
+@use '../../abstratos/variaveis' as *;
+
+.fs-progresso {
+  @media (max-width: $bp-mobile) {
+    bottom: 12px;
+    right: 12px;
+
+    &__rotulo {
+      display: none;
+    }
+
+    &__trigger {
+      padding: 10px 12px;
+    }
+
+    &__widget {
+      width: calc(100vw - 24px);
+      max-width: 283px;
+    }
+  }
+}

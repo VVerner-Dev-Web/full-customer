@@ -1,0 +1,17 @@
+{
+  "name": "fullservice",
+  "version": "1.0.0",
+  "description": "Dashboard Fullservices",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/syne": "^5.2.7"
+  },
+  "devDependencies": {
+    "sass": "^1.98.0",
+    "vite": "^8.0.8"
+  }
+}

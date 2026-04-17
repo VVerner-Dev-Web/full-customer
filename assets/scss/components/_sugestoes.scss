@@ -1,0 +1,64 @@
+@use '../abstratos/variaveis' as *;
+
+// Sugestões — ações sugeridas na index
+
+.fs-sugestoes {
+  width: 100%;
+  max-width: $action-card-width;
+  margin-top: 8px;
+
+  &__titulo {
+    font-size: 12px;
+    font-weight: 500;
+    color: #98A2B3;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 12px 0;
+  }
+
+  &__lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 1 calc(33.333% - 6px);
+    padding: 10px 14px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    font-size: 13px;
+    font-weight: 500;
+    color: $gray-700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+
+    &:hover {
+      border-color: $yellow-primary;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+      background: #FFFDF0;
+      color: $gray-700;
+    }
+
+    img {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: $bp-tablet) {
+      flex: 1 1 calc(50% - 4px);
+      max-width: none;
+    }
+
+    @media (max-width: $bp-mobile) {
+      flex: 1 1 calc(50% - 4px);
+    }
+  }
+}

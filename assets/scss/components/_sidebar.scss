@@ -1,0 +1,430 @@
+@use '../abstratos/variaveis' as *;
+
+// Sidebar (sobrescritas do Bootstrap Offcanvas)
+.fs-sidebar {
+  width: 420px !important;
+  max-width: 100%;
+  border-left: none !important;
+
+  // Mantém o layout de altura da offcanvas quando há wrappers de vista.
+  > #centralLista,
+  > #centralDetalhe {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  // Garante área rolável mesmo com cabeçalhos fixos na mesma coluna.
+  .offcanvas-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  // Cabeçalho
+  &__cabecalho {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__titulo-grupo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__titulo {
+    font-size: 20px;
+    font-weight: 500;
+    color: $gray-950;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  &__fechar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  // Corpo
+  &__corpo {
+    background: $gray-100;
+    padding: 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  // Item de menu
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-radius: $radius-sm;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  &__item-esquerda {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__item-icone {
+    width: 36px;
+    height: 36px;
+    background: $white;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__item-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__item-nome {
+    font-size: 14px;
+    font-weight: 500;
+    color: #182230;
+    line-height: 1.4;
+  }
+
+  &__item-desc {
+    font-size: 12px;
+    color: $gray-500;
+    line-height: 1.4;
+  }
+
+  &__item-seta {
+    flex-shrink: 0;
+    transform: rotate(-90deg);
+  }
+
+  // Cabecalho extra (divisor + tabs)
+  &__cabecalho-extra {
+    padding: 0 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__divisor {
+    height: 1px;
+    background: $border-color;
+
+    &--ticket {
+      margin: 0 24px;
+    }
+  }
+
+  // Tabs de filtro
+  &__tabs {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    color: $gray-500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &--ativo {
+      background: $gray-100;
+      font-weight: 600;
+      color: $gray-700;
+    }
+
+    &:hover:not(&--ativo) {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  // Grupo de log por data
+  &__grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__grupo-data {
+    font-size: 14px;
+    font-weight: 500;
+    color: $gray-500;
+    padding: 0 12px;
+  }
+
+  // Item de log
+  &__log {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: $radius-sm;
+
+    &--ativo {
+      background: #EAECF0;
+    }
+  }
+
+  &__log-texto {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__log-titulo {
+    font-size: 14px;
+    font-weight: 500;
+    color: #182230;
+    line-height: 1.4;
+  }
+
+  &__log-desc {
+    font-size: 12px;
+    color: $gray-500;
+    line-height: 1.4;
+
+    strong {
+      font-weight: 600;
+      color: $gray-950;
+    }
+  }
+
+  &__log-acao {
+    font-size: 12px;
+    font-weight: 600;
+    color: $gold-text;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Botão voltar
+  &__voltar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: $gray-500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      color: $gray-700;
+    }
+  }
+
+  // Vista detalhe
+  &__detalhe-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &__corpo--detalhe {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+  }
+
+  &__detalhe-topo {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__detalhe-plugin {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__detalhe-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__detalhe-nome {
+    font-size: 16px;
+    font-weight: 500;
+    color: $gray-950;
+    line-height: 1.4;
+  }
+
+  &__detalhe-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  // Timeline
+  &__timeline-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: #EAECF0;
+    }
+  }
+
+  &__timeline-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__timeline-icone {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  // Rodapé detalhe
+  &__detalhe-rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid $border-color;
+    padding-top: 24px;
+    margin-top: 24px;
+  }
+
+  &__detalhe-desfazer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: $gray-700;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// Status de ticket (inline na sidebar)
+.fs-status--aberto {
+  color: $green-status;
+  font-weight: 500;
+}
+
+.fs-status--fechado {
+  color: $gray-500;
+  font-weight: 500;
+}
+
+// "Nova resposta" no ticket
+.fs-ticket__nova-resposta {
+  color: $green-status;
+}
+
+// Emblema para ticket fechado (via JS)
+.fs-emblema--fechado {
+  background: $gray-100;
+  color: $gray-500;
+}
+
+// Sidebar corpo — variante lista
+.fs-sidebar__corpo--lista {
+  background: $white;
+  padding: 8px 0;
+  gap: 0;
+}
+
+// Log items
+.fs-sidebar__item--log {
+  padding: 12px 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #F9FAFB;
+  }
+
+  &:hover .fs-sidebar__item-seta {
+    opacity: 0.7;
+  }
+}
+
+// Ícones coloridos
+.fs-sidebar__item-icone--amarelo {
+  background: $yellow-light-bg;
+
+  img {
+    filter: none;
+  }
+}
+
+.fs-sidebar__item-icone--erro {
+  background: #FEF3F2;
+}

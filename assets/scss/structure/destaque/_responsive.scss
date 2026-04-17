@@ -1,0 +1,36 @@
+@use '../../abstratos/variaveis' as *;
+
+.fs-principal {
+  @media (max-width: $bp-tablet) {
+    &__conteudo {
+      padding: 48px 16px 40px;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    &__conteudo {
+      padding: 32px 12px 32px;
+      gap: 20px;
+    }
+  }
+}
+
+.fs-saudacao {
+  @media (max-width: $bp-tablet) {
+    &__titulo {
+      font-size: 28px;
+      white-space: normal;
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    &__titulo {
+      font-size: 24px;
+    }
+
+    &__subtitulo p {
+      font-size: 13px;
+    }
+  }
+}

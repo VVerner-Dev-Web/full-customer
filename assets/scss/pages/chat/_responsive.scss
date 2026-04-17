@@ -1,0 +1,65 @@
+@use '../../abstratos/variaveis' as *;
+
+.fs-chat {
+  @media (max-width: $bp-tablet) {
+    &__container {
+      padding: 24px 16px;
+    }
+
+    &__entrada-fixo {
+      padding: 0 16px 24px;
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    &__container {
+      padding: 16px 12px;
+    }
+
+    &__mensagens {
+      gap: 16px;
+    }
+
+    &__balao p,
+    &__texto {
+      font-size: 14px;
+    }
+
+    &__entrada-fixo {
+      padding: 0 12px 16px;
+    }
+
+    &__entrada {
+      padding: 16px;
+      gap: 24px;
+    }
+
+    &__entrada-texto {
+      font-size: 14px;
+    }
+
+    &__entrada-acoes {
+      gap: 10px;
+    }
+
+    &__referral {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &__referral-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+.fs-chat-nav {
+  @media (max-width: $bp-tablet) {
+    padding: 8px 16px;
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: 8px 12px;
+  }
+}

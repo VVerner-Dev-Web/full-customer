@@ -1,0 +1,50 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/syne/700.css";
+@import "@fontsource/syne/800.css";
+
+#full-customer-root {
+  // Base
+  @import 'base/base';
+  @import 'base/animacoes';
+
+  // Structure
+  @import 'structure/header';
+  @import 'structure/faixa';
+  @import 'structure/destaque';
+
+  // Componentes
+  @import 'components/action-card';
+  @import 'components/copilot-input';
+  @import 'components/copilot-feedback';
+  @import 'components/sugestoes';
+  @import 'components/skill-chip';
+  @import 'components/skills-busca';
+  @import 'components/central';
+  @import 'components/ticket';
+  @import 'components/demo-bar';
+  @import 'components/estados';
+  @import 'components/perguntas';
+  @import 'components/progresso';
+  @import 'components/sidebar';
+  @import 'components/upgrade';
+
+  // Pages
+  @import 'pages/skills';
+  @import 'pages/chat';
+
+  // Responsivo
+  @import 'structure/header/responsive';
+  @import 'structure/faixa/responsive';
+  @import 'structure/destaque/responsive';
+  @import 'components/action-card/responsive';
+  @import 'components/progresso/responsive';
+  @import 'components/upgrade/responsive';
+  @import 'pages/skills/responsive';
+  @import 'pages/chat/responsive';
+
+}
+
+@import "fix.scss";

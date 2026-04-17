@@ -1,0 +1,80 @@
+@use '../abstratos/variaveis' as *;
+
+// Copilot Feedback — resposta de intent do copiloto
+
+.fs-copilot-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0 0;
+  animation: fs-entrada 0.2s ease-out both;
+
+  &__msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  &__avatar {
+    width: 22px;
+    height: 22px;
+    background: $yellow-primary;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+
+    img {
+      width: 10px;
+      height: 8px;
+    }
+  }
+
+  &__texto {
+    font-size: 14px;
+    color: $gray-600;
+    line-height: 1.5;
+    margin: 0;
+
+    strong {
+      color: #1D2939;
+      font-weight: 600;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 32px;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-sm;
+    font-size: 13px;
+    font-weight: 500;
+    color: $gray-700;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    text-decoration: none;
+
+    &:hover {
+      border-color: $yellow-primary;
+      background: #FFFDF0;
+      color: $gray-700;
+    }
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

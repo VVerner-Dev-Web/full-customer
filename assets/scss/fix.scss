@@ -1,0 +1,37 @@
+.toplevel_page_full {
+  #wpcontent {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+  }
+
+  #wpbody-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #full-customer-root {
+    min-height: 100dvh !important;
+
+     .fs-principal {
+       min-height: 100dvh !important;
+     }
+
+  }
+
+  #wpfooter {
+    display: none  !important;
+  }
+}
+
+#fc-loader {
+  background: rgba(255,255,255,0.8);
+  z-index: 9;
+  margin-left: 160px;
+  backdrop-filter: blur(3px);
+}
+
+.offcanvas {
+  z-index: 100000;
+}

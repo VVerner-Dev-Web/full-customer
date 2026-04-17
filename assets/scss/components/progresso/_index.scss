@@ -1,0 +1,192 @@
+@use '../../abstratos/variaveis' as *;
+
+// Widget de Progresso / Onboarding
+
+.fs-progresso {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+
+  // Widget expandido (escondido por padrão)
+  &__widget {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    width: 283px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+  }
+
+  &__widget-cabecalho {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__widget-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: $gray-950;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  &__widget-desc {
+    font-size: 12px;
+    color: $gray-700;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  &__widget-barra {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__widget-percentual {
+    font-size: 12px;
+    font-weight: 600;
+    color: $gray-700;
+    line-height: 1.4;
+  }
+
+  &__widget-tarefas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // Tarefa individual
+  &__tarefa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-radius: $radius-md;
+    background: $white;
+    border: 1px solid $border-color;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+
+    &:hover {
+      background: $gray-100;
+    }
+
+    &--completa {
+      background: $gray-100;
+      border: none;
+
+      &:hover {
+        background: $gray-100;
+      }
+    }
+  }
+
+  &__tarefa-esquerda {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    span {
+      font-size: 12px;
+      font-weight: 500;
+      color: $gray-700;
+      line-height: 1.5;
+    }
+
+    img {
+      flex-shrink: 0;
+    }
+  }
+
+  // Trigger (botão abrir/fechar)
+  &__trigger {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__trigger-abrir {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__trigger-fechar {
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Estado aberto
+  &--aberto {
+    .fs-progresso__widget {
+      display: flex;
+    }
+
+    .fs-progresso__trigger-abrir {
+      display: none;
+    }
+
+    .fs-progresso__trigger-fechar {
+      display: flex;
+    }
+
+    .fs-progresso__trigger {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      justify-content: center;
+    }
+  }
+
+  &__anel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__percentual {
+    position: absolute;
+    font-size: 8px;
+    font-weight: 600;
+    color: $gray-950;
+    line-height: 1;
+  }
+
+  &__rotulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: $gray-700;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+}

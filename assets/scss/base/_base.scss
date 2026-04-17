@@ -1,0 +1,78 @@
+@use '../abstratos/variaveis' as *;
+
+// Estilos Base Globais
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $white;
+  color: $gray-700;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+// Utilitario de visibilidade (substitui style="display:none" inline)
+.fs-oculto {
+  display: none !important;
+}
+
+// Skill chip "em breve" — cursor pointer (substitui style inline no JS)
+.fs-skill-chip__item--embreve {
+  cursor: pointer;
+}
+
+// Scrollbar global do sistema (mesmo padrão visual do chat)
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+
+  &:hover {
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+  }
+}

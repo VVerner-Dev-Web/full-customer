@@ -1,0 +1,43 @@
+@use '../../abstratos/variaveis' as *;
+
+.fs-cabecalho {
+  @media (max-width: $bp-tablet) {
+    padding: 0 16px;
+
+    &__logo {
+      width: auto;
+    }
+
+    &__acoes {
+      gap: 12px;
+    }
+
+    &__btn-icone {
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    &__separador {
+      display: none;
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    &__acoes {
+      gap: 10px;
+    }
+
+    &__selo-pro {
+      padding: 4px 8px;
+      gap: 6px;
+    }
+
+    &__pro-leve {
+      display: none;
+    }
+
+    &__pro-sep {
+      display: none;
+    }
+  }
+}

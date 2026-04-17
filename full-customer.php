@@ -1,10 +1,14 @@
-<?php defined('ABSPATH') || exit;
+<?php
+
+use FC\Root;
+
+defined('ABSPATH') || exit;
 
 /**
  * Plugin Name:         FULL.Cliente
  * Description:         Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins.
- * Version:             3.6.0
- * Requires at least:   6.3
+ * Version:             4.0.0-001
+ * Requires at least:   6.5
  * Tested up to:        6.9
  * Requires PHP:        7.4
  * Author:              FULL.
@@ -12,8 +16,19 @@
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) {
-  define('FULL_CUSTOMER_VERSION', '3.6.0');
+  if (!defined('FULL_CUSTOMER_DEV')) {
+    define('FULL_CUSTOMER_DEV', strpos(home_url(), '.dev') !== false);
+  }
+
+  define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.0-001');
   define('FULL_CUSTOMER_FILE', __FILE__);
-  define('FULL_CUSTOMER_APP', __DIR__ . '/app');
-  require_once FULL_CUSTOMER_APP . '/init.php';
+  define('FULL_CUSTOMER_PATH', __DIR__);
+
+  require_once 'vendor/autoload.php';
+
+  if (file_exists(FULL_CUSTOMER_PATH . '/dev.php')) {
+    require_once FULL_CUSTOMER_PATH . '/dev.php';
+  }
+
+  (new Root)->init();
 }

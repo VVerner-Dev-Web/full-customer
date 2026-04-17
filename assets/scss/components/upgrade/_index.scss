@@ -1,0 +1,279 @@
+@use '../../abstratos/variaveis' as *;
+
+// Dialog de Upgrade PRO
+.fs-modal-upgrade {
+  max-width: 798px;
+
+  &__conteudo {
+    border-radius: $radius-md;
+    border: 1px solid $border-color;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  }
+
+  // Header com gradiente
+  &__cabecalho {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px;
+    background: linear-gradient(180deg, $yellow-light-bg 0%, $white 100%);
+    border-bottom: none;
+    position: relative;
+  }
+
+  &__fechar {
+    position: absolute;
+    top: 26px;
+    right: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 0;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__icone {
+    width: 42px;
+    height: 42px;
+  }
+
+  &__titulo {
+    font-size: 20px;
+    font-weight: 500;
+    color: $gray-950;
+    text-align: center;
+    max-width: 378px;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  // Corpo do modal
+  &__corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 32px 32px;
+    max-height: 60vh;
+    overflow-y: auto;
+
+    > * {
+      flex-shrink: 0;
+    }
+  }
+
+  // Card plano atual
+  &__plano-atual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background: #F9FAFB;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    gap: 16px;
+  }
+
+  &__plano-atual-esquerda {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  &__plano-atual-nome {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1D2939;
+    white-space: nowrap;
+  }
+
+  &__plano-atual-sep {
+    width: 1px;
+    height: 17px;
+    background: $border-color;
+    flex-shrink: 0;
+  }
+
+  &__plano-atual-assentos {
+    font-size: 14px;
+    color: $gray-500;
+    white-space: nowrap;
+  }
+
+  &__plano-atual-emblema {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: $yellow-light-bg;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #A67102;
+  }
+
+  // Divisor horizontal
+  &__divisor {
+    height: 1px;
+    width: 100%;
+    background: $border-color;
+  }
+
+  // Seção de texto
+  &__secao-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__secao-titulo {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1D2939;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__secao-desc {
+    font-size: 14px;
+    color: $gray-500;
+    margin: 0;
+    line-height: 1.43;
+  }
+
+  // Cards de plano (Advanced / PRO)
+  &__card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+    gap: 16px;
+  }
+
+  &__card--destaque {
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  }
+
+  &__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__card-nome {
+    font-size: 20px;
+    font-weight: 500;
+    color: #1D2939;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  &__card-desc {
+    font-size: 14px;
+    color: $gray-500;
+    margin: 0;
+    line-height: 1.43;
+  }
+
+  &__card-sep {
+    width: 1px;
+    align-self: stretch;
+    background: $border-color;
+    flex-shrink: 0;
+  }
+
+  &__card-preco {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__card-preco-antigo {
+    font-size: 14px;
+    color: $gray-500;
+    line-height: 1.4;
+
+    s {
+      text-decoration: line-through;
+    }
+  }
+
+  &__card-preco-atual {
+    font-size: 18px;
+    font-weight: 500;
+    color: #101828;
+    line-height: 1.2;
+    white-space: nowrap;
+
+    strong {
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    small {
+      font-size: 18px;
+      font-weight: 500;
+      color: $gray-950;
+    }
+  }
+
+  &__card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    background: $yellow-primary;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    font-weight: 500;
+    color: #182230;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      background: $yellow-gold;
+      color: #182230;
+    }
+  }
+
+  // Wrapper PRO com borda dourada + banner
+  &__card-wrapper--destaque {
+    border: 2px solid $yellow-gold;
+    border-radius: $radius-md;
+    overflow: hidden;
+  }
+
+  &__card-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 32px;
+    background: $yellow-gold;
+
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      color: $gray-950;
+    }
+
+    img {
+      flex-shrink: 0;
+    }
+  }
+}

@@ -1,0 +1,224 @@
+@use '../../abstratos/variaveis' as *;
+
+// Destaque / Area Principal
+
+.fs-principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  &__fundo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 800px 500px at 10% 20%, rgba(255, 217, 16, 0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 600px at 85% 50%, rgba(255, 217, 16, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 400px at 50% 0%, rgba(255, 215, 0, 0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 30% 70%, rgba(255, 217, 16, 0.10) 0%, transparent 70%),
+      linear-gradient(180deg, #FFFDF0 0%, $white 70%);
+  }
+
+  &__conteudo {
+    position: relative;
+    width: 100%;
+    max-width: $action-card-width;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 16px 60px;
+    gap: 32px;
+  }
+
+}
+
+// Secao de saudacao
+.fs-saudacao {
+  &__icone {
+    width: $smiley-icon-size;
+    height: $smiley-icon-size;
+    background: $yellow-primary;
+    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__smiley {
+    width: 33px;
+    height: 25px;
+    overflow: visible;
+    display: block;
+  }
+
+  &__left-eye,
+  &__right-eye-normal,
+  &__right-eye-star,
+  &__mouth {
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  &__mouth {
+    animation: fs-boca-anim 4s ease-in-out infinite alternate
+  }
+
+  &__eyes-group {
+    animation: fs-olhar-lados 4s ease-in-out infinite alternate
+  }
+
+  &__blinkable {
+    animation: fs-piscar-duplo 4s ease-in-out infinite alternate
+  }
+
+  &__right-eye-normal {
+    animation: fs-piscar-duplo 4s ease-in-out infinite alternate, fs-ocultar-olho-normal 4s infinite alternate;
+  }
+
+  &__right-eye-star {
+    opacity: 0;
+    animation: fs-mostrar-estrela 4s infinite alternate;
+  }
+
+  &__titulo {
+    font-size: 40px;
+    font-weight: 500;
+    color: $gray-950;
+    line-height: 1.2;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    font-feature-settings: 'salt' 1;
+  }
+
+  &__subtitulo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    p {
+      font-size: 14px;
+      color: $gray-500;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    strong {
+      font-weight: 600;
+      color: $gray-700;
+    }
+  }
+
+  &__ponto {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 4px solid rgba(18, 183, 106, 0.30);
+      animation: fs-ponto-pulsar 2s ease-in-out infinite;
+    }
+  }
+
+  &__ponto-interno {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #12B76A;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes fs-ponto-pulsar {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes fs-olhar-lados {
+  0%, 10% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  30% {
+    transform: translateX(3px);
+  }
+  40%, 100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fs-boca-anim {
+  0%, 10% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1.5px);
+  }
+  30% {
+    transform: translateX(1.5px);
+  }
+  40%, 100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fs-piscar-duplo {
+  0%, 45% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.1);
+  }
+  55% {
+    transform: scaleY(1);
+  }
+  60% {
+    transform: scaleY(0.1);
+  }
+  65%, 100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fs-ocultar-olho-normal {
+  0%, 80% {
+    opacity: 1;
+  }
+  81%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fs-mostrar-estrela {
+  0%, 80% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-20deg);
+  }
+  85%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}

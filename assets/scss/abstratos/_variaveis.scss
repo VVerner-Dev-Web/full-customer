@@ -1,0 +1,48 @@
+// Tokens de Design
+
+// Cores - Primaria
+$yellow-primary: #FFD910;
+$yellow-gold: #FFD700;
+$yellow-light-bg: #FFF9D8;
+$gold-text: #D19E00;
+$gold-border: rgba(209, 158, 0, 0.2);
+
+// Cores - Escala de Cinza
+$gray-950: #0C111D;
+$gray-700: #344054;
+$gray-600: #475467;
+$gray-500: #667085;
+$gray-100: #F2F4F7;
+$border-color: #E9ECF0;
+$white: #FFFFFF;
+$black: #000000;
+
+// Cores - Utilitarias
+$green-dot: #17B26A;
+$green-status: #12B76A;
+$red-error: #B42318;
+$gray-disabled: #9CA3AF;
+$gray-inactive-bg: #E5E7EB;
+$border-light: rgba(0, 0, 0, 0.1);
+
+// Tipografia
+$font-family: 'Inter', sans-serif;
+
+// Dimensoes
+$header-height: 60px;
+$action-card-width: 640px;
+$avatar-size: 28px;
+$smiley-icon-size: 64px;
+
+// Raio de Borda
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 20px;
+
+// Breakpoints
+$bp-tablet: 768px;
+$bp-mobile: 480px;
+
+// Novos tokens - UX fixes
+$green-success-text: #039855;
+$green-success-bg: #D1FADF;
