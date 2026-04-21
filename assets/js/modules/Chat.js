@@ -10,9 +10,11 @@ export const Chat = {
   },
   input: null,
   button: null,
+  skillsButton: null,
 
   attach(root) {
     this.root = root;
+
     this.root.addEventListener("full-fragments/processed", () => {
       this.root.classList.remove("chating");
       this._setup();
@@ -27,6 +29,7 @@ export const Chat = {
     if (!btn || !this.input) return;
 
     this.container = this.root.querySelector("#fs-copilot-chat");
+
     this.templates.user = this.root.querySelector("#chat-user");
     this.templates.copilot = this.root.querySelector("#chat-copilot");
     this.templates.loading = this.root.querySelector("#chat-loading");
@@ -35,6 +38,10 @@ export const Chat = {
 
     this.button = btn.cloneNode(true);
     btn.parentNode.replaceChild(this.button, btn);
+
+    this.skillsButton = this.root.querySelectorAll(
+      ".fs-skill-chip__item--available",
+    );
 
     this.button.addEventListener("click", (e) => {
       e.preventDefault();
@@ -46,6 +53,45 @@ export const Chat = {
         this._handleSend();
       }
     });
+
+    this.skillsButton.forEach((skillButton) => {
+      skillButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const skill = fcData.skillsRepository[skillButton.dataset.skill];
+
+        this._setActiveSkill(skill);
+      });
+    });
+
+    this._setActiveSkill(fcData.skillsRepository[fcData.starterSkill]);
+  },
+
+  _setActiveSkill(skill) {
+    const trigger = this.root.querySelector("#skillGatilho");
+    const skillButton = this.root.querySelector(
+      '[data-skill="' + skill.id + '"]',
+    );
+
+    if (!skill?.isAvailable) {
+      return;
+    }
+
+    this.skillsButton.forEach((btn) => {
+      btn.classList.remove("fs-skill-chip__item--ativo");
+    });
+
+    trigger.querySelector("#skillNome").textContent = skill.name;
+    trigger.querySelector("#skillIcone").src = skill.icon;
+    this.changePlaceholder(skill.inputPlaceholder);
+
+    this.input.focus();
+
+    skillButton.classList.add("fs-skill-chip__item--ativo");
+
+    const element = this.root.querySelector("#skillGatilho");
+    const dropdown = bootstrap.Dropdown.getInstance(element);
+    dropdown.hide();
   },
 
   _handleSend() {

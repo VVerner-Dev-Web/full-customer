@@ -12,5 +12,7 @@ abstract class AbstractSkill
 
   abstract public function getIcon(): string;
 
+  abstract public function getInputPlaceholder(): string;
+
   abstract public function isAvailable(): bool;
 }

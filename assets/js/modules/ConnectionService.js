@@ -5,10 +5,6 @@ export const ConnectionService = {
   isWaitingEmail: true,
 
   init() {
-    Chat.changePlaceholder(
-      "Digite apenas o e-mail usado durante a compra das licenças na FULL.",
-    );
-
     document
       .querySelector("#full-customer-root")
       .addEventListener("chat/messageSent", (e) => {

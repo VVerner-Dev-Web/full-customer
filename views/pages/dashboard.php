@@ -8,6 +8,8 @@ $fs = FileSystem::instance();
 $repo = SkillRepository::instance();
 $user = User::instance();
 
+$starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->get('connect');
+
 ?>
 <main class="fs-principal">
   <div class="fs-principal__conteudo">
@@ -46,17 +48,20 @@ $user = User::instance();
           <!-- Chip seletor de skill (esquerda) -->
           <div class="fs-skill-chip" id="skillSeletor">
             <button class="fs-skill-chip__gatilho dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="skillGatilho">
-              <img src="<?= $fs->getUrl('assets/images/icons/connector-fill.svg') ?>" alt="" width="16" height="16" id="skillIcone" />
-              <span id="skillNome">Conectar</span>
+              <img src="<?= $fs->getUrl($starterSkill->getIcon()) ?>" alt=" <?= $starterSkill->getName() ?>" width="16" height="16" id="skillIcone" />
+              <span id="skillNome">
+                <?= $starterSkill->getName() ?>
+              </span>
               <img src="<?= $fs->getUrl('assets/images/icons/arrow-down-01.svg') ?>" alt="" width="14" height="14" class="fs-skill-chip__seta" />
             </button>
 
             <div class="fs-skill-chip__menu dropdown-menu">
               <?php foreach ($repo->all('available') as $skill) : ?>
                 <div
-                  class="fs-skill-chip__item fs-skill-chip__item--ativo">
+                  data-skill="<?= $skill::ID ?>"
+                  class="fs-skill-chip__item fs-skill-chip__item--available <?= $skill === $starterSkill ? 'fs-skill-chip__item--ativo' : ''; ?>">
                   <div class="fs-skill-chip__item-esq">
-                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt="" width="16" height="16" />
+                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt=" <?= $skill->getName() ?>" width="16" height="16" />
                     <div>
                       <span class="fs-skill-chip__item-nome">
                         <?= $skill->getName() ?>
@@ -66,7 +71,6 @@ $user = User::instance();
                       </span>
                     </div>
                   </div>
-                  <span class="fs-skill-chip__check">✓</span>
                 </div>
               <?php endforeach; ?>
 
@@ -74,9 +78,9 @@ $user = User::instance();
 
               <?php foreach ($repo->all('unavailable') as $skill) : ?>
 
-                <div class="fs-skill-chip__item fs-skill-chip__item--embreve">
+                <div data-skill="<?= $skill::ID ?>" class="fs-skill-chip__item fs-skill-chip__item--embreve">
                   <div class="fs-skill-chip__item-esq">
-                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt="" width="16" height="16" />
+                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt=" <?= $skill->getName() ?>" width="16" height="16" />
                     <div>
                       <span class="fs-skill-chip__item-nome">
                         <?= $skill->getName() ?>

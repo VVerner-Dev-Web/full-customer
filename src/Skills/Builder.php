@@ -4,6 +4,8 @@ namespace FC\Skills;
 
 class Builder extends AbstractSkill
 {
+  const ID = 'builder';
+
   public function getName(): string
   {
     return 'Builder AI';
@@ -13,6 +15,7 @@ class Builder extends AbstractSkill
   {
     return 'Converta HTML em widget Elementor';
   }
+
   public function getDescription(): string
   {
     return 'Converta HTML em widget Elementor';
@@ -22,6 +25,12 @@ class Builder extends AbstractSkill
   {
     return 'assets/images/icons/embreve-builder.svg';
   }
+
+  public function getInputPlaceholder(): string
+  {
+    return '';
+  }
+
 
   public function isAvailable(): bool
   {

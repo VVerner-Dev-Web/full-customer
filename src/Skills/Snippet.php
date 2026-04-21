@@ -4,6 +4,8 @@ namespace FC\Skills;
 
 class Snippet extends AbstractSkill
 {
+  const ID = 'snippet';
+
   public function getName(): string
   {
     return 'Snippets AI';
@@ -13,6 +15,7 @@ class Snippet extends AbstractSkill
   {
     return 'Gere e aplique trechos de código';
   }
+
   public function getDescription(): string
   {
     return 'Gere e aplique trechos de código';
@@ -21,6 +24,11 @@ class Snippet extends AbstractSkill
   public function getIcon(): string
   {
     return 'assets/images/icons/embreve-snippets.svg';
+  }
+
+  public function getInputPlaceholder(): string
+  {
+    return '';
   }
 
   public function isAvailable(): bool

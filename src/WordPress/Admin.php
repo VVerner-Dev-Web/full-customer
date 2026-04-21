@@ -3,6 +3,9 @@
 namespace FC\WordPress;
 
 use FC\FileSystem;
+use FC\SkillRepository;
+use FC\Skills\ActivateProPlugin;
+use FC\Skills\Connect;
 use FC\User;
 
 class Admin
@@ -41,7 +44,9 @@ class Admin
       'connected' => User::instance()->isConnected(),
       'restUrl'   => get_rest_url(null, 'fc/v1'),
       'nonce'     => wp_create_nonce('wp_rest'),
-      'baseUrl'   => admin_url('admin.php?page=full')
+      'baseUrl'   => admin_url('admin.php?page=full'),
+      'skillsRepository' => SkillRepository::instance()->toArray(),
+      'starterSkill' => User::instance()->isConnected() ? ActivateProPlugin::ID : Connect::ID
     ]);
 
     echo '</script>';

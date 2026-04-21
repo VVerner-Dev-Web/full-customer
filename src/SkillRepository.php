@@ -16,11 +16,30 @@ final class SkillRepository
 
   private function __construct()
   {
-    $this->skills[] = new Connect();
-    $this->skills[] = new ActivateProPlugin();
-    $this->skills[] = new Builder();
-    $this->skills[] = new Snippet();
-    $this->skills[] = new ErrorFix();
+    $this->skills[Connect::ID] = new Connect();
+    $this->skills[ActivateProPlugin::ID] = new ActivateProPlugin();
+    $this->skills[Builder::ID] = new Builder();
+    $this->skills[Snippet::ID] = new Snippet();
+    $this->skills[ErrorFix::ID] = new ErrorFix();
+  }
+
+  public function toArray(): array
+  {
+    $list = [];
+
+    foreach ($this->all() as $key => $skill) {
+      $list[$key] = [
+        'id' => $skill::ID,
+        'name' => $skill->getName(),
+        'shortDescription' => $skill->getShortDescription(),
+        'description' => $skill->getDescription(),
+        'icon' => FileSystem::instance()->getUrl($skill->getIcon()),
+        'inputPlaceholder' => $skill->getInputPlaceholder(),
+        'isAvailable' => $skill->isAvailable(),
+      ];
+    }
+
+    return $list;
   }
 
   public static function instance(): self
