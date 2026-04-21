@@ -66,6 +66,17 @@
     &--copilot {
       align-items: flex-start;
       gap: 16px;
+      
+      .fs-chat__balao {
+        display: flex;
+        flex-direction: column;
+        background: $gray-100;
+        gap: 16px;
+        border: 1px solid $border-color;
+        padding: 16px;
+        border-radius: 12px 12px 12px 4px;
+        max-width: 85%;
+      }
     }
   }
 
@@ -417,7 +428,8 @@
   width: 100%;
 }
 
-.fs-chat__erro-cabecalho {
+.fs-chat__erro-cabecalho,
+.fs-chat__success-cabecalho {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -429,7 +441,8 @@
   color: $red-error;
 }
 
-.fs-chat__erro-desc {
+.fs-chat__erro-desc,
+.fs-chat__success-desc {
   font-size: 14px;
   color: $gray-700;
   line-height: 1.5;
@@ -505,4 +518,22 @@
   color: $gray-700;
   line-height: 1.5;
   margin: 0;
+}
+
+.fs-chat__cartao-success {
+  background: #f2fff6;
+  border: 1px solid $green-success-text;
+  border-radius: $radius-md;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+
+.fs-chat__success-titulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: $green-success-text;
 }

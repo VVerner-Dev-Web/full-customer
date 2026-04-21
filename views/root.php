@@ -1,14 +1,8 @@
 <?php
 
 use FC\FileSystem;
-use FC\User;
 
 $fs = FileSystem::instance();
-$page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : 'dashboard';
-
-if (!User::instance()->isConnected()) {
-  $page = 'connection';
-}
 
 ?>
 
@@ -64,7 +58,7 @@ if (!User::instance()->isConnected()) {
     </div>
   </div>
 
-  <app data-page="<?= $page ?>" class="position-relative z-3 d-block"></app>
+  <app class="position-relative z-3 d-block"></app>
 
   <div class="modal fade" id="modalUpgrade" tabindex="-1" aria-labelledby="modalUpgradeTitulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable fs-modal-upgrade">
@@ -620,4 +614,62 @@ if (!User::instance()->isConnected()) {
     </div>
   </div>
 
+  <template id="chat-user">
+    <div class="fs-chat__msg fs-chat__msg--usuario">
+      <div class="fs-chat__content fs-chat__balao"></div>
+    </div>
+  </template>
+
+  <template id="chat-copilot">
+    <div class="fs-chat__msg fs-chat__msg--copilot">
+      <div class="fs-chat__balao">
+        <div class="fs-chat__autor">
+          <span class="fs-chat__autor-icone">
+            <img src="<?= $fs->getUrl('assets/images/icons/smiley.svg'); ?>" alt="" width="12" height="10" />
+          </span>
+          <span class="fs-chat__autor-nome">Copilot</span>
+        </div>
+        <div class="fs-chat__content fs-chat__texto"></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="chat-loading">
+    <div class="fs-chat__msg fs-chat__msg--copilot  ">
+      <div class="fs-chat__balao">
+        <div class="fs-chat__autor">
+          <span class="fs-chat__autor-icone">
+            <img src="<?= $fs->getUrl('assets/images/icons/smiley.svg'); ?>" alt="" width="12" height="10" />
+          </span>
+          <span class="fs-chat__autor-nome">Copilot</span>
+        </div>
+        <div class="fs-chat__content fs-chat__texto">
+          <div class="fs-typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="chat-error">
+    <div class="fs-chat__cartao-erro">
+      <div class="fs-chat__erro-cabecalho">
+        <img src="<?= $fs->getUrl('assets/images/icons/error-circle.svg'); ?>" alt="" width="20" height="20">
+        <span class="fs-chat__erro-titulo">Algo deu errado</span>
+      </div>
+      <p class="fs-chat__erro-desc fs-chat__content"></p>
+      <div class="fs-chat__erro-acoes">
+        <button class="fs-chat__erro-btn fs-chat__erro-btn--secundario" data-bs-toggle="offcanvas" data-bs-target="#sidebarAjuda">Preciso de ajuda</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="chat-success">
+    <div class="fs-chat__cartao-success">
+      <div class="fs-chat__success-cabecalho">
+        <img src="<?= $fs->getUrl('assets/images/icons/emotion-laugh-line.svg'); ?>" alt="" width="20" height="20">
+        <span class="fs-chat__success-titulo">Boas notícias!</span>
+      </div>
+      <p class="fs-chat__success-desc fs-chat__content"></p>
+    </div>
+  </template>
 </div>

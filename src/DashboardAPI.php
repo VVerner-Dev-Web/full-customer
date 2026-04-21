@@ -43,7 +43,7 @@ class DashboardAPI
       return [
         'success' => false,
         'status'  => $code,
-        'message' => $body['message'] ?? $body['errors'] ?? 'Erro desconhecido na API.',
+        'message' => $body['error'] ?? $body['errors'] ?? 'Erro desconhecido na API.',
         'data'    => $body
       ];
     }

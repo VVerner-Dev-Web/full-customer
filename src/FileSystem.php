@@ -9,7 +9,7 @@ final class FileSystem
   private static $instance = null;
   private string $baseUrl;
 
-  public static function instance()
+  public static function instance(): self
   {
     if (null === self::$instance) {
       self::$instance = new self();

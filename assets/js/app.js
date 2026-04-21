@@ -1,139 +1,41 @@
+import { Chat } from "./modules/Chat.js";
+import { FragmentService } from "./modules/FragmentService.js";
+import { UIManager } from "./modules/UIManager.js";
+import { WelcomeService } from "./modules/WelcomeService.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.querySelector("#full-customer-root");
-  const appContainer = root.querySelector("app");
+
+  Chat.attach(root);
+  UIManager.attach(root);
+  WelcomeService.attach(root);
 
   async function refreshUI(requests) {
-    fcLoader("show");
-
-    const payload = {
-      fragments: {},
-    };
-
-    requests.forEach((req) => {
-      payload.fragments[req.fragment] = req.args || {};
-    });
-
+    UIManager.toggleLoader(true);
     try {
-      const response = await fetch(`${fcData.restUrl}/fragments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-WP-Nonce": fcData.nonce,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      fcLoader("hide");
-
+      const data = await FragmentService.fetchFragments(requests);
       if (data.success) {
         requests.forEach((req) => {
           const html = data.fragments[req.fragment];
-
-          if (html && typeof req.callback === "function") {
-            req.callback(html);
-          }
-
-          root.dispatchEvent(
-            new CustomEvent("full-fragment/processed", {
-              detail: {
-                fragment: req.fragment,
-                html: html,
-              },
-            }),
-          );
+          if (html && typeof req.callback === "function") req.callback(html);
         });
-
+        // Este evento notifica Chat e UIManager que a tela mudou
         root.dispatchEvent(new CustomEvent("full-fragments/processed"));
       }
     } catch (error) {
-      console.error("Erro ao processar Fragments:", error);
+      console.error("Erro na navegação:", error);
+    } finally {
+      UIManager.toggleLoader(false);
     }
   }
 
-  async function fcLoader(action = "hide") {
-    const el = document.querySelector("#fc-loader");
-    if (!el) return;
+  window._refreshUI = refreshUI;
 
-    if (action === "show") {
-      el.classList.remove("d-none");
-    } else {
-      el.classList.add("d-none");
-    }
-  }
-
-  root.addEventListener("full-fragments/processed", () => {
-    const tabs = root.querySelectorAll('[data-bs-toggle="tab"]');
-    tabs.forEach((el) => {
-      if (!bootstrap.Tab.getInstance(el)) {
-        new bootstrap.Tab(el);
-      }
-    });
-
-    const tooltips = root.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach((el) => {
-      if (!bootstrap.Tooltip.getInstance(el)) {
-        new bootstrap.Tooltip(el);
-      }
-    });
-
-    const modals = root.querySelectorAll('[data-bs-toggle="modal"]');
-    modals.forEach((el) => {
-      if (!bootstrap.Modal.getInstance(el)) {
-        new bootstrap.Modal(el);
-      }
-    });
-
-    const popovers = root.querySelectorAll('[data-bs-toggle="popover"]');
-    popovers.forEach((el) => {
-      if (!bootstrap.Popover.getInstance(el)) {
-        new bootstrap.Popover(el);
-      }
-    });
-  });
-
-  root.addEventListener("click", (e) => {
-    const targetElement = e.target.closest("[data-fragment]");
-
-    if (!targetElement) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const fragmentName = targetElement.getAttribute("data-fragment");
-    const args = targetElement.dataset.args
-      ? JSON.parse(targetElement.dataset.args)
-      : {};
-
-    refreshUI([
-      {
-        fragment: fragmentName,
-        args: args,
-        callback: (html) => {
-          const targetSelector = targetElement.getAttribute("data-target");
-          const destination = targetSelector
-            ? document.querySelector(targetSelector)
-            : appContainer;
-
-          destination.innerHTML = html;
-        },
-      },
-    ]);
-  });
-
-  refreshUI(
-    [
-      {
-        fragment: "DashboardFullPage",
-        args: {
-          page: appContainer.getAttribute("data-page"),
-        },
-        callback: (html) => {
-          appContainer.innerHTML = html;
-        },
-      },
-    ],
-    true,
-  );
+  // Carga inicial
+  refreshUI([
+    {
+      fragment: "DashboardFullPage",
+      callback: (h) => (document.querySelector("app").innerHTML = h),
+    },
+  ]);
 });

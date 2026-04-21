@@ -3,6 +3,7 @@
 namespace FC\WordPress;
 
 use FC\FileSystem;
+use FC\User;
 
 class Admin
 {
@@ -37,9 +38,10 @@ class Admin
     echo '<script>';
 
     echo 'window.fcData = ' . wp_json_encode([
-      'restUrl' => get_rest_url(null, 'fc/v1'),
-      'nonce'   => wp_create_nonce('wp_rest'),
-      'baseUrl' => admin_url('admin.php?page=full')
+      'connected' => User::instance()->isConnected(),
+      'restUrl'   => get_rest_url(null, 'fc/v1'),
+      'nonce'     => wp_create_nonce('wp_rest'),
+      'baseUrl'   => admin_url('admin.php?page=full')
     ]);
 
     echo '</script>';
