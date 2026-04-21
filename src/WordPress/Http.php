@@ -3,7 +3,6 @@
 namespace FC\WordPress;
 
 use FC\Services\Connection;
-use FC\User;
 use WP_REST_Response;
 
 class Http

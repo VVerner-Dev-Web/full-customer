@@ -2,10 +2,11 @@
 
 namespace FC;
 
+use FC\Services\Analytics;
 use FC\Services\Connection;
+use FC\Services\Fragments;
 use FC\WordPress\Admin;
 use FC\WordPress\Http;
-use FC\WordPress\Rest;
 
 class Root
 {
@@ -24,10 +25,11 @@ class Root
   {
     // WORDPRESS
     new Admin;
-    new Rest;
     new Http;
 
     // SERVICES;
+    new Analytics;
     new Connection;
+    new Fragments;
   }
 }

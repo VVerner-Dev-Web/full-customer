@@ -4,6 +4,8 @@ namespace FC\Services;
 
 use FC\FileSystem;
 use FC\User;
+use WP_REST_Request;
+use WP_REST_Response;
 
 class Connection
 {
@@ -16,6 +18,8 @@ class Connection
     register_deactivation_hook(FULL_CUSTOMER_FILE, [$this, 'deactivationAnalyticsHook']);
 
     add_action('admin_notices', [$this, 'notice']);
+
+    fcRegisterRestRoute('POST', 'connect', [$this, 'connect']);
   }
 
   public static function getConnectionToken(): ?string
@@ -30,6 +34,26 @@ class Connection
       'wp_site_url'       => trailingslashit(home_url()),
       'wp_user_email'     => $user->wp()->user_email,
     ]));
+  }
+
+  public function connect(WP_REST_Request $request): WP_REST_Response
+  {
+    $email = sanitize_email($request->get_param('email'));
+
+    if (!is_email($email)) {
+      return new WP_REST_Response([
+        'error' => 'E-mail inválido ou ausente, por favor informe apenas o e-mail da sua conta FULL.'
+      ]);
+    }
+
+    $success = $this->handleConnection($email);
+
+    return new WP_REST_Response([
+      'success' => $success['success'],
+      'message' => $success ?
+        'Conectado com sucesso! Vamos recarregar a página para que você possa aproveitar ao máximo sua conta FULL.' :
+        $success['data']['message']
+    ]);
   }
 
   public function notice(): void
@@ -73,8 +97,15 @@ class Connection
     $data = json_decode($json, true);
 
     if (isset($data['email']) && $data['email']) {
-      define('FULL_CUSTOMER_CONNECTION_EMAIL', $data['email']);
+      $this->handleConnection($data['email']);
     }
+
+    $fs->delete('conn.json');
+  }
+
+  private function handleConnection(string $email): array
+  {
+    define('FULL_CUSTOMER_CONNECTION_EMAIL', $email);
 
     $exists = fcDashboardAPI()->fetch('GET', 'account/me');
     $success = $exists['success'] && $exists['data']['me']['site']['dashboardUrl'];
@@ -88,9 +119,12 @@ class Connection
 
     if ($success) {
       $user = User::instance();
-      $user->setConnectionEmail($data['email']);
+      $user->setConnectionEmail($email);
     }
 
-    $fs->delete('conn.json');
+    return [
+      'success' => $success,
+      'data'    => isset($connected) ? $connected : $exists
+    ];
   }
 }
