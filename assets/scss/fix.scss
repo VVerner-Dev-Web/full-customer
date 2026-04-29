@@ -137,3 +137,15 @@
   }
 }
 
+#conteudoAbas {
+  background-color: #F5F7FB;
+}
+
+.fs-cartao-plugin--bloqueado {
+  pointer-events: none !important;
+
+  .fs-btn-ativar {
+    background: #d9d9d9 !important;
+    opacity: .2;
+  }
+}

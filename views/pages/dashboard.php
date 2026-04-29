@@ -48,54 +48,12 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
           <!-- Chip seletor de skill (esquerda) -->
           <div class="fs-skill-chip" id="skillSeletor">
             <button class="fs-skill-chip__gatilho dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="skillGatilho">
-              <img src="<?= $fs->getUrl($starterSkill->getIcon()) ?>" alt=" <?= $starterSkill->getName() ?>" width="16" height="16" id="skillIcone" />
-              <span id="skillNome">
-                <?= $starterSkill->getName() ?>
-              </span>
+              <img src="" alt="" width="16" height="16" id="skillIcone" />
+              <span id="skillNome"></span>
               <img src="<?= $fs->getUrl('assets/images/icons/arrow-down-01.svg') ?>" alt="" width="14" height="14" class="fs-skill-chip__seta" />
             </button>
 
-            <div class="fs-skill-chip__menu dropdown-menu">
-              <?php foreach ($repo->all('available') as $skill) : ?>
-                <div
-                  data-skill="<?= $skill::ID ?>"
-                  class="fs-skill-chip__item fs-skill-chip__item--available <?= $skill === $starterSkill ? 'fs-skill-chip__item--ativo' : ''; ?>">
-                  <div class="fs-skill-chip__item-esq">
-                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt=" <?= $skill->getName() ?>" width="16" height="16" />
-                    <div>
-                      <span class="fs-skill-chip__item-nome">
-                        <?= $skill->getName() ?>
-                      </span>
-                      <span class="fs-skill-chip__item-desc">
-                        <?= $skill->getShortDescription() ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              <?php endforeach; ?>
-
-              <div class="fs-skill-chip__divisor"></div>
-
-              <?php foreach ($repo->all('unavailable') as $skill) : ?>
-
-                <div data-skill="<?= $skill::ID ?>" class="fs-skill-chip__item fs-skill-chip__item--embreve">
-                  <div class="fs-skill-chip__item-esq">
-                    <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt=" <?= $skill->getName() ?>" width="16" height="16" />
-                    <div>
-                      <span class="fs-skill-chip__item-nome">
-                        <?= $skill->getName() ?>
-                      </span>
-                      <span class="fs-skill-chip__item-desc">
-                        <?= $skill->getShortDescription() ?>
-                      </span>
-                    </div>
-                  </div>
-                  <span class="fs-emblema fs-emblema--aviso fs-emblema--pequeno">Em breve</span>
-                </div>
-
-              <?php endforeach; ?>
-
-            </div>
+            <div class="fs-skill-chip__menu dropdown-menu" id="skillMenuContainer"></div>
           </div>
 
           <!-- direita: Skills + enviar -->
@@ -168,44 +126,20 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
           </div>
         </div>
       </div>
-
-
-      <?php if ($user->isConnected()): ?>
-        <!-- Rodapé -->
-        <div class="fs-cartao-acao__rodape">
-          <div class="fs-cartao-acao__uso">
-            <img src="<?= $fs->getUrl('assets/images/icons/progress-ring-mini.svg') ?>" alt="" width="16" height="16" />
-            <span>Usando 3 de 14 ativações neste plano</span>
-          </div>
-          <a href="#" class="fs-cartao-acao__link-plugins">Ver plugins &rarr;</a>
-        </div>
-      <?php endif; ?>
     </div>
 
-    <?php if ($user->isConnected()): ?>
-      <!-- AÇÕES SUGERIDAS -->
-      <div class="fs-sugestoes">
-        <p class="fs-sugestoes__titulo">Sugestões</p>
-        <div class="fs-sugestoes__lista">
-          <a href="#" <?= fcElementDataFragments('ChatFullPage', 'app') ?> class="fs-sugestoes__item">
-            <img src="<?= $fs->getUrl('assets/images/icons/plugin-elementor.svg') ?>" alt="" width="20" height="20" />
-            <span>Ativar Elementor PRO</span>
-          </a>
-          <a href="#" <?= fcElementDataFragments('ChatFullPage', 'app') ?> class="fs-sugestoes__item">
-            <img src="<?= $fs->getUrl('assets/images/icons/plugin-rankmath.svg') ?>" alt="" width="20" height="20" />
-            <span>Ativar Rank Math PRO</span>
-          </a>
-          <a href="#" <?= fcElementDataFragments('ChatFullPage', 'app') ?> class="fs-sugestoes__item">
-            <img src="<?= $fs->getUrl('assets/images/icons/plugin-crocoblock.svg') ?>" alt="" width="20" height="20" />
-            <span>Ativar Crocoblock</span>
-          </a>
-          <a href="#" <?= fcElementDataFragments('SkillsFullPage', 'app') ?> class="fs-sugestoes__item">
-            <img src="<?= $fs->getUrl('assets/images/icons/layers-01.svg') ?>" alt="" width="20" height="20" />
-            <span>Ver todos os plugins</span>
-          </a>
-        </div>
+    <!-- AÇÕES SUGERIDAS -->
+    <div class="fs-sugestoes d-none">
+      <template>
+        <a href="#" class="fs-sugestoes__item">
+          <img src="" alt="" width="20" height="20" />
+          <span></span>
+        </a>
+      </template>
+      <p class="fs-sugestoes__titulo">Sugestões</p>
+      <div class="fs-sugestoes__lista">
       </div>
-    <?php endif; ?>
+    </div>
 
   </div>
 </main>

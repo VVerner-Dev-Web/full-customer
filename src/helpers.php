@@ -12,9 +12,9 @@ function fcElementDataFragments(string $fragment, string $target, array $args = 
   );
 }
 
-function fcDashboardAPI(): DashboardAPI
+function fcDashboardAPI(string $method, string $endpoint, array $payload = []): array
 {
-  return new DashboardAPI();
+  return (new DashboardAPI())->fetch($method, $endpoint, $payload);
 }
 
 function fcRegisterRestRoute(string $method, string $route, callable $callback): void

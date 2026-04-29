@@ -18,7 +18,7 @@ class Snippet extends AbstractSkill
 
   public function getDescription(): string
   {
-    return 'Gere e aplique trechos de código';
+    return 'Gere e aplique trechos de código diretamente no seu WordPress sem precisar editar arquivos. Descreva o que precisa em português — o Copiloto escreve, testa e instala o trecho com segurança.';
   }
 
   public function getIcon(): string
@@ -31,8 +31,13 @@ class Snippet extends AbstractSkill
     return '';
   }
 
-  public function isAvailable(): bool
+  public function getFeaturesList(): array
   {
-    return false;
+    return [
+      'Geração por prompt em português',
+      'Biblioteca de trechos prontos',
+      'Instalação com reversão automática',
+      'Versionamento e histórico',
+    ];
   }
 }

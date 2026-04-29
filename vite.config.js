@@ -10,6 +10,9 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "assets/js/app.js"),
         style: path.resolve(__dirname, "assets/scss/main.scss"),
+
+        staff: path.resolve(__dirname, "assets/js/staff.js"),
+        staffStyle: path.resolve(__dirname, "assets/scss/staff.scss"),
       },
     },
   },

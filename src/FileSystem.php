@@ -6,8 +6,13 @@ use WP_Filesystem_Base;
 
 final class FileSystem
 {
-  private static $instance = null;
+  private static ?FileSystem $instance = null;
   private string $baseUrl;
+
+  public function wpContentDir(): string
+  {
+    return trailingslashit($this->core()->wp_content_dir());
+  }
 
   public static function instance(): self
   {
@@ -19,7 +24,10 @@ final class FileSystem
 
   public function resolvePath(string $path): string
   {
-    $path = rtrim(FULL_CUSTOMER_PATH, '/') . '/' . ltrim($path, '/');
+    $path = strpos($path, 'wp-content') === false ?
+      rtrim(FULL_CUSTOMER_PATH, '/') . '/' . ltrim($path, '/')
+      : $path;
+
     $path = str_replace(
       ['/', '\\'],
       [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR],
@@ -29,43 +37,51 @@ final class FileSystem
     return $path;
   }
 
-  public function getUrl(string $relative_path): string
+  public function getUrl(string $relativePath): string
   {
     if (!isset($this->baseUrl)) {
       $this->baseUrl = trailingslashit(plugin_dir_url(FULL_CUSTOMER_FILE));
     }
 
-    return $this->baseUrl . ltrim($relative_path, '/');
+    return strpos($relativePath, 'https://') === false ?
+      $this->baseUrl . ltrim($relativePath, '/')
+      : $relativePath;
   }
 
-  public function getContents(string $relative_path)
+  public function getContents(string $relativePath)
   {
-    $full_path = $this->resolvePath($relative_path);
-    return $this->core()->get_contents($full_path);
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->get_contents($fulllPath);
   }
 
-  public function delete(string $relative_path, bool $recursive = false)
+  public function include(string $relativePath)
   {
-    $full_path = $this->resolvePath($relative_path);
-    return $this->core()->delete($full_path, $recursive);
+    $fulllPath = $this->resolvePath($relativePath);
+    $this->isFile($relativePath) && include $fulllPath;
   }
 
-  public function putContents(string $relative_path, $contents, $mode = false)
+  public function delete(string $relativePath, bool $recursive = false)
   {
-    $full_path = $this->resolvePath($relative_path);
-    return $this->core()->put_contents($full_path, $contents, $mode);
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->delete($fulllPath, $recursive);
   }
 
-  public function isFile(string $relative_path): bool
+  public function putContents(string $relativePath, $contents, $mode = false)
   {
-    $full_path = $this->resolvePath($relative_path);
-    return $this->core()->is_file($full_path);
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->put_contents($fulllPath, $contents, $mode);
   }
 
-  public function isDir(string $relative_path): bool
+  public function isFile(string $relativePath): bool
   {
-    $full_path = $this->resolvePath($relative_path);
-    return $this->core()->is_dir($full_path);
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->is_file($fulllPath);
+  }
+
+  public function isDir(string $relativePath): bool
+  {
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->is_dir($fulllPath);
   }
 
   private function core(): WP_Filesystem_Base

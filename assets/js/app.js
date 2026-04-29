@@ -1,7 +1,17 @@
-import { Chat } from "./modules/Chat.js";
-import { FragmentService } from "./modules/FragmentService.js";
-import { UIManager } from "./modules/UIManager.js";
-import { WelcomeService } from "./modules/WelcomeService.js";
+/**
+ * app.js — Ponto de entrada da aplicação.
+ *
+ * Responsabilidade única: instanciar os módulos e orquestrar
+ * o carregamento inicial. Nenhuma lógica de negócio aqui.
+ */
+import { Chat } from "./core/Chat.js";
+import { SkillManager } from "./core/SkillManager.js";
+import { WelcomeService } from "./core/WelcomeService.js";
+import { ActivateProPlugin } from "./middleware/ActivateProPlugin.js";
+import { ConnectionService } from "./middleware/ConnectionService.js";
+import { SimpleSkill } from "./middleware/SimpleSkill.js";
+import { FragmentService } from "./utils/FragmentService.js";
+import { UIManager } from "./utils/UIManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.querySelector("#full-customer-root");
@@ -10,32 +20,50 @@ document.addEventListener("DOMContentLoaded", () => {
   UIManager.attach(root);
   WelcomeService.attach(root);
 
-  async function refreshUI(requests) {
+  Chat.root.addEventListener("fc/chat/ready", () => {
+    SkillManager.addMiddleware(
+      ActivateProPlugin._middleware.bind(ActivateProPlugin),
+    );
+
+    SkillManager.addMiddleware(
+      ConnectionService._middleware.bind(ConnectionService),
+    );
+
+    SkillManager.addMiddleware(SimpleSkill._middleware.bind(SimpleSkill));
+
+    SkillManager.init(root);
+  });
+
+  window._refreshUI = async (requests) => {
     UIManager.toggleLoader(true);
+
     try {
-      const data = await FragmentService.fetchFragments(requests);
-      if (data.success) {
-        requests.forEach((req) => {
-          const html = data.fragments[req.fragment];
-          if (html && typeof req.callback === "function") req.callback(html);
-        });
-        // Este evento notifica Chat e UIManager que a tela mudou
-        root.dispatchEvent(new CustomEvent("full-fragments/processed"));
+      const data = await FragmentService.fetch(requests);
+
+      if (!data.success) return;
+
+      for (const req of requests) {
+        const html = data.fragments[req.fragment];
+        if (html && typeof req.callback === "function") {
+          req.callback(html);
+        }
       }
-    } catch (error) {
-      console.error("Erro na navegação:", error);
+
+      root.dispatchEvent(new CustomEvent("fc/fragments/processed"));
+    } catch (err) {
+      console.error("[app] Erro ao carregar fragmentos:", err);
     } finally {
       UIManager.toggleLoader(false);
     }
-  }
-
-  window._refreshUI = refreshUI;
+  };
 
   // Carga inicial
-  refreshUI([
+  window._refreshUI([
     {
       fragment: "DashboardFullPage",
-      callback: (h) => (document.querySelector("app").innerHTML = h),
+      callback: (html) => {
+        document.querySelector("app").innerHTML = html;
+      },
     },
   ]);
 });

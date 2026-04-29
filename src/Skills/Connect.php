@@ -2,6 +2,9 @@
 
 namespace FC\Skills;
 
+use FC\Actions\ConnectAccount;
+use FC\Actions\ViewConnectedAccount;
+
 class Connect extends AbstractSkill
 {
   const ID = 'connect';
@@ -18,7 +21,7 @@ class Connect extends AbstractSkill
 
   public function getDescription(): string
   {
-    return 'Conectar com o Copilot da FULL para liberar superpoderes no seu WordPress.';
+    return 'Conectar com o Copilot da FULL libera todos os superpoderes, ativações e melhoras disponíveis no seu WordPress.';
   }
 
   public function getIcon(): string
@@ -34,5 +37,28 @@ class Connect extends AbstractSkill
   public function isAvailable(): bool
   {
     return true;
+  }
+
+  public function isSoon(): bool
+  {
+    return false;
+  }
+
+  public function actions(): array
+  {
+    return [
+      new ConnectAccount,
+      new ViewConnectedAccount
+    ];
+  }
+
+  public function getFeaturesList(): array
+  {
+    return [
+      'Novas skills desbloqueadas',
+      'Consultar assentos disponíveis',
+      'Acesso rápido para solicitar novas ativações',
+      'Novos recursos incríveis',
+    ];
   }
 }

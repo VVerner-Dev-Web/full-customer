@@ -17,7 +17,7 @@ class DashboardAPI
 
     $args = [
       'method'      => $method,
-      'timeout'     => 60,
+      'timeout'     => MINUTE_IN_SECONDS * 5,
       'redirection' => 5,
       'blocking'    => true,
       'body'        => $method !== 'GET' ? wp_json_encode($payload) : null,

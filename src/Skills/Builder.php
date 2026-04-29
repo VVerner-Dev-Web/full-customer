@@ -18,7 +18,7 @@ class Builder extends AbstractSkill
 
   public function getDescription(): string
   {
-    return 'Converta HTML em widget Elementor';
+    return 'Converta qualquer HTML, imagem ou URL em um componente do Elementor funcional com um clique. Cole o código, aponte para uma página ou faça upload de uma imagem — o Construtor IA gera o componente pronto para instalar no seu WordPress.';
   }
 
   public function getIcon(): string
@@ -31,9 +31,13 @@ class Builder extends AbstractSkill
     return '';
   }
 
-
-  public function isAvailable(): bool
+  public function getFeaturesList(): array
   {
-    return false;
+    return [
+      'HTML → Componente do Elementor',
+      'Imagem → Componente do Elementor',
+      'URL → Clonagem de seção',
+      'Comando de texto → Seção gerada por IA',
+    ];
   }
 }

@@ -55,6 +55,8 @@ class User
 
   public function isConnected(): bool
   {
+    // return false;
+
     $email = $this->getConnectionEmail();
     return !empty($email) && is_email($email);
   }

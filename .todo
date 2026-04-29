@@ -1,12 +1,5 @@
--> conexão
-  -> ao abrir o chat, mostrar "você não esta conectado" informe seu email...
-  -> roda fluxo de conexão 
-  -> salva no usuário
-  -> refresh nos fragments
-  # para conexão, vamos fazer o post no painel para ver se tem usuário no painel, se não houver retornar erro.
-  # se o usuário existir, só salva como user_meta o email de conexão do usuário (a conexão é por usuário, não da para usar option)
-
--> solicitar ativação
-
-
-
+[] na listagem de plugins para ativar, adicionar um status e dependendo de como estiver, abrir um texto específico de ação
+[] verificar quantidade de licenças após ativar
+[] sugestões de plugins de ativação
+[] barra lateral
+[] na ação de conectar, ter as ações como status da conta, login, desconectar e etc

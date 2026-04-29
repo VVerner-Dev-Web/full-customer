@@ -1,0 +1,139 @@
+import { ActivateProPlugin } from "../middleware/ActivateProPlugin";
+import { ApiService } from "../utils/ApiService";
+import { generateId } from "../utils/functions";
+
+export const StaffModal = {
+  dialog: null,
+  buffer: [],
+  combo: ["f", "u", "l", "l"],
+
+  init(root) {
+    this.dialog = document.querySelector("#full-staff-modal");
+    if (!this.dialog) return;
+
+    this.bindEvents();
+  },
+
+  bindEvents() {
+    // Atalho de teclado
+    document.addEventListener("keydown", (e) => this.handleShortcut(e));
+
+    // Fechar modal
+    this.dialog
+      .querySelector(".fsm-header button")
+      ?.addEventListener("click", () => {
+        this.dialog.close();
+        document.dispatchEvent(new CustomEvent("fs/modal/closed"));
+      });
+
+    // Submit do formulário
+    this.dialog.addEventListener("submit", (e) => {
+      if (e.target.tagName === "FORM") {
+        e.preventDefault();
+        this.handleFormSubmit(e.target);
+      }
+    });
+
+    // Escutar abertura para carregar plugins
+    document.addEventListener("fs/modal/opened", () => this.loadRepository());
+
+    // Limpeza ao fechar
+    document.addEventListener("fs/modal/closed", () => {
+      this.dialog.querySelector(".fsm-repository").innerHTML = "";
+      this.dialog.querySelector(".fsm-response").innerHTML = "";
+    });
+  },
+
+  handleShortcut(e) {
+    if (e.shiftKey) {
+      const key = e.key.toLowerCase();
+      if (/^[a-z]$/.test(key)) {
+        this.buffer.push(key);
+        if (this.buffer.length > this.combo.length) this.buffer.shift();
+
+        if (this.buffer.join("") === this.combo.join("")) {
+          this.dialog.showModal();
+          document.dispatchEvent(new CustomEvent("fs/modal/opened"));
+          this.buffer = [];
+        }
+      }
+    } else {
+      this.buffer = [];
+    }
+  },
+
+  async loadRepository() {
+    const container = this.dialog.querySelector(".fsm-repository");
+    container.innerHTML = "Buscando plugins...";
+
+    try {
+      const response = await ApiService.post("/actions/plugins/repository");
+      if (!response.success || !response.plugins.length) {
+        container.innerHTML = "Nenhum plugin encontrado";
+        return;
+      }
+
+      container.innerHTML = response.plugins
+        .map(
+          (item, i) => `
+        <div class="fsm-item">
+          <input type="checkbox" name="plugins[]" value="${item.plugin}" id="plugin-${i}">   
+          <label for="plugin-${i}">${item.name}</label>
+        </div>
+      `,
+        )
+        .join("");
+    } catch (err) {
+      console.log(err);
+      container.innerHTML = "Erro ao carregar repositório.";
+    }
+  },
+
+  async handleFormSubmit(form) {
+    const responseContainer = this.dialog.querySelector(".fsm-response");
+    const checked = Array.from(
+      form.querySelectorAll('input[name="plugins[]"]:checked'),
+    );
+
+    if (!checked.length) {
+      responseContainer.innerHTML = "Selecione pelo menos um plugin.";
+      return;
+    }
+
+    const queue = checked.map((el) => el.value);
+    this.installNext(queue);
+  },
+
+  async installNext(queue) {
+    if (!queue.length) {
+      alert("Todos os plugins finalizados");
+      window.location.href = window.fcData.wpPluginsUrl;
+      return;
+    }
+
+    const processId = generateId();
+
+    const pluginSlug = queue.shift();
+    const responseContainer = this.dialog.querySelector(".fsm-response");
+    const logId = `log-${processId}`;
+
+    responseContainer.insertAdjacentHTML(
+      "beforeend",
+      `<div id="${logId}" class="fsm-log-line"></div>`,
+    );
+    const logEl = responseContainer.querySelector(`#${logId}`);
+
+    const incrementLog = (msg) => {
+      logEl.innerHTML += msg + "<br>";
+    };
+
+    await ActivateProPlugin.processInstallation(processId, pluginSlug, {
+      start: (msg) => incrementLog("Iniciando " + msg),
+      progress: incrementLog,
+      onError: incrementLog,
+      onSuccess: incrementLog,
+    });
+
+    this.installNext(queue);
+  },
+};

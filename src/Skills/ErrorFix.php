@@ -18,7 +18,7 @@ class ErrorFix extends AbstractSkill
 
   public function getDescription(): string
   {
-    return 'Detecte e corrija erros do WordPress';
+    return 'Detecta e corrige automaticamente os erros mais comuns do WordPress — tela branca, conflitos de extensões, erros 500, falhas de banco de dados — sem precisar abrir o terminal ou contatar o suporte.';
   }
 
   public function getIcon(): string
@@ -31,9 +31,13 @@ class ErrorFix extends AbstractSkill
     return '';
   }
 
-
-  public function isAvailable(): bool
+  public function getFeaturesList(): array
   {
-    return false;
+    return [
+      'Diagnóstico automático em tempo real',
+      'Correção com um clique',
+      'Biblioteca de 200+ erros conhecidos',
+      'Reversão segura se a correção falhar',
+    ];
   }
 }

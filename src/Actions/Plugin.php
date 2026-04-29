@@ -1,0 +1,94 @@
+<?php
+
+namespace FC\Actions;
+
+use WP_REST_Request;
+use WP_REST_Response;
+
+class Plugin extends AbstractAction
+{
+  private array $repoPlugin;
+
+  public function __construct(array $repoPlugin)
+  {
+    $this->repoPlugin = $repoPlugin;
+  }
+
+  public function getIcon(): string
+  {
+    return $this->repoPlugin['image_url'];
+  }
+
+  public function getName(): string
+  {
+    return $this->repoPlugin['name'];
+  }
+
+  public function getShortDescription(): string
+  {
+    return $this->repoPlugin['sections']['description'];
+  }
+
+  public function isAvailable(): bool
+  {
+    return !$this->repoPlugin['activation'];
+  }
+
+  public function getPromptArgs(): array
+  {
+    return array_merge($this->_defaultPromptArgs(), [
+      'id' => $this->repoPlugin['id'],
+      'imageUrl' => $this->repoPlugin['image_url'],
+      'name' => $this->getName(),
+      'desc' => $this->repoPlugin['version'],
+      'simpleRest' => false,
+      'extraProps' => [
+        'plugin' => $this->repoPlugin['plugin']
+      ]
+    ]);
+  }
+
+  public function inShellActions(): array
+  {
+    return [
+      PluginRepository::class,
+      PluginInstall::class,
+      PluginActivate::class,
+      PluginLicense::class,
+      ExecutionStatus::class
+    ];
+  }
+
+  public function getRestMethod(): string
+  {
+    return 'POST';
+  }
+
+  public function getRestRoute(): string
+  {
+    // FYI: this action is a shell for other actions so we don't register a rest route
+    return '';
+  }
+
+  public function restHandler(WP_REST_Request $request): WP_REST_Response
+  {
+    return new WP_REST_Response([]);
+  }
+
+  public function getCta(): string
+  {
+    $cta = 'Ativar';
+
+    $balance = $this->repoPlugin['balance'];
+
+    if (!is_array($balance) || 0 >= $balance['available']) {
+      $cta = 'Comprar';
+    }
+
+    if ($this->repoPlugin['activation']) {
+      $cta = 'Consultar';
+    }
+
+    return $cta;
+  }
+}
