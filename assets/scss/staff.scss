@@ -1,141 +1,270 @@
-  /* Reset básico para o Dialog */
-  #full-staff-modal {
-    border: none;
-    border-radius: 8px;
-    padding: 0;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+@use 'abstratos/variaveis' as *;
+
+/* Reset básico para o Dialog */
+#full-staff-modal {
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Escurecimento do fundo */
+#full-staff-modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+/* Cabeçalho */
+.fsm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fsm-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1f2937;
+}
+
+.fsm-header button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #9ca3af;
+  line-height: 1;
+}
+
+.fsm-header button:hover {
+  color: #1f2937;
+}
+
+/* Corpo e Repositório */
+.fsm-body {
+  padding: 20px;
+}
+
+.fsm-repository {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fsm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.fsm-item:hover {
+  background: #f3f4f6;
+}
+
+.fsm-item input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.fsm-item label {
+  cursor: pointer;
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* Rodapé e Botão */
+.fsm-footer {
+  text-align: right;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.full-primary-button {
+  background: #2271b1;
+  /* Cor padrão WordPress */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.full-primary-button:hover {
+  background: #135e96;
+}
+
+/* Logs de Resposta */
+.fsm-response {
+  margin-top: 15px;
+  font-size: 13px;
+  line-height: 1.6;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 4px;
+  color: #4b5563;
+}
+
+.fsm-response strong {
+  color: #111827;
+}
+
+/* Animação simples */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 
-  /* Escurecimento do fundo */
-  #full-staff-modal::backdrop {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  /* Cabeçalho */
-  .fsm-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e5e7eb;
-  }
+#full-staff-modal[open] {
+  animation: fadeIn 0.3s ease-out;
+}
 
-  .fsm-header h2 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #1f2937;
-  }
 
-  .fsm-header button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #9ca3af;
-    line-height: 1;
-  }
+.fs-admin-notice {
+  background: #f0f0f1;
+  display: flex;
+  align-items: flex-start;
+  padding-left: 20px;
+  width: 100%;
+  min-height: 100%;
 
-  .fsm-header button:hover {
-    color: #1f2937;
-  }
-
-  /* Corpo e Repositório */
-  .fsm-body {
-    padding: 20px;
-  }
-
-  .fsm-repository {
-    max-height: 250px;
-    overflow-y: auto;
-    margin-bottom: 20px;
+  &__wrap {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
+    padding: 10px 20px 0 2px;
+    min-width: 0;
   }
 
-  .fsm-item {
+  // Título h1
+  &__h1 {
+    padding: 9px 0 4px;
+
+    h1 {
+      font-family: $font-family;
+      font-size: 23px;
+      font-weight: 400;
+      color: #1d2327;
+      line-height: normal;
+      margin: 0;
+    }
+  }
+
+  // Banner de aviso
+  &__banner {
+    background: $yellow-light-bg;
+    border: 1px solid #ded7b1;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border-radius: 4px;
-    transition: background 0.2s;
+    align-items: flex-start;
+    min-width: 255px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
   }
 
-  .fsm-item:hover {
-    background: #f3f4f6;
+  &__banner-imagem {
+    width: 94px;
+    height: 119px;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+
+    img {
+      position: absolute;
+      left: -6px;
+      top: 22px;
+      width: 94px;
+      height: 75px;
+      object-fit: cover;
+    }
   }
 
-  .fsm-item input[type="checkbox"] {
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
+  &__banner-barra {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    width: 4px;
+    height: calc(100% + 2px);
+    background: $yellow-primary;
   }
 
-  .fsm-item label {
-    cursor: pointer;
+  &__banner-conteudo {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    min-width: 0;
+  }
+
+  &__banner-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__banner-nome {
+    font-family: $font-family;
     font-size: 14px;
-    color: #374151;
+    font-weight: 600;
+    color: $black;
+    line-height: normal;
+    margin: 0;
   }
 
-  /* Rodapé e Botão */
-  .fsm-footer {
-    text-align: right;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 15px;
-  }
-
-  .full-primary-button {
-    background: #2271b1;
-    /* Cor padrão WordPress */
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-
-  .full-primary-button:hover {
-    background: #135e96;
-  }
-
-  /* Logs de Resposta */
-  .fsm-response {
-    margin-top: 15px;
+  &__banner-texto {
+    font-family: $font-family;
     font-size: 13px;
-    line-height: 1.6;
-    max-height: 150px;
-    overflow-y: auto;
-    padding: 10px;
-    background: #f9fafb;
-    border-radius: 4px;
-    color: #4b5563;
+    font-weight: 300;
+    color: #3c434a;
+    line-height: normal;
+    margin: 0;
   }
 
-  .fsm-response strong {
-    color: #111827;
-  }
+  &__banner-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $yellow-primary;
+    border: none;
+    border-radius: 3px;
+    padding: 7px 10px;
+    font-family: $font-family;
+    font-size: 13px;
+    font-weight: 600;
+    color: $gray-950;
+    line-height: normal;
+    cursor: pointer;
+    align-self: flex-start;
+    text-decoration: none;
 
-  /* Animação simples */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
+    &:hover {
+      opacity: 0.9;
     }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
-  #full-staff-modal[open] {
-    animation: fadeIn 0.3s ease-out;
-  }
+}

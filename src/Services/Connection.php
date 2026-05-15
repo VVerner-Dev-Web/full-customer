@@ -72,15 +72,9 @@ class Connection
       return;
     }
 
-    wp_admin_notice('
-      <h2>FULL. Services</h2>
-      <p>Seu usuário está desconectado. Para aproveitar todos os benefícios da FULL. Conecte seu site a sua conta FULL.</p>
-      <p><a class="button-primary" href="' . admin_url('admin.php?page=full') . '">Conectar site</a></p>
-    ', [
-      'type'               => 'warning',
-      'additional_classes' => ['notice-alt'],
-    ]);
+    FileSystem::instance()->include('views/wp/connection-notice.php');
   }
+
 
   public function autoConnection(): void
   {
