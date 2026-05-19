@@ -6,6 +6,7 @@
  */
 import { Chat } from "./core/Chat.js";
 import { SkillManager } from "./core/SkillManager.js";
+import { SkillsPage } from "./core/SkillsPage.js";
 import { WelcomeService } from "./core/WelcomeService.js";
 import { ActivateProPlugin } from "./middleware/ActivateProPlugin.js";
 import { ConnectionService } from "./middleware/ConnectionService.js";
@@ -19,17 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
   Chat.attach(root);
   UIManager.attach(root);
   WelcomeService.attach(root);
+  SkillsPage.attach(root);
+
+  const activateProMiddleware =
+    ActivateProPlugin._middleware.bind(ActivateProPlugin);
+  const connectionMiddleware =
+    ConnectionService._middleware.bind(ConnectionService);
+  const simpleSkillMiddleware = SimpleSkill._middleware.bind(SimpleSkill);
 
   Chat.root.addEventListener("fc/chat/ready", () => {
-    SkillManager.addMiddleware(
-      ActivateProPlugin._middleware.bind(ActivateProPlugin),
-    );
-
-    SkillManager.addMiddleware(
-      ConnectionService._middleware.bind(ConnectionService),
-    );
-
-    SkillManager.addMiddleware(SimpleSkill._middleware.bind(SimpleSkill));
+    SkillManager.addMiddleware(activateProMiddleware);
+    SkillManager.addMiddleware(connectionMiddleware);
+    SkillManager.addMiddleware(simpleSkillMiddleware);
 
     SkillManager.init(root);
   });

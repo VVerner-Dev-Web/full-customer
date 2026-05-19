@@ -2,7 +2,6 @@
 
 namespace FC\Actions;
 
-use FC\PluginRepository as FCPluginRepository;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -42,7 +41,9 @@ class PluginLicense extends AbstractAction
   {
     $pid = $request->get_param('processId');
 
-    $plugins = (new FCPluginRepository())->getPlugins();
+    $data = fcDashboardAPI('GET', 'plugin-repository/all');
+    $plugins = $data['success'] ? $data['data'] : [];
+
     $plugin = array_filter($plugins, fn($plugin) => $plugin['plugin'] === $request->get_param('plugin'));
     $plugin = array_shift($plugin);
 
@@ -63,8 +64,7 @@ class PluginLicense extends AbstractAction
 
     return new WP_REST_Response([
       'success' => $activate['success'],
-      'message' => isset($activate['data']) && $activate['data'] ? $activate['data'] : '',
-      'error'   => isset($activate['error']) && $activate['error'] ? $activate['error'] : ''
+      'error' => isset($activate['message']) && $activate['message'] ? $activate['message'] : '',
     ]);
   }
 }

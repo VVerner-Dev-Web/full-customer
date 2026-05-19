@@ -18,7 +18,6 @@ defined('ABSPATH') || exit;
 if (!defined('FULL_CUSTOMER_VERSION')) {
   if (!defined('FULL_CUSTOMER_DEV')) {
     define('FULL_CUSTOMER_DEV', strpos(home_url(), '.dev') !== false);
-    // define('FULL_CUSTOMER_DEV', false);
   }
 
   define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.0-001');

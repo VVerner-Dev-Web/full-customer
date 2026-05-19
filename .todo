@@ -3,3 +3,27 @@
 [] sugestões de plugins de ativação
 [] barra lateral
 [] na ação de conectar, ter as ações como status da conta, login, desconectar e etc
+
+====
+
+REVIEW
+
+[X] usuário A consegue se conectar (novo site)
+[X] usuário B consegue se conectar (site teoricamente já conectado)
+
+[X] solicitar ativação gera ativação no painel e consome licença
+[X] permite conectar apenas plugins não ativados anteriormente
+[X] ao tentar conectar plugin, mostrar já que foi feito e dados
+
+[X] páginas de suporte levam para o help.full
+[X] páginas de informaçõe levam para o painel.full
+
+[X] desconectar conta
+[X] ver resumo de licenças
+
+RESOLVER
+[ ] o repositório de plugins deve ser por site e não por usuário, ou seja, não pode ser usado para fluxo de ativação e consulta, apenas para atualização no wp
+[X] UX: abrir opções de uma skill/action apenas quando o usuário selecionar
+[X] UX: em skill -> ao clicar em ativar, acionar e abrir o chat
+[X] DEV: Ver por que esta forçando várias vezes a ativação
+[X] DEV: ajustar requests repetidas para mesmo endpoint de repositorio

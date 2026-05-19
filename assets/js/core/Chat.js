@@ -32,8 +32,8 @@ export const Chat = {
 
   setSkillContext(skill) {
     // Apenas muda visual do input para adequar ao contexto da skill
-    this.input.placeholder = skill.inputPlaceholder ?? "Digite sua mensagem...";
-    this.input.focus();
+    this.input.placeholder =
+      skill.inputPlaceholder ?? "Clique ou digite para ver as opções";
   },
 
   toggleSubmitButton(isDisabled) {

@@ -5,7 +5,7 @@ namespace FC\Actions;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class Plugin extends AbstractAction
+class PluginActivationFactory extends AbstractAction
 {
   private array $repoPlugin;
 
@@ -31,7 +31,11 @@ class Plugin extends AbstractAction
 
   public function isAvailable(): bool
   {
-    return !$this->repoPlugin['activation'];
+    if (isset($this->repoPlugin['activation']) && is_array($this->repoPlugin['activation'])) {
+      return intval($this->repoPlugin['activation']['id']) === 0;
+    }
+
+    return false;
   }
 
   public function getPromptArgs(): array
@@ -40,7 +44,7 @@ class Plugin extends AbstractAction
       'id' => $this->repoPlugin['id'],
       'imageUrl' => $this->repoPlugin['image_url'],
       'name' => $this->getName(),
-      'desc' => $this->repoPlugin['version'],
+      'desc' => 'Solicitar nova ativação',
       'simpleRest' => false,
       'extraProps' => [
         'plugin' => $this->repoPlugin['plugin']
@@ -85,7 +89,7 @@ class Plugin extends AbstractAction
       $cta = 'Comprar';
     }
 
-    if ($this->repoPlugin['activation']) {
+    if ($this->repoPlugin['activation']['id']) {
       $cta = 'Consultar';
     }
 

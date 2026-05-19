@@ -27,11 +27,16 @@ export const SkillManager = {
 
   init(root) {
     this._root = root;
+
     this._suggestionsEl = root.querySelector("#copilotSugestoes");
     this._tagsEl = root.querySelector("#copilotTags");
     this._triggerIconEl = root.querySelector("#skillIcone");
     this._triggerNameEl = root.querySelector("#skillNome");
     this._menuContainerEl = root.querySelector("#skillMenuContainer");
+
+    if (!this._menuContainerEl) {
+      return;
+    }
 
     this._bindSkillChange();
     this._bindMenuEvents();
@@ -41,6 +46,37 @@ export const SkillManager = {
     this._bindOutsideClick();
 
     this._loadAndRenderSkills();
+  },
+
+  async trigger(skillId, action, msg = "") {
+    const skill = this._skills.find((s) => s.id == skillId);
+    if (!skill) {
+      return;
+    }
+
+    if (!skill.isAvailable) {
+      Chat.sendCopilotMissingToolOrSkillMessage();
+      return;
+    }
+
+    this._menuContainerEl
+      ?.querySelectorAll(".fs-skill-chip__item")
+      .forEach((el) => el.classList.remove("fs-skill-chip__item--ativo"));
+
+    const itemEl = this._menuContainerEl?.querySelector(
+      `[data-skill="${skill.id}"]`,
+    );
+    if (itemEl) itemEl.classList.add("fs-skill-chip__item--ativo");
+
+    this._updateTriggerVisuals(skill);
+    this._dispatchSkillChange(skill);
+
+    this._clearUI(true);
+
+    this._selectedItems.push(action);
+    Chat.sendUserMessage(`Executar ação: ${action.name}`);
+
+    await this._execute(msg);
   },
 
   // ─── Renderização do Menu de Skills ───────────────────────
@@ -166,8 +202,8 @@ export const SkillManager = {
       }
     };
 
-    Chat.input.addEventListener("input", handleInput);
-    Chat.input.addEventListener("focus", handleInput);
+    Chat.input?.addEventListener("input", handleInput);
+    Chat.input?.addEventListener("focus", handleInput);
   },
 
   _bindSuggestionClick() {
@@ -228,6 +264,8 @@ export const SkillManager = {
   },
 
   _addTag(item) {
+    console.log(item);
+
     if (this.waitingUserPersonalAnswer) {
       return;
     }
@@ -283,9 +321,11 @@ export const SkillManager = {
   // ─── Execução Genérica ────────────────────────────────────
 
   addMiddleware(middleware) {
-    if (typeof middleware === "function") {
-      this._middlewares.push(middleware);
-    }
+    if (typeof middleware !== "function") return;
+
+    if (this._middlewares.includes(middleware)) return;
+
+    this._middlewares.push(middleware);
   },
 
   async _execute(msg) {

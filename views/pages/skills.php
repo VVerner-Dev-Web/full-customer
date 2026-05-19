@@ -97,7 +97,10 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
                         Bloqueado
                       </button>
                     <?php endif; ?>
-                    <a class="fs-btn-ativar disabled">
+                    <a class="fs-btn-ativar" data-trigger='<?= wp_json_encode([
+                                                              'skill' => $skill::ID,
+                                                              'prompt' => $action->getPromptArgs()
+                                                            ]) ?>'>
                       <img src="<?= $fs->getUrl('assets/images/icons/energy-dark.svg') ?>" alt="" width="18" height="18" />
                       <?= $action->getCta() ?>
                     </a>

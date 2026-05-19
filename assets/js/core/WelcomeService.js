@@ -12,16 +12,6 @@ const GREETINGS = [
       "Escolha uma tarefa ou descreva o que precisa ser automatizado agora.",
   },
   {
-    title: "Oi! Vamos criar algo incrível hoje juntos?",
-    subtitle:
-      "Estou pronto para gerar código limpo e widgets poderosos para o seu projeto.",
-  },
-  {
-    title: "Estava ansioso esperando você!",
-    subtitle:
-      "Que tal começarmos otimizando suas rotinas ou refatorando algumas classes?",
-  },
-  {
     title: "Estou aqui para ajudar!",
     subtitle:
       "Diga-me qual licença precisamos ativar e eu cuido do trabalho pesado.",

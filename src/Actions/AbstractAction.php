@@ -38,10 +38,15 @@ abstract class AbstractAction
     return [];
   }
 
+  public function getId(): string
+  {
+    return sanitize_title(get_class($this));
+  }
+
   protected function _defaultPromptArgs(): array
   {
     return [
-      'id' => sanitize_title(get_class($this)),
+      'id' => $this->getId(),
       'imageUrl' => FileSystem::instance()->getUrl($this->getIcon()),
       'name' => $this->getName(),
       'desc' => $this->getShortDescription(),

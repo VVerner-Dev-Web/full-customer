@@ -2,7 +2,6 @@
 
 namespace FC\Actions;
 
-use FC\PluginRepository as FCPluginRepository;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -40,7 +39,8 @@ class PluginRepository extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $plugins = (new FCPluginRepository())->getPlugins(true);
+    $data = fcDashboardAPI('GET', 'plugin-repository/all');
+    $plugins = $data['success'] ? $data['data'] : [];
 
     return new WP_REST_Response([
       'plugins' => $plugins,

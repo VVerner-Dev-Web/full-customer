@@ -27,6 +27,7 @@ export const SimpleSkill = {
           response.message ??
             "Ops, algo deu errado. Por favor, tente novamente.",
           response.success ? "normal" : "error",
+          response.terminate === true ? true : false,
         );
       } catch {
         loading.remove();

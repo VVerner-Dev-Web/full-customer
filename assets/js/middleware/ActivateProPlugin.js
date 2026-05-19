@@ -14,6 +14,10 @@ export const ActivateProPlugin = {
     const workingPlugins = actions;
 
     for (const plugin of workingPlugins) {
+      if (plugin.simpleRest) {
+        continue;
+      }
+
       const processId = generateId();
 
       const callbacks = {

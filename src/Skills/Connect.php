@@ -2,7 +2,9 @@
 
 namespace FC\Skills;
 
+use FC\Actions\AccountLicensesExtract;
 use FC\Actions\ConnectAccount;
+use FC\Actions\DisconnectAccount;
 use FC\Actions\ViewConnectedAccount;
 
 class Connect extends AbstractSkill
@@ -48,7 +50,9 @@ class Connect extends AbstractSkill
   {
     return [
       new ConnectAccount,
-      new ViewConnectedAccount
+      new ViewConnectedAccount,
+      new DisconnectAccount,
+      new AccountLicensesExtract
     ];
   }
 

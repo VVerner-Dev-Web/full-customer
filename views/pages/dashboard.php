@@ -36,7 +36,7 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
           <!-- Tags de plugins selecionados -->
           <div class="fs-copilot-tags" id="copilotTags"></div>
           <!-- Campo de texto -->
-          <input type="text" id="copilotTexto" class="fs-copilot-input__campo" placeholder="" autocomplete=" off" />
+          <input type="text" id="copilotTexto" class="fs-copilot-input__campo" placeholder="" autocomplete="off" />
           <div class="fs-copilot-input__sugestoes" id="copilotSugestoes"></div>
         </div>
 
