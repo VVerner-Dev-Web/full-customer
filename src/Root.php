@@ -9,6 +9,7 @@ use FC\Services\Connection;
 use FC\Services\MagicLink;
 use FC\Services\Rest;
 use FC\Services\Staff;
+use FC\Services\Update;
 
 class Root
 {
@@ -31,7 +32,7 @@ class Root
     new BackLink;
     new Staff;
     new MagicLink;
-
+    new Update;
     new Rest;
   }
 }

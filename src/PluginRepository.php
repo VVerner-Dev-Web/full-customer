@@ -15,16 +15,21 @@ class PluginRepository
 
   public function getPlugins(bool $force = false): array
   {
+    $fs = FileSystem::instance();
+
     $lastUpdated = (int) get_option('fc/plugin-repository/updated-at', time());
     $now = (int) time();
 
     $hasExpired = $now - $lastUpdated > DAY_IN_SECONDS;
 
-    if ($force || $hasExpired) {
+    if (
+      $force
+      || $hasExpired
+      || !$fs->isFile($this->repositoryFilename)
+    ) {
       $this->updateRepository();
     }
 
-    $fs = FileSystem::instance();
     $plugins = [];
 
     if ($fs->isFile($this->repositoryFilename)) {
