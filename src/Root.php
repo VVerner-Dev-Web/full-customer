@@ -6,6 +6,7 @@ use FC\Services\AdminPage;
 use FC\Services\Analytics;
 use FC\Services\BackLink;
 use FC\Services\Connection;
+use FC\Services\MagicLink;
 use FC\Services\Rest;
 use FC\Services\Staff;
 
@@ -29,6 +30,7 @@ class Root
     new Connection;
     new BackLink;
     new Staff;
+    new MagicLink;
 
     new Rest;
   }

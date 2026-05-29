@@ -17,16 +17,25 @@ function fcDashboardAPI(string $method, string $endpoint, array $payload = []): 
   return (new DashboardAPI())->fetch($method, $endpoint, $payload);
 }
 
-function fcRegisterRestRoute(string $method, string $route, callable $callback): void
+function fcRegisterRestRoute(string $method, string $route, callable $callback, ?callable $permissionCallback = null): void
 {
   add_action(
     'rest_api_init',
-    function () use ($method, $route, $callback) {
+    function () use ($method, $route, $callback, $permissionCallback) {
       register_rest_route(FULL_CUSTOMER_REST_NAMESPACE, $route, [
         'methods'  => $method,
         'callback' => $callback,
-        'permission_callback' => fn() => current_user_can('manage_options'),
+        'permission_callback' => $permissionCallback ?? fn() => current_user_can('manage_options'),
       ]);
     }
   );
+}
+
+function fcGetAnonymousUserConnection(): ?array
+{
+  global $wpdb;
+
+  $data = $wpdb->get_row("SELECT user_id, meta_value as connection_email FROM {$wpdb->usermeta} WHERE meta_key = 'fc/connection-email' AND meta_value != '' LIMIT 1", ARRAY_A);
+
+  return is_array($data) && $data ? $data : null;
 }

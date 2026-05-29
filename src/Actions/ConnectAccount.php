@@ -74,10 +74,8 @@ class ConnectAccount extends AbstractAction
     $success = $exists['success'] && $exists['data']['me']['site']['dashboardUrl'];
 
     if (!$success) {
-      $connected = fcDashboardAPI('POST', 'account/connect', [
-        'login_url' => wp_login_url()
-      ]);
-
+      $connected = fcDashboardAPI('POST', 'account/connect');
+      error_log(print_r($connected, true));
       $success = $connected['success'] && $connected['data']['success'];
     }
 

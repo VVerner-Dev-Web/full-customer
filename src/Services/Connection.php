@@ -14,7 +14,7 @@ class Connection
 
     add_action('admin_init', [$this, 'autoConnection']);
 
-    add_action('admin_notices', [$this, 'notice']);
+    add_action('admin_notices', [$this, 'notices']);
     add_filter('plugin_row_meta', [$this, 'pluginRowMeta'], 10, 2);
 
     add_filter('http_request_args', [$this, 'filterRequestArgs'], PHP_INT_MAX, 2);
@@ -53,45 +53,101 @@ class Connection
   private function getConnectionToken(): ?string
   {
     $user = User::instance();
+    $anon = fcGetAnonymousUserConnection();
 
     return base64_encode(wp_json_encode([
       'fc_version'        => FULL_CUSTOMER_VERSION,
       'fc_mode'           => FULL_CUSTOMER_DEV ? 'dev' : 'prod',
       'wp_version'        => get_bloginfo('version'),
-      'connection_email'  => $user->getConnectionEmail(),
+      'connection_email'  => is_user_logged_in() ? $user->getConnectionEmail() : ($anon ? $anon['connection_email'] : null),
+      'wp_user_email'     => is_user_logged_in() ? $user->wp()->user_email : ($anon ? get_userdata($anon['user_id'])->user_email : null),
       'wp_site_url'       => trailingslashit(home_url()),
-      'wp_user_email'     => $user->wp()->user_email,
     ]));
   }
 
-  public function notice(): void
+  public function notices(): void
   {
     $user = User::instance();
 
-    if (!$user->isAdmin() || $user->isConnected()) {
+    if (!$user->isAdmin()) {
       return;
     }
 
-    FileSystem::instance()->include('views/wp/connection-notice.php');
-  }
+    $fs = FileSystem::instance();
+    $message = '
+    <div class="fs-admin-notice__banner">
+      <div class="fs-admin-notice__banner-imagem">
+        <img src="' . $fs->getUrl('assets/images/plugue.png') . '" alt="Conectar" />
+      </div>
+      <div class="fs-admin-notice__banner-barra"></div>
+      <div class="fs-admin-notice__banner-conteudo">
+        <div class="fs-admin-notice__banner-textos">
+          <p class="fs-admin-notice__banner-nome">FULL. Services</p>
+          <p class="fs-admin-notice__banner-texto">{{text}}</p>
+        </div>
+        <a href="' . admin_url('admin.php?page=full') . '" class="fs-admin-notice__banner-btn">{{cta}}</a>
+      </div>
+    </div>';
 
+    if (!$user->isConnected()) {
+      delete_option('fc/automatic-connection');
+      echo str_replace(
+        ['{{cta}}', '{{text}}'],
+        ['Conectar site', 'Seu usuário está desconectado. Para aproveitar todos os benefícios da FULL, conecte seu site à sua conta FULL.'],
+        $message
+      );
+      return;
+    }
+
+    $auto = get_option('fc/automatic-connection');
+
+    if ($auto) {
+      delete_option('fc/automatic-connection');
+
+      $replace = $auto === 'upgrade' ?
+        ['Ver novidades', 'Atualizamos automaticamente sua conexão com o painel da FULL. Aproveite!'] :
+        ['Ativar plugins PRO', 'Conectamos automaticamente seu site ao painel da FULL. Aproveite para ativar seus plugins agora mesmo!'];
+
+      echo str_replace(['{{cta}}', '{{text}}'], $replace, $message);
+      return;
+    }
+  }
 
   public function autoConnection(): void
   {
     $fs = FileSystem::instance();
-    $conn = $fs->isFile('conn.json');
 
-    if (!$conn) {
-      return;
+    $connectionEmail = null;
+    $connectionMode = '';
+
+    if ($fs->isFile('conn.json')) {
+      $json = $fs->getContents('conn.json') ?: '{}';
+      $data = json_decode($json, true);
+      $connectionEmail = isset($data['email']) && $data['email'] ? $data['email'] : null;
+      $fs->delete('conn.json');
+
+      $connectionMode = 'file';
     }
 
-    $json = $fs->getContents('conn.json') ?: '{}';
-    $data = json_decode($json, true);
+    $legacyConnection = get_option('_full_customer-connection_email');
 
-    if (isset($data['email']) && $data['email']) {
-      (new ConnectAccount())->handleConnection($data['email']);
+    if ($legacyConnection) {
+      $connectionEmail = $legacyConnection;
+
+      delete_option('_full_customer-connection_email');
+      delete_option('_full_customer-enabled_services');
+      delete_option('_full_customer-dashboard_url');
+      delete_option('_full_customer-previous-connect-site-check');
+
+      $connectionMode = 'upgrade';
     }
 
-    $fs->delete('conn.json');
+    if ($connectionEmail) {
+      $done = (new ConnectAccount())->handleConnection($connectionEmail);
+
+      if ($done['success']) {
+        update_option('fc/automatic-connection', $connectionMode);
+      }
+    }
   }
 }
