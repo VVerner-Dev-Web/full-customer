@@ -35,6 +35,11 @@ class ActivateProPlugin extends AbstractSkill
     return 'Selecione quais plugins você quer ativar para começar a automação';
   }
 
+  public function isDefault(): bool
+  {
+    return User::instance()->isConnected();
+  }
+
   public function isAvailable(): bool
   {
     return User::instance()->isConnected();

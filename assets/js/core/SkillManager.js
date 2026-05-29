@@ -97,7 +97,7 @@ export const SkillManager = {
         a.isAvailable === b.isAvailable ? 0 : a.isAvailable ? -1 : 1,
       );
 
-      const firstAvailable = this._skills.find((s) => s.isAvailable);
+      const firstAvailable = this._skills.find((s) => s.isDefault);
 
       this._menuContainerEl.innerHTML = this._skills
         .map((skill) => {

@@ -101,6 +101,7 @@ class Rest
         'imageUrl'          => FileSystem::instance()->getUrl($skill->getIcon()),
         'name'              => $skill->getName(),
         'id'                => $skill::ID,
+        'isDefault'         => $skill->isDefault(),
         'shortDescription'  => $skill->getShortDescription(),
         'isAvailable'       => $skill->isAvailable(),
         'isSoon'            => $skill->isSoon(),

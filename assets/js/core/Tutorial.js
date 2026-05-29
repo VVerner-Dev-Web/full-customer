@@ -314,8 +314,8 @@ export const Tutorial = {
         ? "Conta conectada! 🎉"
         : "Hora de Ativar";
       const firstStepText = isResuming
-        ? "Parabéns, agora você tem superpoderes! Vamos testá-los ativando um plugin. Clique aqui para mudar nosso Modelo de IA."
-        : "Como sua conta já está conectada, podemos ativar plugins direto por aqui. Clique neste seletor para trocar o Modelo.";
+        ? "Parabéns, agora você tem superpoderes! Vamos testá-los ativando um plugin. Mantenha o modelo 'Ativações' selecionado."
+        : "Como sua conta já está conectada, podemos ativar plugins direto por aqui. Mantenha o modelo 'Ativações' selecionado.";
 
       this._tourInstance.addStep({
         id: "step-action-intro",
@@ -325,33 +325,15 @@ export const Tutorial = {
           element: "#skillSeletor",
           on: "right",
         },
-        advanceOn: {
-          selector: "#skillSeletor",
-          event: "click",
-        },
-        buttons: [
-          {
-            action() {
-              return isResuming ? this.cancel() : this.back();
-            },
-            classes: "shepherd-button-secondary",
-            text: isResuming ? "Cancelar Tour" : "Voltar",
+        when: {
+          show: () => {
+            const el = document.querySelector("#skillSeletor");
+            if (el) el.style.pointerEvents = "none"; // Desabilita o clique
           },
-        ],
-      });
-
-      this._tourInstance.addStep({
-        id: "step-action-choose",
-        title: "Modelo de Ativações",
-        text: "Selecione o modelo 'Ativações'. Ele contém todas as habilidades para gerenciar seus produtos.",
-        arrow: true,
-        attachTo: {
-          element: '[data-skill="activateProPlugin"]',
-          on: "bottom",
-        },
-        advanceOn: {
-          selector: '[data-skill="activateProPlugin"]',
-          event: "click",
+          hide: () => {
+            const el = document.querySelector("#skillSeletor");
+            if (el) el.style.pointerEvents = ""; // Limpa a regra para voltar ao normal
+          },
         },
         buttons: [
           {
@@ -360,6 +342,12 @@ export const Tutorial = {
             },
             classes: "shepherd-button-secondary",
             text: "Voltar",
+          },
+          {
+            action() {
+              return this.next();
+            },
+            text: "Avançar",
           },
         ],
       });

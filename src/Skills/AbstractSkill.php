@@ -18,6 +18,11 @@ abstract class AbstractSkill
 
   abstract public function getFeaturesList(): array;
 
+  public function isDefault(): bool
+  {
+    return false;
+  }
+
   public function isAvailable(): bool
   {
     return false;

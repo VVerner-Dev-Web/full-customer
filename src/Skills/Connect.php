@@ -6,6 +6,7 @@ use FC\Actions\AccountLicensesExtract;
 use FC\Actions\ConnectAccount;
 use FC\Actions\DisconnectAccount;
 use FC\Actions\ViewConnectedAccount;
+use FC\User;
 
 class Connect extends AbstractSkill
 {
@@ -34,6 +35,11 @@ class Connect extends AbstractSkill
   public function getInputPlaceholder(): string
   {
     return 'Digite apenas o e-mail usado durante a compra das licenças na FULL.';
+  }
+
+  public function isDefault(): bool
+  {
+    return !User::instance()->isConnected();
   }
 
   public function isAvailable(): bool
