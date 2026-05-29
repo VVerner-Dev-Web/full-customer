@@ -22,7 +22,9 @@ $fs = FileSystem::instance();
       </button>
       <div class="fs-cabecalho__separador"></div>
       <div class="fs-cabecalho__avatar">
-        <img src="<?= get_avatar_url(get_current_user_id()) ?>" alt="Avatar" width="28" height="28" />
+        <a href="https://painel.full.services/?utm_source=fc" target="_blank" rel="noopener noreferrer">
+          <img src="<?= get_avatar_url(get_current_user_id()) ?>" alt="Avatar" width="28" height="28" />
+        </a>
       </div>
     </div>
   </header>
