@@ -14,6 +14,9 @@ $fs = FileSystem::instance();
       </a>
     </div>
     <div class="fs-cabecalho__acoes">
+      <button class="fs-cabecalho__btn-icone fs-cabecalho__btn-icone--tutorial" id="btnTutorial" title="Tutorial">
+        <img src="<?= $fs->getUrl('assets/images/icons/service-bell.svg') ?>" alt="Ajuda" width="20" height="20" />
+      </button>
       <button class="fs-cabecalho__btn-icone" title="Ajuda" data-bs-toggle="offcanvas" data-bs-target="#sidebarAjuda">
         <img src="<?= $fs->getUrl('assets/images/icons/help-circle.svg') ?>" alt="Ajuda" width="20" height="20" />
       </button>

@@ -8,6 +8,7 @@ import { Chat } from "./core/Chat.js";
 import { SkillManager } from "./core/SkillManager.js";
 import { SkillsPage } from "./core/SkillsPage.js";
 import { WelcomeService } from "./core/WelcomeService.js";
+import { Tutorial } from "./core/Tutorial.js";
 import { ActivateProPlugin } from "./middleware/ActivateProPlugin.js";
 import { ConnectionService } from "./middleware/ConnectionService.js";
 import { SimpleSkill } from "./middleware/SimpleSkill.js";
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   UIManager.attach(root);
   WelcomeService.attach(root);
   SkillsPage.attach(root);
+  Tutorial.attach(root);
 
   const activateProMiddleware =
     ActivateProPlugin._middleware.bind(ActivateProPlugin);

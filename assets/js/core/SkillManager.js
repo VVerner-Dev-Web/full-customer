@@ -25,7 +25,7 @@ export const SkillManager = {
 
   _middlewares: [],
 
-  init(root) {
+  async init(root) {
     this._root = root;
 
     this._suggestionsEl = root.querySelector("#copilotSugestoes");
@@ -41,11 +41,16 @@ export const SkillManager = {
     this._bindSkillChange();
     this._bindMenuEvents();
     this._bindInputEvents();
-    this._bindChatSubmit(); // Novo listener para execução!
+    this._bindChatSubmit();
     this._bindSuggestionClick();
     this._bindOutsideClick();
 
-    this._loadAndRenderSkills();
+    await this._loadAndRenderSkills();
+    this._root.dispatchEvent(
+      new CustomEvent("fc/skills/loaded", {
+        detail: { availableSkills: this._skills },
+      }),
+    );
   },
 
   async trigger(skillId, action, msg = "") {
@@ -264,8 +269,6 @@ export const SkillManager = {
   },
 
   _addTag(item) {
-    console.log(item);
-
     if (this.waitingUserPersonalAnswer) {
       return;
     }

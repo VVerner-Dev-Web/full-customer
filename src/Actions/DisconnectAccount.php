@@ -48,7 +48,8 @@ class DisconnectAccount extends AbstractAction
     return new WP_REST_Response([
       'success' => true,
       'message' => 'Conta desconectada com sucesso. Suas ativações e licenças seguem funcionando normalmente.',
-      'terminate' => true
+      'terminate' => true,
+      'reload' => true
     ]);
   }
 }

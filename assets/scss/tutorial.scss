@@ -1,0 +1,119 @@
+/* ============================================================
+   Tematização da Full Services para Shepherd.js (Copilot Tour)
+   ============================================================ */
+/* 1. O Contêiner do Balão (Bubble) */
+.fc-tutorial-theme.shepherd-element {
+  background: #ffffff; /* Branco puro para limpeza e contraste */
+  border-radius: 12px; /* Cantos arredondados suaves como o input box principal */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Sombra suave para flutuação */
+  border: none;
+  z-index: 100000;
+}
+
+/* 2. A Seta */
+.fc-tutorial-theme.shepherd-element[data-popper-placement^=top] .shepherd-arrow::before {
+  background: #ffffff;
+}
+.fc-tutorial-theme.shepherd-element[data-popper-placement^=bottom] .shepherd-arrow::before {
+  background: #ffffff;
+}
+.fc-tutorial-theme.shepherd-element[data-popper-placement^=left] .shepherd-arrow::before {
+  background: #ffffff;
+}
+.fc-tutorial-theme.shepherd-element[data-popper-placement^=right] .shepherd-arrow::before {
+  background: #ffffff;
+}
+
+/* 3. Cabeçalho (Título) */
+.fc-tutorial-theme .shepherd-header {
+  background: #ffffff !important;
+  padding: 20px 24px 10px 24px !important; /* Mais espaço interno */
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fc-tutorial-theme .shepherd-title {
+  color: #111827; /* Preto/Cinza escuro, igual aos textos principais da UI */
+  font-size: 1.125rem; /* ~18px */
+  font-weight: 600; /* Semibold, combinando com o título principal */
+  font-family: inherit; /* Usa a fonte da aplicação */
+  margin: 0;
+}
+/* Ícone de Cancelar (X) */
+.fc-tutorial-theme .shepherd-cancel-icon {
+  color: #a1a1aa; /* Cinza claro suave */
+  transition: color 0.2s ease;
+  font-weight: 300;
+  border: unset;
+  border-radius: 99px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fc-tutorial-theme .shepherd-cancel-icon:hover {
+  color: #ef4444; /* Vermelho suave no hover */
+}
+/* 4. Conteúdo (Texto) */
+.fc-tutorial-theme .shepherd-text {
+  color: #6b7280; /* Cinza médio, igual ao subtítulo da UI */
+  padding: 0 24px 16px 24px;
+  font-size: 0.9375rem; /* ~15px */
+  line-height: 1.6;
+  font-family: inherit;
+}
+/* 5. Rodapé e Botões */
+.fc-tutorial-theme .shepherd-footer {
+  padding: 0 24px 20px 24px;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  justify-content: space-between;
+}
+/* Estilo Base para os Botões */
+.fc-tutorial-theme .shepherd-button {
+  border-radius: 8px; /* Cantos dos botões da UI */
+  font-family: inherit;
+  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  border: unset;
+}
+/* Botão Primário (Proximo/Concluir) - Amarelo da UI */
+.fc-tutorial-theme .shepherd-button:not(.shepherd-button-secondary) {
+  background-color: #ffce00; /* O amarelo vibrante da Full */
+  color: #111827; /* Texto escuro para contraste */
+}
+.fc-tutorial-theme .shepherd-button:not(.shepherd-button-secondary):hover {
+  background-color: #ffda33; /* Amarelo ligeiramente mais claro no hover */
+}
+.fc-tutorial-theme .shepherd-button:not(.shepherd-button-secondary):active {
+  transform: translateY(1px); /* Feedback tátil */
+}
+/* Botão Secundário (Pular Tour/Voltar) - Minimalista */
+.fc-tutorial-theme .shepherd-button.shepherd-button-secondary {
+  background-color: #f3f4f6; /* Cinza muito claro */
+  color: #6b7280; /* Cinza médio */
+}
+.fc-tutorial-theme .shepherd-button.shepherd-button-secondary:hover {
+  background-color: #e5e7eb; /* Cinza um pouco mais escuro no hover */
+  color: #1f2937; /* Texto mais escuro no hover */
+}
+/* 6. Overlay Modal (Escurecimento do Fundo) */
+
+/* O contêiner não pode ter cor de fundo, senão tampa o "buraco" do foco */
+.shepherd-modal-overlay-container {
+  z-index: 9998 !important;
+  background-color: transparent !important; 
+}
+
+/* É aqui que controlamos a cor e escuridão do fundo */
+.shepherd-modal-overlay-container svg path {
+  fill: #000000 !important; /* Cor da máscara (Preto) */
+  fill-opacity: 0.4 !important; /* Nível de escuridão (0.4 é suave e elegante) */
+}
+
+/* Garante que o balão do tour fique ACIMA de tudo */
+.shepherd-element {
+  z-index: 9999 !important; 
+}

@@ -31,7 +31,6 @@ export const SkillsPage = {
                   "fc/chat/ready",
                   () => {
                     SkillManager.trigger(trigger.skill, trigger.prompt);
-                    // console.log("oi?");
                   },
                   { once: true },
                 );

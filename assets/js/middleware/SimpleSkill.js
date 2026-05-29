@@ -29,6 +29,10 @@ export const SimpleSkill = {
           response.success ? "normal" : "error",
           response.terminate === true ? true : false,
         );
+
+        if (response.reload) {
+          setTimeout(() => window.location.reload(), 1500);
+        }
       } catch {
         loading.remove();
         Chat.sendCopilotMessage(

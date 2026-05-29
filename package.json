@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
-    "@fontsource/syne": "^5.2.7"
+    "@fontsource/syne": "^5.2.7",
+    "shepherd.js": "^15.2.2"
   },
   "devDependencies": {
     "sass": "^1.98.0",
