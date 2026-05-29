@@ -4,7 +4,8 @@
   "description": "Dashboard Fullservices",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "release": "bash build.sh"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
