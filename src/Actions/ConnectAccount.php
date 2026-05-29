@@ -70,14 +70,8 @@ class ConnectAccount extends AbstractAction
   {
     define('FULL_CUSTOMER_CONNECTION_EMAIL', $email);
 
-    $exists = fcDashboardAPI('GET', 'account/me');
-    $success = $exists['success'] && $exists['data']['me']['site']['dashboardUrl'];
-
-    if (!$success) {
-      $connected = fcDashboardAPI('POST', 'account/connect');
-      error_log(print_r($connected, true));
-      $success = $connected['success'] && $connected['data']['success'];
-    }
+    $connected = fcDashboardAPI('POST', 'account/connect');
+    $success = $connected['success'] && $connected['data']['success'];
 
     if ($success) {
       User::instance()->setConnectionEmail($email);
@@ -85,7 +79,7 @@ class ConnectAccount extends AbstractAction
 
     return [
       'success' => $success,
-      'data'    => isset($connected) ? $connected['data'] : $exists['data']
+      'data'    => $connected['data']
     ];
   }
 }
