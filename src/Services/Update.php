@@ -3,7 +3,6 @@
 namespace FC\Services;
 
 use FC\FileSystem;
-use FC\PluginRepository;
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 class Update
@@ -15,10 +14,12 @@ class Update
 
   public function initiate(): void
   {
-    $repo = new PluginRepository();
+    $data = fcDashboardAPI('GET', 'plugin-repository/updates');
+    $plugins = $data['success'] ? $data['data'] : [];
+
     $fs = FileSystem::instance();
 
-    foreach ($repo->getPlugins() as $plugin) {
+    foreach ($plugins as $plugin) {
       $path = trailingslashit(WP_PLUGIN_DIR) . $plugin['plugin'];
 
       if ($fs->isFile($path)) {
