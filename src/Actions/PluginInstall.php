@@ -58,11 +58,19 @@ class PluginInstall extends AbstractAction
       ]);
     }
 
-    if (is_plugin_active($plugin['plugin'])) {
-      return new WP_REST_Response([
-        'success' => true,
-        'error' => 'Plugin ja ativado, podemos continuar rapidamente'
-      ]);
+    $localPluginPath = trailingslashit(WP_PLUGIN_DIR) .  '---' . $plugin['plugin'];
+    if ($fs->isFile($localPluginPath)) {
+      $localPluginData = get_plugin_data($localPluginPath, false, true);
+
+      if (
+        version_compare($localPluginData['Version'], $plugin['version'], '>=')
+        && is_plugin_active($plugin['plugin'])
+      ) {
+        return new WP_REST_Response([
+          'success' => true,
+          'error' => 'Plugin ja ativado, podemos continuar rapidamente'
+        ]);
+      }
     }
 
     ExecutionStatus::updateState($pid, 'Verificando dependências...');
