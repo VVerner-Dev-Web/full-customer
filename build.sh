@@ -2,32 +2,43 @@
 
 echo "🚀 Iniciando o build do plugin..."
 
+# (Opcional, mas recomendado) Garantir que pacotes node existam
+echo "📦 Instalando dependências Node..."
+npm install
+
 # 1. Compilar os assets do Vite
 echo "📦 Compilando assets..."
 npm run build
 
 # 2. Gerar a pasta vendor otimizada para produção
-echo "🐘 Instalando dependências PHP..."
+echo "🐘 Instalando dependências PHP (Sem pacotes de dev)..."
 composer install --no-dev --optimize-autoloader
 
 # 3. Criar uma pasta temporária para montar o plugin
 echo "📁 Criando estrutura temporária..."
 rm -rf temp_build
 mkdir -p temp_build/full-customer
+mkdir -p temp_build/full-customer/assets
 
-# 4. Usar o Git para copiar os arquivos do projeto (respeitando o .gitattributes)
-# O tar vai extrair o conteúdo do git archive direto para a pasta temporária
+# 4. Usar o Git para copiar os arquivos base (respeitando o .gitattributes)
 git archive HEAD | tar -x -C temp_build/full-customer
 
-# 5. Copiar a pasta vendor (que o git ignorou) para dentro do plugin
-echo "🚚 Copiando pasta vendor..."
+# 5. Copiar os diretórios ignorados pelo Git, mas necessários em produção
+echo "🚚 Copiando vendor e assets compilados..."
 cp -r vendor temp_build/full-customer/
+cp -r assets/dist temp_build/full-customer/assets/ # 🔥 CORREÇÃO PRINCIPAL AQUI
 
-# 6. Gerar o arquivo .zip final (Versão Windows/PowerShell)
+# 6. Gerar o arquivo .zip final 
 echo "🗜️ Gerando full-customer.zip..."
-powershell.exe -nologo -noprofile -command "Compress-Archive -Path temp_build\full-customer -DestinationPath full-customer.zip -Force"
+cd temp_build
+npx bestzip ../full-customer.zip full-customer/
+cd ..
 
 # 7. Limpar a pasta temporária
 rm -rf temp_build
+
+# 8. Restaurar estado de dev do Composer
+echo "🔄 Restaurando ambiente de desenvolvimento PHP..."
+composer install --quiet
 
 echo "✅ Build concluído! Arquivo full-customer.zip gerado com sucesso."
