@@ -16,6 +16,10 @@ defined('ABSPATH') || exit;
  */
 
 if (!defined('FULL_CUSTOMER_VERSION')) {
+  define('FULL_CUSTOMER_FILE', __FILE__);
+  define('FULL_CUSTOMER_PATH', __DIR__);
+  define('FULL_CUSTOMER_REST_NAMESPACE', 'fc/v1');
+
   if (file_exists(FULL_CUSTOMER_PATH . '/dev.php')) {
     require_once FULL_CUSTOMER_PATH . '/dev.php';
   }
@@ -25,10 +29,6 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
   }
 
   define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.0');
-  define('FULL_CUSTOMER_FILE', __FILE__);
-  define('FULL_CUSTOMER_PATH', __DIR__);
-  define('FULL_CUSTOMER_REST_NAMESPACE', 'fc/v1');
-
   define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
   define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai' : FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
 
