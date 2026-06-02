@@ -11,6 +11,7 @@
 /.todo export-ignore
 /.vscode export-ignore
 /.editorconfig export-ignore
+/build.sh export-ignore
 
 # EXCLUI O VILÃO PRINCIPAL
 /node_modules export-ignore
