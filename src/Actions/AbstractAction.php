@@ -33,6 +33,11 @@ abstract class AbstractAction
     return !empty($this->inShellActions());
   }
 
+  public function showInActionsDropdown(): bool
+  {
+    return true;
+  }
+
   public function inShellActions(): array
   {
     return [];
@@ -53,7 +58,8 @@ abstract class AbstractAction
       'isAvailable' => $this->isAvailable(),
       'restRoute' => $this->getRestRoute(),
       'restMethod' => $this->getRestMethod(),
-      'simpleRest' => true
+      'simpleRest' => true,
+      'showInActionsDropdown' => $this->showInActionsDropdown(),
     ];
   }
 }

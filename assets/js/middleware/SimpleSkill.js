@@ -19,7 +19,10 @@ export const SimpleSkill = {
       try {
         const method = action.restMethod.toLowerCase();
 
-        const response = await ApiService[method]("/" + action.restRoute);
+        const response = await ApiService[method](
+          "/" + action.restRoute,
+          action.extraProps || {},
+        );
 
         loading.remove();
 
@@ -28,6 +31,7 @@ export const SimpleSkill = {
             "Ops, algo deu errado. Por favor, tente novamente.",
           response.success ? "normal" : "error",
           response.terminate === true ? true : false,
+          response.actions || [],
         );
 
         if (response.reload) {

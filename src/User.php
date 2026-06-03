@@ -64,7 +64,7 @@ class User
     return $this->user->has_cap('manage_options');
   }
 
-  private function getMeta(string $key): mixed
+  private function getMeta(string $key)
   {
     if (!$this->loggedIn) {
       return null;
@@ -74,10 +74,24 @@ class User
     return $value !== '' ? $value : null;
   }
 
-  private function setMeta(string $key, mixed $value): void
+  private function setMeta(string $key, $value): void
   {
     if ($this->loggedIn) {
       update_user_meta($this->id, 'fc/' . $key, $value);
     }
+  }
+
+  public function getCurrentCookies(): string
+  {
+    $cookies = [];
+    foreach ($_COOKIE as $name => $value) {
+      $cookies[] = [
+        'name'  => (string) $name,
+        'value' => (string) $value,
+        'domain' => $_SERVER['HTTP_HOST'],
+        'path'   => '/'
+      ];
+    }
+    return base64_encode(wp_json_encode($cookies));
   }
 }

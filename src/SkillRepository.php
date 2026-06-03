@@ -35,7 +35,7 @@ final class SkillRepository
         'description' => $skill->getDescription(),
         'icon' => FileSystem::instance()->getUrl($skill->getIcon()),
         'inputPlaceholder' => $skill->getInputPlaceholder(),
-        'isAvailable' => $skill->isAvailable(),
+        'isAvailable' => $skill->isAvailable()
       ];
     }
 

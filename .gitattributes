@@ -1,8 +1,6 @@
-# Exclui o próprio arquivo de atributos e gitignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 
-# Exclui arquivos de configuração de dependências
 /package.json export-ignore
 /package-lock.json export-ignore
 /vite.config.js export-ignore
@@ -12,14 +10,13 @@
 /.vscode export-ignore
 /.editorconfig export-ignore
 /build.sh export-ignore
+/phpcs.xml export-ignore
+/phpstan.neon export-ignore
 
-# EXCLUI O VILÃO PRINCIPAL
 /node_modules export-ignore
 
-# Exclui os sources crus, já que o Vite mandou o código final para assets/dist/
 /assets/js export-ignore
 /assets/scss export-ignore
 
-# Se você usar arquivos de ambiente ou editores
 /.env export-ignore
 /.vscode export-ignore

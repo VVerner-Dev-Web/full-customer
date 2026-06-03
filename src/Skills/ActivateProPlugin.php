@@ -4,6 +4,7 @@ namespace FC\Skills;
 
 use FC\Actions\PluginActivationFactory;
 use FC\Actions\PluginActivationManager;
+use FC\Actions\PluginReactivate;
 use FC\User;
 
 class ActivateProPlugin extends AbstractSkill
@@ -64,11 +65,25 @@ class ActivateProPlugin extends AbstractSkill
   {
     $data = fcDashboardAPI('GET', 'plugin-repository/all');
     $plugins = $data['success'] ? $data['data'] : [];
+    $actions = [];
 
-    return array_map(
-      fn($plugin) =>
-      isset($plugin['activation']) && $plugin['activation']['id'] > 0 ? new PluginActivationManager($plugin) : new PluginActivationFactory($plugin),
-      $plugins
-    );
+    foreach ($plugins as $plugin) {
+      if (!isset($plugin['activation']) || $plugin['activation']['id'] === 0) {
+        $actions[] = new PluginActivationFactory($plugin);
+        continue;
+      }
+
+      $actions[] = new PluginActivationManager($plugin);
+
+      if ($plugin['activation']['status'] === 'success') {
+        $actions[] = new PluginReactivate($plugin);
+      }
+
+      if ($plugin['activation']['status'] === 'expired') {
+        // $actions[] = new PluginReactivate($plugin);
+      }
+    }
+
+    return $actions;
   }
 }

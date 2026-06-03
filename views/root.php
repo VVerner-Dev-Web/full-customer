@@ -77,12 +77,13 @@ $fs = FileSystem::instance();
           <span class="fs-chat__autor-nome">Copilot</span>
         </div>
         <div class="fs-chat__content fs-chat__texto"></div>
+        <div class="fs-chat-acoes"></div>
       </div>
     </div>
   </template>
 
   <template id="chat-loading">
-    <div class="fs-chat__msg fs-chat__msg--copilot  ">
+    <div class="fs-chat__msg fs-chat__msg--copilot">
       <div class="fs-chat__balao">
         <div class="fs-chat__autor">
           <span class="fs-chat__autor-icone">

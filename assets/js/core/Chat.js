@@ -60,7 +60,12 @@ export const Chat = {
     }, 1500);
   },
 
-  sendCopilotMessage(text, status = "normal", isTerminator = false) {
+  sendCopilotMessage(
+    text,
+    status = "normal",
+    isTerminator = false,
+    actions = [],
+  ) {
     this.root.classList.add("chating");
 
     const templateMap = {
@@ -69,10 +74,17 @@ export const Chat = {
       normal: this._templates.copilot,
     };
 
-    this._appendTemplate(templateMap[status] ?? this._templates.copilot, text);
+    const message = this._appendTemplate(
+      templateMap[status] ?? this._templates.copilot,
+      text,
+    );
 
     if (isTerminator) {
       this.root.querySelector(".fs-cartao-acao")?.remove();
+    }
+
+    if (actions.length && message) {
+      this._renderActions(message, actions);
     }
   },
 
@@ -107,6 +119,17 @@ export const Chat = {
     sendBtn.replaceWith(this.button);
 
     this._bindInputEvents();
+
+    this.container.addEventListener("click", (e) => {
+      const actionBtn = e.target.closest(".btn-chat-action");
+      if (!actionBtn) return;
+
+      const lastMessage = this.container.lastElementChild;
+      if (lastMessage && lastMessage.contains(actionBtn)) {
+        e.preventDefault();
+        this._emit("fc/chat/action", { action: actionBtn.dataset.action });
+      }
+    });
   },
 
   _bindInputEvents() {
@@ -131,6 +154,26 @@ export const Chat = {
     clone.querySelector(".fs-chat__content").innerHTML = content;
     this.container.appendChild(clone);
     this._scrollToBottom();
+
+    return this.container.lastElementChild;
+  },
+
+  _renderActions(message, actions) {
+    const oldButtons = this.container.querySelectorAll(
+      ".btn-chat-action:not([disabled])",
+    );
+    oldButtons.forEach((btn) => (btn.disabled = true));
+
+    const actionContainer = message.querySelector(".fs-chat-acoes");
+
+    if (!actionContainer) return;
+
+    actionContainer.innerHTML = "";
+
+    for (const { action, label } of actions) {
+      const html = `<button class="btn-chat-action" data-action="${action}">${label}</button>`;
+      actionContainer.insertAdjacentHTML("beforeend", html);
+    }
   },
 
   _scrollToBottom() {

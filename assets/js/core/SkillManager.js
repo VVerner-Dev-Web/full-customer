@@ -44,6 +44,7 @@ export const SkillManager = {
     this._bindChatSubmit();
     this._bindSuggestionClick();
     this._bindOutsideClick();
+    this._bindActions();
 
     await this._loadAndRenderSkills();
     this._root.dispatchEvent(
@@ -232,7 +233,30 @@ export const SkillManager = {
     });
   },
 
+  _bindActions() {
+    this._root.addEventListener("fc/chat/action", async ({ detail }) => {
+      const { action } = detail;
+
+      if (action === "help") {
+        this._showSidebar();
+        return;
+      }
+
+      const actionItem = this._activeSkill.actions.find((p) => p.id === action);
+
+      this.trigger(this._activeSkill.id, actionItem);
+    });
+  },
+
   // ─── Lógica de UI (Tags e Sugestões Genéricas) ────────────
+
+  _showSidebar() {
+    const offcanvasElement = document.getElementById("sidebarAjuda");
+    const bsOffcanvas =
+      bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+
+    bsOffcanvas.show();
+  },
 
   _filterSuggestions() {
     const query = Chat.input.value.trim().toLowerCase();
@@ -251,7 +275,9 @@ export const SkillManager = {
       return;
     }
 
-    this._suggestionsEl.innerHTML = items
+    const available = items.filter((item) => item.showInActionsDropdown);
+
+    this._suggestionsEl.innerHTML = available
       .map(
         (item) => `
         <div class="fs-copilot-sugestao" data-id="${item.id}">

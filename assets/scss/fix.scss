@@ -153,3 +153,27 @@
     opacity: .2;
   }
 }
+
+#full-customer-root .btn-chat-action {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  color: #344054;
+  border: 1px solid #E9ECF0;
+
+  &:hover {
+    background: #F2F4F7;
+  }
+}
+
+.fs-chat-acoes {
+ display: flex;
+  gap: 18px
+}

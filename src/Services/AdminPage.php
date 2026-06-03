@@ -52,7 +52,7 @@ class AdminPage
       'wpPluginsUrl' => admin_url('plugins.php'),
       'skillsRepository' => SkillRepository::instance()->toArray(),
       'starterSkill' => User::instance()->isConnected() ? ActivateProPlugin::ID : Connect::ID,
-      'authorizationCookies' => base64_encode(wp_json_encode($this->getCurrentCookies())),
+      'authorizationCookies' => User::instance()->getCurrentCookies(),
     ]);
 
     echo '</script>';
@@ -84,7 +84,7 @@ class AdminPage
       wp_enqueue_script_module('vite-client', 'http://localhost:5173/@vite/client', [], null);
 
       wp_enqueue_style('fc-main', $this->getViteAssetUrl('assets/scss/main.scss'), [], null);
-      wp_enqueue_script_module('fc-app', $this->getViteAssetUrl('assets/js/app.js'), ['vite-client'], null);
+      wp_enqueue_script_module('fc-app', $this->getViteAssetUrl('assets/js/app.js'), [], null);
     } else {
       wp_enqueue_style('fc-main', $this->getViteAssetUrl('assets/scss/main.scss'), [], FULL_CUSTOMER_VERSION);
       wp_enqueue_script_module('fc-app', $this->getViteAssetUrl('assets/js/app.js'), [], FULL_CUSTOMER_VERSION);
@@ -94,19 +94,5 @@ class AdminPage
   public function display(): void
   {
     FileSystem::instance()->include('views/root.php');
-  }
-
-  private function getCurrentCookies(): array
-  {
-    $cookies = [];
-    foreach ($_COOKIE as $name => $value) {
-      $cookies[] = [
-        'name'  => (string) $name,
-        'value' => (string) $value,
-        'domain' => $_SERVER['HTTP_HOST'],
-        'path'   => '/'
-      ];
-    }
-    return $cookies;
   }
 }

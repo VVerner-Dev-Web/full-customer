@@ -19,5 +19,17 @@
       "name": "vverner",
       "email": "contato@vverner.com"
     }
-  ]
+  ],
+  "require-dev": {
+    "phpstan/phpstan": "^2.2",
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "squizlabs/php_codesniffer": "^3.13",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.2"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
 }

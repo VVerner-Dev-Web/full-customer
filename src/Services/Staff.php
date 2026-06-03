@@ -75,7 +75,7 @@ class Staff
       wp_enqueue_script_module('vite-client', 'http://localhost:5173/@vite/client', [], null);
 
       wp_enqueue_style('fc-staff', $this->getViteAssetUrl('assets/scss/staff.scss'), [], null);
-      wp_enqueue_script_module('fc-staff', $this->getViteAssetUrl('assets/js/staff.js'), ['vite-client'], null);
+      wp_enqueue_script_module('fc-staff', $this->getViteAssetUrl('assets/js/staff.js'), [], null);
     } else {
       wp_enqueue_style('fc-staff', $this->getViteAssetUrl('assets/scss/staff.scss'), [], FULL_CUSTOMER_VERSION);
       wp_enqueue_script_module('fc-staff', $this->getViteAssetUrl('assets/js/staff.js'), [], FULL_CUSTOMER_VERSION);

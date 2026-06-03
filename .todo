@@ -3,3 +3,7 @@ Para zipar:
 npm run build
 composer install --no-dev --optimize-autoloader
 git archive --format=zip --prefix=full-customer/ HEAD -o full-customer.zip
+
+==
+
+php vendor/bin/phpstan analyse

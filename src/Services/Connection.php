@@ -50,7 +50,7 @@ class Connection
     return $meta;
   }
 
-  private function getConnectionToken(): ?string
+  private function getConnectionToken(): string
   {
     $user = User::instance();
     $anon = fcGetAnonymousUserConnection();
