@@ -5,6 +5,8 @@
   </div>
 
   <form class="fsm-body" method="dialog">
+    <input type="search" id="fsm-search" autocomplete="off" placeholder="Buscar plugins">
+
     <div class="fsm-repository">
     </div>
 

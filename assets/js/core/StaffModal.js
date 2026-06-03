@@ -34,6 +34,18 @@ export const StaffModal = {
       }
     });
 
+    this.dialog.querySelector("#fsm-search").addEventListener("input", (e) => {
+      const query = e.target.value;
+
+      this.dialog.querySelectorAll(".fsm-item").forEach((item) => {
+        if (item.textContent.toLowerCase().includes(query.toLowerCase())) {
+          item.style.display = "block";
+        } else {
+          item.style.display = "none";
+        }
+      });
+    });
+
     // Escutar abertura para carregar plugins
     document.addEventListener("fs/modal/opened", () => this.loadRepository());
 
