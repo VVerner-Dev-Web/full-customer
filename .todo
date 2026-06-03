@@ -1,9 +1,4 @@
-Para zipar:
-
-npm run build
-composer install --no-dev --optimize-autoloader
-git archive --format=zip --prefix=full-customer/ HEAD -o full-customer.zip
-
-==
+Para testar:
 
 php vendor/bin/phpstan analyse
+php vendor/bin/phpcs
