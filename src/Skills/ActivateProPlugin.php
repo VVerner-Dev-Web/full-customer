@@ -68,6 +68,10 @@ class ActivateProPlugin extends AbstractSkill
     $actions = [];
 
     foreach ($plugins as $plugin) {
+      if (strpos($plugin['plugin'], 'full-customer') !== false) {
+        continue;
+      }
+
       if (!isset($plugin['activation']) || $plugin['activation']['id'] === 0) {
         $actions[] = new PluginActivationFactory($plugin);
         continue;
@@ -80,6 +84,7 @@ class ActivateProPlugin extends AbstractSkill
       }
 
       if ($plugin['activation']['status'] === 'expired') {
+        // TODO: criar renovar
         // $actions[] = new PluginReactivate($plugin);
       }
     }
