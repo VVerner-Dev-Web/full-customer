@@ -4,15 +4,30 @@ namespace FC;
 
 class DashboardAPI
 {
+  private const CACHE_PREFIX    = 'fc_dapi_';
+  private const VERSION_OPTION  = 'fc_dapi_repo_version';
+  private const CACHEABLE_GROUP = 'plugin-repository/';
+
   public function __construct() {}
 
   public function fetch(string $method, string $endpoint, array $payload = []): array
   {
-    $method = strtoupper($method);
-    $url    = FULL_CUSTOMER_API_URL . '/' . ltrim($endpoint, '/');
+    $method   = strtoupper($method);
+    $endpoint = ltrim($endpoint, '/');
+    $url      = FULL_CUSTOMER_API_URL . '/' . $endpoint;
 
     if ($method === 'GET' && !empty($payload)) {
       $url = add_query_arg($payload, $url);
+    }
+
+    $cacheKey = $this->isCacheable($method, $endpoint) ? $this->cacheKey($url) : null;
+
+    if ($cacheKey !== null) {
+      $cached = get_transient($cacheKey);
+
+      if ($cached !== false) {
+        return $cached;
+      }
     }
 
     $args = [
@@ -48,10 +63,41 @@ class DashboardAPI
       ];
     }
 
-    return [
+    $result = [
       'success' => true,
       'status'  => $code,
       'data'    => $body
     ];
+
+    if ($cacheKey !== null) {
+      set_transient($cacheKey, $result, 6 * HOUR_IN_SECONDS);
+    }
+
+    if ($method !== 'GET' && strpos($endpoint, self::CACHEABLE_GROUP) === 0) {
+      $this->flushRepositoryCache();
+    }
+
+    return $result;
+  }
+
+  private function isCacheable(string $method, string $endpoint): bool
+  {
+    return
+      $method === 'GET' &&
+      strpos($endpoint, self::CACHEABLE_GROUP) === 0 &&
+      strpos($endpoint, 'updates') === false;
+  }
+
+  private function cacheKey(string $url): string
+  {
+    $version = (int) get_option(self::VERSION_OPTION, 1);
+
+    return self::CACHE_PREFIX . $version . '_' . md5($url);
+  }
+
+  private function flushRepositoryCache(): void
+  {
+    $version = (int) get_option(self::VERSION_OPTION, 1);
+    update_option(self::VERSION_OPTION, $version + 1, false);
   }
 }

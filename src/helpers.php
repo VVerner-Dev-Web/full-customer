@@ -33,9 +33,13 @@ function fcRegisterRestRoute(string $method, string $route, callable $callback, 
 
 function fcGetAnonymousUserConnection(): ?array
 {
-  global $wpdb;
+  static $data = false;
 
-  $data = $wpdb->get_row("SELECT user_id, meta_value as connection_email FROM {$wpdb->usermeta} WHERE meta_key = 'fc/connection-email' AND meta_value != '' LIMIT 1", ARRAY_A);
+  if ($data === false) {
+    global $wpdb;
+    $data = $wpdb->get_row("SELECT user_id, meta_value as connection_email FROM {$wpdb->usermeta} WHERE meta_key = 'fc/connection-email' AND meta_value != '' LIMIT 1", ARRAY_A);
+    $data =  is_array($data) && $data ? $data : null;
+  }
 
-  return is_array($data) && $data ? $data : null;
+  return $data;
 }

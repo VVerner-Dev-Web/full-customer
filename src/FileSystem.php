@@ -84,6 +84,12 @@ final class FileSystem
     return $this->core()->is_dir($fulllPath);
   }
 
+  public function modifiedTime(string $relativePath): int
+  {
+    $fulllPath = $this->resolvePath($relativePath);
+    return $this->core()->mtime($fulllPath);
+  }
+
   private function core(): WP_Filesystem_Base
   {
     global $wp_filesystem;

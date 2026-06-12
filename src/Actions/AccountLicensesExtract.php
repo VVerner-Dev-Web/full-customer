@@ -2,7 +2,6 @@
 
 namespace FC\Actions;
 
-use FC\User;
 use WP_REST_Request;
 use WP_REST_Response;
 

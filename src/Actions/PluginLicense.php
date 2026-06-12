@@ -62,6 +62,8 @@ class PluginLicense extends AbstractAction
 
     ExecutionStatus::deleteState($pid);
 
+    do_action('fc/updates/invalidate');
+
     return new WP_REST_Response([
       'success' => $activate['success'],
       'error' => isset($activate['message']) && $activate['message'] ? $activate['message'] : '',

@@ -50,6 +50,8 @@ class PluginActivate extends AbstractAction
 
     ExecutionStatus::deleteState($pid);
 
+    do_action('fc/updates/invalidate');
+
     return new WP_REST_Response([]);
   }
 }
