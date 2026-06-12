@@ -25,14 +25,14 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
   }
 
   if (!defined('FULL_CUSTOMER_DEV')) {
-    define('FULL_CUSTOMER_DEV', strpos(home_url(), '.dev') !== false);
+    define('FULL_CUSTOMER_DEV', false);
   }
 
   define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.3');
   define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
   define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai' : FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
 
-  require_once 'vendor/autoload.php';
+  require_once FULL_CUSTOMER_PATH . '/vendor/autoload.php';
 
   (new Root)->init();
 }

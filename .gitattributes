@@ -7,14 +7,12 @@
 /composer.json export-ignore
 /composer.lock export-ignore
 /.todo export-ignore
-/.vscode export-ignore
 /.editorconfig export-ignore
 /build.sh export-ignore
 /phpcs.xml export-ignore
 /phpstan.neon export-ignore
 
 /node_modules export-ignore
-
 /assets/js export-ignore
 /assets/scss export-ignore
 

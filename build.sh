@@ -4,7 +4,7 @@ echo "🚀 Iniciando o build do plugin..."
 
 # (Opcional, mas recomendado) Garantir que pacotes node existam
 echo "📦 Instalando dependências Node..."
-npm install
+npm ci
 
 # 1. Compilar os assets do Vite
 echo "📦 Compilando assets..."

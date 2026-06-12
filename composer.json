@@ -2,8 +2,8 @@
   "name": "full/full-customer",
   "description": "Conecta seu site ao painel da FULL e libera o poder de extensões avançadas para segurança, conteúdo dinâmico e gestão otimizada.",
   "type": "plugin",
-  "license": "GPL v3 or later",
-  "version": "4.0.0",
+  "license": "GPL-3.0-or-later",
+  "version": "4.0.3",
   "autoload": {
     "psr-4": {
       "FC\\": "src/"
