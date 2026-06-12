@@ -44,7 +44,17 @@ class ViewConnectedAccount extends AbstractAction
   {
     return new WP_REST_Response([
       'success' => true,
-      'message' => 'Atualmente você está conectado com a conta <strong>'  . User::instance()->getConnectionEmail() . '</strong>.'
+      'message' => 'Atualmente você está conectado com a conta <strong>'  . User::instance()->getConnectionEmail() . '</strong>.',
+      'actions' => [
+        [
+          'label' => 'Voltar à home',
+          'action' => 'restart-chat',
+        ],
+        [
+          'label' => 'Ativar licenças',
+          'action' => 'skill.activateProPlugin',
+        ]
+      ]
     ]);
   }
 }

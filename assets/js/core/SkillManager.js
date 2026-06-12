@@ -54,7 +54,7 @@ export const SkillManager = {
     );
   },
 
-  async trigger(skillId, action, msg = "") {
+  async trigger(skillId, action = "", msg = "") {
     const skill = this._skills.find((s) => s.id == skillId);
     if (!skill) {
       return;
@@ -79,10 +79,14 @@ export const SkillManager = {
 
     this._clearUI(true);
 
-    this._selectedItems.push(action);
-    Chat.sendUserMessage(`Executar ação: ${action.name}`);
+    if (action) {
+      this._selectedItems.push(action);
+      Chat.sendUserMessage(`Executar ação: ${action.name}`);
+    }
 
-    await this._execute(msg);
+    if (msg) {
+      await this._execute(msg);
+    }
   },
 
   // ─── Renderização do Menu de Skills ───────────────────────

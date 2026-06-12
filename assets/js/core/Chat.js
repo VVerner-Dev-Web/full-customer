@@ -1,3 +1,5 @@
+import { SkillManager } from "./SkillManager";
+
 /**
  * Chat (core)
  * Ponto central da interface de chat.
@@ -137,7 +139,30 @@ export const Chat = {
       const lastMessage = this.container.lastElementChild;
       if (lastMessage && lastMessage.contains(actionBtn)) {
         e.preventDefault();
-        this._emit("fc/chat/action", { action: actionBtn.dataset.action });
+
+        const action = actionBtn.dataset.action;
+
+        if (action === "restart-chat") {
+          return window._refreshUI([
+            {
+              fragment: "DashboardFullPage",
+              callback: (html) => {
+                document.querySelector("app").innerHTML = html;
+              },
+            },
+          ]);
+        }
+
+        if (action.includes("skill.")) {
+          const skillId = action.split(".")[1];
+          SkillManager.trigger(skillId);
+          setTimeout(() => {
+            this.input.focus();
+          });
+          return;
+        }
+
+        this._emit("fc/chat/action", { action });
       }
     });
   },
