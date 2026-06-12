@@ -9,7 +9,7 @@ class AccountLicensesExtract extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/connector-fill.svg';
+    return 'assets/images/icons/archive-drawer-line.svg';
   }
 
   public function getName(): string

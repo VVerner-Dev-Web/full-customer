@@ -10,7 +10,7 @@ class ConnectAccount extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/connector-fill.svg';
+    return 'assets/images/icons/link-m.svg';
   }
 
   public function getName(): string

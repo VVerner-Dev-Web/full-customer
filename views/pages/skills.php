@@ -45,7 +45,7 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
               data-bs-target="#pane-<?= $skill::ID ?>"
               type="button"
               role="tab">
-              <img src="<?= $fs->getUrl($skill->getIcon()) ?>" alt="<?= $skill->getName() ?>" width="20" height="20" />
+              <img src="<?= $fs->getUrl($skill->getIcon()) ?>" width="20" height="20" />
               <?= $skill->getName() ?>
               <?php if ($skill->isSoon()) : ?>
                 <span class="fs-emblema fs-emblema--aviso">Em breve</span>

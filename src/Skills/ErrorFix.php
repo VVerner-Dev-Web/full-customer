@@ -2,6 +2,8 @@
 
 namespace FC\Skills;
 
+use FC\Actions\CleanUpCache;
+
 class ErrorFix extends AbstractSkill
 {
   const ID = 'errorFix';
@@ -48,6 +50,13 @@ class ErrorFix extends AbstractSkill
       'Correção com um clique',
       'Biblioteca de 200+ erros conhecidos',
       'Reversão segura se a correção falhar',
+    ];
+  }
+
+  public function actions(): array
+  {
+    return [
+      new CleanUpCache
     ];
   }
 }
