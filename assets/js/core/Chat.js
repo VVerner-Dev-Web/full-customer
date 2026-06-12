@@ -179,8 +179,14 @@ export const Chat = {
   },
 
   _emitSubmit() {
-    const msg = this.input.value.trim();
-    this._emit("fc/chat/submit", { message: msg });
+    if (this._submitTimeout) {
+      clearTimeout(this._submitTimeout);
+    }
+
+    this._submitTimeout = setTimeout(() => {
+      const msg = this.input.value.trim();
+      this._emit("fc/chat/submit", { message: msg });
+    }, 150);
   },
 
   _appendTemplate(template, content) {
