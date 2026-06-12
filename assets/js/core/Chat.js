@@ -38,6 +38,16 @@ export const Chat = {
 
   toggleSubmitButton(isDisabled) {
     this.button?.classList.toggle("desabilitado", isDisabled);
+
+    if (isDisabled) {
+      this.button?.setAttribute("disabled", "disabled");
+      this.button?.setAttribute("tabindex", "-1");
+      this.button?.classList.remove("ativo");
+    } else {
+      this.button?.removeAttribute("disabled");
+      this.button?.removeAttribute("tabindex");
+      this.button?.classList.add("ativo");
+    }
   },
 
   // ─── Mensagens ────────────────────────────────────────────
