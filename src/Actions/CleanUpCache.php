@@ -2,6 +2,7 @@
 
 namespace FC\Actions;
 
+use FC\DashboardAPI;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -42,11 +43,14 @@ class CleanUpCache extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
+    do_action('fc/updates/invalidate');
 
+    $version = get_option(DashboardAPI::VERSION_OPTION);
+    update_option(DashboardAPI::VERSION_OPTION, $version + 1, false);
 
     return new WP_REST_Response([
       'success' => true,
-      'message' => 'Pronto, tudo ok, o cache foi limpo com sucesso.',
+      'message' => 'Cache de atualizações e da API limpos com sucesso!',
     ]);
   }
 }

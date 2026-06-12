@@ -4,8 +4,9 @@ namespace FC;
 
 class DashboardAPI
 {
+  public const VERSION_OPTION  = 'fc_dapi_repo_version';
+
   private const CACHE_PREFIX    = 'fc_dapi_';
-  private const VERSION_OPTION  = 'fc_dapi_repo_version';
   private const CACHEABLE_GROUP = 'plugin-repository/';
 
   public function __construct() {}
