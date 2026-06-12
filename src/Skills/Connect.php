@@ -14,12 +14,18 @@ class Connect extends AbstractSkill
 
   public function getName(): string
   {
-    return 'Conectar';
+    $connected = User::instance()->isConnected();
+    $html = 'Conta FULL. <span class="badge %s">%s</span>';
+    return sprintf(
+      $html,
+      $connected ? 'bg-primary bg-opacity-75' : 'bg-danger bg-opacity-75',
+      $connected ? 'Conectado' : 'Desconectado'
+    );
   }
 
   public function getShortDescription(): string
   {
-    return 'Conectar com o Copilot da FULL.';
+    return 'Skills para conexão e gerenciamento de sua conta.';
   }
 
   public function getDescription(): string

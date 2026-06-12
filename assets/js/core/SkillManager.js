@@ -114,11 +114,11 @@ export const SkillManager = {
           return `
           <div data-skill="${skill.id}" class="fs-skill-chip__item ${stateClass} ${isAtivoClass}">
             <div class="fs-skill-chip__item-esq">
-              <img src="${skill.imageUrl}" alt="${skill.name}" width="16" height="16" />
-              <div>
+              <div class="fs-skill-chip__item-header">
+                <img src="${skill.imageUrl}" alt="Ícone da skill" width="16" height="16" />
                 <span class="fs-skill-chip__item-nome">${skill.name}</span>
-                <span class="fs-skill-chip__item-desc">${skill.shortDescription}</span>
               </div>
+              <span class="fs-skill-chip__item-desc">${skill.shortDescription}</span>
             </div>
             ${badgeHtml}
           </div>`;
@@ -137,10 +137,9 @@ export const SkillManager = {
   _updateTriggerVisuals(skill) {
     if (this._triggerIconEl) {
       this._triggerIconEl.src = skill.imageUrl;
-      this._triggerIconEl.alt = skill.name;
     }
     if (this._triggerNameEl) {
-      this._triggerNameEl.textContent = skill.name;
+      this._triggerNameEl.innerHTML = skill.name;
     }
   },
 
@@ -364,6 +363,8 @@ export const SkillManager = {
       );
       return;
     }
+
+    Chat.toggleSubmitButton(true);
 
     if (
       !this.waitingUserPersonalAnswer &&

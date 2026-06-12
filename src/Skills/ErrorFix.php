@@ -8,27 +8,37 @@ class ErrorFix extends AbstractSkill
 
   public function getName(): string
   {
-    return 'Error Auto Fix';
+    return 'Manutenção';
   }
 
   public function getShortDescription(): string
   {
-    return 'Detecte e corrija erros do WordPress';
+    return 'Corrija os erros mais comuns de seu WordPress';
   }
 
   public function getDescription(): string
   {
-    return 'Detecta e corrige automaticamente os erros mais comuns do WordPress — tela branca, conflitos de extensões, erros 500, falhas de banco de dados — sem precisar abrir o terminal ou contatar o suporte.';
+    return 'Detecta e corrige os erros mais comuns do WordPress e da sua conta FULL. — tela branca, conflitos de extensões, erros 500, falhas de banco de dados — sem precisar abrir o terminal ou contatar o suporte.';
   }
 
   public function getIcon(): string
   {
-    return 'assets/images/icons/embreve-errorfix.svg';
+    return 'assets/images/icons/errorfix.svg';
+  }
+
+  public function isAvailable(): bool
+  {
+    return true;
+  }
+
+  public function isSoon(): bool
+  {
+    return false;
   }
 
   public function getInputPlaceholder(): string
   {
-    return '';
+    return 'Clique para selecionar uma ação';
   }
 
   public function getFeaturesList(): array
