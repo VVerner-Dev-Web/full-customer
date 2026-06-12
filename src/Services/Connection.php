@@ -8,16 +8,49 @@ use FC\User;
 
 class Connection
 {
+  const AUTO_CONNECTION_KEY = 'fc/automatic-connection-reponse';
+
   public function __construct()
   {
     register_activation_hook(FULL_CUSTOMER_FILE, [$this, 'autoConnection']);
 
+    add_action('admin_init', [$this, 'watchForSiteUrlChange'], 0);
     add_action('admin_init', [$this, 'autoConnection']);
 
     add_action('admin_notices', [$this, 'notices']);
     add_filter('plugin_row_meta', [$this, 'pluginRowMeta'], 10, 2);
 
     add_filter('http_request_args', [$this, 'filterRequestArgs'], PHP_INT_MAX, 2);
+  }
+
+  public function watchForSiteUrlChange(): void
+  {
+    $user = User::instance();
+
+    if (!$user->isAdmin() || !$user->isConnected()) {
+      return;
+    }
+
+    $current = trailingslashit(home_url());
+    $stored = get_option('fc/siteurl');
+
+    if (!$stored) {
+      update_option('fc/siteurl', $current);
+      $stored = $current;
+    }
+
+    if ($current === $stored) {
+      return;
+    }
+
+    update_option('fc/siteurl', $current);
+
+    $done = (new ConnectAccount())->updateSiteUrl($stored);
+
+    update_option(
+      self::AUTO_CONNECTION_KEY,
+      $done['success'] ? 'url-changed-success' : 'url-changed-error'
+    );
   }
 
   public function filterRequestArgs(array $args, $url): array
@@ -90,7 +123,7 @@ class Connection
     </div>';
 
     if (!$user->isConnected()) {
-      delete_option('fc/automatic-connection');
+      delete_option(self::AUTO_CONNECTION_KEY);
       echo str_replace(
         ['{{cta}}', '{{text}}'],
         ['Conectar site', 'Seu usuário está desconectado. Para aproveitar todos os benefícios da FULL, conecte seu site à sua conta FULL.'],
@@ -99,14 +132,24 @@ class Connection
       return;
     }
 
-    $auto = get_option('fc/automatic-connection');
+    $auto = get_option(self::AUTO_CONNECTION_KEY);
 
     if ($auto) {
-      delete_option('fc/automatic-connection');
+      delete_option(self::AUTO_CONNECTION_KEY);
 
-      $replace = $auto === 'upgrade' ?
-        ['Ver novidades', 'Atualizamos automaticamente sua conexão com o painel da FULL. Aproveite!'] :
-        ['Ativar plugins PRO', 'Conectamos automaticamente seu site ao painel da FULL. Aproveite para ativar seus plugins agora mesmo!'];
+      $replace = ['Ativar plugins PRO', 'Conectamos automaticamente seu site ao painel da FULL. Aproveite para ativar seus plugins agora mesmo!'];
+
+      if ($auto === 'upgrade') {
+        $replace = ['Ver novidades', 'Atualizamos automaticamente sua conexão com o painel da FULL. Aproveite!'];
+      }
+
+      if ($auto === 'url-changed-success') {
+        $replace = ['Reativar plugins', 'Notamos que a url do seu site mudou. Atualizamos automaticamente sua conexão com o painel da FULL. Aproveite!'];
+      }
+
+      if ($auto === 'url-changed-error') {
+        $replace = ['Reconectar site', 'Notamos que a url do seu site mudou, mas não conseguimos atualizar automaticamente sua conexão com o painel da FULL. Por favor, refaça a conexão manualmente.'];
+      }
 
       echo str_replace(['{{cta}}', '{{text}}'], $replace, $message);
       return;
@@ -146,7 +189,7 @@ class Connection
       $done = (new ConnectAccount())->handleConnection($connectionEmail);
 
       if ($done['success']) {
-        update_option('fc/automatic-connection', $connectionMode);
+        update_option(self::AUTO_CONNECTION_KEY, $connectionMode);
       }
     }
   }

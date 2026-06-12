@@ -82,4 +82,16 @@ class ConnectAccount extends AbstractAction
       'data'    => $connected['data']
     ];
   }
+
+  public function updateSiteUrl(string $previousUrl): array
+  {
+    $update = fcDashboardAPI('POST', 'account/update-site-url', [
+      'previousUrl' => $previousUrl
+    ]);
+
+    return [
+      'success' => $update['success'],
+      'data'    => $update['data']
+    ];
+  }
 }
