@@ -63,7 +63,7 @@ class Update
       ];
     }
 
-    $fs->putContents($this->cacheFile, json_encode($updates));
+    $fs->putContents($this->cacheFile, wp_json_encode($updates));
 
     return $updates;
   }

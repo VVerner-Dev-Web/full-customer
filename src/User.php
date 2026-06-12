@@ -88,7 +88,7 @@ class User
       $cookies[] = [
         'name'  => (string) $name,
         'value' => (string) $value,
-        'domain' => $_SERVER['HTTP_HOST'],
+        'domain' => is_array($_SERVER) && isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '',
         'path'   => '/'
       ];
     }

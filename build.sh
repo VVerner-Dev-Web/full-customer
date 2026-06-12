@@ -26,7 +26,7 @@ git archive HEAD | tar -x -C temp_build/full-customer
 # 5. Copiar os diretórios ignorados pelo Git, mas necessários em produção
 echo "🚚 Copiando vendor e assets compilados..."
 cp -r vendor temp_build/full-customer/
-cp -r assets/dist temp_build/full-customer/assets/ # 🔥 CORREÇÃO PRINCIPAL AQUI
+cp -r assets/dist temp_build/full-customer/assets/ 
 
 # 6. Gerar o arquivo .zip final 
 echo "🗜️ Gerando full-customer.zip..."

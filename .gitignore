@@ -5,3 +5,4 @@ assets/dist/*
 conn.ex.json
 full-customer.zip
 .todo
+/reports

@@ -59,7 +59,7 @@ class Staff
       'wpPluginsUrl' => admin_url('plugins.php'),
       'skillsRepository' => SkillRepository::instance()->toArray(),
       'starterSkill' => User::instance()->isConnected() ? ActivateProPlugin::ID : Connect::ID,
-      'authorizationCookies' => base64_encode(wp_json_encode($this->getCurrentCookies())),
+      'authorizationCookies' => User::instance()->getCurrentCookies(),
     ]);
 
     echo '</script>';
@@ -80,19 +80,5 @@ class Staff
       wp_enqueue_style('fc-staff', $this->getViteAssetUrl('assets/scss/staff.scss'), [], FULL_CUSTOMER_VERSION);
       wp_enqueue_script_module('fc-staff', $this->getViteAssetUrl('assets/js/staff.js'), [], FULL_CUSTOMER_VERSION);
     }
-  }
-
-  private function getCurrentCookies(): array
-  {
-    $cookies = [];
-    foreach ($_COOKIE as $name => $value) {
-      $cookies[] = [
-        'name'  => (string) $name,
-        'value' => (string) $value,
-        'domain' => $_SERVER['HTTP_HOST'],
-        'path'   => '/'
-      ];
-    }
-    return $cookies;
   }
 }
