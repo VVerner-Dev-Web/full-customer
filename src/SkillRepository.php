@@ -4,10 +4,8 @@ namespace FC;
 
 use FC\Skills\AbstractSkill;
 use FC\Skills\ActivateProPlugin;
-use FC\Skills\Builder;
 use FC\Skills\Connect;
 use FC\Skills\ErrorFix;
-use FC\Skills\Snippet;
 
 final class SkillRepository
 {
@@ -18,8 +16,6 @@ final class SkillRepository
   {
     $this->skills[Connect::ID] = new Connect();
     $this->skills[ActivateProPlugin::ID] = new ActivateProPlugin();
-    $this->skills[Builder::ID] = new Builder();
-    $this->skills[Snippet::ID] = new Snippet();
     $this->skills[ErrorFix::ID] = new ErrorFix();
   }
 
