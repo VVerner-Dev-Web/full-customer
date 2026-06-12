@@ -34,7 +34,7 @@ class Update
     $fs = FileSystem::instance();
 
     foreach ($this->getUpdates() as $update) {
-      if ($fs->isFile($update['path'])) {
+      if (isset($update['path']) && $update['path'] && $fs->isFile($update['path'])) {
         PucFactory::buildUpdateChecker($update['puc'], $update['path'], $update['slug']);
       }
     }
