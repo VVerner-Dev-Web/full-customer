@@ -28,7 +28,7 @@ export const SimpleSkill = {
 
         Chat.sendCopilotMessage(
           response.message ??
-            "Ops, algo deu errado. Por favor, tente novamente.",
+            "Recebemos sua solicitação, nossa equipe processar sua solicitação. Você receberá um email informando.",
           response.success ? "normal" : "error",
           response.terminate === true ? true : false,
           response.actions || [],
@@ -39,10 +39,7 @@ export const SimpleSkill = {
         }
       } catch {
         loading.remove();
-        Chat.sendCopilotMessage(
-          "Ops, algo deu errado. Por favor, tente novamente.",
-          "error",
-        );
+        Chat.sendCopilotMessage("Erro de conexão. Tente novamente.", "error");
       }
     }
   },
