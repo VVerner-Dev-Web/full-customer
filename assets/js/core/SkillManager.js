@@ -83,9 +83,7 @@ export const SkillManager = {
       Chat.sendUserMessage(`Executar ação: ${action.name}`);
     }
 
-    if (msg) {
-      await this._execute(msg);
-    }
+    await this._execute(msg);
   },
 
   // ─── Renderização do Menu de Skills ───────────────────────
