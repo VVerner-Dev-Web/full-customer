@@ -43,7 +43,6 @@ export const SkillManager = {
     this._bindInputEvents();
     this._bindChatSubmit();
     this._bindSuggestionClick();
-    this._bindOutsideClick();
     this._bindActions();
 
     await this._loadAndRenderSkills();
@@ -205,10 +204,16 @@ export const SkillManager = {
   },
 
   _bindInputEvents() {
-    const handleInput = () => {
-      if (this._activeSkill?.actions) {
+    let debounceTimer;
+
+    const handleInput = (e) => {
+      if (!this._activeSkill?.actions) return;
+
+      clearTimeout(debounceTimer);
+
+      debounceTimer = setTimeout(() => {
         this._filterSuggestions();
-      }
+      }, 150);
     };
 
     Chat.input?.addEventListener("input", handleInput);
@@ -224,15 +229,6 @@ export const SkillManager = {
         (p) => p.id == itemEl.dataset.id,
       );
       if (dataItem) this._addTag(dataItem);
-    });
-  },
-
-  _bindOutsideClick() {
-    document.addEventListener("click", (e) => {
-      if (!this._suggestionsEl?.classList.contains("ativo")) return;
-      const isInside =
-        this._suggestionsEl.contains(e.target) || Chat.input.contains(e.target);
-      if (!isInside) this._suggestionsEl.classList.remove("ativo");
     });
   },
 
@@ -273,28 +269,34 @@ export const SkillManager = {
   },
 
   _renderSuggestions(items, query = "") {
+    const bsDropdown = bootstrap.Dropdown.getOrCreateInstance(Chat.input);
+
     if (!items.length || this.waitingUserPersonalAnswer) {
-      this._suggestionsEl.classList.remove("ativo");
+      bsDropdown.hide();
       return;
     }
 
     const available = items.filter((item) => item.showInActionsDropdown);
 
-    this._suggestionsEl.innerHTML = available
+    const novoHTML = available
       .map(
         (item) => `
-        <div class="fs-copilot-sugestao" data-id="${item.id}">
-          ${item.imageUrl ? `<img class="fs-copilot-sugestao__icone" src="${item.imageUrl}" alt="">` : ""}
+        <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
+          ${item.imageUrl ? `<img class="fs-copilot-sugestao__icone me-3 rounded" src="${item.imageUrl}" alt="" width="32" height="32" style="object-fit: cover;">` : ""}
           <div class="fs-copilot-sugestao__texto">
-            <span class="fs-copilot-sugestao__nome">${this._highlight(item.name, query)}</span>
-            ${item.desc ? `<span class="fs-copilot-sugestao__desc">${item.desc}</span>` : ""}
+            <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
+            ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
           </div>
-        </div>
+        </a>
       `,
       )
       .join("");
 
-    this._suggestionsEl.classList.add("ativo");
+    if (this._suggestionsEl.innerHTML !== novoHTML) {
+      this._suggestionsEl.innerHTML = novoHTML;
+    }
+
+    bsDropdown.show();
   },
 
   _addTag(item) {
@@ -326,7 +328,10 @@ export const SkillManager = {
 
     this._tagsEl.appendChild(tag);
     Chat.input.value = "";
-    this._suggestionsEl.classList.remove("ativo");
+
+    const bsDropdown = bootstrap.Dropdown.getInstance(Chat.input);
+    if (bsDropdown) bsDropdown.hide();
+
     this._syncButtonState();
   },
 
@@ -416,7 +421,8 @@ export const SkillManager = {
     if (this._tagsEl) this._tagsEl.innerHTML = "";
     if (this._suggestionsEl) {
       this._suggestionsEl.innerHTML = "";
-      this._suggestionsEl.classList.remove("ativo");
+      const bsDropdown = bootstrap.Dropdown.getInstance(Chat.input);
+      if (bsDropdown) bsDropdown.hide();
     }
   },
 };

@@ -31,13 +31,22 @@ $starterSkill = $user->isConnected() ? $repo->get('activateProPlugin') : $repo->
     <!-- CARTÃO DE AÇÃO -->
     <div class="fs-cartao-acao ">
       <div class="fs-cartao-acao__interno">
-        <!-- Linha 1: Input com tags multi-select -->
+
         <div class="fs-copilot-input" id="copilotInput">
-          <!-- Tags de plugins selecionados -->
           <div class="fs-copilot-tags" id="copilotTags"></div>
-          <!-- Campo de texto -->
-          <input type="text" id="copilotTexto" class="fs-copilot-input__campo" placeholder="" autocomplete="off" />
-          <div class="fs-copilot-input__sugestoes" id="copilotSugestoes"></div>
+
+          <div class="dropdown w-100">
+            <input
+              type="text"
+              id="copilotTexto"
+              class="fs-copilot-input__campo w-100"
+              placeholder=""
+              autocomplete="off"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="outside" />
+
+            <div class="fs-copilot-input__sugestoes dropdown-menu w-100 shadow-sm mt-1" id="copilotSugestoes"></div>
+          </div>
         </div>
 
         <!-- Feedback de intent -->
