@@ -59,6 +59,7 @@ class Connection
       $args['reject_unsafe_urls'] = !FULL_CUSTOMER_DEV;
       $args['sslverify'] = !FULL_CUSTOMER_DEV;
       $args['headers']['X-Full-Signature'] = $this->getConnectionToken();
+      $args['timeout'] = max(2 * MINUTE_IN_SECONDS, (isset($args['timeout']) ? $args['timeout'] : 0));
     }
 
     return $args;
