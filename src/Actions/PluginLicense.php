@@ -40,7 +40,6 @@ class PluginLicense extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $pid = $request->get_param('processId');
     $slug = $request->get_param('pluginSlug');
 
     $processor = new LocalLicenseProcessor();

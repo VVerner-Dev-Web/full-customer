@@ -7,9 +7,9 @@ php vendor/bin/phpcs
 
 Ativações via rest
 
-🚩 Elementor PRO
-☑️ ACF PRO
-☑️ All-in-One WP Security
+🤖 Elementor PRO
+✅ ACF PRO
+✅ All-in-One WP Security
 ☑️ Astra PRO
 ☑️ CrocoBlock / Jet Engine
 ☑️ Essential Addons
@@ -22,9 +22,3 @@ Ativações via rest
 ☑️ WP Forms
 ☑️ WP Optimize
 ☑️ WP Rocket
-
-===============
-
-install ---> solicita ativação no painel e salva id no transiente
-activate ---> ativa o plugin no wp do cliente
-license ---> roda o bot ou ativação interna (em caso de interna, usar o endpoint point "license" para buscar a chave de licença para não expor todas as nossas chaves)
