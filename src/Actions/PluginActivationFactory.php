@@ -47,7 +47,8 @@ class PluginActivationFactory extends AbstractAction
       'desc' => 'Solicitar nova ativação',
       'simpleRest' => false,
       'extraProps' => [
-        'plugin' => $this->repoPlugin['plugin']
+        'plugin' => $this->repoPlugin['plugin'],
+        'pluginSlug' => $this->repoPlugin['slug']
       ]
     ]);
   }
@@ -55,8 +56,9 @@ class PluginActivationFactory extends AbstractAction
   public function inShellActions(): array
   {
     return [
+      PluginFullActivate::class,
       PluginInstall::class,
-      PluginActivate::class,
+      PluginWordPressActivate::class,
       PluginLicense::class,
       ExecutionStatus::class
     ];

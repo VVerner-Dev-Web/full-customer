@@ -5,7 +5,7 @@ namespace FC\Actions;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class PluginActivate extends AbstractAction
+class PluginWordPressActivate extends AbstractAction
 {
   public function getIcon(): string
   {
@@ -34,24 +34,34 @@ class PluginActivate extends AbstractAction
 
   public function getRestRoute(): string
   {
-    return 'actions/plugins/activate/(?P<processId>[a-zA-Z0-9-]+)';
+    return 'actions/plugins/wordpress-activate/(?P<processId>[a-zA-Z0-9-]+)';
   }
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $pid = $request->get_param('processId');
     $plugin = $request->get_param('plugin');
 
-    ExecutionStatus::updateState($pid, 'Verificando ativação do plugin no WordPress');
-
-    if (!is_plugin_active($plugin)) {
-      activate_plugin($plugin);
+    if (is_plugin_active($plugin)) {
+      return new WP_REST_Response([
+        'success' => true,
+        'message' => 'O plugin já está ativo no site, podemos continuar rapidamente.'
+      ]);
     }
 
-    ExecutionStatus::deleteState($pid);
+    $status = activate_plugin($plugin);
+
+    if (is_wp_error($status)) {
+      return new WP_REST_Response([
+        'success' => false,
+        'error' => $status->get_error_message()
+      ]);
+    }
 
     do_action('fc/updates/invalidate');
 
-    return new WP_REST_Response([]);
+    return new WP_REST_Response([
+      'success' => true,
+      'message' => 'Plugin ativado no site.'
+    ]);
   }
 }

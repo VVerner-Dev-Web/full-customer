@@ -32,19 +32,24 @@ export const ActivateProPlugin = {
 
       try {
         callbacks.start();
-        await this.processInstallation(
+        await this.processFullActivation(
           processId,
-          plugin.extraProps.plugin,
+          plugin.extraProps.pluginSlug,
           callbacks,
         );
-        await this.processActivation(
+        await this.processInstallation(
+          processId,
+          plugin.extraProps.pluginSlug,
+          callbacks,
+        );
+        await this.processWordPressActivation(
           processId,
           plugin.extraProps.plugin,
           callbacks,
         );
         await this.processLicense(
           processId,
-          plugin.extraProps.plugin,
+          plugin.extraProps.pluginSlug,
           callbacks,
         );
         callbacks.onSuccess(`🚀 Concluído com sucesso!`);
@@ -87,33 +92,59 @@ export const ActivateProPlugin = {
 
   // ─── Processos ────────────────────────────────────────────
 
+  async processFullActivation(processId, pluginSlug, { progress }) {
+    progress(`Solicitando ativação no painel da FULL`);
+
+    const res = await ApiService.post(
+      `/actions/plugins/full-activate/${processId}`,
+      {
+        pluginSlug: pluginSlug,
+      },
+    );
+
+    if (!res.success) {
+      throw new Error(res.error || "Falha na instalação");
+    }
+
+    progress(`✅ ` + res.message);
+  },
+
   async processInstallation(processId, pluginSlug, { progress }) {
-    progress(`Preparando ambiente...`);
+    progress(`Realizando a instalação do plugin no seu WordPress...`);
 
     const res = await ApiService.post(`/actions/plugins/install/${processId}`, {
-      plugin: pluginSlug,
+      pluginSlug: pluginSlug,
     });
 
     if (!res.success) {
       throw new Error(res.error || "Falha na instalação");
     }
 
-    progress(`✅ Instalado.`);
+    progress(`✅ ` + res.message);
   },
 
-  async processActivation(processId, pluginSlug, { progress }) {
-    progress(`Ativando plugin...`);
+  async processWordPressActivation(processId, plugin, { progress }) {
+    progress(`Ativando plugin no seu WordPress...`);
 
-    await ApiService.post(`/actions/plugins/activate/${processId}`, {
-      plugin: pluginSlug,
-    });
+    const res = await ApiService.post(
+      `/actions/plugins/wordpress-activate/${processId}`,
+      {
+        plugin: plugin,
+      },
+    );
+
+    if (!res.success) {
+      throw new Error(res.error || "Falha na instalação");
+    }
+
+    progress(`✅ ` + res.message);
   },
 
   async processLicense(processId, pluginSlug, { progress }) {
-    progress(`Ativando licença...`);
+    progress(`E agora vamos inserir a licença oficial do plugin...`);
 
     const res = await ApiService.post(`/actions/plugins/license/${processId}`, {
-      plugin: pluginSlug,
+      pluginSlug: pluginSlug,
       authorizationCookies: fcData.authorizationCookies,
     });
 

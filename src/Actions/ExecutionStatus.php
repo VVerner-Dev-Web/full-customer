@@ -50,11 +50,16 @@ class ExecutionStatus extends AbstractAction
 
   public static function updateState(string $pid, string $state): void
   {
-    set_transient('fc/current-state/' . $pid, $state, 60);
+    set_transient('fc/current-state/' . $pid, $state, MINUTE_IN_SECONDS);
   }
 
   public static function deleteState(string $pid): void
   {
     delete_transient('fc/current-state/' . $pid);
+  }
+
+  public static function setActivationId(string $pid, int $activationId): void
+  {
+    set_transient('fc/activation-id/' . $pid, $activationId, HOUR_IN_SECONDS);
   }
 }

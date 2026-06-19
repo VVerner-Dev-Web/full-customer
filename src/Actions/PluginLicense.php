@@ -2,6 +2,7 @@
 
 namespace FC\Actions;
 
+use FC\Services\LocalLicenseProcessor;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -40,33 +41,41 @@ class PluginLicense extends AbstractAction
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
     $pid = $request->get_param('processId');
+    $slug = $request->get_param('pluginSlug');
 
-    $data = fcDashboardAPI('GET', 'plugin-repository/all');
-    $plugins = $data['success'] ? $data['data'] : [];
+    $processor = new LocalLicenseProcessor();
+    $runAt = $processor->isAvailableForPlugin($slug) ? 'local' : 'remote';
 
-    $plugin = array_filter($plugins, fn($plugin) => $plugin['plugin'] === $request->get_param('plugin'));
-    $plugin = array_shift($plugin);
+    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license', [
+      'runAt' => $runAt,
+      'cookies' => $request->get_param('authorizationCookies')
+    ]);
 
-    if (!$plugin) {
+    if (!$data['success']) {
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Plugin não localizado para licença'
+        'error' => $data['message']
       ]);
     }
 
-    ExecutionStatus::updateState($pid, 'Iniciando processo de ativação da licença do plugin');
+    if ($runAt === 'local' && !$data['data']['license'] || $runAt === 'remote') {
+      return new WP_REST_Response([
+        'success' => true,
+        'error' => $data['data']
+      ]);
+    }
 
-    $activate = fcDashboardAPI('POST', 'plugin-repository/' . $plugin['slug'] . '/activate', [
-      'cookies' => $request->get_param('authorizationCookies'),
-    ]);
+    $success = $processor->process($slug, $data['data']['license']);
 
-    ExecutionStatus::deleteState($pid);
+    if ($success) {
+      fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license/confirm');
+    }
 
     do_action('fc/updates/invalidate');
 
     return new WP_REST_Response([
-      'success' => $activate['success'],
-      'error' => isset($activate['message']) && $activate['message'] ? $activate['message'] : '',
+      'success' => true,
+      'message' => $success ? 'Plugin ativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.',
     ]);
   }
 }

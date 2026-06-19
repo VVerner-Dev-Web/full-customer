@@ -63,9 +63,9 @@ class ActivateProPlugin extends AbstractSkill
 
   public function actions(): array
   {
+    $actions = [];
     $data = fcDashboardAPI('GET', 'plugin-repository/all');
     $plugins = $data['success'] ? $data['data'] : [];
-    $actions = [];
 
     foreach ($plugins as $plugin) {
       if (strpos($plugin['plugin'], 'full-customer') !== false) {

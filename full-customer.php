@@ -24,12 +24,10 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
     require_once FULL_CUSTOMER_PATH . '/dev.php';
   }
 
-  if (!defined('FULL_CUSTOMER_DEV')) {
-    define('FULL_CUSTOMER_DEV', false);
-  }
+  defined('FULL_CUSTOMER_DEV') || define('FULL_CUSTOMER_DEV', false);
+  defined('FULL_CUSTOMER_API_DOMAIN') || define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
 
   define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.3');
-  define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
   define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai' : FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
 
   require_once FULL_CUSTOMER_PATH . '/vendor/autoload.php';

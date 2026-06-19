@@ -34,6 +34,11 @@ export const SimpleSkill = {
           response.actions || [],
         );
 
+        Chat._emit("fc/simple-action/processed", {
+          action,
+          response,
+        });
+
         if (response.reload) {
           setTimeout(() => window.location.reload(), 1500);
         }

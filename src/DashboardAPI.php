@@ -17,6 +17,14 @@ class DashboardAPI
     $endpoint = ltrim($endpoint, '/');
     $url      = FULL_CUSTOMER_API_URL . '/' . $endpoint;
 
+    if (FULL_CUSTOMER_DEV) {
+      $mock = apply_filters('fc/dashboard-api/response', null, $method, $endpoint, $payload);
+
+      if (!is_null($mock)) {
+        return $mock;
+      }
+    }
+
     if ($method === 'GET' && !empty($payload)) {
       $url = add_query_arg($payload, $url);
     }

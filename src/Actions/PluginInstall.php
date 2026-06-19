@@ -43,32 +43,29 @@ class PluginInstall extends AbstractAction
     require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
     $fs = FileSystem::instance();
+
     $pid = $request->get_param('processId');
+    $slug = $request->get_param('pluginSlug');
 
-    $data = fcDashboardAPI('GET', 'plugin-repository/all');
-    $plugins = $data['success'] ? $data['data'] : [];
-
-    $plugin = array_filter($plugins, fn($plugin) => $plugin['plugin'] === $request->get_param('plugin'));
-    $plugin = array_shift($plugin);
+    $data = fcDashboardAPI('GET', 'plugin-repository/' . $slug . '/info');
+    $plugin = $data['success'] ? $data['data'] : [];
 
     if (!$plugin) {
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Plugin não localizado para instalação'
+        'error' => 'Plugin não localizado no repositório da FULL. para instalação'
       ]);
     }
 
-    $localPluginPath = trailingslashit(WP_PLUGIN_DIR) .  '---' . $plugin['plugin'];
+    $localPluginPath = trailingslashit(WP_PLUGIN_DIR) . $plugin['plugin'];
+
     if ($fs->isFile($localPluginPath)) {
       $localPluginData = get_plugin_data($localPluginPath, false, true);
 
-      if (
-        version_compare($localPluginData['Version'], $plugin['version'], '>=')
-        && is_plugin_active($plugin['plugin'])
-      ) {
+      if (version_compare($localPluginData['Version'], $plugin['version'], '>=')) {
         return new WP_REST_Response([
           'success' => true,
-          'error' => 'Plugin ja ativado, podemos continuar rapidamente'
+          'message' => 'Plugin já instalado na versão mais recente, podemos continuar rapidamente'
         ]);
       }
     }
@@ -130,20 +127,15 @@ class PluginInstall extends AbstractAction
       ]);
     }
 
+    ExecutionStatus::updateState($pid, 'Arquivo transferido.');
+
     $fs->delete($workingDir, true);
-
-    $pluginActivationPath = trailingslashit(WP_PLUGIN_DIR) . $plugin['plugin'];
-    ExecutionStatus::updateState($pid, 'Arquivo transferido. Solicitando ativação do plugin no WordPress');
-
-    if (!is_plugin_active($pluginActivationPath)) {
-      activate_plugin($pluginActivationPath);
-    }
 
     ExecutionStatus::deleteState($pid);
 
     return new WP_REST_Response([
       'success' => true,
-      'message' => 'Plugin instalado com sucesso!'
+      'message' => 'Plugin instalado com sucesso no seu WordPress.'
     ]);
   }
 }

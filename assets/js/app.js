@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Carga inicial
   window._refreshUI([
     {
       fragment: "DashboardFullPage",

@@ -45,12 +45,26 @@ export const SkillManager = {
     this._bindSuggestionClick();
     this._bindActions();
 
-    await this._loadAndRenderSkills();
-    this._root.dispatchEvent(
-      new CustomEvent("fc/skills/loaded", {
-        detail: { availableSkills: this._skills },
-      }),
+    const loadSkills = async () => {
+      await this._loadAndRenderSkills();
+
+      this._root.dispatchEvent(
+        new CustomEvent("fc/skills/loaded", {
+          detail: { availableSkills: this._skills },
+        }),
+      );
+    };
+
+    root.addEventListener(
+      "fc/simple-action/processed",
+      ({ detail: { action, response } }) => {
+        if (action.id === "CleanUpCache" && response.success) {
+          loadSkills();
+        }
+      },
     );
+
+    loadSkills();
   },
 
   async trigger(skillId, action = "", msg = "") {
