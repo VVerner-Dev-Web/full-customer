@@ -3,6 +3,7 @@
 namespace FC\Skills;
 
 use FC\Actions\CleanUpCache;
+use FC\Actions\PluginRepository;
 
 class ErrorFix extends AbstractSkill
 {
@@ -56,7 +57,8 @@ class ErrorFix extends AbstractSkill
   public function actions(): array
   {
     return [
-      new CleanUpCache
+      new CleanUpCache,
+      new PluginRepository
     ];
   }
 }

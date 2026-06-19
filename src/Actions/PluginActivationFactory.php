@@ -55,7 +55,6 @@ class PluginActivationFactory extends AbstractAction
   public function inShellActions(): array
   {
     return [
-      PluginRepository::class,
       PluginInstall::class,
       PluginActivate::class,
       PluginLicense::class,

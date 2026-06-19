@@ -9,7 +9,7 @@ class PluginRepository extends AbstractAction
 {
   public function getIcon(): string
   {
-    return '';
+    return 'assets/images/icons/git-repository-line.svg';
   }
 
   public function getName(): string
@@ -42,7 +42,22 @@ class PluginRepository extends AbstractAction
     $data = fcDashboardAPI('GET', 'plugin-repository/all');
     $plugins = $data['success'] ? $data['data'] : [];
 
+    $message = '';
+
+    foreach ($plugins as  $i => $plugin) {
+      if ($i > 0) {
+        $message .= '<hr>';
+      }
+
+      $message .= '<h6>' . $plugin['name'] . '</h6>';
+      $message .= '<p>Versão disponível: ' . $plugin['version'] . '</p>';
+      $message .= $plugin['activation']['id'] !== 0 ?
+        '<p>Este plugin já foi ativado neste site</p>' :
+        '<p>Plugin disponível para ativação</p>';
+    }
+
     return new WP_REST_Response([
+      'message' => $message,
       'plugins' => $plugins,
       'success' => !empty($plugins)
     ]);
