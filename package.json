@@ -1,6 +1,6 @@
 {
   "name": "fullservice",
-  "version": "1.0.0",
+  "version": "4.0.4",
   "description": "Dashboard Fullservices",
   "scripts": {
     "dev": "vite",
