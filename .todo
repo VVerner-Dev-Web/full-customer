@@ -8,17 +8,17 @@ php vendor/bin/phpcs
 Ativações via rest
 
 🤖 Elementor PRO
+🤖 CrocoBlock / Jet Engine
 ✅ ACF PRO
 ✅ All-in-One WP Security
 ☑️ Astra PRO
-☑️ CrocoBlock / Jet Engine
 ☑️ Essential Addons
 ☑️ Happy Addons
-☑️ Perfmatters
+✅ Perfmatters
 ☑️ Rank Math PRO
 ☑️ SEO Press
 ☑️ Ultimate Addons
-☑️ UpdraftPlus
-☑️ WP Forms
-☑️ WP Optimize
-☑️ WP Rocket
+🚩 UpdraftPlus -> precisamos do plugin premium
+✅ WP Forms
+✅ WP Optimize
+✅ WP Rocket

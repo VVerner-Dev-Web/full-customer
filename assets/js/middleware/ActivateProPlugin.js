@@ -151,5 +151,7 @@ export const ActivateProPlugin = {
     if (!res.success) {
       throw new Error(res.error || "Falha na ativação");
     }
+
+    progress(`✅ ` + res.message);
   },
 };
