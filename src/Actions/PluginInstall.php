@@ -57,6 +57,18 @@ class PluginInstall extends AbstractAction
       ]);
     }
 
+    ExecutionStatus::updateState($pid, 'Verificando dependências...');
+
+    if ($plugin['dependencies']) {
+      $error = $this->resolvePluginDependencies($plugin, $pid);
+
+      if (!is_null($error)) {
+        return $error;
+      }
+    }
+
+    ExecutionStatus::updateState($pid, 'Dependências verificadas, iniciando processo de instalação principal...');
+
     $localPluginPath = trailingslashit(WP_PLUGIN_DIR) . $plugin['plugin'];
 
     if ($fs->isFile($localPluginPath)) {
@@ -69,21 +81,6 @@ class PluginInstall extends AbstractAction
         ]);
       }
     }
-
-    ExecutionStatus::updateState($pid, 'Verificando dependências...');
-
-    foreach ($plugin['dependencies'] as $dep) {
-      $request = new WP_REST_Request('POST', '/wp/v2/plugins');
-      $request->set_param('slug', $dep);
-      $request->set_param('status', 'active');
-      $request->set_param('context', 'edit');
-
-      ExecutionStatus::updateState($pid, 'Instalando dependência ' . $dep . '...');
-
-      rest_do_request($request);
-    }
-
-    ExecutionStatus::updateState($pid, 'Dependências verificadas, iniciando processo de instalação principal...');
 
     $recoveryLink = ' <a href="' . $plugin['package'] . '">Baixar plugin manualmente</a> ';
 
@@ -137,5 +134,77 @@ class PluginInstall extends AbstractAction
       'success' => true,
       'message' => 'Plugin instalado com sucesso no seu WordPress.'
     ]);
+  }
+
+  private function resolvePluginDependencies(array $plugin, string $pid): ?WP_REST_Response
+  {
+    foreach ($plugin['dependencies'] as $dep) {
+      ExecutionStatus::updateState($pid, 'Verificando dependência ' . $dep . '...');
+
+      wp_clean_plugins_cache();
+      $all_plugins = get_plugins();
+      $dependency_file = '';
+
+      foreach (array_keys($all_plugins) as $file) {
+        if (dirname($file) === $dep || $file === $dep . '.php') {
+          $dependency_file = $file;
+          break;
+        }
+      }
+
+      if (!empty($dependency_file) && is_plugin_active($dependency_file)) {
+        ExecutionStatus::updateState($pid, 'Dependência ' . $dep . ' já instalada e ativa.');
+        continue;
+      }
+
+      if (!empty($dependency_file) && !is_plugin_active($dependency_file)) {
+        ExecutionStatus::updateState($pid, 'Dependência ' . $dep . ' encontrada no disco. Ativando...');
+
+        $activated = activate_plugin($dependency_file);
+
+        if (is_wp_error($activated)) {
+          return new WP_REST_Response([
+            'success' => false,
+            'error' => 'Erro fatal ao ativar a dependência existente: ' . $dep . '. ' . $activated->get_error_message()
+          ]);
+        }
+        continue;
+      }
+
+      ExecutionStatus::updateState($pid, 'Baixando e instalando dependência ' . $dep . '...');
+
+      $request = new WP_REST_Request('POST', '/wp/v2/plugins');
+      $request->set_param('slug', $dep);
+      $request->set_param('status', 'active');
+      $request->set_param('context', 'edit');
+
+      rest_do_request($request);
+
+      wp_clean_plugins_cache();
+      $all_plugins = get_plugins();
+      $dependency_file = '';
+
+      foreach (array_keys($all_plugins) as $file) {
+        if (dirname($file) === $dep || $file === $dep . '.php') {
+          $dependency_file = $file;
+          break;
+        }
+      }
+
+      if (!empty($dependency_file) && !is_plugin_active($dependency_file)) {
+        ExecutionStatus::updateState($pid, 'Forçando ativação da dependência recém-instalada ' . $dep . '...');
+
+        $activated = activate_plugin($dependency_file);
+
+        if (is_wp_error($activated)) {
+          return new WP_REST_Response([
+            'success' => false,
+            'error' => 'Erro fatal ao ativar a dependência após instalação: ' . $dep . '. ' . $activated->get_error_message()
+          ]);
+        }
+      }
+    }
+
+    return null;
   }
 }
