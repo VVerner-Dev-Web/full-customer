@@ -89,14 +89,16 @@ class Connection
     $user = User::instance();
     $anon = fcGetAnonymousUserConnection();
 
-    return base64_encode(wp_json_encode([
+    $params = [
       'fc_version'        => FULL_CUSTOMER_VERSION,
       'fc_mode'           => FULL_CUSTOMER_DEV ? 'dev' : 'prod',
       'wp_version'        => get_bloginfo('version'),
       'connection_email'  => is_user_logged_in() ? $user->getConnectionEmail() : ($anon ? $anon['connection_email'] : null),
       'wp_user_email'     => is_user_logged_in() ? $user->wp()->user_email : ($anon ? get_userdata($anon['user_id'])->user_email : null),
       'wp_site_url'       => trailingslashit(home_url()),
-    ]));
+    ];
+
+    return base64_encode(wp_json_encode(apply_filters('fc/connection/token', $params)));
   }
 
   public function notices(): void
