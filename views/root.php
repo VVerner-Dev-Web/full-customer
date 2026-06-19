@@ -58,7 +58,6 @@ $fs = FileSystem::instance();
 
   <app class="position-relative z-3 d-block"></app>
 
-  <?php $fs->include('views/components/modal-addons.php') ?>
   <?php $fs->include('views/components/sidebar-ajuda.php') ?>
 
   <template id="chat-user">
