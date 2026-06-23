@@ -20,6 +20,7 @@ class LocalLicenseProcessor
       'wp-seopress-pro' => [$this, 'seoPress'],
       'ultimate-elementor' => [$this, 'ultimateAddons'],
       'astra-addon' => [$this, 'astra'],
+      'seo-by-rank-math-pro' => [$this, 'rankMath'],
     ];
   }
 
@@ -32,6 +33,30 @@ class LocalLicenseProcessor
   public function process(string $plugin, string $license): bool
   {
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function rankMath(string $license): bool
+  {
+    if (!function_exists('rank_math_pro')) {
+      return false;
+    }
+
+    [$user, $licenseKey] = explode(':', $license);
+
+    update_option(
+      'rank_math_reseller_data',
+      [
+        'username' => $user,
+        'api_key'  => $licenseKey,
+      ],
+      false
+    );
+
+    \RankMathPro\Admin\Licence_Activation::activate_licence();
+
+    $data = \RankMath\Admin\Admin_Helper::get_registration_data();
+
+    return is_array($data) && $data['connected'];
   }
 
   public function ultimateAddons(string $license): bool
