@@ -22,17 +22,51 @@ class LocalLicenseProcessor
       'astra-addon' => [$this, 'astra'],
       'seo-by-rank-math-pro' => [$this, 'rankMath'],
       'essential-addons-elementor' => [$this, 'essentialAddons'],
+      'jet-theme-core' => [$this, 'jetThemeCore'],
     ];
   }
 
   public function isAvailableForPlugin(string $plugin): bool
   {
+    error_log($plugin);
     return isset($this->map[$plugin]);
   }
 
   public function process(string $plugin, string $license): bool
   {
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function jetThemeCore(string $license): bool
+  {
+    $cookies = [];
+    foreach ($_COOKIE as $name => $value) {
+      $cookies[] = new \WP_Http_Cookie([
+        'name'  => $name,
+        'value' => $value
+      ]);
+    }
+
+    $request = wp_remote_post(admin_url('admin-ajax.php'), [
+      'sslverify' => false,
+      'cookies'   => $cookies,
+      'body'      => [
+        'action' => 'jet_license_action',
+        'data' => [
+          'license' => $license,
+          'action' => 'activate',
+          'nonce' => wp_create_nonce('jet-dashboard')
+        ]
+      ],
+    ]);
+
+    if (is_wp_error($request)) {
+      return false;
+    }
+
+    $response = json_decode(wp_remote_retrieve_body($request), true);
+
+    return is_array($response) && isset($response['status']) && $response['status'] === 'success';
   }
 
   public function essentialAddons(string $license): bool
