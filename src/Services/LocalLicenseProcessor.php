@@ -21,18 +21,92 @@ class LocalLicenseProcessor
       'ultimate-elementor' => [$this, 'ultimateAddons'],
       'astra-addon' => [$this, 'astra'],
       'seo-by-rank-math-pro' => [$this, 'rankMath'],
+      'essential-addons-elementor' => [$this, 'essentialAddons'],
     ];
   }
 
   public function isAvailableForPlugin(string $plugin): bool
   {
-    error_log($plugin);
     return isset($this->map[$plugin]);
   }
 
   public function process(string $plugin, string $license): bool
   {
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function essentialAddons(string $license): bool
+  {
+    global $wpdb;
+
+    if (!defined('EAEL_PRO_PLUGIN_FILE')) {
+      return false;
+    }
+
+    $transientKey = 'fc/local-license-processor/essential-addons';
+    delete_transient($transientKey);
+
+    $m = \Essential_Addons_Elementor\Pro\Classes\License\Manager::get_instance([
+      'plugin_file'    => EAEL_PRO_PLUGIN_FILE,
+      'version'        => EAEL_PRO_PLUGIN_VERSION,
+      'item_id'        => EAEL_SL_ITEM_ID,
+      'item_name'      => EAEL_SL_ITEM_NAME,
+      'item_slug'      => EAEL_SL_ITEM_SLUG,
+      'textdomain'     => 'essential-addons-elementor',
+      'db_prefix'      => EAEL_SL_ITEM_SLUG,
+      'page_slug'      => 'eael-settings',
+      'scripts_handle' => 'eael-admin-dashboard',
+      'screen_id'      => ["toplevel_page_eael-settings"],
+      'api'            => 'ajax',
+      'ajax'           => [
+        'textdomain'    => 'essential-addons-elementor',
+        'action_prefix' => 'essential-addons-elementor'
+      ],
+      'migrate_from' => [
+        'license' => 'essential-addons-elementor-license-key',
+        'status' => 'essential-addons-elementor-license-status'
+      ]
+    ]);
+
+    $response = $m->activate(['license_key' => $license]);
+
+    if (is_wp_error($response)) {
+      return false;
+    }
+
+    if (!isset($response->license) || 'required_otp' !== $response->license) {
+      return false;
+    }
+
+    $otp = null;
+
+    // FYI: 120s
+    for ($i = 0; $i < 24; $i++) {
+      $data = $wpdb->get_var("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = '_transient_{$transientKey}';");
+      $data = json_decode($data, true);
+
+      if (is_array($data) && isset($data['otp'])) {
+        $otp = $data['otp'];
+        break;
+      }
+
+      sleep(5);
+    }
+
+    if (!$otp) {
+      return false;
+    }
+
+    $done = $m->submit_otp([
+      'license_key' => $license,
+      'otp' => $otp
+    ]);
+
+    if (is_wp_error($done)) {
+      return false;
+    }
+
+    return isset($done->license) && $done->license === 'valid';
   }
 
   public function rankMath(string $license): bool

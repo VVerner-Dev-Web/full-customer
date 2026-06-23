@@ -18,6 +18,8 @@ class Rest
     fcRegisterRestRoute('POST', 'fragments', [$this, 'fragments']);
 
     fcRegisterRestRoute('GET', 'skills', [$this, 'skills']);
+
+    fcRegisterRestRoute('POST', 'local-license-processor', [$this, 'localLicenseProcessor'], '__return_true');
   }
 
   public function actions(): void
@@ -112,6 +114,17 @@ class Rest
     return rest_ensure_response([
       'success' => true,
       'skills'  => $list
+    ]);
+  }
+
+  public function localLicenseProcessor(WP_REST_Request $request): WP_REST_Response
+  {
+    $plugin = $request->get_param('plugin');
+
+    set_transient('fc/local-license-processor/' . $plugin, wp_json_encode($request->get_params()), MINUTE_IN_SECONDS);
+
+    return rest_ensure_response([
+      'success' => true,
     ]);
   }
 }
