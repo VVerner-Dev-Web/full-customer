@@ -48,6 +48,10 @@ class PluginWordPressActivate extends AbstractAction
       ]);
     }
 
+    if (!function_exists('get_editable_roles')) {
+      require_once ABSPATH . 'wp-admin/includes/user.php';
+    }
+
     $status = activate_plugin($plugin);
 
     if (is_wp_error($status)) {

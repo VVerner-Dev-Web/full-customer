@@ -15,8 +15,9 @@ class LocalLicenseProcessor
       'wp-optimize-premium' => [$this, 'wpOptimize'],
       'wpforms' => [$this, 'wpforms'],
       'perfmatters' => [$this, 'perfmatters'],
-      'happy-elementor-addons-pro' => [$this, 'happyElementorAddons'], // todo
-      // 'updraftplus' => [$this, 'updraftplus'], // corrigir plugin no repositório para pro
+      'happy-elementor-addons-pro' => [$this, 'happyElementorAddons'],
+      'updraftplus' => [$this, 'updraftplus'],
+      'wp-seopress-pro' => [$this, 'seoPress'],
     ];
   }
 
@@ -29,6 +30,36 @@ class LocalLicenseProcessor
   public function process(string $plugin, string $license): bool
   {
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function seoPress(string $license): bool
+  {
+    $file = WP_PLUGIN_DIR . '/wp-seopress-pro/inc/admin/callbacks/License.php';
+
+    if (!file_exists($file)) {
+      return false;
+    }
+
+    if (!function_exists('seopress_automatic_license_activation')) {
+      include_once($file);
+    }
+
+    if (defined('SEOPRESS_LICENSE_KEY')) {
+      return false;
+    }
+
+    delete_option('seopress_pro_license_automatic_attempt');
+    define('SEOPRESS_LICENSE_KEY', $license);
+
+    seopress_automatic_license_activation();
+
+    $done = get_option('seopress_pro_license_status') === 'valid';
+
+    if ($done) {
+      update_option('seopress_pro_license_key', $license, false);
+    }
+
+    return $done;
   }
 
   public function perfmatters(string $license): bool
@@ -99,7 +130,7 @@ class LocalLicenseProcessor
 
   public function updraftplus(string $license): bool
   {
-    return $this->updraftFamily('all-in-one-wp-security-and-firewall-premium', $license);
+    return $this->updraftFamily('updraftplus', $license);
   }
 
   public function wpOptimize(string $license): bool
