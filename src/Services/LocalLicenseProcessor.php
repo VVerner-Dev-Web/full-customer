@@ -18,6 +18,7 @@ class LocalLicenseProcessor
       'happy-elementor-addons-pro' => [$this, 'happyElementorAddons'],
       'updraftplus' => [$this, 'updraftplus'],
       'wp-seopress-pro' => [$this, 'seoPress'],
+      'ultimate-elementor' => [$this, 'ultimateAddons'],
     ];
   }
 
@@ -30,6 +31,22 @@ class LocalLicenseProcessor
   public function process(string $plugin, string $license): bool
   {
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function ultimateAddons(string $license): bool
+  {
+    if (!class_exists('BSF_License_Manager', false)) {
+      return false;
+    }
+
+    $result = \BSF_License_Manager::instance()->bsf_process_license_activation([
+      'privacy_consent'          => true,
+      'terms_conditions_consent' => true,
+      'product_id'               => 'uael',
+      'license_key'              => $license,
+    ]);
+
+    return is_array($result) && isset($result['success']) && $result['success'];
   }
 
   public function seoPress(string $license): bool
