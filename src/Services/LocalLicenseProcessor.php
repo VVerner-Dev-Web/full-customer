@@ -15,7 +15,7 @@ class LocalLicenseProcessor
       'wp-optimize-premium' => [$this, 'wpOptimize'],
       'wpforms' => [$this, 'wpforms'],
       'perfmatters' => [$this, 'perfmatters'],
-      // 'happy-elementor-addons-pro' => [$this, 'happyElementorAddons'], // todo
+      'happy-elementor-addons-pro' => [$this, 'happyElementorAddons'], // todo
       // 'updraftplus' => [$this, 'updraftplus'], // corrigir plugin no repositório para pro
     ];
   }
@@ -40,6 +40,24 @@ class LocalLicenseProcessor
     update_option('perfmatters_edd_license_key', $license, false);
 
     return \Perfmatters\License::activate();
+  }
+
+  public function happyElementorAddons(string $license): bool
+  {
+    if (!function_exists('hapro_get_appsero')) {
+      return false;
+    }
+
+    hapro_get_appsero()->license()->license_form_submit([
+      'license_key' => $license,
+      'submit' => 1,
+      '_action' => 'active',
+      '_nonce' => wp_create_nonce('Happy Elementor Addons Pro')
+    ]);
+
+    $license = hapro_get_appsero()->license()->get_license();
+
+    return isset($license['status']) && $license['status'] === 'active';
   }
 
   public function acfPRO(string $license): bool
