@@ -17,6 +17,15 @@ class AdminPage
     add_action('admin_menu', [$this, 'register']);
     add_action('admin_enqueue_scripts', [$this, 'assets'], PHP_INT_MAX);
     add_action('admin_head', [$this, 'localize'], 0);
+    add_action('in_admin_header', [$this, 'removeNotices'], PHP_INT_MAX);
+  }
+
+  public function removeNotices(): void
+  {
+    if ('full' === filter_input(INPUT_GET, 'page')) {
+      remove_all_actions('admin_notices');
+      remove_all_actions('all_admin_notices');
+    }
   }
 
   private function getViteAssetUrl(string $entry): string
