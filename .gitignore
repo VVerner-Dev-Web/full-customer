@@ -3,7 +3,7 @@ dev.php
 node_modules
 assets/dist/*
 conn.ex.json
-full-customer.zip
+/release
 .todo
 /reports
 plugins.json
