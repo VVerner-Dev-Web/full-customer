@@ -19,6 +19,7 @@ class LocalLicenseProcessor
       'updraftplus' => [$this, 'updraftplus'],
       'wp-seopress-pro' => [$this, 'seoPress'],
       'ultimate-elementor' => [$this, 'ultimateAddons'],
+      'astra-addon' => [$this, 'astra'],
     ];
   }
 
@@ -35,18 +36,12 @@ class LocalLicenseProcessor
 
   public function ultimateAddons(string $license): bool
   {
-    if (!class_exists('BSF_License_Manager', false)) {
-      return false;
-    }
+    return $this->bsfFamily('ultimate-elementor', 'uael', $license);
+  }
 
-    $result = \BSF_License_Manager::instance()->bsf_process_license_activation([
-      'privacy_consent'          => true,
-      'terms_conditions_consent' => true,
-      'product_id'               => 'uael',
-      'license_key'              => $license,
-    ]);
-
-    return is_array($result) && isset($result['success']) && $result['success'];
+  public function astra(string $license): bool
+  {
+    return $this->bsfFamily('astra-addon', 'astra-addon', $license);
   }
 
   public function seoPress(string $license): bool
@@ -179,5 +174,27 @@ class LocalLicenseProcessor
     $response = json_decode(wp_remote_retrieve_body($request), true);
 
     return is_array($response) && isset($response['code']) && $response['code'] === 'OK';
+  }
+
+  public function bsfFamily(string $plugin, string $productId, string $license): bool
+  {
+    $file = WP_PLUGIN_DIR . '/' . $plugin . '/admin/bsf-core/index.php';
+
+    if (!file_exists($file)) {
+      return false;
+    }
+
+    if (!class_exists('BSF_License_Manager', false)) {
+      include_once($file);
+    }
+
+    $result = \BSF_License_Manager::instance()->bsf_process_license_activation([
+      'privacy_consent'          => true,
+      'terms_conditions_consent' => true,
+      'product_id'               => $productId,
+      'license_key'              => $license,
+    ]);
+
+    return is_array($result) && isset($result['success']) && $result['success'];
   }
 }
