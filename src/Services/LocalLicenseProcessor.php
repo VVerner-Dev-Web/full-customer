@@ -28,7 +28,6 @@ class LocalLicenseProcessor
 
   public function isAvailableForPlugin(string $plugin): bool
   {
-    error_log($plugin);
     return isset($this->map[$plugin]);
   }
 
