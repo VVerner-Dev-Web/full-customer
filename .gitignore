@@ -8,3 +8,4 @@ conn.ex.json
 /reports
 plugins.json
 cookies.json
+*.zip

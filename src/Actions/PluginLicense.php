@@ -42,13 +42,7 @@ class PluginLicense extends AbstractAction
   {
     $slug = $request->get_param('pluginSlug');
 
-    $processor = new LocalLicenseProcessor();
-    $runAt = $processor->isAvailableForPlugin($slug) ? 'local' : 'remote';
-
-    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license', [
-      'runAt' => $runAt,
-      'cookies' => $request->get_param('authorizationCookies')
-    ]);
+    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license');
 
     if (!$data['success']) {
       return new WP_REST_Response([
@@ -57,16 +51,10 @@ class PluginLicense extends AbstractAction
       ]);
     }
 
-    if ($runAt === 'local' && !$data['data']['license'] || $runAt === 'remote') {
-      return new WP_REST_Response([
-        'success' => true,
-        'error' => $data['data']
-      ]);
-    }
+    $processor = new LocalLicenseProcessor();
+    $result = $processor->process($slug, $data['data']['license'] ?? '');
 
-    $success = $processor->process($slug, $data['data']['license']);
-
-    if ($success) {
+    if ($result['success']) {
       fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license/confirm');
     }
 
@@ -74,7 +62,8 @@ class PluginLicense extends AbstractAction
 
     return new WP_REST_Response([
       'success' => true,
-      'message' => $success ? 'Plugin ativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.',
+      'message' => $result['success'] ? 'Plugin ativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.',
+      'result' => $result
     ]);
   }
 }

@@ -150,8 +150,14 @@ export const ActivateProPlugin = {
 
     if (!res.success) {
       throw new Error(res.error || "Falha na ativação");
+      return;
     }
 
     progress(`✅ ` + res.message);
+
+    if (res.result?.redirectUrl) {
+      progress(`Redirecionando...`);
+      window.location.href = res.result.redirectUrl;
+    }
   },
 };

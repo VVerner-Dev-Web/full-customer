@@ -2,6 +2,8 @@
 
 namespace FC\Services;
 
+use WP_Http_Cookie;
+
 class LocalLicenseProcessor
 {
   private array $map;
@@ -23,20 +25,135 @@ class LocalLicenseProcessor
       'seo-by-rank-math-pro' => [$this, 'rankMath'],
       'essential-addons-elementor' => [$this, 'essentialAddons'],
       'jet-theme-core' => [$this, 'jetThemeCore'],
+      'elementor-pro' => [$this, 'elementorPro'],
     ];
   }
 
-  public function isAvailableForPlugin(string $plugin): bool
+  public function process(string $plugin, string $license): array
   {
-    return isset($this->map[$plugin]);
-  }
+    if (!isset($this->map[$plugin])) {
+      return [
+        'success' => false,
+      ];
+    }
 
-  public function process(string $plugin, string $license): bool
-  {
     return call_user_func($this->map[$plugin], $license);
   }
 
-  public function jetThemeCore(string $license): bool
+  public function elementorPro(string $license): array
+  {
+    [$license, $elementorCookies] = explode(':', $license);
+    $elementorCookies = json_decode(base64_decode($elementorCookies), true);
+
+    $elementorCookies = array_map(fn($c) => new WP_Http_Cookie($c), $elementorCookies);
+
+    $url = rest_url('elementor-one/v1/connect/authorize?clearSession=true');
+
+    $request = wp_remote_post($url, [
+      'sslverify' => false,
+      'timeout'   => 15,
+      'cookies'   => $_COOKIE,
+      'headers'   => [
+        'X-WP-Nonce' => wp_create_nonce('wp_rest'),
+      ],
+    ]);
+
+    if (is_wp_error($request)) {
+      return [
+        'success' => false,
+        'trace' => 'local_authorize',
+      ];
+    }
+
+    $response = json_decode(wp_remote_retrieve_body($request), true);
+    $oauthUrl = $response['data'] ?? null;
+
+    if (!$oauthUrl) {
+      return [
+        'success' => false,
+        'trace' => 'elementor-one/v1/connect/authorize?clearSession=true',
+      ];
+    }
+
+    $request = wp_remote_get($oauthUrl, [
+      'cookies' => $elementorCookies,
+    ]);
+
+    $consentUrl = $request['http_response']->get_response_object()->url;
+
+    $parsed     = wp_parse_url($consentUrl);
+    $queryParams = [];
+    wp_parse_str($parsed['query'], $queryParams);
+    $challenge = $queryParams['consent_challenge'] ?? null;
+
+    if (!$challenge) {
+      return [
+        'success' => false,
+        'trace' => 'consentUrl',
+      ];
+    }
+
+    $allCookies = $elementorCookies;
+
+    foreach ($request['http_response']->get_response_object()->cookies as $cookie) {
+      $allCookies[] = new WP_Http_Cookie([
+        'name'   => $cookie->name,
+        'value'  => $cookie->value,
+        'path'   => $attrs['path']   ?? '/',
+        'domain' => $attrs['domain'] ?? 'my.elementor.com',
+      ]);
+    }
+
+    $response = wp_remote_post('https://my.elementor.com/connect/api/v1/consent', [
+      'cookies' => $allCookies,
+      'headers'     => [
+        'Accept'       => 'application/json',
+        'Content-Type' => 'application/json',
+        'Referer'      => $consentUrl,
+      ],
+      'body'        => wp_json_encode([
+        'consentChallenge' => $challenge,
+        'subscriptionId'   => $license,
+        'grantScope'       => ['openid', 'offline_access', 'share_usage_data'],
+      ]),
+      'timeout'     => 15,
+    ]);
+
+    $respBody = json_decode(wp_remote_retrieve_body($response), true);
+    $redirectUrl = $respBody['redirectUrl'] ?? null;
+
+    if (!$redirectUrl) {
+      return [
+        'success' => false,
+        'trace' => 'subscription_select',
+      ];
+    }
+
+    $done = wp_remote_get($redirectUrl, [
+      'cookies' => $allCookies,
+      'sslverify'   => false,
+      'timeout'   => 15,
+    ]);
+
+    $localUrl = $done['http_response']->get_response_object()->url;
+
+    $qs = [];
+    wp_parse_str(wp_parse_url($localUrl, PHP_URL_QUERY), $qs);
+
+    if (!$qs['redirect_to']) {
+      return [
+        'success' => false,
+        'trace' => 'redirect_to',
+      ];
+    }
+
+    return [
+      'success' => true,
+      'redirectUrl' => $qs['redirect_to'] ?? '',
+    ];
+  }
+
+  public function jetThemeCore(string $license): array
   {
     $cookies = [];
     foreach ($_COOKIE as $name => $value) {
@@ -60,20 +177,20 @@ class LocalLicenseProcessor
     ]);
 
     if (is_wp_error($request)) {
-      return false;
+      return ['success' => false];
     }
 
     $response = json_decode(wp_remote_retrieve_body($request), true);
 
-    return is_array($response) && isset($response['status']) && $response['status'] === 'success';
+    return ['success' => is_array($response) && isset($response['status']) && $response['status'] === 'success'];
   }
 
-  public function essentialAddons(string $license): bool
+  public function essentialAddons(string $license): array
   {
     global $wpdb;
 
     if (!defined('EAEL_PRO_PLUGIN_FILE')) {
-      return false;
+      return ['success' => false];
     }
 
     $transientKey = 'fc/local-license-processor/essential-addons';
@@ -104,11 +221,11 @@ class LocalLicenseProcessor
     $response = $m->activate(['license_key' => $license]);
 
     if (is_wp_error($response)) {
-      return false;
+      return ['success' => false];
     }
 
     if (!isset($response->license) || 'required_otp' !== $response->license) {
-      return false;
+      return ['success' => false];
     }
 
     $otp = null;
@@ -127,7 +244,7 @@ class LocalLicenseProcessor
     }
 
     if (!$otp) {
-      return false;
+      return ['success' => false];
     }
 
     $done = $m->submit_otp([
@@ -136,16 +253,16 @@ class LocalLicenseProcessor
     ]);
 
     if (is_wp_error($done)) {
-      return false;
+      return ['success' => false];
     }
 
-    return isset($done->license) && $done->license === 'valid';
+    return ['success' => isset($done->license) && $done->license === 'valid'];
   }
 
-  public function rankMath(string $license): bool
+  public function rankMath(string $license): array
   {
     if (!function_exists('rank_math_pro')) {
-      return false;
+      return ['success' => false];
     }
 
     [$user, $licenseKey] = explode(':', $license);
@@ -163,25 +280,25 @@ class LocalLicenseProcessor
 
     $data = \RankMath\Admin\Admin_Helper::get_registration_data();
 
-    return is_array($data) && $data['connected'];
+    return ['success' => is_array($data) && $data['connected']];
   }
 
-  public function ultimateAddons(string $license): bool
+  public function ultimateAddons(string $license): array
   {
     return $this->bsfFamily('ultimate-elementor', 'uael', $license);
   }
 
-  public function astra(string $license): bool
+  public function astra(string $license): array
   {
     return $this->bsfFamily('astra-addon', 'astra-addon', $license);
   }
 
-  public function seoPress(string $license): bool
+  public function seoPress(string $license): array
   {
     $file = WP_PLUGIN_DIR . '/wp-seopress-pro/inc/admin/callbacks/License.php';
 
     if (!file_exists($file)) {
-      return false;
+      return ['success' => false];
     }
 
     if (!function_exists('seopress_automatic_license_activation')) {
@@ -189,7 +306,7 @@ class LocalLicenseProcessor
     }
 
     if (defined('SEOPRESS_LICENSE_KEY')) {
-      return false;
+      return ['success' => false];
     }
 
     delete_option('seopress_pro_license_automatic_attempt');
@@ -203,24 +320,24 @@ class LocalLicenseProcessor
       update_option('seopress_pro_license_key', $license, false);
     }
 
-    return $done;
+    return ['success' => $done];
   }
 
-  public function perfmatters(string $license): bool
+  public function perfmatters(string $license): array
   {
     if (!class_exists('\Perfmatters\License', false)) {
-      return false;
+      return ['success' => false];
     }
 
     update_option('perfmatters_edd_license_key', $license, false);
 
-    return \Perfmatters\License::activate();
+    return ['success' => \Perfmatters\License::activate()];
   }
 
-  public function happyElementorAddons(string $license): bool
+  public function happyElementorAddons(string $license): array
   {
     if (!function_exists('hapro_get_appsero')) {
-      return false;
+      return ['success' => false];
     }
 
     hapro_get_appsero()->license()->license_form_submit([
@@ -232,31 +349,31 @@ class LocalLicenseProcessor
 
     $license = hapro_get_appsero()->license()->get_license();
 
-    return isset($license['status']) && $license['status'] === 'active';
+    return ['success' => isset($license['status']) && $license['status'] === 'active'];
   }
 
-  public function acfPRO(string $license): bool
+  public function acfPRO(string $license): array
   {
     if (!function_exists('acf_pro_activate_license')) {
-      return false;
+      return ['success' => false];
     }
 
     $done = acf_pro_activate_license($license, true);
 
-    return is_array($done) && (int) $done['success'] === 1;
+    return ['success' => is_array($done) && (int) $done['success'] === 1];
   }
 
-  public function wpforms(string $license): bool
+  public function wpforms(string $license): array
   {
     if (!function_exists('wpforms')) {
-      return false;
+      return ['success' => false];
     }
 
     if (!class_exists('\WPForms_License', false)) {
       $file = WP_CONTENT_DIR . '/plugins/wpforms/pro/includes/admin/class-license.php';
 
       if (!file_exists($file)) {
-        return false;
+        return ['success' => false];
       }
 
       require_once($file);
@@ -264,25 +381,25 @@ class LocalLicenseProcessor
 
     $done = (new \WPForms_License())->verify_key($license, false);
 
-    return $done ? true : false;
+    return ['success' => $done ? true : false];
   }
 
-  public function aiowpspf(string $license): bool
+  public function aiowpspf(string $license): array
   {
     return $this->updraftFamily('all-in-one-wp-security-and-firewall-premium', $license);
   }
 
-  public function updraftplus(string $license): bool
+  public function updraftplus(string $license): array
   {
     return $this->updraftFamily('updraftplus', $license);
   }
 
-  public function wpOptimize(string $license): bool
+  public function wpOptimize(string $license): array
   {
     return $this->updraftFamily('wp-optimize-premium', $license);
   }
 
-  private function updraftFamily(string $plugin, string $license): bool
+  private function updraftFamily(string $plugin, string $license): array
   {
     [$email, $password] = explode(':', $license);
 
@@ -305,15 +422,15 @@ class LocalLicenseProcessor
 
     $response = json_decode(wp_remote_retrieve_body($request), true);
 
-    return is_array($response) && isset($response['code']) && $response['code'] === 'OK';
+    return ['success' => is_array($response) && isset($response['code']) && $response['code'] === 'OK'];
   }
 
-  public function bsfFamily(string $plugin, string $productId, string $license): bool
+  public function bsfFamily(string $plugin, string $productId, string $license): array
   {
     $file = WP_PLUGIN_DIR . '/' . $plugin . '/admin/bsf-core/index.php';
 
     if (!file_exists($file)) {
-      return false;
+      return ['success' => false];
     }
 
     if (!class_exists('BSF_License_Manager', false)) {
@@ -327,6 +444,6 @@ class LocalLicenseProcessor
       'license_key'              => $license,
     ]);
 
-    return is_array($result) && isset($result['success']) && $result['success'];
+    return ['success' => is_array($result) && isset($result['success']) && $result['success']];
   }
 }
