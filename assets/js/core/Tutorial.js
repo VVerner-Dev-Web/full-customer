@@ -138,7 +138,7 @@ export const Tutorial = {
       this._tourInstance.addStep({
         id: "step-connect-intro",
         title: "Sua primeira missão",
-        text: "Para começar a mágica, precisamos vincular sua conta. Por enquanto, mantenha o modelo 'Conectar' selecionado.",
+        text: "Para começar a mágica, precisamos vincular sua conta. Por enquanto, mantenha o modelo 'Conta FULL.' selecionado.",
         attachTo: {
           element: "#skillSeletor",
           on: "right",
@@ -200,12 +200,48 @@ export const Tutorial = {
         text: "Excelente! Agora clique em 'Conectar Conta FULL' nesta lista.",
         arrow: true,
         attachTo: {
-          element: ".fs-copilot-sugestao[data-id='connectAccount']",
-          on: "bottom",
+          element: ".fs-copilot-input__sugestoes",
+          on: "top",
         },
-        advanceOn: {
-          selector: ".fs-copilot-sugestao[data-id='connectAccount']",
-          event: "click",
+        when: {
+          show: () => {
+            this._preventDropdownClose = (e) => {
+              e.preventDefault(); // Impede o Bootstrap de fechar a lista
+            };
+
+            document.addEventListener(
+              "hide.bs.dropdown",
+              this._preventDropdownClose,
+            );
+
+            this._handleConnectClick = (e) => {
+              const clickedTarget = e.target.closest(
+                ".fs-copilot-sugestao[data-id='connectAccount']",
+              );
+
+              if (clickedTarget) {
+                this._tourInstance.next();
+              }
+            };
+
+            document.addEventListener("click", this._handleConnectClick, true);
+          },
+          hide: () => {
+            if (this._preventDropdownClose) {
+              document.removeEventListener(
+                "hide.bs.dropdown",
+                this._preventDropdownClose,
+              );
+            }
+
+            if (this._handleConnectClick) {
+              document.removeEventListener(
+                "click",
+                this._handleConnectClick,
+                true,
+              );
+            }
+          },
         },
         buttons: [
           {
@@ -225,21 +261,12 @@ export const Tutorial = {
         arrow: true,
         attachTo: {
           element: "#btnEnviarCopilot",
-          on: "bottom", // Ajuste conforme ficar melhor na UI
+          on: "top",
         },
         advanceOn: {
           selector: "#btnEnviarCopilot",
           event: "click",
         },
-        buttons: [
-          {
-            action() {
-              return this.back();
-            },
-            classes: "shepherd-button-secondary",
-            text: "Voltar",
-          },
-        ],
       });
 
       this._tourInstance.addStep({
@@ -250,28 +277,23 @@ export const Tutorial = {
           element: ".fs-cartao-acao",
           on: "top",
         },
-        // 1. Remova o advanceOn. Nós vamos assumir o controle total no "show".
         when: {
           show: () => {
-            // Função centralizada e síncrona para garantir o salvamento imediato
             this._saveResumeState = () => {
               localStorage.setItem("fc_tour_resume", "true");
               this._tourInstance.hide();
             };
 
-            // Escutador 1: Tecla Enter
             this._handleEnterPress = (e) => {
               if (e.key === "Enter") {
                 this._saveResumeState();
               }
             };
 
-            // Escutador 2: Clique no Botão
             this._handleBtnClick = () => {
               this._saveResumeState();
             };
 
-            // Anexando os eventos assim que o passo aparece
             document.addEventListener("keydown", this._handleEnterPress);
 
             const btn = document.querySelector("#btnEnviarCopilot");
@@ -281,7 +303,6 @@ export const Tutorial = {
           },
 
           hide: () => {
-            // No hide, fazemos apenas a faxina (remover os listeners)
             if (this._handleEnterPress) {
               document.removeEventListener("keydown", this._handleEnterPress);
             }
@@ -381,12 +402,46 @@ export const Tutorial = {
         text: "Selecione na lista qual plugin você deseja instalar e ativar agora.",
         arrow: true,
         attachTo: {
-          element: "#copilotSugestoes",
+          element: ".fs-copilot-input__sugestoes",
           on: "top",
         },
-        advanceOn: {
-          selector: "#copilotSugestoes",
-          event: "click",
+        when: {
+          show: () => {
+            this._preventDropdownClose = (e) => {
+              e.preventDefault(); // Impede o Bootstrap de fechar a lista
+            };
+
+            document.addEventListener(
+              "hide.bs.dropdown",
+              this._preventDropdownClose,
+            );
+
+            this._handleConnectClick = (e) => {
+              const clickedTarget = e.target.closest(".fs-copilot-sugestao");
+
+              if (clickedTarget) {
+                this._tourInstance.next();
+              }
+            };
+
+            document.addEventListener("click", this._handleConnectClick, true);
+          },
+          hide: () => {
+            if (this._preventDropdownClose) {
+              document.removeEventListener(
+                "hide.bs.dropdown",
+                this._preventDropdownClose,
+              );
+            }
+
+            if (this._handleConnectClick) {
+              document.removeEventListener(
+                "click",
+                this._handleConnectClick,
+                true,
+              );
+            }
+          },
         },
         buttons: [
           {
@@ -402,7 +457,7 @@ export const Tutorial = {
       this._tourInstance.addStep({
         id: "step-action-send",
         title: "Tudo pronto!",
-        text: "Clique em enviar e observe a mágica acontecer! Você pode usar esse Copilot sempre que precisar poupar tempo.",
+        text: "Clique em enviar e observe a mágica acontecer! Você pode usar esse Copilot sempre que precisar ativa um plugin PRO em seu site.",
         arrow: true,
         attachTo: {
           element: "#btnEnviarCopilot",
