@@ -2,6 +2,7 @@
 
 namespace FC\Actions;
 
+use FC\Services\LocalLicenseProcessor;
 use FC\User;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -60,13 +61,31 @@ class PluginReactivate extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $remote = fcDashboardAPI('POST', 'plugin-repository/' . $this->repoPlugin['slug'] . '/reactivate', [
-      'cookies' => User::instance()->getCurrentCookies()
-    ]);
+    $slug = $this->repoPlugin['slug'];
+    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/reactivate');
+
+    if (!$data['success']) {
+      return new WP_REST_Response([
+        'success' => false,
+        'error' => $data['message']
+      ]);
+    }
+
+    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license');
+
+    $processor = new LocalLicenseProcessor();
+    $result = $processor->process($slug, $data['data']['license'] ?? '');
+
+    if ($result['success']) {
+      fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license/confirm');
+    }
+
+    do_action('fc/updates/invalidate');
 
     return new WP_REST_Response([
-      'success' => $remote['success'],
-      'error' => isset($remote['message']) && $remote['message'] ? $remote['message'] : '',
+      'success' => true,
+      'message' => $result['success'] ? 'Plugin reativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.',
+      'result' => $result
     ]);
   }
 }

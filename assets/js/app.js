@@ -36,6 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
     SkillManager.addMiddleware(simpleSkillMiddleware);
 
     SkillManager.init(root);
+
+    Chat.root.addEventListener(
+      "fc/simple-action/processed",
+      ({ detail: { action, response } }) => {
+        if (response.result.redirectUrl) {
+          window.location.href = response.result.redirectUrl;
+        }
+      },
+    );
   });
 
   window._refreshUI = async (requests) => {
