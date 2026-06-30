@@ -100,8 +100,7 @@ class DashboardAPI
   private function cacheKey(string $url): string
   {
     $version = (int) get_option(self::VERSION_OPTION, 1);
-
-    return self::CACHE_PREFIX . $version . '_' . md5($url);
+    return self::CACHE_PREFIX . $version . '_' . md5($url) . '_' . get_current_user_id();
   }
 
   private function flushRepositoryCache(): void
