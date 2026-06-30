@@ -38,7 +38,7 @@ class Rest
   {
     $class = is_string($action) ? $action : get_class($action);
 
-    if (in_array($class, $processed)) return;
+    if (in_array($action, $processed)) return;
 
     $instance = is_string($action) ? new $action() : $action;
 
