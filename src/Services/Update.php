@@ -19,7 +19,7 @@ class Update
 
     $this->cacheFile = $fs->resolvePath($path);
 
-    add_action('plugins_loaded', [$this, 'initiate']);
+    add_action('plugins_loaded', [$this, 'initiate'], 0);
     add_action('fc/updates/invalidate', [$this, 'invalidate']);
   }
 
@@ -36,6 +36,7 @@ class Update
     foreach ($this->getUpdates() as $update) {
       if (isset($update['path']) && $update['path'] && $fs->isFile($update['path'])) {
         PucFactory::buildUpdateChecker($update['puc'], $update['path'], $update['slug']);
+        add_filter('puc_is_slug_in_use-' . $update['slug'], '__return_false', PHP_INT_MAX);
       }
     }
   }
