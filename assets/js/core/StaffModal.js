@@ -15,10 +15,8 @@ export const StaffModal = {
   },
 
   bindEvents() {
-    // Atalho de teclado
     document.addEventListener("keydown", (e) => this.handleShortcut(e));
 
-    // Fechar modal
     this.dialog
       .querySelector(".fsm-header button")
       ?.addEventListener("click", () => {
@@ -26,7 +24,6 @@ export const StaffModal = {
         document.dispatchEvent(new CustomEvent("fs/modal/closed"));
       });
 
-    // Submit do formulário
     this.dialog.addEventListener("submit", (e) => {
       if (e.target.tagName === "FORM") {
         e.preventDefault();
@@ -46,10 +43,8 @@ export const StaffModal = {
       });
     });
 
-    // Escutar abertura para carregar plugins
     document.addEventListener("fs/modal/opened", () => this.loadRepository());
 
-    // Limpeza ao fechar
     document.addEventListener("fs/modal/closed", () => {
       this.dialog.querySelector(".fsm-repository").innerHTML = "";
       this.dialog.querySelector(".fsm-response").innerHTML = "";
@@ -89,7 +84,7 @@ export const StaffModal = {
         .map(
           (item, i) => `
         <div class="fsm-item">
-          <input type="checkbox" name="plugins[]" value="${item.plugin}" id="plugin-${i}">   
+          <input type="checkbox" name="plugins[]" value="${item.plugin}" data-slug="${item.slug}" id="plugin-${i}">   
           <label for="plugin-${i}">${item.name}</label>
         </div>
       `,
@@ -112,7 +107,7 @@ export const StaffModal = {
       return;
     }
 
-    const queue = checked.map((el) => el.value);
+    const queue = checked.map((el) => el.dataset.slug);
     this.installNext(queue);
   },
 

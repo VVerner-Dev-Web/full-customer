@@ -86,7 +86,7 @@ class PluginInstall extends AbstractAction
 
     ExecutionStatus::updateState($pid, 'Baixando arquivo do plugin...');
 
-    $package = download_url($plugin['package'], 300);
+    $package = download_url($plugin['package'], 5 * MINUTE_IN_SECONDS);
     if (is_wp_error($package)) {
       return new WP_REST_Response([
         'success' => false,
