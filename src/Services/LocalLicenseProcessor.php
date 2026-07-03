@@ -51,9 +51,9 @@ class LocalLicenseProcessor
 
     $request = wp_remote_post($url, [
       'sslverify' => false,
-      'timeout'   => 15,
-      'cookies'   => $_COOKIE,
-      'headers'   => [
+      'timeout' => 15,
+      'cookies' => $_COOKIE,
+      'headers' => [
         'X-WP-Nonce' => wp_create_nonce('wp_rest'),
       ],
     ]);
@@ -81,7 +81,7 @@ class LocalLicenseProcessor
 
     $consentUrl = $request['http_response']->get_response_object()->url;
 
-    $parsed     = wp_parse_url($consentUrl);
+    $parsed = wp_parse_url($consentUrl);
     $queryParams = [];
     wp_parse_str($parsed['query'], $queryParams);
     $challenge = $queryParams['consent_challenge'] ?? null;
@@ -97,26 +97,26 @@ class LocalLicenseProcessor
 
     foreach ($request['http_response']->get_response_object()->cookies as $cookie) {
       $allCookies[] = new WP_Http_Cookie([
-        'name'   => $cookie->name,
-        'value'  => $cookie->value,
-        'path'   => $attrs['path']   ?? '/',
-        'domain' => $attrs['domain'] ?? 'my.elementor.com',
+        'name' => $cookie->name,
+        'value' => $cookie->value,
+        'path' => $cookie->path ?? '/',
+        'domain' => $cookie->domain ?? 'my.elementor.com',
       ]);
     }
 
     $response = wp_remote_post('https://my.elementor.com/connect/api/v1/consent', [
       'cookies' => $allCookies,
-      'headers'     => [
-        'Accept'       => 'application/json',
+      'headers' => [
+        'Accept' => 'application/json',
         'Content-Type' => 'application/json',
-        'Referer'      => $consentUrl,
+        'Referer' => $consentUrl,
       ],
-      'body'        => wp_json_encode([
+      'body' => wp_json_encode([
         'consentChallenge' => $challenge,
-        'subscriptionId'   => $license,
-        'grantScope'       => ['openid', 'offline_access', 'share_usage_data'],
+        'subscriptionId' => $license,
+        'grantScope' => ['openid', 'offline_access', 'share_usage_data'],
       ]),
-      'timeout'     => 15,
+      'timeout' => 15,
     ]);
 
     $respBody = json_decode(wp_remote_retrieve_body($response), true);
@@ -131,8 +131,8 @@ class LocalLicenseProcessor
 
     $done = wp_remote_get($redirectUrl, [
       'cookies' => $allCookies,
-      'sslverify'   => false,
-      'timeout'   => 15,
+      'sslverify' => false,
+      'timeout' => 15,
     ]);
 
     $localUrl = $done['http_response']->get_response_object()->url;
@@ -158,15 +158,15 @@ class LocalLicenseProcessor
     $cookies = [];
     foreach ($_COOKIE as $name => $value) {
       $cookies[] = new \WP_Http_Cookie([
-        'name'  => $name,
+        'name' => $name,
         'value' => $value
       ]);
     }
 
     $request = wp_remote_post(admin_url('admin-ajax.php'), [
       'sslverify' => false,
-      'cookies'   => $cookies,
-      'body'      => [
+      'cookies' => $cookies,
+      'body' => [
         'action' => 'jet_license_action',
         'data' => [
           'license' => $license,
@@ -197,19 +197,19 @@ class LocalLicenseProcessor
     delete_transient($transientKey);
 
     $m = \Essential_Addons_Elementor\Pro\Classes\License\Manager::get_instance([
-      'plugin_file'    => EAEL_PRO_PLUGIN_FILE,
-      'version'        => EAEL_PRO_PLUGIN_VERSION,
-      'item_id'        => EAEL_SL_ITEM_ID,
-      'item_name'      => EAEL_SL_ITEM_NAME,
-      'item_slug'      => EAEL_SL_ITEM_SLUG,
-      'textdomain'     => 'essential-addons-elementor',
-      'db_prefix'      => EAEL_SL_ITEM_SLUG,
-      'page_slug'      => 'eael-settings',
+      'plugin_file' => EAEL_PRO_PLUGIN_FILE,
+      'version' => EAEL_PRO_PLUGIN_VERSION,
+      'item_id' => EAEL_SL_ITEM_ID,
+      'item_name' => EAEL_SL_ITEM_NAME,
+      'item_slug' => EAEL_SL_ITEM_SLUG,
+      'textdomain' => 'essential-addons-elementor',
+      'db_prefix' => EAEL_SL_ITEM_SLUG,
+      'page_slug' => 'eael-settings',
       'scripts_handle' => 'eael-admin-dashboard',
-      'screen_id'      => ["toplevel_page_eael-settings"],
-      'api'            => 'ajax',
-      'ajax'           => [
-        'textdomain'    => 'essential-addons-elementor',
+      'screen_id' => ["toplevel_page_eael-settings"],
+      'api' => 'ajax',
+      'ajax' => [
+        'textdomain' => 'essential-addons-elementor',
         'action_prefix' => 'essential-addons-elementor'
       ],
       'migrate_from' => [
@@ -271,7 +271,7 @@ class LocalLicenseProcessor
       'rank_math_reseller_data',
       [
         'username' => $user,
-        'api_key'  => $licenseKey,
+        'api_key' => $licenseKey,
       ],
       false
     );
@@ -438,10 +438,10 @@ class LocalLicenseProcessor
     }
 
     $result = \BSF_License_Manager::instance()->bsf_process_license_activation([
-      'privacy_consent'          => true,
+      'privacy_consent' => true,
       'terms_conditions_consent' => true,
-      'product_id'               => $productId,
-      'license_key'              => $license,
+      'product_id' => $productId,
+      'license_key' => $license,
     ]);
 
     return ['success' => is_array($result) && isset($result['success']) && $result['success']];
