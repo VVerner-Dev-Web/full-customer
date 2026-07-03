@@ -111,7 +111,7 @@ class Connection
 
     $fs = FileSystem::instance();
     $message = '
-    <div class="fs-admin-notice__banner">
+    <div class="fs-admin-notice__banner notice">
       <div class="fs-admin-notice__banner-imagem">
         <img src="' . $fs->getUrl('assets/images/plugue.png') . '" alt="Conectar" />
       </div>
@@ -125,7 +125,7 @@ class Connection
       </div>
     </div>';
 
-    if (!$user->isConnected()) {
+    if (!$user->isConnected() || true) {
       delete_option(self::AUTO_CONNECTION_KEY);
       echo str_replace(
         ['{{cta}}', '{{text}}'],
