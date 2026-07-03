@@ -11,7 +11,7 @@ class LocalLicenseProcessor
   public function __construct()
   {
     $this->map = [
-      'wp-rocket' => '__return_true',
+      'wp-rocket' => [$this, 'wpRocket'],
       'advanced-custom-fields-pro' => [$this, 'acfPRO'],
       'all-in-one-wp-security-and-firewall-premium' => [$this, 'aiowpspf'],
       'wp-optimize-premium' => [$this, 'wpOptimize'],
@@ -38,6 +38,13 @@ class LocalLicenseProcessor
     }
 
     return call_user_func($this->map[$plugin], $license);
+  }
+
+  public function wpRocket(string $license): array
+  {
+    return [
+      'success' => true,
+    ];
   }
 
   public function elementorPro(string $license): array
