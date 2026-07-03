@@ -65,29 +65,32 @@ export const ActivateProPlugin = {
 
   _startPolling(processId, onProgress) {
     let _lastState = null;
-    let _isPolling = false;
+    const { restUrl, nonce } = window.fcData;
+    const eventSource = new EventSource(
+      `${restUrl}/actions/execution/${processId}?_wpnonce=${nonce}`,
+    );
 
-    const interval = setInterval(async () => {
-      if (_isPolling) return;
-
-      _isPolling = true;
-
+    eventSource.onmessage = (event) => {
       try {
-        const res = await ApiService.post(`/actions/execution/${processId}`);
-        const statusText = res.state;
+        const data = JSON.parse(event.data);
+        const statusText = data.state;
 
         if (statusText && _lastState !== statusText) {
           _lastState = statusText;
           onProgress(statusText);
         }
       } catch (e) {
-        console.warn("[Status Fetch] Erro na requisição de polling", e);
-      } finally {
-        _isPolling = false;
+        console.warn("[Status SSE] Erro ao processar mensagem SSE", e);
       }
-    }, 2000);
+    };
 
-    return () => clearInterval(interval);
+    eventSource.onerror = (e) => {
+      console.warn("[Status SSE] Erro ou conexão fechada na transmissão SSE", e);
+    };
+
+    return () => {
+      eventSource.close();
+    };
   },
 
   // ─── Processos ────────────────────────────────────────────
