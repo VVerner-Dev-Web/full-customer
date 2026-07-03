@@ -38,6 +38,11 @@ class PluginInstall extends AbstractAction
     return 'actions/plugins/install/(?P<processId>[a-zA-Z0-9-]+)';
   }
 
+  public function showInActionsDropdown(): bool
+  {
+    return false;
+  }
+
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
     require_once ABSPATH . 'wp-admin/includes/plugin.php';

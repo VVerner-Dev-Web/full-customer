@@ -4,6 +4,7 @@ namespace FC\Skills;
 
 use FC\Actions\PluginActivationFactory;
 use FC\Actions\PluginActivationManager;
+use FC\Actions\PluginInstall;
 use FC\Actions\PluginReactivate;
 use FC\User;
 
@@ -71,6 +72,8 @@ class ActivateProPlugin extends AbstractSkill
       if (strpos($plugin['plugin'], 'full-customer') !== false) {
         continue;
       }
+
+      $actions[] = new PluginInstall($plugin);
 
       if (!isset($plugin['activation']) || $plugin['activation']['id'] === 0) {
         $actions[] = new PluginActivationFactory($plugin);
