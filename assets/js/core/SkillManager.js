@@ -4,11 +4,11 @@
  */
 import { Chat } from "../core/Chat.js";
 import { ApiService } from "../utils/ApiService.js";
-import { generateId } from "../utils/functions.js";
 
 export const SkillManager = {
   waitingUserPersonalAnswer: false,
 
+  _initialized: false,
   _working: false,
   _root: null,
 
@@ -38,33 +38,40 @@ export const SkillManager = {
       return;
     }
 
-    this._bindSkillChange();
+    // Event listeners on transient/recreated elements must be bound every time
     this._bindMenuEvents();
     this._bindInputEvents();
-    this._bindChatSubmit();
     this._bindSuggestionClick();
-    this._bindActions();
 
-    const loadSkills = async () => {
-      await this._loadAndRenderSkills();
+    // Event listeners on persistent root must be bound only once
+    if (!this._initialized) {
+      this._bindSkillChange();
+      this._bindChatSubmit();
+      this._bindActions();
 
-      this._root.dispatchEvent(
-        new CustomEvent("fc/skills/loaded", {
-          detail: { availableSkills: this._skills },
-        }),
+      root.addEventListener(
+        "fc/simple-action/processed",
+        async ({ detail: { action, response } }) => {
+          if (action.id === "CleanUpCache" && response.success) {
+            await this._loadAndRenderSkills();
+            this._root.dispatchEvent(
+              new CustomEvent("fc/skills/loaded", {
+                detail: { availableSkills: this._skills },
+              }),
+            );
+          }
+        },
       );
-    };
 
-    root.addEventListener(
-      "fc/simple-action/processed",
-      ({ detail: { action, response } }) => {
-        if (action.id === "CleanUpCache" && response.success) {
-          loadSkills();
-        }
-      },
+      this._initialized = true;
+    }
+
+    await this._loadAndRenderSkills();
+    this._root.dispatchEvent(
+      new CustomEvent("fc/skills/loaded", {
+        detail: { availableSkills: this._skills },
+      }),
     );
-
-    loadSkills();
   },
 
   async trigger(skillId, action = "", msg = "") {
