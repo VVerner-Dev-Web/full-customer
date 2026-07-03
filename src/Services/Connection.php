@@ -125,7 +125,7 @@ class Connection
       </div>
     </div>';
 
-    if (!$user->isConnected() || true) {
+    if (!$user->isConnected()) {
       delete_option(self::AUTO_CONNECTION_KEY);
       echo str_replace(
         ['{{cta}}', '{{text}}'],
