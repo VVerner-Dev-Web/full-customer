@@ -18,3 +18,5 @@
 
 /.env export-ignore
 /.vscode export-ignore
+
+/.fullos export-ignore
