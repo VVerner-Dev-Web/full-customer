@@ -1,11 +1,11 @@
 <?php
 
-namespace FC\Skills;
+namespace FC\Models;
 
-use FC\FileSystem;
-
-abstract class AbstractSkill
+abstract class AbstractModel
 {
+  abstract public function getId(): string;
+
   abstract public function getName(): string;
 
   abstract public function getShortDescription(): string;
@@ -17,6 +17,13 @@ abstract class AbstractSkill
   abstract public function getInputPlaceholder(): string;
 
   abstract public function getFeaturesList(): array;
+
+  /**
+   * Retorna os agentes associados a este modelo.
+   *
+   * @return \FC\Agents\AbstractAgent[]
+   */
+  abstract public function agents(): array;
 
   public function isDefault(): bool
   {
@@ -30,11 +37,6 @@ abstract class AbstractSkill
 
   public function isSoon(): bool
   {
-    return true;
-  }
-
-  public function actions(): array
-  {
-    return [];
+    return false;
   }
 }

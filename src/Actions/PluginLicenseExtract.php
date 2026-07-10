@@ -5,8 +5,15 @@ namespace FC\Actions;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class AccountLicensesExtract extends AbstractAction
+class PluginLicenseExtract extends AbstractAction
 {
+  private ?array $repoPlugin = null;
+
+  public function __construct(?array $repoPlugin = null)
+  {
+    $this->repoPlugin = $repoPlugin;
+  }
+
   public function getIcon(): string
   {
     return 'assets/images/icons/archive-drawer-line.svg';
@@ -14,7 +21,7 @@ class AccountLicensesExtract extends AbstractAction
 
   public function getName(): string
   {
-    return 'Resumo de licenças';
+    return 'Consultar licenças compradas';
   }
 
   public function getShortDescription(): string
@@ -24,9 +31,18 @@ class AccountLicensesExtract extends AbstractAction
 
   public function getPromptArgs(): array
   {
-    return array_merge($this->_defaultPromptArgs(), [
-      'id' => 'accountLicensesResume'
-    ]);
+    $args = $this->_defaultPromptArgs();
+
+    if ($this->repoPlugin) {
+      $args = array_merge($args, [
+        'id' => 'accountLicensesResume.' . $this->repoPlugin['id'],
+        'extraProps' => [
+          'pluginId' => $this->repoPlugin['id']
+        ]
+      ]);
+    }
+
+    return $args;
   }
 
   public function getRestMethod(): string
@@ -41,7 +57,13 @@ class AccountLicensesExtract extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $data = fcDashboardAPI('GET', 'account/licenses-extract');
+    $pluginId = $request->get_param('pluginId');
+    $params = [];
+    if ($pluginId) {
+      $params['pluginId'] = $pluginId;
+    }
+
+    $data = fcDashboardAPI('GET', 'account/licenses-extract', $params);
 
     if (!$data['success']) {
       return new WP_REST_Response([
@@ -52,7 +74,9 @@ class AccountLicensesExtract extends AbstractAction
 
     $message = '';
 
-    foreach ($data['data'] as $i => $value) {
+    $plugins = isset($data['data']['name']) ? [$data['data']] : $data['data'];
+
+    foreach ($plugins as $i => $value) {
       if ($i > 0) {
         $message .= '<hr>';
       }

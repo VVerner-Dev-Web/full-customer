@@ -1,16 +1,18 @@
 <?php
 
-namespace FC\Skills;
+namespace FC\Models;
 
-use FC\Actions\AccountLicensesExtract;
-use FC\Actions\ConnectAccount;
-use FC\Actions\DisconnectAccount;
-use FC\Actions\ViewConnectedAccount;
+use FC\Agents\ConnectorAgent;
 use FC\User;
 
-class Connect extends AbstractSkill
+class ConnectModel extends AbstractModel
 {
   const ID = 'connect';
+
+  public function getId(): string
+  {
+    return self::ID;
+  }
 
   public function getName(): string
   {
@@ -25,7 +27,7 @@ class Connect extends AbstractSkill
 
   public function getShortDescription(): string
   {
-    return 'Skills para conexão e gerenciamento de sua conta.';
+    return 'Modelos para conexão e gerenciamento de sua conta.';
   }
 
   public function getDescription(): string
@@ -58,23 +60,20 @@ class Connect extends AbstractSkill
     return false;
   }
 
-  public function actions(): array
-  {
-    return [
-      new ConnectAccount,
-      new ViewConnectedAccount,
-      new DisconnectAccount,
-      new AccountLicensesExtract
-    ];
-  }
-
   public function getFeaturesList(): array
   {
     return [
-      'Novas skills desbloqueadas',
+      'Novas habilidades desbloqueadas',
       'Consultar assentos disponíveis',
       'Acesso rápido para solicitar novas ativações',
       'Novos recursos incríveis',
+    ];
+  }
+
+  public function agents(): array
+  {
+    return [
+      new ConnectorAgent()
     ];
   }
 }

@@ -4,8 +4,7 @@ namespace FC\Services;
 
 use FC\FileSystem;
 use FC\Fragments\DashboardFullPage;
-use FC\Fragments\SkillsFullPage;
-use FC\SkillRepository;
+use FC\ModelRepository;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -15,8 +14,6 @@ class Rest
   {
     add_action('init', [$this, 'actions']);
 
-    fcRegisterRestRoute('POST', 'fragments', [$this, 'fragments']);
-
     fcRegisterRestRoute('GET', 'skills', [$this, 'skills']);
 
     fcRegisterRestRoute('POST', 'local-license-processor', [$this, 'localLicenseProcessor'], '__return_true');
@@ -25,12 +22,24 @@ class Rest
   public function actions(): void
   {
     $processed = [];
-    $skills = SkillRepository::instance()->all();
+    $actions = [
+      new \FC\Actions\ConnectAccount(),
+      new \FC\Actions\ViewConnectedAccount(),
+      new \FC\Actions\DisconnectAccount(),
+      new \FC\Actions\PluginLicenseExtract(),
+      new \FC\Actions\PluginRepository(),
+      new \FC\Actions\CleanUpCache(),
+      new \FC\Actions\PluginInstall(),
+      new \FC\Actions\PluginLicense(),
+      new \FC\Actions\PluginWordPressActivate(),
+      new \FC\Actions\PluginFullActivate(),
+      new \FC\Actions\ExecutionStatus(),
+      new \FC\Actions\PluginActivationManager(),
+      new \FC\Actions\PluginReactivate(),
+    ];
 
-    foreach ($skills as $skill) {
-      foreach ($skill->actions() as $action) {
-        $this->register_action_recursive($action, $processed);
-      }
+    foreach ($actions as $action) {
+      $this->register_action_recursive($action, $processed);
     }
   }
 
@@ -38,7 +47,8 @@ class Rest
   {
     $class = is_string($action) ? $action : get_class($action);
 
-    if (in_array($action, $processed)) return;
+    if (in_array($action, $processed))
+      return;
 
     $instance = is_string($action) ? new $action() : $action;
 
@@ -57,63 +67,47 @@ class Rest
     $processed[] = $class;
   }
 
-  public function fragments(WP_REST_Request $request): WP_REST_Response
-  {
-    $requested_fragments = $request->get_param('fragments');
-
-    if (!is_array($requested_fragments)) {
-      return rest_ensure_response(['success' => false, 'error' => 'Invalid payload']);
-    }
-
-    $registry = [
-      'DashboardFullPage' => DashboardFullPage::class,
-      'SkillsFullPage' => SkillsFullPage::class,
-    ];
-
-    $response = [];
-
-    foreach ($requested_fragments as $key => $args) {
-      if (isset($registry[$key])) {
-        $class = $registry[$key];
-        $response[$key] = (new $class($args))->render();
-      } else {
-        $response[$key] = "";
-      }
-    }
-
-    return rest_ensure_response([
-      'success'   => true,
-      'fragments' => $response
-    ]);
-  }
-
   public function skills(): WP_REST_Response
   {
     $list = [];
 
-    foreach (SkillRepository::instance()->all() as $skill) {
-      $actions = [];
+    foreach (ModelRepository::instance()->all() as $model) {
+      $agents = [];
 
-      foreach ($skill->actions() as $action) {
-        if (!$action->isAvailable()) continue;
-        $actions[] = $action->getPromptArgs();
+      foreach ($model->agents() as $agent) {
+        $agentActions = [];
+
+        foreach ($agent->actions() as $action) {
+          if (!$action->isAvailable())
+            continue;
+          $agentActions[] = $action->getPromptArgs();
+        }
+
+        $agents[] = [
+          'id' => $agent->getId(),
+          'name' => $agent->getName(),
+          'imageUrl' => $agent->getIcon(),
+          'isReadOnly' => $agent->isReadOnly(),
+          'actions' => $agentActions,
+        ];
       }
 
       $list[] = [
-        'imageUrl'          => FileSystem::instance()->getUrl($skill->getIcon()),
-        'name'              => $skill->getName(),
-        'id'                => $skill::ID,
-        'isDefault'         => $skill->isDefault(),
-        'shortDescription'  => $skill->getShortDescription(),
-        'isAvailable'       => $skill->isAvailable(),
-        'isSoon'            => $skill->isSoon(),
-        'actions'           => $actions
+        'imageUrl' => FileSystem::instance()->getUrl($model->getIcon()),
+        'name' => $model->getName(),
+        'id' => $model->getId(),
+        'isDefault' => $model->isDefault(),
+        'shortDescription' => $model->getShortDescription(),
+        'isAvailable' => $model->isAvailable(),
+        'isSoon' => $model->isSoon(),
+        'agents' => $agents
       ];
     }
 
     return rest_ensure_response([
       'success' => true,
-      'skills'  => $list
+      'connected' => \FC\User::instance()->isConnected(),
+      'skills' => $list
     ]);
   }
 

@@ -6,7 +6,7 @@ class MagicLink
 {
   public function __construct()
   {
-    fcRegisterRestRoute('POST', 'magic-link', [$this, 'generateLink'], fn() => __return_true());
+    fcRegisterRestRoute('POST', 'magic-link', [$this, 'generateLink'], '__return_true');
     add_action('init', [$this, 'handleMagicLinkLogin']);
   }
 

@@ -1,9 +1,7 @@
 import { Chat } from "../core/Chat.js";
 import { ApiService } from "../utils/ApiService.js";
 
-export const SimpleSkill = {
-  _working: false,
-
+export const SimpleAction = {
   async _middleware(manager, skill, actions, msg) {
     if (actions === null) {
       return;
@@ -17,7 +15,11 @@ export const SimpleSkill = {
       const loading = Chat.sendLoadingMessage();
 
       try {
-        const method = action.restMethod.toLowerCase();
+        const method = (action.restMethod || "post").toLowerCase();
+
+        if (typeof ApiService[method] !== "function") {
+          throw new Error(`[SimpleAction] Método HTTP não suportado: ${method}`);
+        }
 
         const response = await ApiService[method](
           "/" + action.restRoute,
@@ -28,7 +30,7 @@ export const SimpleSkill = {
 
         Chat.sendCopilotMessage(
           response.message ??
-            "Recebemos sua solicitação, nossa equipe processar sua solicitação. Você receberá um email informando.",
+            "Recebemos sua solicitação, nossa equipe irá processar sua solicitação. Você receberá um email informando.",
           response.success ? "normal" : "error",
           response.terminate === true ? true : false,
           response.actions || [],

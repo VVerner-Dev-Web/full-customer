@@ -1,6 +1,6 @@
-import { ActivateProPlugin } from "../middleware/ActivateProPlugin";
-import { ApiService } from "../utils/ApiService";
-import { generateId } from "../utils/functions";
+import { ActivateProPlugin } from "../middleware/ActivateProPlugin.js";
+import { ApiService } from "../utils/ApiService.js";
+import { generateId } from "../utils/functions.js";
 
 export const StaffModal = {
   dialog: null,
@@ -52,6 +52,16 @@ export const StaffModal = {
   },
 
   handleShortcut(e) {
+    // Ignore keyboard events when user is typing in inputs or contenteditable fields
+    const targetTagName = e.target.tagName;
+    if (
+      targetTagName === "INPUT" ||
+      targetTagName === "TEXTAREA" ||
+      e.target.isContentEditable
+    ) {
+      return;
+    }
+
     if (e.shiftKey) {
       const key = e.key.toLowerCase();
       if (/^[a-z]$/.test(key)) {
@@ -114,7 +124,7 @@ export const StaffModal = {
   async installNext(queue) {
     if (!queue.length) {
       alert("Todos os plugins finalizados");
-      window.location.href = window.fcData.wpPluginsUrl;
+      window.location.href = window.fcData?.wpPluginsUrl || "#";
       return;
     }
 
@@ -134,13 +144,16 @@ export const StaffModal = {
       logEl.innerHTML += msg + "<br>";
     };
 
-    await ActivateProPlugin.processInstallation(processId, pluginSlug, {
-      start: (msg) => incrementLog("Iniciando " + msg),
-      progress: incrementLog,
-      onError: incrementLog,
-      onSuccess: incrementLog,
-    });
-
-    this.installNext(queue);
+    try {
+      incrementLog("Iniciando instalação...");
+      await ActivateProPlugin.processInstallation(processId, pluginSlug, {
+        progress: incrementLog,
+      });
+      incrementLog("✅ Plugin instalado com sucesso!");
+    } catch (err) {
+      incrementLog(`❌ Erro na instalação: ${err.message}`);
+    } finally {
+      this.installNext(queue);
+    }
   },
 };

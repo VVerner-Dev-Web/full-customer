@@ -5,14 +5,13 @@
  * o carregamento inicial. Nenhuma lógica de negócio aqui.
  */
 import { Chat } from "./core/Chat.js";
-import { SkillManager } from "./core/SkillManager.js";
+import { CopilotManager } from "./core/CopilotManager.js";
 import { SkillsPage } from "./core/SkillsPage.js";
 import { WelcomeService } from "./core/WelcomeService.js";
 import { Tutorial } from "./core/Tutorial.js";
 import { ActivateProPlugin } from "./middleware/ActivateProPlugin.js";
 import { ConnectionService } from "./middleware/ConnectionService.js";
-import { SimpleSkill } from "./middleware/SimpleSkill.js";
-import { FragmentService } from "./utils/FragmentService.js";
+import { SimpleAction } from "./middleware/SimpleAction.js";
 import { UIManager } from "./utils/UIManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,59 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
   WelcomeService.attach(root);
   SkillsPage.attach(root);
   Tutorial.attach(root);
+  ConnectionService.attach(root);
+
+  root.addEventListener("click", (e) => {
+    const btn = e.target.closest("#btnRestartChat");
+    if (btn) {
+      e.preventDefault();
+      CopilotManager.reset();
+    }
+  });
 
   const activateProMiddleware =
     ActivateProPlugin._middleware.bind(ActivateProPlugin);
   const connectionMiddleware =
     ConnectionService._middleware.bind(ConnectionService);
-  const simpleSkillMiddleware = SimpleSkill._middleware.bind(SimpleSkill);
+  const simpleActionMiddleware = SimpleAction._middleware.bind(SimpleAction);
 
-  Chat.root.addEventListener("fc/chat/ready", () => {
-    SkillManager.addMiddleware(activateProMiddleware);
-    SkillManager.addMiddleware(connectionMiddleware);
-    SkillManager.addMiddleware(simpleSkillMiddleware);
+  CopilotManager.addMiddleware(activateProMiddleware);
+  CopilotManager.addMiddleware(connectionMiddleware);
+  CopilotManager.addMiddleware(simpleActionMiddleware);
 
-    SkillManager.init(root);
-
-    Chat.root.addEventListener(
-      "fc/simple-action/processed",
-      ({ detail: { action, response } }) => {
-        if (response.result.redirectUrl) {
-          window.location.href = response.result.redirectUrl;
-        }
-      },
-    );
-  });
-
-  window._refreshUI = async (requests) => {
-    UIManager.toggleLoader(true);
-
-    try {
-      const data = await FragmentService.fetch(requests);
-
-      if (!data.success) return;
-
-      for (const req of requests) {
-        const html = data.fragments[req.fragment];
-        if (html && typeof req.callback === "function") {
-          req.callback(html);
-        }
-      }
-
-      root.dispatchEvent(new CustomEvent("fc/fragments/processed"));
-    } catch (err) {
-      console.error("[app] Erro ao carregar fragmentos:", err);
-    } finally {
-      UIManager.toggleLoader(false);
-    }
-  };
-
-  window._refreshUI([
-    {
-      fragment: "DashboardFullPage",
-      callback: (html) => {
-        document.querySelector("app").innerHTML = html;
-      },
-    },
-  ]);
+  CopilotManager.init(root);
 });

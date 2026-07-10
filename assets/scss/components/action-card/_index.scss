@@ -5,26 +5,41 @@
 
 .fs-cartao-acao {
   width: 100%;
-  background: $gray-100;
-  border: 1px solid $border-color;
-  border-radius: $radius-md;
-  padding: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
   position: relative;
   z-index: 2;
+  transition: opacity 0.2s ease;
+
+  &.bloqueado {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  margin-bottom: 20px;
 
   &__interno {
     background: $white;
-    border-radius: $radius-sm;
-    padding: 20px;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 16px 20px;
     display: flex;
     flex-direction: column;
-    gap: 42px;
+    gap: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.015);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+    &:focus-within {
+      border-color: #D19E00;
+      box-shadow: 0 10px 25px rgba(209, 158, 0, 0.05), 0 2px 6px rgba(209, 158, 0, 0.025);
+    }
   }
 
   &__placeholder {
-    font-size: 16px;
+    font-size: 15px;
     color: $gray-500;
-    line-height: 1.4;
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -32,6 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 4px;
   }
 
   &__direita {
@@ -71,321 +87,33 @@
 
 }
 
-// Seletor suspenso - Nova ativacao
-.fs-seletor {
-  position: relative;
-  z-index: 1;
-
-  &.show {
-    z-index: 20;
-  }
-
-  // Bootstrap .dropdown-toggle caret override
-  .dropdown-toggle::after {
-    display: none;
-  }
-
-  &__gatilho {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 42px;
-    padding: 0 12px;
-    background: $white;
-    border: 1px solid $border-light;
-    border-radius: $radius-sm;
-    font-size: 14px;
-    font-weight: 600;
-    color: $gray-700;
-    line-height: 1.4;
-    transition: background 0.2s;
-
-    &:hover {
-      background: $gray-100;
-    }
-  }
-
-  &__seta {
-    transition: transform 0.2s;
-  }
-
-  &.show &__seta {
-    transform: rotate(180deg);
-  }
-
-  &__menu {
-    width: 320px;
-    background: $white;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.05);
-    padding: 12px;
-    overflow: hidden;
-    z-index: 1050;
-
-    // Quando Bootstrap mostra o menu
-    &.show {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-  }
-
-  // Campo de busca
-  &__campo-busca {
-    width: 100%;
-    padding: 8px 16px;
-    border: 1px solid #EAECF0;
-    border-radius: $radius-sm;
-    font-size: 14px;
-    font-family: $font-family;
-    color: $gray-700;
-    background: $white;
-    outline: none;
-    line-height: 1.4;
-
-    &::placeholder {
-      color: $gray-500;
-    }
-
-    &:focus {
-      border-color: $yellow-primary;
-    }
-  }
-
-  // Area de itens com rolagem
-  &__itens {
-    display: flex;
-    flex-direction: column;
-    max-height: 280px;
-    overflow-y: auto;
-    position: relative;
-  }
-
-  // Cada item de plugin
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
-    border-radius: $radius-sm;
-    transition: background 0.15s;
-    text-decoration: none;
-
-    &:hover {
-      background: $gray-100;
-    }
-  }
-
-  &__item-icone {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    object-fit: cover;
-  }
-
-  &__item-texto {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  &__item-nome {
-    font-size: 14px;
-    font-weight: 600;
-    color: $gray-700;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  &__item-desc {
-    font-size: 12px;
-    font-weight: 400;
-    color: $gray-500;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  // Gradiente de degrade inferior
-  &__degrade {
-    position: absolute;
-    bottom: 12px;
-    left: 0;
-    right: 0;
-    height: 37px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), $white);
-    pointer-events: none;
-    border-radius: 0 0 $radius-md $radius-md;
-  }
-
-}
-
-// Popover de habilidades
-.fs-habilidades {
-  position: relative;
-  z-index: 1;
-
-  // Bootstrap .dropdown-toggle caret override
-  .dropdown-toggle::after {
-    display: none;
-  }
-
-  &.show {
-    z-index: 20;
-  }
-
-  // Bootstrap .dropdown-toggle caret override
-  .dropdown-toggle::after {
-    display: none;
-  }
-
-  &__gatilho {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 42px;
-    padding: 0 12px;
-    background: $white;
-    border: 1px solid $border-light;
-    border-radius: $radius-sm;
-    font-size: 14px;
-    font-weight: 600;
-    color: $gray-700;
-    line-height: 1.4;
-    transition: background 0.2s;
-    cursor: pointer;
-
-    &:hover {
-      background: $gray-100;
-    }
-  }
-
-  &__menu {
-    width: 320px;
-    background: $white;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.05);
-    padding: 12px;
-    z-index: 1050;
-
-    &.show {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-  }
-
-  &__item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 8px;
-    border-radius: $radius-sm;
-    text-decoration: none;
-    transition: background 0.15s;
-
-    &:hover:not(&--desativado) {
-      background: $gray-100;
-    }
-
-    &--desativado {
-      opacity: 0.3;
-      cursor: default;
-      pointer-events: none;
-    }
-  }
-
-  &__item-esquerda {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__item-icone {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-
-  &__item-texto {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  &__item-linha-nome {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__item-nome {
-    font-size: 14px;
-    font-weight: 600;
-    color: $gray-700;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  &__item-desc {
-    font-size: 12px;
-    font-weight: 400;
-    color: $gray-500;
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  &__item-seta {
-    flex-shrink: 0;
-    transform: rotate(-90deg);
-  }
-
-  &__emblema {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    background: $yellow-light-bg;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #A67102;
-    line-height: 18px;
-    white-space: nowrap;
-  }
-
-}
-
 // Botao amarelo de enviar
 .fs-btn-enviar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   background: $yellow-gold;
-  border-radius: $radius-sm;
-  transition: background 0.2s, width 0.3s, padding 0.3s, opacity 0.2s;
+  border-radius: 10px;
+  transition: background 0.2s, width 0.25s, padding 0.25s, opacity 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(209, 158, 0, 0.15);
 
   &:hover {
     background: color.adjust($yellow-gold, $lightness: -5%);
+    box-shadow: 0 4px 12px rgba(209, 158, 0, 0.25);
   }
 
   &.desabilitado {
-    opacity: 0.4;
+    opacity: 0.35;
     pointer-events: none;
+    box-shadow: none;
   }
 
   &.ativo {
     width: auto;
-    padding: 0 16px;
+    padding: 0 14px;
     gap: 6px;
   }
 }

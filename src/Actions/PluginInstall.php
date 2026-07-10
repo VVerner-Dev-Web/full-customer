@@ -89,15 +89,34 @@ class PluginInstall extends AbstractAction
 
     $recoveryLink = ' <a href="' . $plugin['package'] . '">Baixar plugin manualmente</a> ';
 
-    ExecutionStatus::updateState($pid, 'Baixando arquivo do plugin...');
-
-    $package = download_url($plugin['package'], 5 * MINUTE_IN_SECONDS);
-    if (is_wp_error($package)) {
+    $temp_file = wp_tempnam($plugin['slug']);
+    if (!$temp_file) {
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Houve um erro ao baixar o arquivo do plugin. ' . $package->get_error_message() . ' ' . $recoveryLink
+        'error' => 'Não foi possível alocar espaço temporário para baixar o plugin.'
       ]);
     }
+
+    ExecutionStatus::updateState($pid, 'Baixando arquivo do plugin...');
+
+    $download = FileSystem::instance()->downloadWithProgress($plugin['package'], $temp_file, function (string $type, $value) use ($pid) {
+      error_log('-- ' . microtime() . ' --' . $value);
+      if ('percent' === $type) {
+        ExecutionStatus::updateState($pid, "Baixando arquivo do plugin... ({$value}%)");
+      } else {
+        ExecutionStatus::updateState($pid, "Baixando arquivo do plugin... ({$value} MB baixados)");
+      }
+    });
+
+    if (is_wp_error($download)) {
+      @unlink($temp_file);
+      return new WP_REST_Response([
+        'success' => false,
+        'error' => 'Houve um erro ao baixar o arquivo do plugin. ' . $download->get_error_message() . ' ' . $recoveryLink
+      ]);
+    }
+
+    $package = $temp_file;
 
     ExecutionStatus::updateState($pid, 'Download completo');
 
@@ -132,8 +151,6 @@ class PluginInstall extends AbstractAction
     ExecutionStatus::updateState($pid, 'Arquivo transferido.');
 
     $fs->delete($workingDir, true);
-
-    ExecutionStatus::deleteState($pid);
 
     return new WP_REST_Response([
       'success' => true,

@@ -9,9 +9,9 @@ use WP_REST_Response;
 
 class PluginReactivate extends AbstractAction
 {
-  private array $repoPlugin;
+  private ?array $repoPlugin = null;
 
-  public function __construct(array $repoPlugin)
+  public function __construct(?array $repoPlugin = null)
   {
     $this->repoPlugin = $repoPlugin;
   }
@@ -23,25 +23,29 @@ class PluginReactivate extends AbstractAction
 
   public function getName(): string
   {
-    return 'Reativar ' . $this->repoPlugin['name'];
+    return 'Solicitar reativação';
   }
 
   public function getShortDescription(): string
   {
-    return 'Permite o usuário reative os plugins que ele já ativou anteriormente pela FULL.';
+    return 'Reativar e validar a licença do plugin localmente.';
   }
 
   public function showInActionsDropdown(): bool
   {
-    return false;
+    return true;
   }
 
   public function getPromptArgs(): array
   {
+    if (!$this->repoPlugin) {
+      return $this->_defaultPromptArgs();
+    }
+
     return array_merge($this->_defaultPromptArgs(), [
       'id' => 'reactivate.' . $this->repoPlugin['id'],
       'name' => $this->getName(),
-      'desc' => 'Reativar licença',
+      'desc' => $this->getShortDescription(),
       'simpleRest' => true,
       'extraProps' => [
         'plugin' => $this->repoPlugin['plugin']
@@ -56,12 +60,21 @@ class PluginReactivate extends AbstractAction
 
   public function getRestRoute(): string
   {
-    return 'actions/activation/' . $this->repoPlugin['slug'] . '/reactivate';
+    $slug = $this->repoPlugin && isset($this->repoPlugin['slug']) ? $this->repoPlugin['slug'] : '(?P<pluginSlug>[a-zA-Z0-9-]+)';
+    return 'actions/activation/' . $slug . '/reactivate';
   }
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
-    $slug = $this->repoPlugin['slug'];
+    $slug = $this->repoPlugin && isset($this->repoPlugin['slug']) ? $this->repoPlugin['slug'] : $request->get_param('pluginSlug');
+
+    if (!$slug) {
+      return new WP_REST_Response([
+        'success' => false,
+        'error' => 'Identificador do plugin não fornecido.'
+      ], 400);
+    }
+
     $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/reactivate');
 
     if (!$data['success']) {
@@ -71,10 +84,17 @@ class PluginReactivate extends AbstractAction
       ]);
     }
 
-    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license');
+    $licenseData = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license');
+
+    if (!$licenseData['success']) {
+      return new WP_REST_Response([
+        'success' => false,
+        'error' => $licenseData['message'] ?? 'Não foi possível recuperar os dados da licença no painel da FULL.'
+      ]);
+    }
 
     $processor = new LocalLicenseProcessor();
-    $result = $processor->process($slug, $data['data']['license'] ?? '');
+    $result = $processor->process($slug, $licenseData['data']['license'] ?? '');
 
     if ($result['success']) {
       fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license/confirm');

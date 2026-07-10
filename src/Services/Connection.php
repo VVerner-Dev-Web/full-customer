@@ -68,7 +68,7 @@ class Connection
   public function pluginRowMeta(array $meta, string $plugin): array
   {
     if ($plugin === plugin_basename(FULL_CUSTOMER_FILE)) {
-      $pageUrl = esc_url(admin_url('options-general.php?page=full'));
+      $pageUrl = esc_url(admin_url('admin.php?page=full'));
 
       foreach ($meta as $key => $action) {
         if (strpos($action, 'open-plugin-details-modal') !== false) {

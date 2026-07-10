@@ -6,7 +6,6 @@ export const Tutorial = {
   attach(root) {
     if (!root) return;
 
-    // Dispara o tour quando o chat estiver pronto
     root.addEventListener("fc/chat/ready", () => {
       const isCompleted = localStorage.getItem("fc_tour_completed") === "true";
       const isResuming = localStorage.getItem("fc_tour_resume") === "true";
@@ -16,14 +15,23 @@ export const Tutorial = {
       }
     });
 
-    const manualStartButton = root.querySelector("#btnTutorial");
-    if (manualStartButton) {
-      manualStartButton.addEventListener("click", () => {
+    root.addEventListener("fc/chat/reset", () => {
+      const isCompleted = localStorage.getItem("fc_tour_completed") === "true";
+      const isResuming = localStorage.getItem("fc_tour_resume") === "true";
+
+      if (!isCompleted || isResuming) {
+        this._startTour(true);
+      }
+    });
+
+    root.addEventListener("click", (e) => {
+      const manualStartButton = e.target.closest("#btnTutorial");
+      if (manualStartButton) {
         localStorage.removeItem("fc_tour_resume");
         localStorage.removeItem("fc_tour_completed");
         this._startTour(true);
-      });
-    }
+      }
+    });
   },
 
   _markAsCompleted() {
@@ -94,25 +102,60 @@ export const Tutorial = {
       });
 
       this._tourInstance.addStep({
-        id: "step-skill-intro",
+        id: "step-models-intro",
         title: "Conheça os Modelos",
         arrow: true,
-        text: "Os Modelos são grupos de Inteligências Artificiais treinados para tarefas específicas. Você pode alternar entre eles dependendo do que precisa fazer no momento.",
+        text: "Os Modelos são grupos de agentes de IA treinados para tarefas específicas. Você pode alternar entre eles dependendo do que precisa fazer no momento.",
         attachTo: {
-          element: "#skillSeletor",
-          on: "right",
+          element: "#modeloGatilho",
+          on: "top",
         },
         when: {
           show: () => {
-            const el = document.querySelector("#skillSeletor");
+            const el = document.querySelector("#modeloGatilho");
             if (el) el.style.pointerEvents = "none"; // Desabilita o clique
           },
           hide: () => {
-            const el = document.querySelector("#skillSeletor");
+            const el = document.querySelector("#modeloGatilho");
             if (el) el.style.pointerEvents = ""; // Limpa a regra para voltar ao normal
           },
         },
-
+        buttons: [
+          {
+            action() {
+              return this.back();
+            },
+            classes: "shepherd-button-secondary",
+            text: "Voltar",
+          },
+          {
+            action() {
+              return this.next();
+            },
+            text: "Avançar",
+          },
+        ],
+      });
+      
+      this._tourInstance.addStep({
+        id: "step-agents-intro",
+        title: "Conheça os Agentes",
+        arrow: true,
+        text: "Cada agente de IA foi especialmente treinado para uma tarefa ou contexto específico. Para conectar a conta, vamos manter este aqui.",
+        attachTo: {
+          element: "#agenteGatilho",
+          on: "top",
+        },
+        when: {
+          show: () => {
+            const el = document.querySelector("#agenteGatilho");
+            if (el) el.style.pointerEvents = "none"; // Desabilita o clique
+          },
+          hide: () => {
+            const el = document.querySelector("#agenteGatilho");
+            if (el) el.style.pointerEvents = ""; // Limpa a regra para voltar ao normal
+          },
+        },
         buttons: [
           {
             action() {
@@ -138,21 +181,7 @@ export const Tutorial = {
       this._tourInstance.addStep({
         id: "step-connect-intro",
         title: "Sua primeira missão",
-        text: "Para começar a mágica, precisamos vincular sua conta. Por enquanto, mantenha o modelo 'Conta FULL.' selecionado.",
-        attachTo: {
-          element: "#skillSeletor",
-          on: "right",
-        },
-        when: {
-          show: () => {
-            const el = document.querySelector("#skillSeletor");
-            if (el) el.style.pointerEvents = "none"; // Desabilita o clique
-          },
-          hide: () => {
-            const el = document.querySelector("#skillSeletor");
-            if (el) el.style.pointerEvents = ""; // Limpa a regra para voltar ao normal
-          },
-        },
+        text: "Para começar a mágica, precisamos vincular sua conta. Já deixei o Modelo e Agente pré-configurado para você, vamos lá?",
         buttons: [
           {
             action() {
@@ -220,11 +249,13 @@ export const Tutorial = {
               );
 
               if (clickedTarget) {
-                this._tourInstance.next();
+                setTimeout(() => {
+                  this._tourInstance.next();
+                }, 100);
               }
             };
 
-            document.addEventListener("click", this._handleConnectClick, true);
+            document.addEventListener("click", this._handleConnectClick);
           },
           hide: () => {
             if (this._preventDropdownClose) {
@@ -238,8 +269,15 @@ export const Tutorial = {
               document.removeEventListener(
                 "click",
                 this._handleConnectClick,
-                true,
               );
+            }
+
+            const inputEl = document.querySelector("#copilotTexto");
+            if (inputEl && typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
+              const dropdown = bootstrap.Dropdown.getOrCreateInstance(inputEl);
+              if (dropdown) {
+                dropdown.hide();
+              }
             }
           },
         },
@@ -334,24 +372,24 @@ export const Tutorial = {
         ? "Conta conectada! 🎉"
         : "Hora de Ativar";
       const firstStepText = isResuming
-        ? "Parabéns, agora você tem superpoderes! Vamos testá-los ativando um plugin. Mantenha o modelo 'Ativações' selecionado."
-        : "Como sua conta já está conectada, podemos ativar plugins direto por aqui. Mantenha o modelo 'Ativações' selecionado.";
+        ? "Parabéns, agora você tem superpoderes! Vamos testá-los ativando um plugin. Mantenha o modelo 'Plugins' selecionado."
+        : "Como sua conta já está conectada, podemos ativar plugins direto por aqui. Mantenha o modelo 'Plugins' selecionado.";
 
       this._tourInstance.addStep({
         id: "step-action-intro",
         title: firstStepTitle,
         text: firstStepText,
         attachTo: {
-          element: "#skillSeletor",
-          on: "right",
+          element: "#modeloGatilho",
+          on: "top",
         },
         when: {
           show: () => {
-            const el = document.querySelector("#skillSeletor");
+            const el = document.querySelector("#modeloGatilho");
             if (el) el.style.pointerEvents = "none"; // Desabilita o clique
           },
           hide: () => {
-            const el = document.querySelector("#skillSeletor");
+            const el = document.querySelector("#modeloGatilho");
             if (el) el.style.pointerEvents = ""; // Limpa a regra para voltar ao normal
           },
         },
@@ -375,14 +413,14 @@ export const Tutorial = {
       this._tourInstance.addStep({
         id: "step-action-chat",
         title: "O que vamos ativar?",
-        text: "Com o modelo pronto, clique na área de texto para ver os plugins disponíveis para você.",
+        text: "Com o modelo pronto, vamos escolher nosso agente especializado no plugin que você deseja ativar.",
         arrow: true,
         attachTo: {
-          element: "#copilotTexto",
-          on: "bottom",
+          element: "#agenteGatilho",
+          on: "top",
         },
         advanceOn: {
-          selector: "#copilotTexto",
+          selector: "#agenteGatilho",
           event: "click",
         },
         buttons: [
@@ -399,7 +437,74 @@ export const Tutorial = {
       this._tourInstance.addStep({
         id: "step-action-plugin",
         title: "Escolha o plugin",
-        text: "Selecione na lista qual plugin você deseja instalar e ativar agora.",
+        text: "Selecione na lista o agente adequado",
+        arrow: true,
+        attachTo: {
+          element: "#agenteMenuContainer",
+          on: "right",
+        },
+        when: {
+          show: () => {
+            this._preventDropdownClose = (e) => {
+              e.preventDefault(); // Impede o Bootstrap de fechar a lista
+            };
+
+            document.addEventListener(
+              "hide.bs.dropdown",
+              this._preventDropdownClose,
+            );
+
+            this._handleConnectClick = (e) => {
+              const clickedTarget = e.target.closest("[data-agent]");
+
+              if (clickedTarget) {
+                setTimeout(() => {
+                  this._tourInstance.next();
+                }, 100);
+              }
+            };
+
+            document.addEventListener("click", this._handleConnectClick);
+          },
+          hide: () => {
+            if (this._preventDropdownClose) {
+              document.removeEventListener(
+                "hide.bs.dropdown",
+                this._preventDropdownClose,
+              );
+            }
+
+            if (this._handleConnectClick) {
+              document.removeEventListener(
+                "click",
+                this._handleConnectClick,
+              );
+            }
+
+            const gatilhoEl = document.querySelector("#agenteGatilho");
+            if (gatilhoEl && typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
+              const dropdown = bootstrap.Dropdown.getOrCreateInstance(gatilhoEl);
+              if (dropdown) {
+                dropdown.hide();
+              }
+            }
+          },
+        },
+        buttons: [
+          {
+            action() {
+              return this.back();
+            },
+            classes: "shepherd-button-secondary",
+            text: "Voltar",
+          },
+        ],
+      });
+
+      this._tourInstance.addStep({
+        id: "step-action-select",
+        title: "Escolha de ação",
+        text: "Por fim, você só precisa agora definir qual ação o agente especializado deve fazer. Neste caso, vamos usar a opção de Ativar",
         arrow: true,
         attachTo: {
           element: ".fs-copilot-input__sugestoes",
@@ -407,6 +512,11 @@ export const Tutorial = {
         },
         when: {
           show: () => {
+            const inputEl = document.querySelector("#copilotTexto");
+            if (inputEl) {
+              inputEl.focus();
+            }
+
             this._preventDropdownClose = (e) => {
               e.preventDefault(); // Impede o Bootstrap de fechar a lista
             };
@@ -440,6 +550,14 @@ export const Tutorial = {
                 this._handleConnectClick,
                 true,
               );
+            }
+
+            const inputEl = document.querySelector("#copilotTexto");
+            if (inputEl && typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
+              const dropdown = bootstrap.Dropdown.getOrCreateInstance(inputEl);
+              if (dropdown) {
+                dropdown.hide();
+              }
             }
           },
         },

@@ -1,13 +1,18 @@
 <?php
 
-namespace FC\Skills;
+namespace FC\Models;
 
-use FC\Actions\CleanUpCache;
-use FC\Actions\PluginRepository;
+use FC\Agents\DevAgent;
+use FC\User;
 
-class ErrorFix extends AbstractSkill
+class ErrorFixModel extends AbstractModel
 {
   const ID = 'errorFix';
+
+  public function getId(): string
+  {
+    return self::ID;
+  }
 
   public function getName(): string
   {
@@ -29,19 +34,19 @@ class ErrorFix extends AbstractSkill
     return 'assets/images/icons/errorfix.svg';
   }
 
+  public function getInputPlaceholder(): string
+  {
+    return 'Clique para selecionar uma ação';
+  }
+
   public function isAvailable(): bool
   {
-    return true;
+    return User::instance()->isConnected();
   }
 
   public function isSoon(): bool
   {
     return false;
-  }
-
-  public function getInputPlaceholder(): string
-  {
-    return 'Clique para selecionar uma ação';
   }
 
   public function getFeaturesList(): array
@@ -54,11 +59,10 @@ class ErrorFix extends AbstractSkill
     ];
   }
 
-  public function actions(): array
+  public function agents(): array
   {
     return [
-      new CleanUpCache,
-      new PluginRepository
+      new DevAgent()
     ];
   }
 }

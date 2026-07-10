@@ -3,9 +3,9 @@
 namespace FC\Services;
 
 use FC\FileSystem;
-use FC\SkillRepository;
-use FC\Skills\ActivateProPlugin;
-use FC\Skills\Connect;
+use FC\ModelRepository;
+use FC\Models\PluginsModel;
+use FC\Models\ConnectModel;
 use FC\User;
 
 class AdminPage
@@ -55,13 +55,12 @@ class AdminPage
 
     echo 'window.fcData = window.fcData || ' . wp_json_encode([
       'connected' => User::instance()->isConnected(),
-      'restUrl'   => get_rest_url(null, 'fc/v1'),
-      'nonce'     => wp_create_nonce('wp_rest'),
-      'baseUrl'   => admin_url('admin.php?page=full'),
+      'restUrl' => get_rest_url(null, 'fc/v1'),
+      'nonce' => wp_create_nonce('wp_rest'),
+      'baseUrl' => admin_url('admin.php?page=full'),
       'wpPluginsUrl' => admin_url('plugins.php'),
-      'skillsRepository' => SkillRepository::instance()->toArray(),
-      'starterSkill' => User::instance()->isConnected() ? ActivateProPlugin::ID : Connect::ID,
-      'authorizationCookies' => User::instance()->getCurrentCookies(),
+      'skillsRepository' => ModelRepository::instance()->toArray(),
+      'starterSkill' => User::instance()->isConnected() ? PluginsModel::ID : ConnectModel::ID,
     ]);
 
     echo '</script>';

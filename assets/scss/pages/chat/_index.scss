@@ -61,21 +61,37 @@
 
     &--usuario {
       align-items: flex-end;
+
+      .fs-chat__balao {
+        background: $green-success-bg;
+        color: #0F291E;
+        border: 1px solid rgba(18, 183, 106, 0.15);
+        border-radius: 16px 16px 4px 16px;
+        box-shadow: 0 3px 8px rgba(18, 183, 106, 0.05);
+        padding: 12px 18px;
+
+        p {
+          color: #0F291E;
+          font-size: 15px;
+          line-height: 1.5;
+        }
+      }
     }
 
     &--copilot {
       align-items: flex-start;
-      gap: 16px;
+      gap: 12px;
       
       .fs-chat__balao {
         display: flex;
         flex-direction: column;
-        background: $gray-100;
-        gap: 16px;
-        border: 1px solid $border-color;
-        padding: 16px;
-        border-radius: 12px 12px 12px 4px;
+        background: #FFFFFF;
+        gap: 12px;
+        border: 1px solid #E2E8F0;
+        padding: 16px 20px;
+        border-radius: 16px 16px 16px 4px;
         max-width: 85%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
       }
     }
   }
@@ -84,13 +100,13 @@
     background: $white;
     border: 1px solid $border-color;
     padding: 16px;
-    border-radius: 12px 12px 4px 12px;
+    border-radius: 16px 16px 4px 16px;
     max-width: 85%;
 
     p {
-      font-size: 16px;
-      color: $gray-700;
-      line-height: 1.4;
+      font-size: 15px;
+      color: #334155;
+      line-height: 1.5;
       margin: 0;
     }
   }
@@ -101,30 +117,37 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 4px;
   }
 
   &__autor-icone {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background: $yellow-primary;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   &__autor-nome {
-    font-size: 12px;
-    font-weight: 500;
-    color: #182230;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
     line-height: 1.4;
   }
 
   &__texto {
-    font-size: 16px;
-    color: $gray-700;
-    line-height: 1.4;
+    font-size: 15px;
+    color: #334155;
+    line-height: 1.5;
     margin: 0;
   }
 

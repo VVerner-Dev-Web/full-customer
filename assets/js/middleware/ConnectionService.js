@@ -1,5 +1,5 @@
 import { Chat } from "../core/Chat.js";
-import { SkillManager } from "../core/SkillManager.js";
+import { CopilotManager } from "../core/CopilotManager.js";
 import { ApiService } from "../utils/ApiService.js";
 
 const EMAIL_REGEX =
@@ -8,6 +8,18 @@ const EMAIL_REGEX =
 export const ConnectionService = {
   _working: false,
   _waitingEmail: false,
+
+  attach(root) {
+    root.addEventListener("fc/chat/reset", () => {
+      this.reset();
+    });
+  },
+
+  reset() {
+    this._working = false;
+    this._waitingEmail = false;
+    CopilotManager.waitingUserPersonalAnswer = false;
+  },
 
   async _middleware(manager, skill, actions, msg) {
     if (skill.id !== "connect") {
@@ -23,18 +35,19 @@ export const ConnectionService = {
     }
 
     if (!this._waitingEmail) {
-      SkillManager.waitingUserPersonalAnswer = true;
-
+      const emailVal = msg ? msg.trim() : "";
+      if (!emailVal) {
+        CopilotManager.waitingUserPersonalAnswer = true;
+        this._waitingEmail = true;
+        Chat.sendCopilotMessage(
+          "Por favor, insira o e-mail utilizado durante a compra das licenças na FULL.",
+        );
+        return;
+      }
       this._waitingEmail = true;
-
-      Chat.sendCopilotMessage(
-        "Por favor, insira o e-mail utilizado durante a compra das licenças na FULL.",
-      );
-
-      return;
     }
 
-    const email = msg.toLowerCase().trim();
+    const email = (msg || "").toLowerCase().trim();
 
     if (!EMAIL_REGEX.test(email)) {
       Chat.sendCopilotMessage(
@@ -59,7 +72,13 @@ export const ConnectionService = {
       if (!response.success) return;
 
       Chat.sendLoadingMessage();
-      setTimeout(() => location.reload(), 3000);
+      if (window.fcData) {
+        window.fcData.connected = true;
+      }
+      this.reset();
+      setTimeout(() => {
+        CopilotManager.reset();
+      }, 1000);
     } catch {
       loading.remove();
       Chat.sendCopilotMessage("Erro de conexão. Tente novamente.", "error");

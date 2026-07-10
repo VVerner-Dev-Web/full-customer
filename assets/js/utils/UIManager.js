@@ -10,47 +10,14 @@ export const UIManager = {
 
   attach(root) {
     this._root = root;
-    this._bindFragmentClicks();
-
-    root.addEventListener("fc/fragments/processed", () => {
-      this._reinitBootstrap();
-    });
-  },
-
-  toggleLoader(visible = true) {
-    document.querySelector("#fc-loader")?.classList.toggle("d-none", !visible);
+    this._reinitBootstrap();
   },
 
   // ─── Privado ──────────────────────────────────────────────
 
-  _bindFragmentClicks() {
-    this._root.addEventListener("click", (e) => {
-      const target = e.target.closest("[data-fragment]");
-      if (!target || !window._refreshUI) return;
-
-      e.preventDefault();
-
-      const fragment = target.getAttribute("data-fragment");
-      const args = target.dataset.args ? JSON.parse(target.dataset.args) : {};
-      const selector = target.getAttribute("data-target");
-
-      window._refreshUI([
-        {
-          fragment,
-          args,
-          callback: (html) => {
-            const dest = selector
-              ? document.querySelector(selector)
-              : this._root.querySelector("app");
-
-            if (dest) dest.innerHTML = html;
-          },
-        },
-      ]);
-    });
-  },
-
   _reinitBootstrap() {
+    if (typeof bootstrap === "undefined") return;
+
     const components = [
       { sel: '[data-bs-toggle="tab"]',     Ctor: bootstrap.Tab },
       { sel: '[data-bs-toggle="tooltip"]', Ctor: bootstrap.Tooltip },
@@ -59,6 +26,7 @@ export const UIManager = {
     ];
 
     for (const { sel, Ctor } of components) {
+      if (!Ctor) continue;
       this._root.querySelectorAll(sel).forEach((el) => {
         if (!Ctor.getInstance(el)) new Ctor(el);
       });

@@ -4,8 +4,13 @@
  * Não carrega lógica de negócio — apenas transporte HTTP.
  */
 export const ApiService = {
-  async get(endpoint) {
-    return this.fetch(endpoint, { method: "GET" });
+  async get(endpoint, params = {}) {
+    let url = endpoint;
+    if (Object.keys(params).length > 0) {
+      const searchParams = new URLSearchParams(params);
+      url += (url.includes("?") ? "&" : "?") + searchParams.toString();
+    }
+    return this.fetch(url, { method: "GET" });
   },
 
   async post(endpoint, data = {}) {

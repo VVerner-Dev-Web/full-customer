@@ -27,7 +27,7 @@ const DISCONNECTED_GREETING = {
 export const WelcomeService = {
   attach(root) {
     if (!root) return;
-    root.addEventListener("fc/fragments/processed", () => this._greet(root));
+    this._greet(root);
   },
 
   _greet(root) {

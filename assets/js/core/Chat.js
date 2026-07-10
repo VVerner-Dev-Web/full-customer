@@ -1,4 +1,4 @@
-import { SkillManager } from "./SkillManager";
+import { CopilotManager } from "./CopilotManager.js";
 
 /**
  * Chat (core)
@@ -23,11 +23,9 @@ export const Chat = {
   attach(root) {
     this.root = root;
 
-    root.addEventListener("fc/fragments/processed", () => {
-      root.classList.remove("chating");
-      this._setup();
-      this._emit("fc/chat/ready");
-    });
+    root.classList.remove("chating");
+    this._setup();
+    this._emit("fc/chat/ready");
   },
 
   // ─── API do Chat para outros módulos ──────────────────────
@@ -86,10 +84,28 @@ export const Chat = {
       normal: this._templates.copilot,
     };
 
-    const message = this._appendTemplate(
-      templateMap[status] ?? this._templates.copilot,
-      text,
-    );
+    // Check if we should update the last message (in-place progress)
+    const lastMsgElem = this.container.lastElementChild;
+    const isUpdate = lastMsgElem && 
+                     lastMsgElem.querySelector(".fs-chat__content") && 
+                     (
+                       text.startsWith("Baixando arquivo do plugin") && 
+                       lastMsgElem.querySelector(".fs-chat__content").innerText.startsWith("Baixando arquivo do plugin")
+                     );
+
+    let message;
+    if (isUpdate) {
+      message = lastMsgElem;
+      const contentElem = message.querySelector(".fs-chat__content");
+      if (contentElem) {
+        contentElem.innerHTML = text;
+      }
+    } else {
+      message = this._appendTemplate(
+        templateMap[status] ?? this._templates.copilot,
+        text,
+      );
+    }
 
     if (isTerminator) {
       this.root.querySelector(".fs-cartao-acao")?.remove();
@@ -143,19 +159,18 @@ export const Chat = {
         const action = actionBtn.dataset.action;
 
         if (action === "restart-chat") {
-          return window._refreshUI([
-            {
-              fragment: "DashboardFullPage",
-              callback: (html) => {
-                document.querySelector("app").innerHTML = html;
-              },
-            },
-          ]);
+          CopilotManager.reset();
+          return;
+        }
+
+        if (action === "reload") {
+          window.location.reload();
+          return;
         }
 
         if (action.includes("skill.")) {
           const skillId = action.split(".")[1];
-          SkillManager.trigger(skillId);
+          CopilotManager.trigger(skillId);
           setTimeout(() => {
             this.input.focus();
           });
@@ -179,14 +194,8 @@ export const Chat = {
   },
 
   _emitSubmit() {
-    if (this._submitTimeout) {
-      clearTimeout(this._submitTimeout);
-    }
-
-    this._submitTimeout = setTimeout(() => {
-      const msg = this.input.value.trim();
-      this._emit("fc/chat/submit", { message: msg });
-    }, 150);
+    const msg = this.input.value.trim();
+    this._emit("fc/chat/submit", { message: msg });
   },
 
   _appendTemplate(template, content) {

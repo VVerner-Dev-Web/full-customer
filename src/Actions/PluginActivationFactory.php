@@ -21,12 +21,12 @@ class PluginActivationFactory extends AbstractAction
 
   public function getName(): string
   {
-    return $this->repoPlugin['name'];
+    return 'Ativar';
   }
 
   public function getShortDescription(): string
   {
-    return $this->repoPlugin['sections']['description'];
+    return 'Solicitar nova ativação da licença do plugin no site.';
   }
 
   public function isAvailable(): bool
@@ -44,7 +44,7 @@ class PluginActivationFactory extends AbstractAction
       'id' => $this->repoPlugin['id'],
       'imageUrl' => $this->repoPlugin['image_url'],
       'name' => $this->getName(),
-      'desc' => 'Solicitar nova ativação',
+      'desc' => $this->getShortDescription(),
       'simpleRest' => false,
       'extraProps' => [
         'plugin' => $this->repoPlugin['plugin'],

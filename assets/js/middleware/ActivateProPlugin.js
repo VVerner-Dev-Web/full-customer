@@ -24,8 +24,30 @@ export const ActivateProPlugin = {
         start: () =>
           Chat.sendCopilotMessage(`Começando processo para: ${plugin.name}`),
         progress: (msg) => Chat.sendCopilotMessage(msg),
-        onSuccess: (msg) => Chat.sendCopilotMessage(msg, "success", true),
-        onError: (msg) => Chat.sendCopilotMessage(msg, "error", true),
+        onSuccess: (msg) => Chat.sendCopilotMessage(msg, "success", false, [
+          {
+            label: 'Reiniciar chat',
+            action: 'restart-chat',
+          },
+          {
+            label: 'Recarregar página',
+            action: 'reload',
+          }
+        ]),
+        onError: (msg) => Chat.sendCopilotMessage(msg, "error", false, [
+          {
+            label: 'Suporte',
+            action: 'help',
+          },
+          {
+            label: 'Reiniciar chat',
+            action: 'restart-chat',
+          },
+          {
+            label: 'Recarregar página',
+            action: 'reload',
+          }
+        ]),
       };
 
       const stopPolling = this._startPolling(processId, callbacks.progress);
@@ -53,6 +75,7 @@ export const ActivateProPlugin = {
           callbacks,
         );
         callbacks.onSuccess(`🚀 Concluído com sucesso!`);
+        await manager._loadAndRenderSkills();
       } catch (err) {
         callbacks.onError(`❌ Erro: ${err.message}`);
       } finally {
@@ -66,30 +89,46 @@ export const ActivateProPlugin = {
   _startPolling(processId, onProgress) {
     let _lastState = null;
     const { restUrl, nonce } = window.fcData;
-    const eventSource = new EventSource(
-      `${restUrl}/actions/execution/${processId}?_wpnonce=${nonce}`,
-    );
 
-    eventSource.onmessage = (event) => {
+    let isPolling = true;
+    let timerId = null;
+
+    const poll = async () => {
+      if (!isPolling) return;
+
       try {
-        const data = JSON.parse(event.data);
-        const statusText = data.state;
+        const res = await fetch(`${restUrl}/actions/execution/${processId}`, {
+          headers: {
+            "X-WP-Nonce": nonce,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const states = data.states || [];
 
-        if (statusText && _lastState !== statusText) {
-          _lastState = statusText;
-          onProgress(statusText);
+          for (const statusText of states) {
+            if (statusText && _lastState !== statusText) {
+              _lastState = statusText;
+              onProgress(statusText);
+            }
+          }
         }
       } catch (e) {
-        console.warn("[Status SSE] Erro ao processar mensagem SSE", e);
+        console.warn("[Status Polling] Erro ao buscar status de execução", e);
+      }
+
+      if (isPolling) {
+        timerId = setTimeout(poll, 1000);
       }
     };
 
-    eventSource.onerror = (e) => {
-      console.warn("[Status SSE] Erro ou conexão fechada na transmissão SSE", e);
-    };
+    poll();
 
     return () => {
-      eventSource.close();
+      isPolling = false;
+      if (timerId) {
+        clearTimeout(timerId);
+      }
     };
   },
 
@@ -148,12 +187,10 @@ export const ActivateProPlugin = {
 
     const res = await ApiService.post(`/actions/plugins/license/${processId}`, {
       pluginSlug: pluginSlug,
-      authorizationCookies: fcData.authorizationCookies,
     });
 
     if (!res.success) {
       throw new Error(res.error || "Falha na ativação");
-      return;
     }
 
     progress(`✅ ` + res.message);

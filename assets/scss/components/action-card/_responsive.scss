@@ -53,53 +53,6 @@
   }
 }
 
-.fs-seletor {
-  @media (max-width: $bp-tablet) {
-    &__menu {
-      width: calc(100vw - 80px);
-      max-width: 320px;
-    }
-  }
-
-  @media (max-width: $bp-mobile) {
-    width: 100%;
-
-    &__gatilho {
-      width: 100%;
-      justify-content: center;
-    }
-
-    &__menu {
-      width: calc(100vw - 56px) !important;
-      min-width: 0 !important;
-    }
-  }
-}
-
-.fs-habilidades {
-  @media (max-width: $bp-tablet) {
-    &__menu {
-      width: calc(100vw - 80px);
-      max-width: 320px;
-    }
-  }
-
-  @media (max-width: $bp-mobile) {
-    flex: 1;
-    min-width: 0;
-
-    &__gatilho {
-      width: 100%;
-      justify-content: center;
-    }
-
-    &__menu {
-      width: calc(100vw - 56px) !important;
-      min-width: 0 !important;
-    }
-  }
-}
-
 .fs-skill-chip {
   @media (max-width: $bp-mobile) {
     flex: 1;

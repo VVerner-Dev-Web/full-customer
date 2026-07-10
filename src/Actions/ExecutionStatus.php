@@ -40,63 +40,31 @@ class ExecutionStatus extends AbstractAction
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
     $pid = $request->get_param('processId');
+    $key = 'fc/current-state/' . $pid;
 
-    if (function_exists('apache_setenv')) {
-      // phpcs:ignore
-      @apache_setenv('no-gzip', '1');
-    }
-    @ini_set('zlib.output_compression', '0');
-    @ini_set('implicit_flush', '1');
+    wp_cache_delete($key, 'transient');
+    $states = get_transient($key);
+    $states = is_array($states) ? $states : [];
 
-    header('Content-Type: text/event-stream');
-    header('Cache-Control: no-cache, must-revalidate');
-    header('Connection: keep-alive');
-    header('X-Accel-Buffering: no');
+    delete_transient($key);
 
-    while (ob_get_level() > 0) {
-      ob_end_flush();
-    }
-    ob_implicit_flush(1);
-
-    $start_time = time();
-    $last_state = null;
-    $has_started = false;
-
-    while (time() - $start_time < MINUTE_IN_SECONDS * 10) {
-      if (connection_aborted()) {
-        break;
-      }
-
-      wp_cache_flush();
-      $raw_state = get_transient('fc/current-state/' . $pid);
-      $state = $raw_state !== false ? (string) $raw_state : '';
-
-      if ($state !== '') {
-        $has_started = true;
-      }
-
-      if ($state !== $last_state) {
-        $last_state = $state;
-        echo "data: " . wp_json_encode(['state' => $state]) . "\n\n";
-        if (ob_get_level() > 0) {
-          ob_flush();
-        }
-        flush();
-      }
-
-      if ($has_started && $raw_state === false) {
-        break;
-      }
-
-      sleep(1);
-    }
-
-    return new WP_REST_Response([]);
+    return new WP_REST_Response([
+      'success' => true,
+      'states'   => $states
+    ]);
   }
 
   public static function updateState(string $pid, string $state): void
   {
-    set_transient('fc/current-state/' . $pid, $state, MINUTE_IN_SECONDS);
+    $key = 'fc/current-state/' . $pid;
+    wp_cache_delete($key, 'transient');
+    $current = get_transient($key);
+    $states = is_array($current) ? $current : [];
+
+    if (empty($states) || end($states) !== $state) {
+      $states[] = $state;
+      set_transient($key, $states, MINUTE_IN_SECONDS);
+    }
   }
 
   public static function deleteState(string $pid): void

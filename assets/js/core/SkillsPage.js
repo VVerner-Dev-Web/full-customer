@@ -1,4 +1,4 @@
-import { SkillManager } from "./SkillManager";
+import { CopilotManager } from "./CopilotManager.js";
 
 export const SkillsPage = {
   _root: null,
@@ -7,42 +7,24 @@ export const SkillsPage = {
   attach(root) {
     this._root = root;
 
-    root.addEventListener("fc/fragments/processed", () => {
-      const container = this._root.querySelector("#conteudoAbas");
+    const container = this._root.querySelector("#conteudoAbas");
+    if (!container) return;
 
-      if (!container) return;
-
-      this._container = container;
-      this.bindEvents();
-    });
+    this._container = container;
+    this.bindEvents();
   },
 
   bindEvents() {
-    this._container.querySelectorAll(".fs-btn-ativar").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        try {
-          const trigger = JSON.parse(btn.dataset.trigger);
+    this._container.addEventListener("click", (e) => {
+      const btn = e.target.closest(".fs-btn-ativar");
+      if (!btn) return;
 
-          window._refreshUI([
-            {
-              fragment: "DashboardFullPage",
-              callback: (html) => {
-                this._root.addEventListener(
-                  "fc/chat/ready",
-                  () => {
-                    SkillManager.trigger(trigger.skill, trigger.prompt);
-                  },
-                  { once: true },
-                );
-
-                document.querySelector("app").innerHTML = html;
-              },
-            },
-          ]);
-        } catch (error) {
-          console.error("Failed to parse action dataset:", error);
-        }
-      });
+      try {
+        const trigger = JSON.parse(btn.dataset.trigger);
+        CopilotManager.trigger(trigger.skill, trigger.agent, trigger.prompt);
+      } catch (error) {
+        console.error("Failed to parse action dataset:", error);
+      }
     });
   },
 };

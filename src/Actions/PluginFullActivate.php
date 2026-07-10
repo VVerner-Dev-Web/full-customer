@@ -39,6 +39,11 @@ class PluginFullActivate extends AbstractAction
 
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
+    $pid = $request->get_param('processId');
+    if ($pid) {
+      ExecutionStatus::deleteState($pid);
+    }
+
     $slug = $request->get_param('pluginSlug');
     $activate = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/activate');
 
@@ -51,7 +56,7 @@ class PluginFullActivate extends AbstractAction
 
     return new WP_REST_Response([
       'success' => true,
-      'message' => $activate['data']['message']
+      'message' => $activate['data']['message'] ?? 'Plugin ativado com sucesso.'
     ]);
   }
 }

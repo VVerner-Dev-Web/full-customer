@@ -90,6 +90,54 @@ final class FileSystem
     return $this->core()->mtime($fulllPath);
   }
 
+  public function downloadWithProgress(string $url, string $filepath, callable $progressCallback): bool|\WP_Error
+  {
+    $fp = fopen($filepath, 'w+');
+    if (!$fp) {
+      return new \WP_Error('file_write_error', 'Não foi possível criar o arquivo temporário no disco.');
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // 5 minutes
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+
+    $last_update = 0;
+
+    curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function($ch, $download_size, $downloaded, $upload_size, $uploaded) use ($progressCallback, &$last_update) {
+      if ($download_size > 0) {
+        $now = microtime(true);
+        if ($now - $last_update >= 1.0 || $downloaded === $download_size) {
+          $last_update = $now;
+          $percent = round(($downloaded / $download_size) * 100);
+          call_user_func($progressCallback, 'percent', $percent);
+        }
+      } elseif ($downloaded > 0) {
+        $now = microtime(true);
+        if ($now - $last_update >= 1.0) {
+          $last_update = $now;
+          $mb = round($downloaded / (1024 * 1024), 2);
+          call_user_func($progressCallback, 'size', $mb);
+        }
+      }
+      return 0;
+    });
+
+    $success = curl_exec($ch);
+    $error_msg = curl_error($ch);
+    curl_close($ch);
+    fclose($fp);
+
+    if (!$success) {
+      return new \WP_Error('download_failed', 'Erro no download: ' . $error_msg);
+    }
+
+    return true;
+  }
+
   private function core(): WP_Filesystem_Base
   {
     global $wp_filesystem;

@@ -51,6 +51,10 @@ class User
   public function setConnectionEmail(string $email): void
   {
     $this->setMeta('connection-email', sanitize_email($email));
+
+    // Invalida o cache da API do Dashboard (transients de repositório de plugins)
+    $version = (int) get_option('fc_dapi_repo_version', 1);
+    update_option('fc_dapi_repo_version', $version + 1, false);
   }
 
   public function isConnected(): bool
@@ -79,19 +83,5 @@ class User
     if ($this->loggedIn) {
       update_user_meta($this->id, 'fc/' . $key, $value);
     }
-  }
-
-  public function getCurrentCookies(): string
-  {
-    $cookies = [];
-    foreach ($_COOKIE as $name => $value) {
-      $cookies[] = [
-        'name'  => (string) $name,
-        'value' => (string) $value,
-        'domain' => is_array($_SERVER) && isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '',
-        'path'   => '/'
-      ];
-    }
-    return base64_encode(wp_json_encode($cookies));
   }
 }

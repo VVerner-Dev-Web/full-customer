@@ -71,7 +71,7 @@ class ConnectAccount extends AbstractAction
     define('FULL_CUSTOMER_CONNECTION_EMAIL', $email);
 
     $connected = fcDashboardAPI('POST', 'account/connect');
-    $success = $connected['success'] && $connected['data']['success'];
+    $success = $connected['success'] && isset($connected['data']['success']) && $connected['data']['success'];
 
     if ($success) {
       User::instance()->setConnectionEmail($email);
@@ -79,7 +79,7 @@ class ConnectAccount extends AbstractAction
 
     return [
       'success' => $success,
-      'data'    => $connected['data']
+      'data'    => $connected['data'] ?? ['error' => $connected['message'] ?? 'Erro de conexão com o painel da FULL.']
     ];
   }
 

@@ -1,20 +1,22 @@
 <?php
 
-namespace FC\Skills;
+namespace FC\Models;
 
-use FC\Actions\PluginActivationFactory;
-use FC\Actions\PluginActivationManager;
-use FC\Actions\PluginInstall;
-use FC\Actions\PluginReactivate;
+use FC\Agents\AgentFactory;
 use FC\User;
 
-class ActivateProPlugin extends AbstractSkill
+class PluginsModel extends AbstractModel
 {
   const ID = 'activateProPlugin';
 
+  public function getId(): string
+  {
+    return self::ID;
+  }
+
   public function getName(): string
   {
-    return 'Ativações';
+    return 'Plugins';
   }
 
   public function getShortDescription(): string
@@ -62,9 +64,9 @@ class ActivateProPlugin extends AbstractSkill
     ];
   }
 
-  public function actions(): array
+  public function agents(): array
   {
-    $actions = [];
+    $agents = [];
     $data = fcDashboardAPI('GET', 'plugin-repository/all');
     $plugins = $data['success'] ? $data['data'] : [];
 
@@ -73,25 +75,9 @@ class ActivateProPlugin extends AbstractSkill
         continue;
       }
 
-      $actions[] = new PluginInstall($plugin);
-
-      if (!isset($plugin['activation']) || $plugin['activation']['id'] === 0) {
-        $actions[] = new PluginActivationFactory($plugin);
-        continue;
-      }
-
-      $actions[] = new PluginActivationManager($plugin);
-
-      if ($plugin['activation']['status'] === 'success') {
-        $actions[] = new PluginReactivate($plugin);
-      }
-
-      if ($plugin['activation']['status'] === 'expired') {
-        // TODO: criar renovar
-        // $actions[] = new PluginReactivate($plugin);
-      }
+      $agents[] = AgentFactory::create($plugin);
     }
 
-    return $actions;
+    return $agents;
   }
 }
