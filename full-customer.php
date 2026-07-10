@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 /**
  * Plugin Name:         FULL.Cliente
  * Description:         Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins.
- * Version:             4.0.7
+ * Version:             4.0.7.001
  * Requires at least:   6.5
  * Tested up to:        7.0
  * Requires PHP:        7.4
@@ -27,7 +27,7 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
   defined('FULL_CUSTOMER_DEV') || define('FULL_CUSTOMER_DEV', false);
   defined('FULL_CUSTOMER_API_DOMAIN') || define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
 
-  define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.7');
+  define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.7.001');
   define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai' : FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
 
   require_once FULL_CUSTOMER_PATH . '/vendor/autoload.php';
