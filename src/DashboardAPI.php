@@ -4,18 +4,20 @@ namespace FC;
 
 class DashboardAPI
 {
-  public const VERSION_OPTION  = 'fc_dapi_repo_version';
+  public const VERSION_OPTION = 'fc_dapi_repo_version';
 
-  private const CACHE_PREFIX    = 'fc_dapi_';
+  private const CACHE_PREFIX = 'fc_dapi_';
   private const CACHEABLE_GROUP = 'plugin-repository/';
 
-  public function __construct() {}
+  public function __construct()
+  {
+  }
 
   public function fetch(string $method, string $endpoint, array $payload = []): array
   {
-    $method   = strtoupper($method);
+    $method = strtoupper($method);
     $endpoint = ltrim($endpoint, '/');
-    $url      = FULL_CUSTOMER_API_URL . '/' . $endpoint;
+    $url = FULL_CUSTOMER_API_URL . '/' . $endpoint;
 
     if (FULL_CUSTOMER_DEV) {
       $mock = apply_filters('fc/dashboard-api/response', null, $method, $endpoint, $payload);
@@ -40,14 +42,14 @@ class DashboardAPI
     }
 
     $args = [
-      'method'      => $method,
-      'timeout'     => MINUTE_IN_SECONDS * 5,
+      'method' => $method,
+      'timeout' => MINUTE_IN_SECONDS * 5,
       'redirection' => 5,
-      'blocking'    => true,
-      'body'        => $method !== 'GET' ? wp_json_encode($payload) : null,
-      'headers'     => [
+      'blocking' => true,
+      'body' => $method !== 'GET' ? wp_json_encode($payload) : null,
+      'headers' => [
         'Content-Type' => 'application/json',
-        'Accept'       => 'application/json',
+        'Accept' => 'application/json',
       ],
     ];
 
@@ -66,16 +68,16 @@ class DashboardAPI
     if ($code < 200 || $code >= 300) {
       return [
         'success' => false,
-        'status'  => $code,
+        'status' => $code,
         'message' => $body['error'] ?? $body['errors'] ?? 'Erro desconhecido na API.',
-        'data'    => $body
+        'data' => $body
       ];
     }
 
     $result = [
       'success' => true,
-      'status'  => $code,
-      'data'    => $body
+      'status' => $code,
+      'data' => $body
     ];
 
     if ($cacheKey !== null) {

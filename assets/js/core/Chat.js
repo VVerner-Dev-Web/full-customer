@@ -116,6 +116,49 @@ export const Chat = {
     }
   },
 
+  sendProgressMessage(id, label, percent) {
+    if (!this.root || !this.container) return;
+
+    this.root.classList.add("chating");
+
+    const element = this.container.querySelector(`.fc-progress-message-${id}`);
+
+    if (element) {
+      const labelElem = element.querySelector(".fc-progress-label");
+      const valueElem = element.querySelector(".fc-progress-value");
+      const fillElem = element.querySelector(".fc-progress-bar-fill");
+
+      if (labelElem) labelElem.innerText = label;
+      if (valueElem) valueElem.innerText = `${percent}%`;
+      if (fillElem) fillElem.style.width = `${percent}%`;
+    } else {
+      const template = this._templates.copilot;
+      if (!template || !this.container) return;
+
+      const clone = template.content.cloneNode(true);
+      const msgOuter = clone.querySelector(".fs-chat__msg");
+      if (msgOuter) {
+        msgOuter.classList.add(`fc-progress-message-${id}`);
+      }
+
+      const progressHtml = `
+        <div class="fc-progress-container">
+          <div class="fc-progress-header">
+            <span class="fc-progress-label">${label}</span>
+            <span class="fc-progress-value">${percent}%</span>
+          </div>
+          <div class="fc-progress-bar-wrapper">
+            <div class="fc-progress-bar-fill" style="width: ${percent}%"></div>
+          </div>
+        </div>
+      `;
+
+      clone.querySelector(".fs-chat__content").innerHTML = progressHtml;
+      this.container.appendChild(clone);
+      this._scrollToBottom();
+    }
+  },
+
   sendLoadingMessage() {
     this.container.insertAdjacentHTML(
       "beforeend",

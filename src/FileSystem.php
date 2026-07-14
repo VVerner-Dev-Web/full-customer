@@ -138,6 +138,18 @@ final class FileSystem
     return true;
   }
 
+  public function mkdir(string $relativePath): bool
+  {
+    $fullPath = $this->resolvePath($relativePath);
+    return wp_mkdir_p($fullPath);
+  }
+
+  public function appendContents(string $relativePath, $contents): bool|int
+  {
+    $fullPath = $this->resolvePath($relativePath);
+    return file_put_contents($fullPath, $contents, FILE_APPEND);
+  }
+
   private function core(): WP_Filesystem_Base
   {
     global $wp_filesystem;

@@ -36,6 +36,8 @@ class Rest
       new \FC\Actions\ExecutionStatus(),
       new \FC\Actions\PluginActivationManager(),
       new \FC\Actions\PluginReactivate(),
+      new \FC\Actions\PluginInfo(),
+      new \FC\Actions\PluginUploadChunk(),
     ];
 
     foreach ($actions as $action) {

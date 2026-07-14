@@ -117,7 +117,10 @@ export const StaffModal = {
       return;
     }
 
-    const queue = checked.map((el) => el.dataset.slug);
+    const queue = checked.map((el) => ({
+      slug: el.dataset.slug,
+      plugin: el.value,
+    }));
     this.installNext(queue);
   },
 
@@ -130,7 +133,9 @@ export const StaffModal = {
 
     const processId = generateId();
 
-    const pluginSlug = queue.shift();
+    const current = queue.shift();
+    const pluginSlug = current.slug;
+    const pluginFile = current.plugin;
     const responseContainer = this.dialog.querySelector(".fsm-response");
     const logId = `log-${processId}`;
 
@@ -140,16 +145,38 @@ export const StaffModal = {
     );
     const logEl = responseContainer.querySelector(`#${logId}`);
 
+    let progressLineEl = null;
     const incrementLog = (msg) => {
-      logEl.innerHTML += msg + "<br>";
+      const isProgress = msg.startsWith("Baixando arquivo") || msg.startsWith("Enviando arquivo");
+
+      if (isProgress) {
+        if (!progressLineEl) {
+          progressLineEl = document.createElement("div");
+          progressLineEl.className = "fsm-log-progress";
+          logEl.appendChild(progressLineEl);
+        }
+        progressLineEl.innerHTML = msg;
+      } else {
+        progressLineEl = null;
+        logEl.insertAdjacentHTML("beforeend", `<div>${msg}</div>`);
+      }
     };
 
     try {
       incrementLog("Iniciando instalação...");
+      
+      // 1. Download + Upload fatiado + Instalação física
       await ActivateProPlugin.processInstallation(processId, pluginSlug, {
         progress: incrementLog,
+        isStaff: true,
       });
-      incrementLog("✅ Plugin instalado com sucesso!");
+
+      // 2. Ativação local no WordPress
+      await ActivateProPlugin.processWordPressActivation(processId, pluginFile, {
+        progress: incrementLog,
+      });
+
+      incrementLog("✅ Plugin instalado e ativado com sucesso!");
     } catch (err) {
       incrementLog(`❌ Erro na instalação: ${err.message}`);
     } finally {

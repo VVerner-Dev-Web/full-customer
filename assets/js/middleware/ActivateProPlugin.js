@@ -151,18 +151,112 @@ export const ActivateProPlugin = {
     progress(`✅ ` + res.message);
   },
 
-  async processInstallation(processId, pluginSlug, { progress }) {
-    progress(`Realizando a instalação do plugin no seu WordPress...`);
+  async processInstallation(processId, pluginSlug, options) {
+    const { progress } = options;
+    progress(`Buscando dados do plugin no repositório...`);
 
-    const res = await ApiService.post(`/actions/plugins/install/${processId}`, {
+    // 1. Busca dados do plugin e estado local
+    const infoRes = await ApiService.get(`/actions/plugins/info/${pluginSlug}`);
+    if (!infoRes.success || !infoRes.data?.package) {
+      throw new Error(infoRes.error || "Não foi possível obter dados do plugin.");
+    }
+
+    const pluginData = infoRes.data;
+
+    // 2. Se o plugin já estiver instalado localmente e atualizado
+    if (pluginData.local?.installed && pluginData.local?.upToDate) {
+      progress(`Plugin já instalado localmente na versão mais recente. Validando dependências...`);
+      
+      const installRes = await ApiService.post(`/actions/plugins/install/${processId}`, {
+        pluginSlug: pluginSlug,
+      });
+
+      if (!installRes.success) {
+        throw new Error(installRes.error || "Falha na validação final da instalação.");
+      }
+
+      progress(`✅ ` + installRes.message);
+      return;
+    }
+
+    // 3. Caso contrário, executa o download pelo navegador
+    progress(`Iniciando download do plugin pelo seu navegador...`);
+
+    const response = await fetch(pluginData.package);
+    if (!response.ok) {
+      throw new Error(`Falha ao baixar o plugin (${response.statusText})`);
+    }
+
+    let downloadedBytes = 0;
+    const reader = response.body.getReader();
+    const chunks = [];
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      chunks.push(value);
+      downloadedBytes += value.length;
+
+      const loadedMb = (downloadedBytes / (1024 * 1024)).toFixed(2);
+      progress(`Baixando arquivo do plugin... (${loadedMb} MB baixados)`);
+    }
+
+    const blob = new Blob(chunks);
+    progress(`Download concluído! Preparando para enviar...`);
+
+    // 4. Fatiamento em chunks de 1MB e upload para o servidor
+    const chunkSize = 1024 * 1024; // 1MB por chunk
+    const totalChunks = Math.ceil(blob.size / chunkSize);
+    const fileName = `${pluginSlug}.zip`;
+
+    for (let i = 0; i < totalChunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, blob.size);
+      const chunkSlice = blob.slice(start, end);
+
+      const formData = new FormData();
+      formData.append("chunk", chunkSlice, fileName);
+      formData.append("fileName", fileName);
+      formData.append("chunkIndex", i);
+      formData.append("totalChunks", totalChunks);
+      formData.append("pluginSlug", pluginSlug);
+
+      const uploadPercent = Math.round((i / totalChunks) * 100);
+      if (options.isStaff) {
+        progress(`Enviando arquivo do plugin... (${uploadPercent}%)`);
+      }
+      Chat.sendProgressMessage("upload-plugin", "Enviando arquivo do plugin...", uploadPercent);
+
+      const uploadRes = await ApiService.postFormData(
+        `/actions/plugins/upload-chunk/${processId}`,
+        formData,
+      );
+
+      if (!uploadRes.success) {
+        throw new Error(uploadRes.error || "Falha ao enviar pedaço do plugin.");
+      }
+      
+      if (uploadRes.completed) {
+        Chat.sendProgressMessage("upload-plugin", "Enviando arquivo do plugin...", 100);
+        if (options.isStaff) {
+          progress(`Enviando arquivo do plugin... (100%)`);
+        }
+      }
+    }
+
+    // 5. Instalação física e resolução de dependências no backend
+    progress(`Descompactando e finalizando instalação no seu WordPress...`);
+
+    const installRes = await ApiService.post(`/actions/plugins/install/${processId}`, {
       pluginSlug: pluginSlug,
     });
 
-    if (!res.success) {
-      throw new Error(res.error || "Falha na instalação");
+    if (!installRes.success) {
+      throw new Error(installRes.error || "Falha ao finalizar a instalação do plugin.");
     }
 
-    progress(`✅ ` + res.message);
+    progress(`✅ ` + installRes.message);
   },
 
   async processWordPressActivation(processId, plugin, { progress }) {

@@ -49,8 +49,8 @@ class PluginInstall extends AbstractAction
 
     $fs = FileSystem::instance();
 
-    $pid = $request->get_param('processId');
-    $slug = $request->get_param('pluginSlug');
+    $pid = preg_replace('/[^a-zA-Z0-9-]/', '', sanitize_text_field($request->get_param('processId')));
+    $slug = preg_replace('/[^a-zA-Z0-9-_]/', '', sanitize_text_field($request->get_param('pluginSlug')));
 
     $data = fcDashboardAPI('GET', 'plugin-repository/' . $slug . '/info');
     $plugin = $data['success'] ? $data['data'] : [];
@@ -89,36 +89,15 @@ class PluginInstall extends AbstractAction
 
     $recoveryLink = ' <a href="' . $plugin['package'] . '">Baixar plugin manualmente</a> ';
 
-    $temp_file = wp_tempnam($plugin['slug']);
-    if (!$temp_file) {
+    $temp_file = $fs->wpContentDir() . 'upgrade/' . $plugin['slug'] . '-' . $pid . '.zip';
+    if (!file_exists($temp_file)) {
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Não foi possível alocar espaço temporário para baixar o plugin.'
-      ]);
-    }
-
-    ExecutionStatus::updateState($pid, 'Baixando arquivo do plugin...');
-
-    $download = FileSystem::instance()->downloadWithProgress($plugin['package'], $temp_file, function (string $type, $value) use ($pid) {
-      error_log('-- ' . microtime() . ' --' . $value);
-      if ('percent' === $type) {
-        ExecutionStatus::updateState($pid, "Baixando arquivo do plugin... ({$value}%)");
-      } else {
-        ExecutionStatus::updateState($pid, "Baixando arquivo do plugin... ({$value} MB baixados)");
-      }
-    });
-
-    if (is_wp_error($download)) {
-      @unlink($temp_file);
-      return new WP_REST_Response([
-        'success' => false,
-        'error' => 'Houve um erro ao baixar o arquivo do plugin. ' . $download->get_error_message() . ' ' . $recoveryLink
-      ]);
+        'error' => 'Arquivo de instalação do plugin não localizado no servidor. Por favor, tente novamente.'
+      ], 404);
     }
 
     $package = $temp_file;
-
-    ExecutionStatus::updateState($pid, 'Download completo');
 
     $workingDir = $fs->wpContentDir() . 'upgrade/' . $plugin['slug'];
 
@@ -130,6 +109,8 @@ class PluginInstall extends AbstractAction
     $done = unzip_file($package, $workingDir);
 
     if (is_wp_error($done)) {
+      @unlink($package);
+      $fs->delete($workingDir, true);
       return new WP_REST_Response([
         'success' => false,
         'error' => 'Houve um erro ao descompactar o arquivo do plugin. ' . $done->get_error_message() . ' ' . $recoveryLink
@@ -142,6 +123,7 @@ class PluginInstall extends AbstractAction
 
     $done = copy_dir($workingDir, WP_PLUGIN_DIR);
     if (is_wp_error($done)) {
+      $fs->delete($workingDir, true);
       return new WP_REST_Response([
         'success' => false,
         'error' => 'Houve um erro ao copiar o arquivo do plugin. ' . $done->get_error_message() . ' ' . $recoveryLink

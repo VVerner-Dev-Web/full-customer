@@ -20,16 +20,30 @@ export const ApiService = {
     });
   },
 
+  async postFormData(endpoint, formData) {
+    return this.fetch(endpoint, {
+      method: "POST",
+      body: formData,
+    });
+  },
+
   async fetch(endpoint, options = {}) {
     const { restUrl, nonce } = window.fcData;
 
+    const headers = {
+      "X-WP-Nonce": nonce,
+      ...options.headers,
+    };
+
+    if (options.body instanceof FormData) {
+      delete headers["Content-Type"];
+    } else if (!headers["Content-Type"]) {
+      headers["Content-Type"] = "application/json";
+    }
+
     const response = await fetch(`${restUrl}${endpoint}`, {
       ...options,
-      headers: {
-        "Content-Type": "application/json",
-        "X-WP-Nonce": nonce,
-        ...options.headers,
-      },
+      headers: headers,
     });
 
     if (!response.ok)
