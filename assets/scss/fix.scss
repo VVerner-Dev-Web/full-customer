@@ -593,3 +593,42 @@
     box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
   }
 }
+
+// ─── Estilos de Sugestões e Acordeão de Addons ────────────────────────────────
+.fs-copilot-input__sugestoes {
+  max-height: 350px !important;
+  overflow-y: auto !important;
+}
+
+.fs-copilot-addons-accordion {
+  display: flex;
+  flex-direction: column;
+
+  .fs-copilot-addons-accordion-trigger {
+    cursor: pointer;
+    outline: none !important;
+    text-align: left;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent !important;
+
+    .fs-accordion-arrow {
+      transition: transform 0.2s ease;
+      font-size: 10px;
+      color: #64748B;
+      display: inline-block;
+    }
+  }
+
+  .fs-copilot-addons-accordion-content {
+    background-color: #F8FAFC;
+    border-top: 1px solid #F1F5F9;
+    border-bottom: 1px solid #F1F5F9;
+
+    .dropdown-item {
+      padding-left: 24px !important;
+      border-radius: 0 !important;
+    }
+  }
+}

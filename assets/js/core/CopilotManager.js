@@ -418,6 +418,30 @@ export const CopilotManager = {
 
   _bindSuggestionClick() {
     this._suggestionsEl?.addEventListener("click", (e) => {
+      const triggerEl = e.target.closest(".fs-copilot-addons-accordion-trigger");
+      if (triggerEl) {
+        e.preventDefault();
+        e.stopPropagation();
+        const contentEl = triggerEl.nextElementSibling;
+        const arrowEl = triggerEl.querySelector(".fs-accordion-arrow");
+        if (contentEl) {
+          contentEl.classList.toggle("d-none");
+          contentEl.classList.toggle("d-flex");
+          if (arrowEl) {
+            arrowEl.style.transform = contentEl.classList.contains("d-none") ? "rotate(0deg)" : "rotate(180deg)";
+          }
+        }
+        return;
+      }
+
+      const accordionContentEl = e.target.closest(".fs-copilot-addons-accordion-content");
+      const isSuggestion = e.target.closest(".fs-copilot-sugestao");
+      if (accordionContentEl && !isSuggestion) {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+      }
+
       const itemEl = e.target.closest(".fs-copilot-sugestao");
       if (!itemEl) return;
 
@@ -496,21 +520,61 @@ export const CopilotManager = {
       return;
     }
 
-    const novoHTML = available
-      .map(
-        (item) => `
-        <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
-          <div class="fs-copilot-sugestao__texto">
-            <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
-            ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
-          </div>
-        </a>
-      `,
-      )
-      .join("");
+    const normalActions = available.filter(item => !item.extraProps?.isAddon);
+    const addonActions = available.filter(item => item.extraProps?.isAddon);
 
-    if (this._suggestionsEl.innerHTML !== novoHTML) {
-      this._suggestionsEl.innerHTML = novoHTML;
+    let html = "";
+
+    if (normalActions.length > 0) {
+      html += normalActions
+        .map(
+          (item) => `
+          <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
+            <div class="fs-copilot-sugestao__texto">
+              <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
+              ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
+            </div>
+          </a>
+        `,
+        )
+        .join("");
+    }
+
+    if (addonActions.length > 0) {
+      if (normalActions.length > 0) {
+        html += `<div class="dropdown-divider"></div>`;
+      }
+
+      html += `
+        <div class="fs-copilot-addons-accordion">
+          <button class="dropdown-item fs-copilot-addons-accordion-trigger px-3 mb-2 d-flex align-items-center justify-content-between w-100 border-0 bg-transparent fw-bold" type="button">
+            <span class="fw-bold text-dark">Addons Disponíveis (${addonActions.length})</span>
+            <span class="fs-accordion-arrow">▼</span>
+          </button>
+          <div class="fs-copilot-addons-accordion-content d-none flex-column">
+      `;
+
+      html += addonActions
+        .map(
+          (item) => `
+          <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
+            <div class="fs-copilot-sugestao__texto">
+              <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
+              ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
+            </div>
+          </a>
+        `,
+        )
+        .join("");
+
+      html += `
+          </div>
+        </div>
+      `;
+    }
+
+    if (this._suggestionsEl.innerHTML !== html) {
+      this._suggestionsEl.innerHTML = html;
     }
 
     if (bsDropdown) bsDropdown.show();
