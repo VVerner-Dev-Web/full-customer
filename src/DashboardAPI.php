@@ -80,6 +80,12 @@ class DashboardAPI
       'data' => $body
     ];
 
+    if (defined('FULL_CUSTOMER_API_LOGGER') && FULL_CUSTOMER_API_LOGGER) {
+      error_log('----FULL_CUSTOMER_API_LOGGER----');
+      error_log("[$method] $endpoint :" . print_r($payload, true));
+      error_log(print_r($result, true));
+    }
+
     if ($cacheKey !== null) {
       set_transient($cacheKey, $result, 6 * HOUR_IN_SECONDS);
     }
