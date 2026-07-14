@@ -46,6 +46,7 @@ class PluginInstall extends AbstractAction
   public function restHandler(WP_REST_Request $request): WP_REST_Response
   {
     require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
 
     $fs = FileSystem::instance();
 
@@ -64,7 +65,7 @@ class PluginInstall extends AbstractAction
 
     ExecutionStatus::updateState($pid, 'Verificando dependências...');
 
-    if ($plugin['dependencies']) {
+    if (!empty($plugin['dependencies'])) {
       $error = $this->resolvePluginDependencies($plugin, $pid);
 
       if (!is_null($error)) {
@@ -87,52 +88,48 @@ class PluginInstall extends AbstractAction
       }
     }
 
-    $recoveryLink = ' <a href="' . $plugin['package'] . '">Baixar plugin manualmente</a> ';
-
-    $temp_file = $fs->wpContentDir() . 'upgrade/' . $plugin['slug'] . '-' . $pid . '.zip';
-    if (!file_exists($temp_file)) {
+    $zipPath = $fs->wpContentDir() . 'upgrade/' . $plugin['slug'] . '-' . $pid . '.zip';
+    if (!$fs->isFile($zipPath)) {
       return new WP_REST_Response([
         'success' => false,
         'error' => 'Arquivo de instalação do plugin não localizado no servidor. Por favor, tente novamente.'
       ], 404);
     }
 
-    $package = $temp_file;
-
     $workingDir = $fs->wpContentDir() . 'upgrade/' . $plugin['slug'];
+    $recoveryLink = ' <a href="' . $plugin['package'] . '">Baixar plugin manualmente</a> ';
 
     if ($fs->isDir($workingDir)) {
       $fs->delete($workingDir, true);
     }
 
-    wp_mkdir_p($workingDir);
-    $done = unzip_file($package, $workingDir);
+    $fs->mkdir($workingDir);
+    $unzipped = unzip_file($zipPath, $workingDir);
 
-    if (is_wp_error($done)) {
-      @unlink($package);
+    if (is_wp_error($unzipped)) {
+      $fs->delete($zipPath);
       $fs->delete($workingDir, true);
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Houve um erro ao descompactar o arquivo do plugin. ' . $done->get_error_message() . ' ' . $recoveryLink
+        'error' => 'Houve um erro ao descompactar o arquivo do plugin. ' . $unzipped->get_error_message() . ' ' . $recoveryLink
       ]);
     }
 
     ExecutionStatus::updateState($pid, 'Arquivo descompactado');
 
-    $fs->delete($package);
+    $fs->delete($zipPath);
 
-    $done = copy_dir($workingDir, WP_PLUGIN_DIR);
-    if (is_wp_error($done)) {
-      $fs->delete($workingDir, true);
+    $copied = copy_dir($workingDir, WP_PLUGIN_DIR);
+    $fs->delete($workingDir, true);
+
+    if (is_wp_error($copied)) {
       return new WP_REST_Response([
         'success' => false,
-        'error' => 'Houve um erro ao copiar o arquivo do plugin. ' . $done->get_error_message() . ' ' . $recoveryLink
+        'error' => 'Houve um erro ao copiar o arquivo do plugin. ' . $copied->get_error_message() . ' ' . $recoveryLink
       ]);
     }
 
     ExecutionStatus::updateState($pid, 'Arquivo transferido.');
-
-    $fs->delete($workingDir, true);
 
     return new WP_REST_Response([
       'success' => true,
