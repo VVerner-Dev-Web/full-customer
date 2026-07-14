@@ -172,6 +172,135 @@ export const Chat = {
     return this.container.lastElementChild;
   },
 
+  sendLicensingCard(id, pluginName, pluginIconUrl) {
+    if (!this.root || !this.container) return;
+
+    this.root.classList.add("chating");
+
+    const template = this._templates.copilot;
+    if (!template || !this.container) return;
+
+    const clone = template.content.cloneNode(true);
+    const textContent = clone.querySelector(".fs-chat__content");
+
+    const cardHtml = `
+      <div class="fs-licensing-card-info mb-3">
+        Estamos fazendo a ativação do seu plugin <strong>${pluginName}</strong>, não feche ou recarregue a página durante este processo.
+      </div>
+      <div class="fs-licensing-card" id="licensing-card-${id}">
+        <div class="fs-licensing-card__steps d-flex flex-column gap-3">
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="1">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Solicitar ativação na FULL</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="2">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Baixar e instalar plugin</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="3">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Ativar no WordPress</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="4">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Ativar licença PRO</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    if (textContent) {
+      textContent.innerHTML = cardHtml;
+    }
+
+    this.container.appendChild(clone);
+    this._scrollToBottom();
+  },
+
+  updateLicensingCard(id, stepIndex, status, detailText = "", progressPercent = null, actions = []) {
+    const card = this.container.querySelector(`#licensing-card-${id}`);
+    if (!card) return;
+
+    const allSteps = card.querySelectorAll('.fs-licensing-step');
+    allSteps.forEach((el) => {
+      const idx = parseInt(el.dataset.step);
+      if (idx < stepIndex) {
+        el.classList.remove('status-pending', 'status-processing', 'status-failed');
+        el.classList.add('status-completed');
+        const dEl = el.querySelector('.fs-licensing-step__detail');
+        if (dEl && dEl.innerText.trim() === '') {
+          dEl.style.display = 'none';
+        }
+      } else if (idx > stepIndex) {
+        el.classList.remove('status-processing', 'status-completed', 'status-failed');
+        el.classList.add('status-pending');
+        const dEl = el.querySelector('.fs-licensing-step__detail');
+        if (dEl) {
+          dEl.innerHTML = '';
+          dEl.style.display = 'none';
+        }
+      }
+    });
+
+    const stepEl = card.querySelector(`.fs-licensing-step[data-step="${stepIndex}"]`);
+    if (stepEl) {
+      stepEl.classList.remove('status-pending', 'status-processing', 'status-completed', 'status-failed');
+      stepEl.classList.add(`status-${status}`);
+
+      const detailEl = stepEl.querySelector('.fs-licensing-step__detail');
+      if (detailEl) {
+        if (detailText) {
+          detailEl.innerHTML = detailText;
+          detailEl.style.display = 'block';
+        } else {
+          detailEl.innerHTML = '';
+          detailEl.style.display = 'none';
+        }
+
+        if (progressPercent !== null) {
+          const progressHtml = `
+            <div class="fc-progress-container mt-2">
+              <div class="fc-progress-bar-wrapper" style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                <div class="fc-progress-bar-fill" style="width: ${progressPercent}%; height: 100%; background: #f59e0b; transition: width 0.2s ease;"></div>
+              </div>
+            </div>
+          `;
+          detailEl.insertAdjacentHTML('beforeend', progressHtml);
+          detailEl.style.display = 'block';
+        }
+      }
+    }
+
+    if (actions && actions.length) {
+      const hasRestart = actions.some((a) => a.action === "restart-chat");
+      if (!hasRestart) {
+        actions.push({
+          label: "Reiniciar chat",
+          action: "restart-chat",
+        });
+      }
+
+      const message = card.closest('.fs-chat__msg');
+      if (message) {
+        this._renderActions(message, actions);
+      }
+    }
+
+    this._scrollToBottom();
+  },
+
   // ─── Privado ──────────────────────────────────────────────
 
   _setup() {

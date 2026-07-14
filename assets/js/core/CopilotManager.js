@@ -45,6 +45,13 @@ export const CopilotManager = {
     this._root = root;
     this._cartaoAcaoEl = root.querySelector(".fs-cartao-acao");
 
+    window.addEventListener("beforeunload", (e) => {
+      if (this._working) {
+        e.preventDefault();
+        return "";
+      }
+    });
+
     this._suggestionsEl = root.querySelector("#copilotSugestoes");
 
     this._modeloGatilhoEl = root.querySelector("#modeloGatilho");

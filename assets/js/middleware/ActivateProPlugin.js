@@ -21,28 +21,35 @@ export const ActivateProPlugin = {
       const processId = generateId();
 
       const callbacks = {
+        activeStep: 1,
         start: () =>
-          Chat.sendCopilotMessage(`Começando processo para: ${plugin.name}`),
-        progress: (msg) => Chat.sendCopilotMessage(msg),
-        onSuccess: (msg) => Chat.sendCopilotMessage(msg, "success", [
-          {
-            label: 'Recarregar página',
-            action: 'reload',
-          }
-        ]),
-        onError: (msg) => Chat.sendCopilotMessage(msg, "error", [
-          {
-            label: 'Suporte',
-            action: 'help',
-          },
-          {
-            label: 'Recarregar página',
-            action: 'reload',
-          }
-        ]),
+          Chat.sendLicensingCard(processId, manager._activeAgent.name, plugin.imageUrl),
+        progress: (stepIndex, status, msg, percent = null) =>
+          Chat.updateLicensingCard(processId, stepIndex, status, msg, percent),
+        onSuccess: (msg) => {
+          Chat.updateLicensingCard(processId, 4, "completed", msg, null, [
+            {
+              label: 'Recarregar página',
+              action: 'reload',
+            }
+          ]);
+        },
+        onError: (msg) => {
+          const step = callbacks.activeStep || 1;
+          Chat.updateLicensingCard(processId, step, "failed", msg, null, [
+            {
+              label: 'Suporte',
+              action: 'help',
+            },
+            {
+              label: 'Recarregar página',
+              action: 'reload',
+            }
+          ]);
+        },
       };
 
-      const stopPolling = this._startPolling(processId, callbacks.progress);
+      const stopPolling = this._startPolling(processId, callbacks);
 
       try {
         callbacks.start();
@@ -65,6 +72,7 @@ export const ActivateProPlugin = {
           processId,
           plugin.extraProps.pluginSlug,
           callbacks,
+          manager,
         );
         callbacks.onSuccess(`🚀 Concluído com sucesso!`);
         await manager._loadAndRenderSkills();
@@ -78,7 +86,7 @@ export const ActivateProPlugin = {
     this._working = false;
   },
 
-  _startPolling(processId, onProgress) {
+  _startPolling(processId, callbacks) {
     let lastDisplayedIndex = 0;
     const { restUrl, nonce } = window.fcData;
 
@@ -102,7 +110,9 @@ export const ActivateProPlugin = {
             for (let i = lastDisplayedIndex; i < states.length; i++) {
               const statusText = states[i];
               if (statusText) {
-                onProgress(statusText);
+                if (callbacks && typeof callbacks.progress === "function") {
+                  callbacks.progress(callbacks.activeStep || 1, "processing", statusText);
+                }
               }
             }
             lastDisplayedIndex = states.length;
@@ -129,8 +139,24 @@ export const ActivateProPlugin = {
 
   // ─── Processos ────────────────────────────────────────────
 
-  async processFullActivation(processId, pluginSlug, { progress }) {
-    progress(`Solicitando ativação no painel da FULL`);
+  async processFullActivation(processId, pluginSlug, callbacks) {
+    if (callbacks && callbacks.activeStep !== undefined) {
+      callbacks.activeStep = 1;
+    }
+
+    const progress = (status, msg, percent = null) => {
+      if (typeof callbacks === "function") {
+        callbacks(msg);
+      } else if (callbacks && typeof callbacks.progress === "function") {
+        if (callbacks.activeStep !== undefined) {
+          callbacks.progress(1, status, msg, percent);
+        } else {
+          callbacks.progress(msg);
+        }
+      }
+    };
+
+    progress("processing", "Solicitando ativação no painel da FULL...");
 
     const res = await ApiService.post(
       `/actions/plugins/full-activate/${processId}`,
@@ -140,17 +166,31 @@ export const ActivateProPlugin = {
     );
 
     if (!res.success) {
-      throw new Error(res.error || "Falha na instalação");
+      throw new Error(res.error || "Falha na ativação");
     }
 
-    progress(`✅ ` + res.message);
+    progress("completed", "Ativação solicitada com sucesso!");
   },
 
-  async processInstallation(processId, pluginSlug, options) {
-    const { progress } = options;
-    progress(`Buscando dados do plugin no repositório...`);
+  async processInstallation(processId, pluginSlug, callbacks) {
+    if (callbacks && callbacks.activeStep !== undefined) {
+      callbacks.activeStep = 2;
+    }
 
-    // 1. Busca dados do plugin e estado local
+    const progress = (status, msg, percent = null) => {
+      if (typeof callbacks === "function") {
+        callbacks(msg);
+      } else if (callbacks && typeof callbacks.progress === "function") {
+        if (callbacks.activeStep !== undefined) {
+          callbacks.progress(2, status, msg, percent);
+        } else {
+          callbacks.progress(msg);
+        }
+      }
+    };
+
+    progress("processing", "Buscando dados do plugin no repositório...");
+
     const infoRes = await ApiService.get(`/actions/plugins/info/${pluginSlug}`);
     if (!infoRes.success || !infoRes.data?.package) {
       throw new Error(infoRes.error || "Não foi possível obter dados do plugin.");
@@ -158,9 +198,9 @@ export const ActivateProPlugin = {
 
     const pluginData = infoRes.data;
 
-    // 2. Se o plugin já estiver instalado localmente e atualizado
+    // Se o plugin já estiver instalado localmente e atualizado
     if (pluginData.local?.installed && pluginData.local?.upToDate) {
-      progress(`Plugin já instalado localmente na versão mais recente. Validando dependências...`);
+      progress("processing", "Plugin já instalado localmente na versão mais recente. Validando dependências...");
       
       const installRes = await ApiService.post(`/actions/plugins/install/${processId}`, {
         pluginSlug: pluginSlug,
@@ -170,12 +210,11 @@ export const ActivateProPlugin = {
         throw new Error(installRes.error || "Falha na validação final da instalação.");
       }
 
-      progress(`✅ ` + installRes.message);
+      progress("completed", "Plugin verificado e instalado.");
       return;
     }
 
-    // 3. Caso contrário, executa o download pelo navegador
-    progress(`Iniciando download do plugin pelo seu navegador...`);
+    progress("processing", "Iniciando download do plugin pelo seu navegador...");
 
     const response = await fetch(pluginData.package);
     if (!response.ok) {
@@ -194,13 +233,12 @@ export const ActivateProPlugin = {
       downloadedBytes += value.length;
 
       const loadedMb = (downloadedBytes / (1024 * 1024)).toFixed(2);
-      progress(`Baixando arquivo do plugin... (${loadedMb} MB baixados)`);
+      progress("processing", `Baixando arquivo do plugin... (${loadedMb} MB baixados)`);
     }
 
     const blob = new Blob(chunks);
-    progress(`Download concluído! Preparando para enviar...`);
+    progress("processing", "Download concluído! Preparando para enviar...");
 
-    // 4. Fatiamento em chunks de 1MB e upload para o servidor
     const chunkSize = 1024 * 1024; // 1MB por chunk
     const totalChunks = Math.ceil(blob.size / chunkSize);
     const fileName = `${pluginSlug}.zip`;
@@ -218,10 +256,7 @@ export const ActivateProPlugin = {
       formData.append("pluginSlug", pluginSlug);
 
       const uploadPercent = Math.round((i / totalChunks) * 100);
-      if (options.isStaff) {
-        progress(`Enviando arquivo do plugin... (${uploadPercent}%)`);
-      }
-      Chat.sendProgressMessage("upload-plugin", "Enviando arquivo do plugin...", uploadPercent);
+      progress("processing", "Enviando arquivo do plugin...", uploadPercent);
 
       const uploadRes = await ApiService.postFormData(
         `/actions/plugins/upload-chunk/${processId}`,
@@ -231,17 +266,9 @@ export const ActivateProPlugin = {
       if (!uploadRes.success) {
         throw new Error(uploadRes.error || "Falha ao enviar pedaço do plugin.");
       }
-      
-      if (uploadRes.completed) {
-        Chat.sendProgressMessage("upload-plugin", "Enviando arquivo do plugin...", 100);
-        if (options.isStaff) {
-          progress(`Enviando arquivo do plugin... (100%)`);
-        }
-      }
     }
 
-    // 5. Instalação física e resolução de dependências no backend
-    progress(`Descompactando e finalizando instalação no seu WordPress...`);
+    progress("processing", "Descompactando e finalizando instalação no seu WordPress...");
 
     const installRes = await ApiService.post(`/actions/plugins/install/${processId}`, {
       pluginSlug: pluginSlug,
@@ -251,11 +278,27 @@ export const ActivateProPlugin = {
       throw new Error(installRes.error || "Falha ao finalizar a instalação do plugin.");
     }
 
-    progress(`✅ ` + installRes.message);
+    progress("completed", "Plugin instalado com sucesso!");
   },
 
-  async processWordPressActivation(processId, plugin, { progress }) {
-    progress(`Ativando plugin no seu WordPress...`);
+  async processWordPressActivation(processId, plugin, callbacks) {
+    if (callbacks && callbacks.activeStep !== undefined) {
+      callbacks.activeStep = 3;
+    }
+
+    const progress = (status, msg, percent = null) => {
+      if (typeof callbacks === "function") {
+        callbacks(msg);
+      } else if (callbacks && typeof callbacks.progress === "function") {
+        if (callbacks.activeStep !== undefined) {
+          callbacks.progress(3, status, msg, percent);
+        } else {
+          callbacks.progress(msg);
+        }
+      }
+    };
+
+    progress("processing", "Ativando plugin no seu WordPress...");
 
     const res = await ApiService.post(
       `/actions/plugins/wordpress-activate/${processId}`,
@@ -265,14 +308,30 @@ export const ActivateProPlugin = {
     );
 
     if (!res.success) {
-      throw new Error(res.error || "Falha na instalação");
+      throw new Error(res.error || "Falha ao ativar o plugin.");
     }
 
-    progress(`✅ ` + res.message);
+    progress("completed", "Plugin ativado com sucesso!");
   },
 
-  async processLicense(processId, pluginSlug, { progress }) {
-    progress(`E agora vamos inserir a licença oficial do plugin...`);
+  async processLicense(processId, pluginSlug, callbacks, manager = null) {
+    if (callbacks && callbacks.activeStep !== undefined) {
+      callbacks.activeStep = 4;
+    }
+
+    const progress = (status, msg, percent = null) => {
+      if (typeof callbacks === "function") {
+        callbacks(msg);
+      } else if (callbacks && typeof callbacks.progress === "function") {
+        if (callbacks.activeStep !== undefined) {
+          callbacks.progress(4, status, msg, percent);
+        } else {
+          callbacks.progress(msg);
+        }
+      }
+    };
+
+    progress("processing", "E agora vamos inserir a licença oficial do plugin...");
 
     let step = "";
     let state = {};
@@ -291,14 +350,18 @@ export const ActivateProPlugin = {
       const result = res.result || {};
 
       if (res.message) {
-        progress(res.message);
+        progress("processing", res.message);
       }
 
       if (result.completed === undefined || result.completed === true) {
-        progress(`✅ ` + (res.message || "Licença instalada com sucesso!"));
+        progress("completed", res.message || "Licença instalada com sucesso!");
         
         if (result.redirectUrl) {
-          progress(`Redirecionando...`);
+          progress("processing", "Redirecionando...");
+          if (manager) {
+            manager._working = false;
+          }
+          this._working = false;
           window.location.href = result.redirectUrl;
         }
         break;

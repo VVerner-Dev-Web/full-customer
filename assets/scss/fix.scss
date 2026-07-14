@@ -26,6 +26,9 @@
       flex-grow: 1
     }
 
+    .fs-chat__msg--copilot .fs-chat__balao {
+      width: 80% !important;
+    }
   }
 
   #wpfooter, .notice, .fs-admin-notice__banner {
@@ -422,5 +425,171 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+.fs-licensing-card-info {
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.fs-licensing-card {
+  margin-top: 12px;
+  text-align: left;
+
+  .fs-licensing-card__steps {
+    position: relative;
+    padding-left: 8px;
+    margin-top: 15px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 10px;
+      bottom: 20px;
+      width: 2px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+  }
+
+  .fs-licensing-step {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .fs-licensing-step__badge {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      transition: all 0.3s ease;
+
+      &::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: transparent;
+      }
+    }
+
+    .fs-licensing-step__content {
+      flex-grow: 1;
+      padding-left: 8px;
+    }
+
+    .fs-licensing-step__label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748b;
+    }
+
+    .fs-licensing-step__detail {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    // Status: Pending (Pendente)
+    &.status-pending {
+      .fs-licensing-step__badge {
+        border-color: #e2e8f0;
+        background: #f8fafc;
+      }
+    }
+
+    // Status: Processing (Em progresso)
+    &.status-processing {
+      .fs-licensing-step__badge {
+        border-color: #f59e0b;
+        background: #fffbef;
+        animation: pulse-border 1.5s infinite ease-in-out;
+
+        &::after {
+          background: #f59e0b;
+        }
+      }
+      .fs-licensing-step__label {
+        color: #d97706;
+        font-weight: 600;
+      }
+    }
+
+    // Status: Completed (Concluído)
+    &.status-completed {
+      .fs-licensing-step__badge {
+        border-color: #10b981;
+        background: #10b981;
+
+        &::after {
+          content: '✓';
+          color: #ffffff;
+          font-size: 11px;
+          font-weight: bold;
+          border-radius: 0;
+          background: transparent;
+          width: auto;
+          height: auto;
+          line-height: 1;
+        }
+      }
+      .fs-licensing-step__label {
+        color: #0f766e;
+      }
+    }
+
+    // Status: Failed (Falhou)
+    &.status-failed {
+      .fs-licensing-step__badge {
+        border-color: #ef4444;
+        background: #ef4444;
+
+        &::after {
+          content: '✕';
+          color: #ffffff;
+          font-size: 10px;
+          font-weight: bold;
+          border-radius: 0;
+          background: transparent;
+          width: auto;
+          height: auto;
+          line-height: 1;
+        }
+      }
+      .fs-licensing-step__label {
+        color: #991b1b;
+      }
+    }
+  }
+
+  // Barra de progresso interna do step
+  .fc-progress-container {
+    margin-top: 6px;
+    max-width: 250px;
+  }
+}
+
+@keyframes pulse-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
   }
 }
