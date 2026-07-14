@@ -29,7 +29,7 @@ class LocalLicenseProcessor
     ];
   }
 
-  public function process(string $plugin, string $license): array
+  public function process(string $plugin, string $license, string $step = '', array $state = []): array
   {
     if (!isset($this->map[$plugin])) {
       return [
@@ -37,7 +37,7 @@ class LocalLicenseProcessor
       ];
     }
 
-    return call_user_func($this->map[$plugin], $license);
+    return call_user_func($this->map[$plugin], $license, $step, $state);
   }
 
   public function wpRocket(string $license): array
@@ -47,72 +47,131 @@ class LocalLicenseProcessor
     ];
   }
 
-  public function elementorPro(string $license): array
+  public function elementorPro(string $license, string $step = '', array $state = []): array
   {
-    [$license, $elementorCookies] = explode(':', $license);
-    $elementorCookies = json_decode(base64_decode($elementorCookies), true);
+    @set_time_limit(120);
 
-    $elementorCookies = array_map(fn($c) => new WP_Http_Cookie($c), $elementorCookies);
+    [$licenseKey, $elementorCookiesRaw] = explode(':', $license);
+    $elementorCookies = json_decode(base64_decode($elementorCookiesRaw), true);
 
-    $url = rest_url('elementor-one/v1/connect/authorize?clearSession=true');
+    if (empty($step)) {
+      $oauthUrl = $this->getElementorOAuthUrl();
+      if (!$oauthUrl) {
+        return [
+          'success' => false,
+          'trace' => 'local_authorize_internal_error',
+        ];
+      }
 
-    $request = wp_remote_post($url, [
-      'sslverify' => false,
-      'timeout' => 15,
-      'cookies' => $_COOKIE,
-      'headers' => [
-        'X-WP-Nonce' => wp_create_nonce('wp_rest'),
-      ],
+      return [
+        'success' => true,
+        'completed' => false,
+        'step' => 'fetch_consent',
+        'message' => 'Autorização local obtida. Conectando à API do Elementor...',
+        'state' => [
+          'oauthUrl' => $oauthUrl,
+        ]
+      ];
+    }
+
+    if ($step === 'fetch_consent') {
+      $oauthUrl = $state['oauthUrl'] ?? '';
+      return $this->fetchElementorConsentUrl($oauthUrl, $elementorCookies);
+    }
+
+    if ($step === 'submit_consent') {
+      $consentUrl = $state['consentUrl'] ?? '';
+      $challenge = $state['challenge'] ?? '';
+      $savedCookies = $state['cookies'] ?? [];
+      return $this->submitElementorConsent($consentUrl, $challenge, $licenseKey, $savedCookies);
+    }
+
+    if ($step === 'finalize') {
+      $redirectUrl = $state['redirectUrl'] ?? '';
+      $savedCookies = $state['cookies'] ?? [];
+      return $this->finalizeElementorActivation($redirectUrl, $savedCookies);
+    }
+
+    return [
+      'success' => false,
+      'trace' => 'invalid_step',
+    ];
+  }
+
+  private function getElementorOAuthUrl(): ?string
+  {
+    $restRequest = new \WP_REST_Request('POST', '/elementor-one/v1/connect/authorize');
+    $restRequest->set_param('clearSession', 'true');
+
+    $response = rest_do_request($restRequest);
+    if ($response->is_error()) {
+      return null;
+    }
+
+    $responseData = $response->get_data();
+    return $responseData['data'] ?? null;
+  }
+
+  private function fetchElementorConsentUrl(string $oauthUrl, array $elementorCookies): array
+  {
+    $cookies = array_map(fn($c) => new WP_Http_Cookie($c), $elementorCookies);
+
+    $request = wp_remote_get($oauthUrl, [
+      'cookies' => $cookies,
+      'timeout' => 30,
     ]);
 
     if (is_wp_error($request)) {
       return [
         'success' => false,
-        'trace' => 'local_authorize',
+        'trace' => 'consent_url_fetch_failed',
       ];
     }
-
-    $response = json_decode(wp_remote_retrieve_body($request), true);
-    $oauthUrl = $response['data'] ?? null;
-
-    if (!$oauthUrl) {
-      return [
-        'success' => false,
-        'trace' => 'elementor-one/v1/connect/authorize?clearSession=true',
-      ];
-    }
-
-    $request = wp_remote_get($oauthUrl, [
-      'cookies' => $elementorCookies,
-    ]);
 
     $consentUrl = $request['http_response']->get_response_object()->url;
 
     $parsed = wp_parse_url($consentUrl);
     $queryParams = [];
-    wp_parse_str($parsed['query'], $queryParams);
+    wp_parse_str($parsed['query'] ?? '', $queryParams);
     $challenge = $queryParams['consent_challenge'] ?? null;
 
     if (!$challenge) {
       return [
         'success' => false,
-        'trace' => 'consentUrl',
+        'trace' => 'consent_challenge_missing',
       ];
     }
 
     $allCookies = $elementorCookies;
-
     foreach ($request['http_response']->get_response_object()->cookies as $cookie) {
-      $allCookies[] = new WP_Http_Cookie([
-        'name' => $cookie->name,
-        'value' => $cookie->value,
-        'path' => $cookie->path ?? '/',
-        'domain' => $cookie->domain ?? 'my.elementor.com',
-      ]);
+      $cookie = (array) $cookie;
+      $allCookies[] = [
+        'name' => $cookie['name'],
+        'value' => $cookie['value'],
+        'path' => isset($cookie['path']) && $cookie['path'] ? $cookie['path'] : '/',
+        'domain' => isset($cookie['domain']) && $cookie['domain'] ? $cookie['domain'] : 'my.elementor.com',
+      ];
     }
 
+    return [
+      'success' => true,
+      'completed' => false,
+      'step' => 'submit_consent',
+      'message' => 'Conexão com a API do Elementor estabelecida. Autenticando...',
+      'state' => [
+        'consentUrl' => $consentUrl,
+        'challenge' => $challenge,
+        'cookies' => $allCookies,
+      ]
+    ];
+  }
+
+  private function submitElementorConsent(string $consentUrl, string $challenge, string $licenseKey, array $savedCookies): array
+  {
+    $cookies = array_map(fn($c) => new WP_Http_Cookie($c), $savedCookies);
+
     $response = wp_remote_post('https://my.elementor.com/connect/api/v1/consent', [
-      'cookies' => $allCookies,
+      'cookies' => $cookies,
       'headers' => [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
@@ -120,11 +179,18 @@ class LocalLicenseProcessor
       ],
       'body' => wp_json_encode([
         'consentChallenge' => $challenge,
-        'subscriptionId' => $license,
+        'subscriptionId' => $licenseKey,
         'grantScope' => ['openid', 'offline_access', 'share_usage_data'],
       ]),
-      'timeout' => 15,
+      'timeout' => 30,
     ]);
+
+    if (is_wp_error($response)) {
+      return [
+        'success' => false,
+        'trace' => 'consent_submit_failed',
+      ];
+    }
 
     $respBody = json_decode(wp_remote_retrieve_body($response), true);
     $redirectUrl = $respBody['redirectUrl'] ?? null;
@@ -136,18 +202,52 @@ class LocalLicenseProcessor
       ];
     }
 
+    $allCookies = $savedCookies;
+    foreach ($response['http_response']->get_response_object()->cookies as $cookie) {
+      $cookie = (array) $cookie;
+      $allCookies[] = [
+        'name' => $cookie['name'],
+        'value' => $cookie['value'],
+        'path' => isset($cookie['path']) && $cookie['path'] ? $cookie['path'] : '/',
+        'domain' => isset($cookie['domain']) && $cookie['domain'] ? $cookie['domain'] : 'my.elementor.com',
+      ];
+    }
+
+    return [
+      'success' => true,
+      'completed' => false,
+      'step' => 'finalize',
+      'message' => 'Autenticação com a FULL realizada. Finalizando ativação local...',
+      'state' => [
+        'redirectUrl' => $redirectUrl,
+        'cookies' => $allCookies,
+      ]
+    ];
+  }
+
+  private function finalizeElementorActivation(string $redirectUrl, array $savedCookies): array
+  {
+    $cookies = array_map(fn($c) => new WP_Http_Cookie($c), $savedCookies);
+
     $done = wp_remote_get($redirectUrl, [
-      'cookies' => $allCookies,
+      'cookies' => $cookies,
       'sslverify' => false,
-      'timeout' => 15,
+      'timeout' => 30,
     ]);
+
+    if (is_wp_error($done)) {
+      return [
+        'success' => false,
+        'trace' => 'callback_fetch_error',
+      ];
+    }
 
     $localUrl = $done['http_response']->get_response_object()->url;
 
     $qs = [];
     wp_parse_str(wp_parse_url($localUrl, PHP_URL_QUERY), $qs);
 
-    if (!$qs['redirect_to']) {
+    if (empty($qs['redirect_to'])) {
       return [
         'success' => false,
         'trace' => 'redirect_to',
@@ -156,6 +256,8 @@ class LocalLicenseProcessor
 
     return [
       'success' => true,
+      'completed' => true,
+      'message' => 'Plugin ativado com sucesso e pronto para uso! Aproveite.',
       'redirectUrl' => $qs['redirect_to'] ?? '',
     ];
   }

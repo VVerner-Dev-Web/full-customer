@@ -46,8 +46,6 @@ class ExecutionStatus extends AbstractAction
     $states = get_transient($key);
     $states = is_array($states) ? $states : [];
 
-    delete_transient($key);
-
     return new WP_REST_Response([
       'success' => true,
       'states'   => $states

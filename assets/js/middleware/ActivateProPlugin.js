@@ -87,7 +87,7 @@ export const ActivateProPlugin = {
   },
 
   _startPolling(processId, onProgress) {
-    let _lastState = null;
+    let lastDisplayedIndex = 0;
     const { restUrl, nonce } = window.fcData;
 
     let isPolling = true;
@@ -106,11 +106,14 @@ export const ActivateProPlugin = {
           const data = await res.json();
           const states = data.states || [];
 
-          for (const statusText of states) {
-            if (statusText && _lastState !== statusText) {
-              _lastState = statusText;
-              onProgress(statusText);
+          if (states.length > lastDisplayedIndex) {
+            for (let i = lastDisplayedIndex; i < states.length; i++) {
+              const statusText = states[i];
+              if (statusText) {
+                onProgress(statusText);
+              }
             }
+            lastDisplayedIndex = states.length;
           }
         }
       } catch (e) {
@@ -279,19 +282,38 @@ export const ActivateProPlugin = {
   async processLicense(processId, pluginSlug, { progress }) {
     progress(`E agora vamos inserir a licença oficial do plugin...`);
 
-    const res = await ApiService.post(`/actions/plugins/license/${processId}`, {
-      pluginSlug: pluginSlug,
-    });
+    let step = "";
+    let state = {};
 
-    if (!res.success) {
-      throw new Error(res.error || "Falha na ativação");
-    }
+    while (true) {
+      const res = await ApiService.post(`/actions/plugins/license/${processId}`, {
+        pluginSlug: pluginSlug,
+        step: step,
+        state: state,
+      });
 
-    progress(`✅ ` + res.message);
+      if (!res.success) {
+        throw new Error(res.error || "Falha na ativação da licença.");
+      }
 
-    if (res.result?.redirectUrl) {
-      progress(`Redirecionando...`);
-      window.location.href = res.result.redirectUrl;
+      const result = res.result || {};
+
+      if (res.message) {
+        progress(res.message);
+      }
+
+      if (result.completed === undefined || result.completed === true) {
+        progress(`✅ ` + (res.message || "Licença instalada com sucesso!"));
+        
+        if (result.redirectUrl) {
+          progress(`Redirecionando...`);
+          window.location.href = result.redirectUrl;
+        }
+        break;
+      }
+
+      step = result.step;
+      state = result.state || {};
     }
   },
 };
