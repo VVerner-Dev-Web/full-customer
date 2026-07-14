@@ -41,7 +41,6 @@ export const SimpleAction = {
             Chat.sendCopilotMessage(
               response.error || response.message || "A ativação falhou.",
               "error",
-              response.terminate === true ? true : false,
               response.actions || [],
             );
             break;
@@ -53,7 +52,6 @@ export const SimpleAction = {
             Chat.sendCopilotMessage(
               response.message,
               "normal",
-              response.terminate === true ? true : false,
               response.actions || [],
             );
           }
@@ -63,7 +61,6 @@ export const SimpleAction = {
               Chat.sendCopilotMessage(
                 "Ação concluída com sucesso!",
                 "success",
-                response.terminate === true ? true : false,
                 response.actions || [],
               );
             }

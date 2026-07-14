@@ -24,24 +24,16 @@ export const ActivateProPlugin = {
         start: () =>
           Chat.sendCopilotMessage(`Começando processo para: ${plugin.name}`),
         progress: (msg) => Chat.sendCopilotMessage(msg),
-        onSuccess: (msg) => Chat.sendCopilotMessage(msg, "success", false, [
-          {
-            label: 'Reiniciar chat',
-            action: 'restart-chat',
-          },
+        onSuccess: (msg) => Chat.sendCopilotMessage(msg, "success", [
           {
             label: 'Recarregar página',
             action: 'reload',
           }
         ]),
-        onError: (msg) => Chat.sendCopilotMessage(msg, "error", false, [
+        onError: (msg) => Chat.sendCopilotMessage(msg, "error", [
           {
             label: 'Suporte',
             action: 'help',
-          },
-          {
-            label: 'Reiniciar chat',
-            action: 'restart-chat',
           },
           {
             label: 'Recarregar página',

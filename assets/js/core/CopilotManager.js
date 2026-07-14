@@ -159,7 +159,8 @@ export const CopilotManager = {
 
     if (action) {
       this._selectAction(action);
-      Chat.sendUserMessage(`Executar ação: ${action.name}`);
+      const agentName = this._activeAgent ? ` para o agente ${this._activeAgent.name}` : "";
+      Chat.sendUserMessage(`Executar ação ${action.name}${agentName}`);
     }
 
     await this._execute(msg);
@@ -361,8 +362,9 @@ export const CopilotManager = {
   _bindChatSubmit() {
     this._root.addEventListener("fc/chat/submit", async ({ detail }) => {
       if (this._selectedItems.length > 0) {
+        const agentName = this._activeAgent ? ` para o agente ${this._activeAgent.name}` : "";
         Chat.sendUserMessage(
-          `Executar ação: ${this._selectedItems.map((p) => p.name).join(", ")}`,
+          `Executar ação ${this._selectedItems.map((p) => p.name).join(", ")}${agentName}`,
         );
       }
       await this._execute(detail.message);

@@ -73,7 +73,6 @@ export const Chat = {
   sendCopilotMessage(
     text,
     status = "normal",
-    isTerminator = false,
     actions = [],
   ) {
     this.root.classList.add("chating");
@@ -107,11 +106,16 @@ export const Chat = {
       );
     }
 
-    if (isTerminator) {
-      this.root.querySelector(".fs-cartao-acao")?.remove();
+    // Por padrão, insere a ação "Reiniciar chat" se não estiver presente
+    const hasRestart = actions.some((a) => a.action === "restart-chat");
+    if (!hasRestart) {
+      actions.push({
+        label: "Reiniciar chat",
+        action: "restart-chat",
+      });
     }
 
-    if (actions.length && message) {
+    if (message) {
       this._renderActions(message, actions);
     }
   },
