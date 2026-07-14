@@ -31,6 +31,10 @@
   #wpfooter, .notice, .fs-admin-notice__banner {
     display: none  !important;
   }
+
+  #adminmenu .wp-submenu {
+    z-index: 9999999999999 !important;
+  }
 }
 
 #fc-loader {
