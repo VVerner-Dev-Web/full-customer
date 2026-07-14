@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FC\Models;
 
 use FC\Agents\AgentFactory;
@@ -70,12 +72,28 @@ class PluginsModel extends AbstractModel
     $data = fcDashboardAPI('GET', 'plugin-repository/all');
     $plugins = $data['success'] ? $data['data'] : [];
 
+    // Separar os plugins principais de seus addons
+    $mainPlugins = [];
+    $addonsByParent = [];
+
     foreach ($plugins as $plugin) {
       if (strpos($plugin['plugin'], 'full-customer') !== false) {
         continue;
       }
 
-      $agents[] = AgentFactory::create($plugin);
+      $parentId = isset($plugin['parent_id']) ? intval($plugin['parent_id']) : 0;
+      if ($parentId > 0) {
+        $addonsByParent[$parentId][] = $plugin;
+      } else {
+        $mainPlugins[] = $plugin;
+      }
+    }
+
+    // Criar agentes apenas para os plugins principais, injetando seus addons correspondentes
+    foreach ($mainPlugins as $plugin) {
+      $pluginId = intval($plugin['id']);
+      $pluginAddons = $addonsByParent[$pluginId] ?? [];
+      $agents[] = AgentFactory::create($plugin, $pluginAddons);
     }
 
     return $agents;

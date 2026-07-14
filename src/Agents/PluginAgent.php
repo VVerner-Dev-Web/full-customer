@@ -1,20 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FC\Agents;
 
 use FC\Actions\PluginLicenseExtract;
 use FC\Actions\PluginActivationFactory;
 use FC\Actions\PluginActivationManager;
 use FC\Actions\PluginReactivate;
+use FC\Actions\PluginAddonActivation;
 use FC\FileSystem;
 
 class PluginAgent extends AbstractAgent
 {
   protected array $pluginData;
+  protected array $addons;
 
-  public function __construct(array $pluginData)
+  public function __construct(array $pluginData, array $addons = [])
   {
     $this->pluginData = $pluginData;
+    $this->addons = $addons;
   }
 
   public function getId(): string
@@ -43,6 +48,10 @@ class PluginAgent extends AbstractAgent
     } else {
       $actions[] = new PluginActivationManager($this->pluginData);
       $actions[] = new PluginReactivate($this->pluginData);
+
+      foreach ($this->addons as $addonData) {
+        $actions[] = new PluginAddonActivation($addonData);
+      }
     }
 
     $actions[] = new PluginLicenseExtract($this->pluginData);

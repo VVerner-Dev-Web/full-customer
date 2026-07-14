@@ -172,7 +172,7 @@ export const Chat = {
     return this.container.lastElementChild;
   },
 
-  sendLicensingCard(id, pluginName, pluginIconUrl) {
+  sendLicensingCard(id, pluginName, pluginIconUrl, isAddon = false, addonName = "") {
     if (!this.root || !this.container) return;
 
     this.root.classList.add("chating");
@@ -183,7 +183,29 @@ export const Chat = {
     const clone = template.content.cloneNode(true);
     const textContent = clone.querySelector(".fs-chat__content");
 
-    const cardHtml = `
+    const cardHtml = isAddon ? `
+      <div class="fs-licensing-card-info mb-3">
+        Estamos instalando o addon <strong>${addonName}</strong> do plugin <strong>${pluginName}</strong>, não feche ou recarregue a página durante este processo.
+      </div>
+      <div class="fs-licensing-card" id="licensing-card-${id}">
+        <div class="fs-licensing-card__steps d-flex flex-column gap-3">
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="1">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Baixar e instalar plugin</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="fs-licensing-step d-flex align-items-start gap-2 status-pending" data-step="2">
+            <span class="fs-licensing-step__badge"></span>
+            <div class="fs-licensing-step__content">
+              <span class="fs-licensing-step__label">Ativar no WordPress</span>
+              <div class="fs-licensing-step__detail mt-1 text-muted small" style="display: none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ` : `
       <div class="fs-licensing-card-info mb-3">
         Estamos fazendo a ativação do seu plugin <strong>${pluginName}</strong>, não feche ou recarregue a página durante este processo.
       </div>

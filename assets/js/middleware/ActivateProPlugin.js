@@ -19,15 +19,18 @@ export const ActivateProPlugin = {
       }
 
       const processId = generateId();
+      const isAddon = plugin.extraProps?.isAddon || false;
 
       const callbacks = {
         activeStep: 1,
+        isAddon: isAddon,
         start: () =>
-          Chat.sendLicensingCard(processId, manager._activeAgent.name, plugin.imageUrl),
+          Chat.sendLicensingCard(processId, manager._activeAgent.name, plugin.imageUrl, isAddon, plugin.extraProps?.addonName),
         progress: (stepIndex, status, msg, percent = null) =>
           Chat.updateLicensingCard(processId, stepIndex, status, msg, percent),
         onSuccess: (msg) => {
-          Chat.updateLicensingCard(processId, 4, "completed", msg, null, [
+          const finalStep = isAddon ? 2 : 4;
+          Chat.updateLicensingCard(processId, finalStep, "completed", msg, null, [
             {
               label: 'Recarregar página',
               action: 'reload',
@@ -53,11 +56,15 @@ export const ActivateProPlugin = {
 
       try {
         callbacks.start();
-        await this.processFullActivation(
-          processId,
-          plugin.extraProps.pluginSlug,
-          callbacks,
-        );
+        
+        if (!isAddon) {
+          await this.processFullActivation(
+            processId,
+            plugin.extraProps.pluginSlug,
+            callbacks,
+          );
+        }
+
         await this.processInstallation(
           processId,
           plugin.extraProps.pluginSlug,
@@ -68,12 +75,16 @@ export const ActivateProPlugin = {
           plugin.extraProps.plugin,
           callbacks,
         );
-        await this.processLicense(
-          processId,
-          plugin.extraProps.pluginSlug,
-          callbacks,
-          manager,
-        );
+
+        if (!isAddon) {
+          await this.processLicense(
+            processId,
+            plugin.extraProps.pluginSlug,
+            callbacks,
+            manager,
+          );
+        }
+
         callbacks.onSuccess(`🚀 Concluído com sucesso!`);
         await manager._loadAndRenderSkills();
       } catch (err) {
@@ -174,7 +185,7 @@ export const ActivateProPlugin = {
 
   async processInstallation(processId, pluginSlug, callbacks) {
     if (callbacks && callbacks.activeStep !== undefined) {
-      callbacks.activeStep = 2;
+      callbacks.activeStep = callbacks.isAddon ? 1 : 2;
     }
 
     const progress = (status, msg, percent = null) => {
@@ -182,7 +193,7 @@ export const ActivateProPlugin = {
         callbacks(msg);
       } else if (callbacks && typeof callbacks.progress === "function") {
         if (callbacks.activeStep !== undefined) {
-          callbacks.progress(2, status, msg, percent);
+          callbacks.progress(callbacks.activeStep, status, msg, percent);
         } else {
           callbacks.progress(msg);
         }
@@ -283,7 +294,7 @@ export const ActivateProPlugin = {
 
   async processWordPressActivation(processId, plugin, callbacks) {
     if (callbacks && callbacks.activeStep !== undefined) {
-      callbacks.activeStep = 3;
+      callbacks.activeStep = callbacks.isAddon ? 2 : 3;
     }
 
     const progress = (status, msg, percent = null) => {
@@ -291,7 +302,7 @@ export const ActivateProPlugin = {
         callbacks(msg);
       } else if (callbacks && typeof callbacks.progress === "function") {
         if (callbacks.activeStep !== undefined) {
-          callbacks.progress(3, status, msg, percent);
+          callbacks.progress(callbacks.activeStep, status, msg, percent);
         } else {
           callbacks.progress(msg);
         }

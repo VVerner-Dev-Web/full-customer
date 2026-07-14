@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FC\Agents;
 
 class AgentFactory
 {
-  public static function create(array $pluginData): AbstractAgent
+  public static function create(array $pluginData, array $addons = []): AbstractAgent
   {
     $slug = $pluginData['slug'];
 
@@ -13,9 +15,9 @@ class AgentFactory
     $className = 'FC\\Agents\\' . str_replace(' ', '', ucwords(str_replace('-', ' ', $slug))) . 'Agent';
 
     if (class_exists($className)) {
-      return new $className($pluginData);
+      return new $className($pluginData, $addons);
     }
 
-    return new PluginAgent($pluginData);
+    return new PluginAgent($pluginData, $addons);
   }
 }
