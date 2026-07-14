@@ -294,18 +294,28 @@ class LocalLicenseProcessor
     return ['success' => is_array($response) && isset($response['status']) && $response['status'] === 'success'];
   }
 
-  public function essentialAddons(string $license): array
+  public function essentialAddons(string $license, string $step = '', array $state = []): array
   {
-    global $wpdb;
-
     if (!defined('EAEL_PRO_PLUGIN_FILE')) {
       return ['success' => false];
     }
 
     $transientKey = 'fc/local-license-processor/essential-addons';
-    delete_transient($transientKey);
 
-    $m = \Essential_Addons_Elementor\Pro\Classes\License\Manager::get_instance([
+    if (empty($step)) {
+      return $this->startEssentialAddonsActivation($license, $transientKey);
+    }
+
+    if ($step === 'check_otp') {
+      return $this->checkEssentialAddonsOTP($license, $transientKey, $state);
+    }
+
+    return ['success' => false];
+  }
+
+  private function getEssentialAddonsManager(): \Essential_Addons_Elementor\Pro\Classes\License\Manager
+  {
+    return \Essential_Addons_Elementor\Pro\Classes\License\Manager::get_instance([
       'plugin_file' => EAEL_PRO_PLUGIN_FILE,
       'version' => EAEL_PRO_PLUGIN_VERSION,
       'item_id' => EAEL_SL_ITEM_ID,
@@ -326,7 +336,13 @@ class LocalLicenseProcessor
         'status' => 'essential-addons-elementor-license-status'
       ]
     ]);
+  }
 
+  private function startEssentialAddonsActivation(string $license, string $transientKey): array
+  {
+    delete_transient($transientKey);
+
+    $m = $this->getEssentialAddonsManager();
     $response = $m->activate(['license_key' => $license]);
 
     if (is_wp_error($response)) {
@@ -337,25 +353,52 @@ class LocalLicenseProcessor
       return ['success' => false];
     }
 
+    return [
+      'success' => true,
+      'completed' => false,
+      'step' => 'check_otp',
+      'message' => 'Chave enviada. Aguardando OTP ser gerado...',
+      'state' => [
+        'attempts' => 0
+      ]
+    ];
+  }
+
+  private function checkEssentialAddonsOTP(string $license, string $transientKey, array $state): array
+  {
+    global $wpdb;
+    $attempts = (int) ($state['attempts'] ?? 0);
+
+    sleep(5);
+
+    $data = $wpdb->get_var("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = '_transient_{$transientKey}';");
+    $data = json_decode($data, true);
+
     $otp = null;
-
-    // FYI: 120s
-    for ($i = 0; $i < 24; $i++) {
-      $data = $wpdb->get_var("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = '_transient_{$transientKey}';");
-      $data = json_decode($data, true);
-
-      if (is_array($data) && isset($data['otp'])) {
-        $otp = $data['otp'];
-        break;
-      }
-
-      sleep(5);
+    if (is_array($data) && isset($data['otp'])) {
+      $otp = $data['otp'];
     }
 
     if (!$otp) {
-      return ['success' => false];
+      if ($attempts >= 24) {
+        return [
+          'success' => false,
+          'message' => 'Tempo esgotado aguardando o código OTP do Essential Addons.'
+        ];
+      }
+
+      return [
+        'success' => true,
+        'completed' => false,
+        'step' => 'check_otp',
+        'message' => 'Aguardando o código OTP do Essential Addons (' . (($attempts + 1) * 5) . 's / 120s)...',
+        'state' => [
+          'attempts' => $attempts + 1
+        ]
+      ];
     }
 
+    $m = $this->getEssentialAddonsManager();
     $done = $m->submit_otp([
       'license_key' => $license,
       'otp' => $otp
@@ -365,7 +408,13 @@ class LocalLicenseProcessor
       return ['success' => false];
     }
 
-    return ['success' => isset($done->license) && $done->license === 'valid'];
+    $isValid = isset($done->license) && $done->license === 'valid';
+
+    return [
+      'success' => $isValid,
+      'completed' => true,
+      'message' => $isValid ? 'Essential Addons ativado com sucesso!' : 'A ativação com o OTP falhou.',
+    ];
   }
 
   public function rankMath(string $license): array
