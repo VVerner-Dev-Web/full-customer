@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FC\Actions;
 
 use FC\Services\LocalLicenseProcessor;
@@ -75,13 +77,18 @@ class PluginReactivate extends AbstractAction
       ], 400);
     }
 
-    $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/reactivate');
+    $step  = sanitize_text_field($request->get_param('step') ?? '');
+    $state = $request->get_param('state') ?? [];
 
-    if (!$data['success']) {
-      return new WP_REST_Response([
-        'success' => false,
-        'error' => $data['message']
-      ]);
+    if (empty($step)) {
+      $data = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/reactivate');
+
+      if (!$data['success']) {
+        return new WP_REST_Response([
+          'success' => false,
+          'error' => $data['message']
+        ]);
+      }
     }
 
     $licenseData = fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license');
@@ -94,18 +101,20 @@ class PluginReactivate extends AbstractAction
     }
 
     $processor = new LocalLicenseProcessor();
-    $result = $processor->process($slug, $licenseData['data']['license'] ?? '');
+    $result    = $processor->process($slug, $licenseData['data']['license'] ?? '', $step, $state);
 
-    if ($result['success']) {
+    $isCompleted = !isset($result['completed']) || $result['completed'] === true;
+
+    if ($result['success'] && $isCompleted) {
       fcDashboardAPI('POST', 'plugin-repository/' . $slug . '/license/confirm');
     }
 
     do_action('fc/updates/invalidate');
 
     return new WP_REST_Response([
-      'success' => true,
-      'message' => $result['success'] ? 'Plugin reativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.',
-      'result' => $result
+      'success' => $result['success'],
+      'message' => $result['message'] ?? ($result['success'] ? 'Plugin reativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.'),
+      'result'  => $result
     ]);
   }
 }

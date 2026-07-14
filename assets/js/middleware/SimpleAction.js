@@ -12,8 +12,6 @@ export const SimpleAction = {
         continue;
       }
 
-      const loading = Chat.sendLoadingMessage();
-
       try {
         const method = (action.restMethod || "post").toLowerCase();
 
@@ -21,31 +19,71 @@ export const SimpleAction = {
           throw new Error(`[SimpleAction] Método HTTP não suportado: ${method}`);
         }
 
-        const response = await ApiService[method](
-          "/" + action.restRoute,
-          action.extraProps || {},
-        );
+        let step = "";
+        let state = {};
+        let response;
 
-        loading.remove();
+        while (true) {
+          const loading = Chat.sendLoadingMessage();
 
-        Chat.sendCopilotMessage(
-          response.message ??
-            "Recebemos sua solicitação, nossa equipe irá processar sua solicitação. Você receberá um email informando.",
-          response.success ? "normal" : "error",
-          response.terminate === true ? true : false,
-          response.actions || [],
-        );
+          response = await ApiService[method](
+            "/" + action.restRoute,
+            {
+              ...(action.extraProps || {}),
+              step,
+              state,
+            }
+          );
 
-        Chat._emit("fc/simple-action/processed", {
-          action,
-          response,
-        });
+          loading.remove();
 
-        if (response.reload) {
-          setTimeout(() => window.location.reload(), 1500);
+          if (!response.success) {
+            Chat.sendCopilotMessage(
+              response.error || response.message || "A ativação falhou.",
+              "error",
+              response.terminate === true ? true : false,
+              response.actions || [],
+            );
+            break;
+          }
+
+          const result = response.result || {};
+
+          if (response.message) {
+            Chat.sendCopilotMessage(
+              response.message,
+              "normal",
+              response.terminate === true ? true : false,
+              response.actions || [],
+            );
+          }
+
+          if (result.completed === undefined || result.completed === true) {
+            if (!response.message) {
+              Chat.sendCopilotMessage(
+                "Ação concluída com sucesso!",
+                "success",
+                response.terminate === true ? true : false,
+                response.actions || [],
+              );
+            }
+
+            Chat._emit("fc/simple-action/processed", {
+              action,
+              response,
+            });
+
+            if (response.reload) {
+              setTimeout(() => window.location.reload(), 1500);
+            }
+            break;
+          }
+
+          step = result.step;
+          state = result.state || {};
         }
-      } catch {
-        loading.remove();
+      } catch (err) {
+        console.error(err);
         Chat.sendCopilotMessage("Erro de conexão. Tente novamente.", "error");
       }
     }
