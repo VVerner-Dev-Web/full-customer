@@ -23,10 +23,12 @@ class Update
     add_action('fc/updates/invalidate', [$this, 'invalidate']);
   }
 
-  public function invalidate(): bool
+  public function invalidate(): void
   {
     $fs = FileSystem::instance();
-    return $fs->isFile($this->cacheFile) && $fs->delete($this->cacheFile);
+    if ($fs->isFile($this->cacheFile)) {
+      $fs->delete($this->cacheFile);
+    }
   }
 
   public function initiate(): void

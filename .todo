@@ -1,24 +1,4 @@
 Para testar:
 
-php vendor/bin/phpstan analyse
+php vendor/bin/phpstan analyse --memory-limit 1G
 php vendor/bin/phpcs
-
-========
-
-Ativações via rest
-
-🤖 Elementor PRO
-✅ CrocoBlock / Jet Engine
-✅ Essential Addons
-✅ ACF PRO
-✅ All-in-One WP Security
-✅ Astra PRO
-✅ Happy Addons
-✅ Perfmatters
-✅ Rank Math PRO
-✅ SEO Press
-✅ Ultimate Addons
-✅ UpdraftPlus
-✅ WP Forms
-✅ WP Optimize
-✅ WP Rocket

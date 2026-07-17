@@ -90,7 +90,13 @@ final class FileSystem
     return $this->core()->mtime($fulllPath);
   }
 
-  public function downloadWithProgress(string $url, string $filepath, callable $progressCallback): bool|\WP_Error
+  /**
+   * @param string $url
+   * @param string $filepath
+   * @param callable $progressCallback
+   * @return bool|\WP_Error
+   */
+  public function downloadWithProgress(string $url, string $filepath, callable $progressCallback)
   {
     $fp = fopen($filepath, 'w+');
     if (!$fp) {
@@ -144,7 +150,12 @@ final class FileSystem
     return wp_mkdir_p($fullPath);
   }
 
-  public function appendContents(string $relativePath, $contents): bool|int
+  /**
+   * @param string $relativePath
+   * @param mixed $contents
+   * @return bool|int
+   */
+  public function appendContents(string $relativePath, $contents)
   {
     $fullPath = $this->resolvePath($relativePath);
     return file_put_contents($fullPath, $contents, FILE_APPEND);

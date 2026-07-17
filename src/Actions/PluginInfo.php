@@ -70,7 +70,7 @@ class PluginInfo extends AbstractAction
 
     if ($isInstalled) {
       $localPluginData = get_plugin_data($localPluginPath, false, true);
-      $localVersion    = $localPluginData['Version'] ?? '';
+      $localVersion    = $localPluginData['Version'];
       $upToDate        = version_compare($localVersion, $plugin['version'], '>=');
     }
 

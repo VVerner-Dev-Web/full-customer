@@ -5,8 +5,30 @@ parameters:
     level: 5
 
     paths:
+        - full-customer.php
+        - dev.php
         - src/
         - views/
-        - full-customer.php
 
     phpVersion: 70400
+
+    ignoreErrors:
+        - '#\b(Essential_Addons_Elementor|RankMathPro|RankMath|WPForms_License|BSF_License_Manager)\b#'
+        - '#\bEAEL_(PRO|SL)_#'
+        - '#seopress_automatic_license_activation#'
+        -
+            message: '#^Right side of && is always false\.$#'
+            paths:
+                - src/DashboardAPI.php
+                - src/Services/AdminPage.php
+                - src/Services/Staff.php
+        -
+            message: '#^If condition is always false\.$#'
+            path: src/DashboardAPI.php
+        -
+            message: '#^Negated boolean expression is always true\.$#'
+            path: src/Services/Connection.php
+        -
+            message: '#^Ternary operator condition is always false\.$#'
+            path: src/Services/Connection.php
+

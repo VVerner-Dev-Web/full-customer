@@ -258,7 +258,7 @@ class LocalLicenseProcessor
       'success' => true,
       'completed' => true,
       'message' => 'Plugin ativado com sucesso e pronto para uso! Aproveite.',
-      'redirectUrl' => $qs['redirect_to'] ?? '',
+      'redirectUrl' => $qs['redirect_to'],
     ];
   }
 
