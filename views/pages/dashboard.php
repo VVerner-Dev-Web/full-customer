@@ -124,9 +124,6 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
             <img src="<?= $fs->getUrl('assets/images/icons/arrow-right.svg') ?>" alt="" width="20" height="20" />
           </button>
         </div>
-
-        <!-- Feedback de intent -->
-        <div class="fs-copilot-feedback fs-oculto" id="copilotFeedback"></div>
       </div>
     </div>
 

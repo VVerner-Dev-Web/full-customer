@@ -12,35 +12,21 @@
 
   // Structure
   @import 'structure/header';
-  @import 'structure/faixa';
   @import 'structure/destaque';
 
   // Componentes
   @import 'components/action-card';
   @import 'components/copilot-input';
-  @import 'components/copilot-feedback';
-  @import 'components/sugestoes';
   @import 'components/skill-chip';
-  @import 'components/skills-busca';
-  @import 'components/central';
-  @import 'components/ticket';
-  @import 'components/demo-bar';
-  @import 'components/estados';
-  @import 'components/perguntas';
-  @import 'components/progresso';
   @import 'components/sidebar';
-  @import 'components/upgrade';
 
   // Pages
   @import 'pages/chat';
 
   // Responsivo
   @import 'structure/header/responsive';
-  @import 'structure/faixa/responsive';
   @import 'structure/destaque/responsive';
   @import 'components/action-card/responsive';
-  @import 'components/progresso/responsive';
-  @import 'components/upgrade/responsive';
   @import 'pages/chat/responsive';
 
 }
