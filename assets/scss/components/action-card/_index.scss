@@ -115,5 +115,21 @@
     width: auto;
     padding: 0 14px;
     gap: 6px;
+
+    .fs-btn-enviar__label {
+      opacity: 1;
+      width: auto;
+    }
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #182230;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s 0.1s, width 0.3s;
+    letter-spacing: 0.02em;
   }
 }

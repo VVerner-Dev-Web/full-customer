@@ -1,35 +1,35 @@
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
-@import "@fontsource/syne/700.css";
-@import "@fontsource/syne/800.css";
+@use "sass:meta";
+
+@use "@fontsource/inter/400.css" as *;
+@use "@fontsource/inter/500.css" as *;
+@use "@fontsource/inter/600.css" as *;
+@use "@fontsource/inter/700.css" as *;
+@use "@fontsource/syne/700.css" as *;
+@use "@fontsource/syne/800.css" as *;
 
 #full-customer-root {
   // Base
-  @import 'base/base';
-  @import 'base/animacoes';
+  @include meta.load-css('base/base');
+  @include meta.load-css('base/animacoes');
 
-  // Structure
-  @import 'structure/header';
-  @import 'structure/destaque';
+  @include meta.load-css('structure/header');
+  @include meta.load-css('structure/destaque');
 
-  // Componentes
-  @import 'components/action-card';
-  @import 'components/copilot-input';
-  @import 'components/skill-chip';
-  @import 'components/sidebar';
+  @include meta.load-css('components/action-card');
+  @include meta.load-css('components/copilot-input');
+  @include meta.load-css('components/skill-chip');
+  @include meta.load-css('components/sidebar');
+  @include meta.load-css('components/copilot-feedback');
+  @include meta.load-css('components/sugestoes');
 
-  // Pages
-  @import 'pages/chat';
+  @include meta.load-css('pages/chat');
 
-  // Responsivo
-  @import 'structure/header/responsive';
-  @import 'structure/destaque/responsive';
-  @import 'components/action-card/responsive';
-  @import 'pages/chat/responsive';
-
+  @include meta.load-css('structure/header/responsive');
+  @include meta.load-css('structure/destaque/responsive');
+  @include meta.load-css('components/action-card/responsive');
+  @include meta.load-css('pages/chat/responsive');
 }
 
-@import "fix.scss";
-@import "tutorial.scss";
+@include meta.load-css("fix");
+@include meta.load-css("tutorial");
+ 
