@@ -523,19 +523,25 @@ export const CopilotManager = {
     const normalActions = available.filter(item => !item.extraProps?.isAddon);
     const addonActions = available.filter(item => item.extraProps?.isAddon);
 
+    const defaultIcon = (window.fcData?.pluginUrl || '') + 'assets/images/icons/energy.svg';
+
     let html = "";
 
     if (normalActions.length > 0) {
       html += normalActions
         .map(
-          (item) => `
-          <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
-            <div class="fs-copilot-sugestao__texto">
-              <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
-              ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
-            </div>
-          </a>
-        `,
+          (item) => {
+            const imgUrl = (item.imageUrl && !item.imageUrl.endsWith('/')) ? item.imageUrl : defaultIcon;
+            return `
+            <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
+              <img src="${imgUrl}" alt="" class="fs-copilot-sugestao__icone" />
+              <div class="fs-copilot-sugestao__texto">
+                <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
+                ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
+              </div>
+            </a>
+          `;
+          }
         )
         .join("");
     }
@@ -556,14 +562,18 @@ export const CopilotManager = {
 
       html += addonActions
         .map(
-          (item) => `
-          <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
-            <div class="fs-copilot-sugestao__texto">
-              <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
-              ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
-            </div>
-          </a>
-        `,
+          (item) => {
+            const imgUrl = (item.imageUrl && !item.imageUrl.endsWith('/')) ? item.imageUrl : defaultIcon;
+            return `
+            <a href="#" class="dropdown-item d-flex align-items-center fs-copilot-sugestao" data-id="${item.id}">
+              <img src="${imgUrl}" alt="" class="fs-copilot-sugestao__icone" />
+              <div class="fs-copilot-sugestao__texto">
+                <span class="fs-copilot-sugestao__nome d-block fw-bold text-dark">${this._highlight(item.name, query)}</span>
+                ${item.desc ? `<span class="fs-copilot-sugestao__desc text-muted small">${item.desc}</span>` : ""}
+              </div>
+            </a>
+          `;
+          }
         )
         .join("");
 

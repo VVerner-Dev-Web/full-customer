@@ -46,6 +46,7 @@ class PluginReactivate extends AbstractAction
 
     return array_merge($this->_defaultPromptArgs(), [
       'id' => 'reactivate.' . $this->repoPlugin['id'],
+      'imageUrl' => $this->repoPlugin['image_url'] ?? '',
       'name' => $this->getName(),
       'desc' => $this->getShortDescription(),
       'simpleRest' => true,

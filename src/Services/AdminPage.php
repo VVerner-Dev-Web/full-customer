@@ -59,6 +59,7 @@ class AdminPage
       'nonce' => wp_create_nonce('wp_rest'),
       'baseUrl' => admin_url('admin.php?page=full'),
       'wpPluginsUrl' => admin_url('plugins.php'),
+      'pluginUrl' => FileSystem::instance()->getUrl(''),
       'skillsRepository' => ModelRepository::instance()->toArray(),
       'starterSkill' => User::instance()->isConnected() ? PluginsModel::ID : ConnectModel::ID,
     ]);
