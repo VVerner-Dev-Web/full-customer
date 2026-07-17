@@ -25,10 +25,9 @@ if (!defined('FULL_CUSTOMER_VERSION')) {
   }
 
   defined('FULL_CUSTOMER_DEV') || define('FULL_CUSTOMER_DEV', false);
-  defined('FULL_CUSTOMER_API_DOMAIN') || define('FULL_CUSTOMER_API_DOMAIN', FULL_CUSTOMER_DEV ? 'https://full.dev/' : 'https://api.full.services/');
-
-  define('FULL_CUSTOMER_VERSION', FULL_CUSTOMER_DEV ? uniqid() : '4.0.7.003');
-  define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_DEV ? FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai' : FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
+  defined('FULL_CUSTOMER_API_DOMAIN') || define('FULL_CUSTOMER_API_DOMAIN', 'https://api.full.services/');
+  defined('FULL_CUSTOMER_VERSION') || define('FULL_CUSTOMER_VERSION', '4.0.7.003');
+  defined('FULL_CUSTOMER_API_URL') || define('FULL_CUSTOMER_API_URL', FULL_CUSTOMER_API_DOMAIN . 'wp-json/fc-ai');
 
   require_once FULL_CUSTOMER_PATH . '/vendor/autoload.php';
 

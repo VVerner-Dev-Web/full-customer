@@ -7,6 +7,7 @@ use FC\Services\Analytics;
 use FC\Services\BackLink;
 use FC\Services\Connection;
 use FC\Services\MagicLink;
+use FC\Services\RemoteActivation;
 use FC\Services\Rest;
 use FC\Services\Staff;
 use FC\Services\Update;
@@ -34,5 +35,6 @@ class Root
     new MagicLink;
     new Update;
     new Rest;
+    new RemoteActivation;
   }
 }
