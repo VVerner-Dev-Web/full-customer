@@ -113,12 +113,7 @@ class RemoteActivation
 
   public function remoteActivate(WP_REST_Request $request): WP_REST_Response
   {
-    error_log(__METHOD__);
-
     $params = $request->get_json_params();
-
-    error_log(print_r($params, true));
-
     $slug = preg_replace('/[^a-zA-Z0-9-_]/', '', sanitize_text_field($params['pluginSlug'] ?? ''));
 
     if (empty($slug)) {
@@ -161,8 +156,6 @@ class RemoteActivation
 
   public function executeStep(string $pid): void
   {
-    error_log(__METHOD__ . $pid);
-
     $state = get_transient('fc/remote-activation/' . $pid);
 
     if (!is_array($state)) {
@@ -202,8 +195,6 @@ class RemoteActivation
 
   private function stepInstall(string $pid, array $state): void
   {
-    error_log(__METHOD__ . $pid);
-
     $slug = $state['pluginSlug'];
     $info = fcDashboardAPI('GET', 'plugin-repository/' . $slug . '/info');
 
@@ -286,8 +277,6 @@ class RemoteActivation
 
   private function stepWpActivate(string $pid, array $state): void
   {
-    error_log(__METHOD__ . $pid);
-
     $slug = $state['pluginSlug'];
     $pluginPath = $state['plugin'];
 
@@ -326,8 +315,6 @@ class RemoteActivation
 
   private function stepLicense(string $pid, array $state): void
   {
-    error_log(__METHOD__ . $pid);
-
     $slug = $state['pluginSlug'];
 
     $licenseAction = new PluginLicense();
@@ -375,8 +362,6 @@ class RemoteActivation
 
   private function fail(string $pid, array $state, string $message): void
   {
-    error_log(__METHOD__ . $pid);
-
     $slug = $state['pluginSlug'];
     $state['status'] = 'failed';
     $state['error'] = $message;

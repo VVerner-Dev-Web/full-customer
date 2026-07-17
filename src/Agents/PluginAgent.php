@@ -50,7 +50,6 @@ class PluginAgent extends AbstractAgent
       $actions[] = new PluginReactivate($this->pluginData);
 
       foreach ($this->addons as $addonData) {
-        error_log(print_r($addonData, true));
         $actions[] = new PluginAddonActivation($addonData);
       }
     }
