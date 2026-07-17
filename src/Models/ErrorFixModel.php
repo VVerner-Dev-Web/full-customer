@@ -31,7 +31,7 @@ class ErrorFixModel extends AbstractModel
 
   public function getIcon(): string
   {
-    return 'assets/images/icons/errorfix.svg';
+    return 'assets/images/icons/model-fix.svg';
   }
 
   public function getInputPlaceholder(): string

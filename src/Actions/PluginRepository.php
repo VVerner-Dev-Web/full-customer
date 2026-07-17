@@ -9,7 +9,7 @@ class PluginRepository extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/git-repository-line.svg';
+    return 'assets/images/icons/zip.svg';
   }
 
   public function getName(): string
@@ -44,7 +44,7 @@ class PluginRepository extends AbstractAction
 
     $message = '';
 
-    foreach ($plugins as  $i => $plugin) {
+    foreach ($plugins as $i => $plugin) {
       if ($i > 0) {
         $message .= '<hr>';
       }

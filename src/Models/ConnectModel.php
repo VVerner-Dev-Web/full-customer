@@ -37,7 +37,7 @@ class ConnectModel extends AbstractModel
 
   public function getIcon(): string
   {
-    return 'assets/images/icons/connector-fill.svg';
+    return 'assets/images/icons/model-connect.svg';
   }
 
   public function getInputPlaceholder(): string

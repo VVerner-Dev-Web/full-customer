@@ -19,7 +19,7 @@ class DevAgent extends AbstractAgent
 
   public function getIcon(): string
   {
-    return FileSystem::instance()->getUrl('assets/images/icons/errorfix.svg');
+    return FileSystem::instance()->getUrl('assets/images/icons/agent-dev.svg');
   }
 
   public function isReadOnly(): bool

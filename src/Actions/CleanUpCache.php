@@ -10,7 +10,7 @@ class CleanUpCache extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/file-shred-line.svg';
+    return 'assets/images/icons/eraser.svg';
   }
 
   public function getName(): string

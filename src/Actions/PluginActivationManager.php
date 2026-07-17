@@ -16,7 +16,7 @@ class PluginActivationManager extends AbstractAction
 
   public function getIcon(): string
   {
-    return $this->repoPlugin && isset($this->repoPlugin['image_url']) ? $this->repoPlugin['image_url'] : '';
+    return 'assets/images/icons/file-search.svg';
   }
 
   public function getName(): string
@@ -46,7 +46,6 @@ class PluginActivationManager extends AbstractAction
 
     return array_merge($this->_defaultPromptArgs(), [
       'id' => $this->repoPlugin['id'],
-      'imageUrl' => $this->repoPlugin['image_url'],
       'name' => $this->getName(),
       'desc' => $this->getShortDescription(),
       'simpleRest' => true,

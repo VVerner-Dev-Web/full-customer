@@ -16,7 +16,7 @@ class PluginLicenseExtract extends AbstractAction
 
   public function getIcon(): string
   {
-    return 'assets/images/icons/archive-drawer-line.svg';
+    return 'assets/images/icons/wallet.svg';
   }
 
   public function getName(): string

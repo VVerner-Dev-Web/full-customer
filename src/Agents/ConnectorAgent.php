@@ -23,7 +23,7 @@ class ConnectorAgent extends AbstractAgent
 
   public function getIcon(): string
   {
-    return FileSystem::instance()->getUrl('assets/images/icons/connector-fill.svg');
+    return FileSystem::instance()->getUrl('assets/images/icons/agent-connector.svg');
   }
 
   public function isReadOnly(): bool

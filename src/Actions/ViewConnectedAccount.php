@@ -10,7 +10,7 @@ class ViewConnectedAccount extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/link-m.svg';
+    return 'assets/images/icons/link.svg';
   }
 
   public function getName(): string

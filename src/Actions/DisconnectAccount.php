@@ -10,7 +10,7 @@ class DisconnectAccount extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/link-unlink-m.svg';
+    return 'assets/images/icons/unlink.svg';
   }
 
   public function getName(): string

@@ -10,7 +10,7 @@ class ConnectAccount extends AbstractAction
 {
   public function getIcon(): string
   {
-    return 'assets/images/icons/link-m.svg';
+    return 'assets/images/icons/link.svg';
   }
 
   public function getName(): string
@@ -79,7 +79,7 @@ class ConnectAccount extends AbstractAction
 
     return [
       'success' => $success,
-      'data'    => $connected['data'] ?? ['error' => $connected['message'] ?? 'Erro de conexão com o painel da FULL.']
+      'data' => $connected['data'] ?? ['error' => $connected['message'] ?? 'Erro de conexão com o painel da FULL.']
     ];
   }
 
@@ -91,7 +91,7 @@ class ConnectAccount extends AbstractAction
 
     return [
       'success' => $update['success'],
-      'data'    => $update['data']
+      'data' => $update['data']
     ];
   }
 }

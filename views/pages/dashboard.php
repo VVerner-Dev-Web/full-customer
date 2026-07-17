@@ -44,7 +44,7 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
                 data-bs-auto-close="outside" id="modeloGatilho">
                 <img src="" alt="" width="16" height="16" id="modeloIcone" />
                 <span id="modeloNome"></span>
-                <img src="<?= $fs->getUrl('assets/images/icons/arrow-down-01.svg') ?>" alt="" width="14" height="14"
+                <img src="<?= $fs->getUrl('assets/images/icons/chevron-down.svg') ?>" alt="" width="14" height="14"
                   class="fs-skill-chip__seta" />
               </button>
               <div class="fs-skill-chip__menu dropdown-menu" id="modeloMenuContainer"></div>
@@ -58,7 +58,7 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
                 data-bs-auto-close="outside" id="agenteGatilho">
                 <img src="" alt="" width="16" height="16" id="agenteIcone" />
                 <span id="agenteNome"></span>
-                <img src="<?= $fs->getUrl('assets/images/icons/arrow-down-01.svg') ?>" alt="" width="14" height="14"
+                <img src="<?= $fs->getUrl('assets/images/icons/chevron-down.svg') ?>" alt="" width="14" height="14"
                   class="fs-skill-chip__seta" />
               </button>
               <div class="fs-skill-chip__menu dropdown-menu" id="agenteMenuContainer"></div>
@@ -75,8 +75,7 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
             </div>
           </div>
           <button class="fs-acao-ativa__remover" id="fsAcaoAtivaRemover" aria-label="Remover ação">
-            <img src="<?= $fs->getUrl('assets/images/icons/multiplication-sign.svg') ?>" alt="" width="12"
-              height="12" />
+            <img src="<?= $fs->getUrl('assets/images/icons/close.svg') ?>" alt="" width="12" height="12" />
           </button>
         </div>
 
@@ -95,19 +94,12 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
           <div class="dropdown dropup ms-2">
             <button class="fs-btn-opcao" type="button" id="btnMenuAcoes" data-bs-toggle="dropdown" aria-expanded="false"
               title="Opções">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="fs-btn-opcao__icone">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
-              </svg>
+              <img src="<?= $fs->getUrl('assets/images/icons/dots-more.svg') ?>" alt="" width="16" height="16" />
             </button>
             <ul class="dropdown-menu dropdown-menu-end fs-menu-dropup" aria-labelledby="btnMenuAcoes">
               <li>
                 <button class="dropdown-item d-flex align-items-center gap-2" id="btnRestartChat" type="button">
-                  <img src="<?= $fs->getUrl('assets/images/icons/loop-right-line.svg') ?>" alt="" width="16"
-                    height="16" />
+                  <img src="<?= $fs->getUrl('assets/images/icons/loop-right.svg') ?>" alt="" width="16" height="16" />
                   Reiniciar chat
                 </button>
               </li>
@@ -129,7 +121,7 @@ $starterSkill = $user->isConnected() ? $repo->get(PluginsModel::ID) : $repo->get
 
           <button class="fs-btn-enviar ms-2" id="btnEnviarCopilot">
             <span class="fs-btn-enviar__label">Executar ação</span>
-            <img src="<?= $fs->getUrl('assets/images/icons/arrow-right-02.svg') ?>" alt="" width="20" height="20" />
+            <img src="<?= $fs->getUrl('assets/images/icons/arrow-right.svg') ?>" alt="" width="20" height="20" />
           </button>
         </div>
 

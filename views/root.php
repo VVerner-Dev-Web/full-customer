@@ -66,7 +66,7 @@ $fs = FileSystem::instance();
   <template id="chat-success">
     <div class="fs-chat__cartao-success">
       <div class="fs-chat__success-cabecalho">
-        <img src="<?= $fs->getUrl('assets/images/icons/emotion-laugh-line.svg'); ?>" alt="" width="20" height="20">
+        <img src="<?= $fs->getUrl('assets/images/icons/emotion-laugh.svg'); ?>" alt="" width="20" height="20">
         <span class="fs-chat__success-titulo">Boas notícias!</span>
       </div>
       <p class="fs-chat__success-desc fs-chat__content"></p>

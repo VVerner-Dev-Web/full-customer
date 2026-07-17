@@ -20,7 +20,7 @@ class PluginReactivate extends AbstractAction
 
   public function getIcon(): string
   {
-    return '';
+    return 'assets/images/icons/recover.svg';
   }
 
   public function getName(): string
@@ -46,7 +46,6 @@ class PluginReactivate extends AbstractAction
 
     return array_merge($this->_defaultPromptArgs(), [
       'id' => 'reactivate.' . $this->repoPlugin['id'],
-      'imageUrl' => $this->repoPlugin['image_url'] ?? '',
       'name' => $this->getName(),
       'desc' => $this->getShortDescription(),
       'simpleRest' => true,
@@ -78,7 +77,7 @@ class PluginReactivate extends AbstractAction
       ], 400);
     }
 
-    $step  = sanitize_text_field($request->get_param('step') ?? '');
+    $step = sanitize_text_field($request->get_param('step') ?? '');
     $state = $request->get_param('state') ?? [];
 
     if (empty($step)) {
@@ -102,7 +101,7 @@ class PluginReactivate extends AbstractAction
     }
 
     $processor = new LocalLicenseProcessor();
-    $result    = $processor->process($slug, $licenseData['data']['license'] ?? '', $step, $state);
+    $result = $processor->process($slug, $licenseData['data']['license'] ?? '', $step, $state);
 
     $isCompleted = !isset($result['completed']) || $result['completed'] === true;
 
@@ -115,7 +114,7 @@ class PluginReactivate extends AbstractAction
     return new WP_REST_Response([
       'success' => $result['success'],
       'message' => $result['message'] ?? ($result['success'] ? 'Plugin reativado com sucesso e pronto para uso! Aproveite.' : 'A ativação automática falhou, nossa equipe técnica já foi acionada para solucionar o caso.'),
-      'result'  => $result
+      'result' => $result
     ]);
   }
 }

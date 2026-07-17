@@ -33,7 +33,7 @@ class PluginsModel extends AbstractModel
 
   public function getIcon(): string
   {
-    return 'assets/images/icons/energy.svg';
+    return 'assets/images/icons/model-plugin.svg';
   }
 
   public function getInputPlaceholder(): string
