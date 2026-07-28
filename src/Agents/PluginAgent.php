@@ -46,8 +46,13 @@ class PluginAgent extends AbstractAgent
     if (!isset($this->pluginData['activation']) || intval($this->pluginData['activation']['id']) === 0) {
       $actions[] = new PluginActivationFactory($this->pluginData);
     } else {
+      $activation = $this->pluginData['activation'];
+
       $actions[] = new PluginActivationManager($this->pluginData);
-      $actions[] = new PluginReactivate($this->pluginData);
+
+      if ($activation['status'] === 'success') {
+        $actions[] = new PluginReactivate($this->pluginData);
+      }
 
       foreach ($this->addons as $addonData) {
         $actions[] = new PluginAddonActivation($addonData);
