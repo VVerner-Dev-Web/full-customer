@@ -603,6 +603,16 @@ export const CopilotManager = {
       return;
     }
 
+    // Fecha e limpa o dropdown de sugestões enquanto o input ainda está habilitado
+    if (typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
+      const bsDropdown = bootstrap.Dropdown.getInstance(Chat.input);
+      if (bsDropdown) bsDropdown.hide();
+    }
+    if (this._suggestionsEl) {
+      this._suggestionsEl.classList.remove("show");
+      this._suggestionsEl.innerHTML = "";
+    }
+
     this._selectedItems = [item];
 
     // Atualizar Barra de Ação Ativa
@@ -614,21 +624,20 @@ export const CopilotManager = {
       this._acaoAtivaContainerEl.classList.add("d-flex");
     }
 
-    // Limpa o input de texto e altera o placeholder para instruções
+    // Limpa o input de texto e altera o placeholder/estado para instruções
     if (Chat.input) {
       Chat.input.value = "";
       if (item.id === "connectAccount") {
+        Chat.input.disabled = false;
+        Chat.input.removeAttribute("disabled");
         Chat.input.placeholder = "Digite o e-mail de compra";
+        Chat.input.focus();
       } else {
-        Chat.input.placeholder = "Instruções adicionais (opcional)...";
+        Chat.input.disabled = true;
+        Chat.input.setAttribute("disabled", "disabled");
+        Chat.input.placeholder = "Esta ação não requer informações adicionais";
+        Chat.input.blur();
       }
-      Chat.input.focus();
-    }
-
-    // Fecha dropdown
-    if (typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
-      const bsDropdown = bootstrap.Dropdown.getInstance(Chat.input);
-      if (bsDropdown) bsDropdown.hide();
     }
 
     this._syncButtonState();
@@ -641,6 +650,8 @@ export const CopilotManager = {
       this._acaoAtivaContainerEl.classList.add("d-none");
     }
     if (Chat.input) {
+      Chat.input.disabled = false;
+      Chat.input.removeAttribute("disabled");
       Chat.input.placeholder = this._activeSkill?.inputPlaceholder || "Digite sua mensagem ou escolha uma ação...";
     }
     if (sync) {
@@ -747,11 +758,12 @@ export const CopilotManager = {
       this._removeAcaoAtiva(false);
     }
     if (this._suggestionsEl) {
-      this._suggestionsEl.innerHTML = "";
       if (typeof bootstrap !== "undefined" && bootstrap.Dropdown) {
         const bsDropdown = bootstrap.Dropdown.getInstance(Chat.input);
         if (bsDropdown) bsDropdown.hide();
       }
+      this._suggestionsEl.classList.remove("show");
+      this._suggestionsEl.innerHTML = "";
     }
   },
 
