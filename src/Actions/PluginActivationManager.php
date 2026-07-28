@@ -21,7 +21,7 @@ class PluginActivationManager extends AbstractAction
 
   public function getName(): string
   {
-    return 'Consultar ativação';
+    return 'Consultar status';
   }
 
   public function getShortDescription(): string
