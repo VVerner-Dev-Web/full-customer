@@ -7,7 +7,6 @@ const EMAIL_REGEX =
 
 export const ConnectionService = {
   _working: false,
-  _waitingEmail: false,
 
   attach(root) {
     root.addEventListener("fc/chat/reset", () => {
@@ -17,8 +16,6 @@ export const ConnectionService = {
 
   reset() {
     this._working = false;
-    this._waitingEmail = false;
-    CopilotManager.waitingUserPersonalAnswer = false;
   },
 
   async _middleware(manager, skill, actions, msg) {
@@ -26,33 +23,31 @@ export const ConnectionService = {
       return;
     }
 
-    this._working = true;
-
     const action = actions === null ? null : actions[0];
 
-    if (action?.id !== "connectAccount" && !this._waitingEmail) {
+    if (action?.id !== "connectAccount") {
       return;
     }
 
-    if (!this._waitingEmail) {
-      const emailVal = msg ? msg.trim() : "";
-      if (!emailVal) {
-        CopilotManager.waitingUserPersonalAnswer = true;
-        this._waitingEmail = true;
-        Chat.sendCopilotMessage(
-          "Por favor, insira o e-mail utilizado durante a compra das licenças na FULL.",
-        );
-        return;
-      }
-      this._waitingEmail = true;
-    }
+    this._working = true;
 
     const email = (msg || "").toLowerCase().trim();
+
+    if (!email) {
+      Chat.sendCopilotMessage(
+        "Por favor, insira o e-mail utilizado durante a compra das licenças na FULL.",
+      );
+      this._working = false;
+      manager.keepActiveAction();
+      return;
+    }
 
     if (!EMAIL_REGEX.test(email)) {
       Chat.sendCopilotMessage(
         "Desculpe, esse e-mail parece inválido. Certifique-se de que não há espaços ou caracteres extras.",
       );
+      this._working = false;
+      manager.keepActiveAction();
       return;
     }
 
@@ -69,7 +64,11 @@ export const ConnectionService = {
         response.success ? "success" : "error",
       );
 
-      if (!response.success) return;
+      if (!response.success) {
+        this._working = false;
+        manager.keepActiveAction();
+        return;
+      }
 
       Chat.sendLoadingMessage();
       if (window.fcData) {
@@ -82,6 +81,9 @@ export const ConnectionService = {
     } catch {
       loading.remove();
       Chat.sendCopilotMessage("Erro de conexão. Tente novamente.", "error");
+      manager.keepActiveAction();
+    } finally {
+      this._working = false;
     }
   },
 };

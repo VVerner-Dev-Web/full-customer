@@ -40,6 +40,7 @@ export const CopilotManager = {
   _selectedItems: [], // Ações selecionadas (contém no máx 1 ação ativa no novo padrão)
 
   _middlewares: [],
+  _keepActiveAction: false,
 
   async init(root) {
     this._root = root;
@@ -382,6 +383,8 @@ export const CopilotManager = {
     let debounceTimer;
 
     const handleInput = (e) => {
+      this._syncButtonState();
+
       if (!this._activeAgent?.actions) return;
 
       clearTimeout(debounceTimer);
@@ -647,17 +650,33 @@ export const CopilotManager = {
 
   _syncButtonState() {
     if (this.waitingUserPersonalAnswer) {
-      Chat.toggleSubmitButton(false);
+      Chat.toggleSubmitButton(true);
       return;
     }
 
-    // O botão fica habilitado (ativo) se houver uma Ação Ativa selecionada OU se houver texto digitado no input!
-    const hasRequirements = this._selectedItems.length > 0 || Chat.input.value.trim().length > 0;
+    const hasSelectedAction = this._selectedItems.length > 0;
+    const hasInputText = Chat.input?.value.trim().length > 0;
+    const isConnectAccountAction =
+      hasSelectedAction && this._selectedItems[0]?.id === "connectAccount";
 
-    Chat.toggleSubmitButton(!hasRequirements);
+    let isEnabled = false;
+
+    if (isConnectAccountAction) {
+      isEnabled = hasInputText;
+    } else if (hasSelectedAction) {
+      isEnabled = true;
+    } else {
+      isEnabled = hasInputText;
+    }
+
+    Chat.toggleSubmitButton(!isEnabled);
   },
 
   // ─── Execução Genérica ────────────────────────────────────
+
+  keepActiveAction() {
+    this._keepActiveAction = true;
+  },
 
   addMiddleware(middleware) {
     if (typeof middleware !== "function") return;
@@ -705,9 +724,14 @@ export const CopilotManager = {
     } finally {
       this._working = false;
       this._cartaoAcaoEl?.classList.remove("bloqueado");
-      this._selectedItems = [];
-      this._removeAcaoAtiva(false);
-      this._syncButtonState();
+      if (this._keepActiveAction && actions && actions[0]) {
+        this._keepActiveAction = false;
+        this._selectAction(actions[0]);
+      } else {
+        this._selectedItems = [];
+        this._removeAcaoAtiva(false);
+        this._syncButtonState();
+      }
     }
   },
 

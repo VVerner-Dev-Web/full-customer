@@ -392,6 +392,7 @@ export const Chat = {
   },
 
   _emitSubmit() {
+    if (this.button?.hasAttribute("disabled") || this.button?.classList.contains("desabilitado")) return;
     const msg = this.input.value.trim();
     this._emit("fc/chat/submit", { message: msg });
   },
