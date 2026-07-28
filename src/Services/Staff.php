@@ -60,6 +60,7 @@ class Staff
       'pluginUrl' => FileSystem::instance()->getUrl(''),
       'skillsRepository' => ModelRepository::instance()->toArray(),
       'starterSkill' => User::instance()->isConnected() ? PluginsModel::ID : ConnectModel::ID,
+      'fcVersion' => FULL_CUSTOMER_VERSION
     ]);
 
     echo '</script>';
