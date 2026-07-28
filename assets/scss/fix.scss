@@ -34,10 +34,6 @@
   #wpfooter, .notice, .fs-admin-notice__banner {
     display: none  !important;
   }
-
-  #adminmenu .wp-submenu {
-    z-index: 9999999999999 !important;
-  }
 }
 
 #fc-loader {
@@ -91,7 +87,6 @@
     min-height: 0 !important;
     height: calc(100vh - 32px) !important;
     max-height: calc(100vh - 32px) !important;
-    z-index: 9990 !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
 
