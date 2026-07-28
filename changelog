@@ -4,3 +4,4 @@
 - arrumado tutorial para nova ux de conexão
 - correção do ícone de conexão
 - removido z-index no container quando .chatting para não bloquear sub-menus wp
+- a ação de reativação só aparece quando o plugin tiver uma ativação com status de sucesso
