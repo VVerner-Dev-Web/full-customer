@@ -293,21 +293,6 @@ export const Tutorial = {
       });
 
       this._tourInstance.addStep({
-        id: "step-connect-send",
-        title: "Mande o comando",
-        text: "Agora é só clicar na setinha para enviar o comando e prosseguirmos.",
-        arrow: true,
-        attachTo: {
-          element: "#btnEnviarCopilot",
-          on: "top",
-        },
-        advanceOn: {
-          selector: "#btnEnviarCopilot",
-          event: "click",
-        },
-      });
-
-      this._tourInstance.addStep({
         id: "step-connect-email",
         title: "Confirme sua identidade",
         text: "Insira o e-mail que você usou na compra das licenças e clique em enviar. Quando a página recarregar, estarei te esperando para o próximo passo!",
