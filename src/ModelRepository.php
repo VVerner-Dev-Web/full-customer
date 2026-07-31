@@ -6,7 +6,6 @@ use FC\Models\AbstractModel;
 use FC\Models\ConnectModel;
 use FC\Models\ErrorFixModel;
 use FC\Models\PluginsModel;
-use FC\Models\SupportModel;
 
 final class ModelRepository
 {
@@ -18,7 +17,6 @@ final class ModelRepository
     $this->models[ConnectModel::ID] = new ConnectModel();
     $this->models[PluginsModel::ID] = new PluginsModel();
     $this->models[ErrorFixModel::ID] = new ErrorFixModel();
-    $this->models[SupportModel::ID] = new SupportModel();
   }
 
   public function toArray(): array

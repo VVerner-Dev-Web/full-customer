@@ -39,7 +39,6 @@ class Rest
       new \FC\Actions\PluginInfo(),
       new \FC\Actions\PluginUploadChunk(),
       new \FC\Actions\PluginDownload(),
-      new \FC\Actions\RequestSupport(),
     ];
 
     foreach ($actions as $action) {

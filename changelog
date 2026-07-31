@@ -8,3 +8,5 @@
 - remoeada a ação para "Consultar status"
 - nova ação "Download de plugin (zip)"
 - nova ação "Solicitar suporte" - via plugin, conta ou genérico
+4.1.2
+- removido solicitação de suporte
