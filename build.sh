@@ -20,11 +20,15 @@ echo "🚀 Iniciando o build do plugin..."
 if ! git diff-index --quiet HEAD --; then
   echo "⚠️  ATENÇÃO: Existem alterações não commitadas no repositório!"
   echo "   Como o 'git archive' utiliza o estado de HEAD, modificações não commitadas NÃO entrarão no arquivo .zip."
-  read -p "Deseja continuar mesmo assim? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Build cancelado pelo usuário."
-    exit 1
+  if [ -t 0 ]; then
+    read -p "Deseja continuar mesmo assim? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "❌ Build cancelado pelo usuário."
+      exit 1
+    fi
+  else
+    echo "ℹ️  Executando em modo não-interativo. Continuando..."
   fi
 fi
 
