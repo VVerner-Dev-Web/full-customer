@@ -1,9 +1,9 @@
 === FULL - Cliente ===
 Contributors: fullservices, vverner
 Tags: full, elementor, security, tool, manage-multiple-sites
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 Requires at least: 6.3
-Tested up to: 7.0
+Tested up to: 7.0.2
 Requires PHP: 7.4
 
 Este plugin adiciona novas extensões úteis e conecta-o ao painel da FULL. para ativações de outros plugins
