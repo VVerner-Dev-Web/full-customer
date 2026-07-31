@@ -1,44 +1,72 @@
 #!/bin/bash
 
+# Abortar imediatamente se algum comando falhar ou se houver variáveis não declaradas
+set -euo pipefail
+
+TEMP_DIR="temp_build"
+PLUGIN_NAME="full-customer"
+
+# 0. Função de Limpeza (Executada sempre no encerramento ou em caso de erro)
+cleanup() {
+  echo "🔄 Restaurando ambiente de desenvolvimento PHP e limpando temporários..."
+  rm -rf "$TEMP_DIR"
+  composer install --quiet
+}
+trap cleanup EXIT
+
 echo "🚀 Iniciando o build do plugin..."
 
-# (Opcional, mas recomendado) Garantir que pacotes node existam
-echo "📦 Instalando dependências Node..."
-npm ci
+# 1. Verificar alterações pendentes no Git
+if ! git diff-index --quiet HEAD --; then
+  echo "⚠️  ATENÇÃO: Existem alterações não commitadas no repositório!"
+  echo "   Como o 'git archive' utiliza o estado de HEAD, modificações não commitadas NÃO entrarão no arquivo .zip."
+  read -p "Deseja continuar mesmo assim? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "❌ Build cancelado pelo usuário."
+    exit 1
+  fi
+fi
 
-# 1. Compilar os assets do Vite
-echo "📦 Compilando assets..."
+# 2. Extrair versão atual do plugin a partir do arquivo principal PHP
+VERSION=$(grep -i "Version:" full-customer.php | head -n 1 | awk '{print $3}' | tr -d '\r')
+OUTPUT_ZIP="${PLUGIN_NAME}@${VERSION}.zip"
+
+echo "📌 Versão detectada: $VERSION"
+echo "📦 Arquivo final: $OUTPUT_ZIP"
+
+# 3. Garantir pacotes Node (apenas se node_modules não existir ou se forçar --fresh)
+if [ ! -d "node_modules" ] || [[ "${1:-}" == "--fresh" ]]; then
+  echo "📦 Instalando dependências Node..."
+  npm ci
+fi
+
+# 4. Compilar assets do Vite
+echo "📦 Compilando assets do Vite..."
 npm run build
 
-# 2. Gerar a pasta vendor otimizada para produção
-echo "🐘 Instalando dependências PHP (Sem pacotes de dev)..."
-composer install --no-dev --optimize-autoloader
+# 5. Gerar pasta vendor otimizada para produção
+echo "🐘 Instalando dependências PHP de produção..."
+composer install --no-dev --optimize-autoloader --classmap-authoritative --quiet
 
-# 3. Criar uma pasta temporária para montar o plugin
-echo "📁 Criando estrutura temporária..."
-rm -rf temp_build
-mkdir -p temp_build/full-customer
-mkdir -p temp_build/full-customer/assets
+# 6. Montar estrutura temporária do plugin
+echo "📁 Criando estrutura de arquivos para o pacote..."
+rm -rf "$TEMP_DIR"
+mkdir -p "$TEMP_DIR/$PLUGIN_NAME"
 
-# 4. Usar o Git para copiar os arquivos base (respeitando o .gitattributes)
-git archive HEAD | tar -x -C temp_build/full-customer
+# Respeita o .gitattributes para exportar o projeto base limpo
+git archive HEAD | tar -x -C "$TEMP_DIR/$PLUGIN_NAME"
 
-# 5. Copiar os diretórios ignorados pelo Git, mas necessários em produção
+# Copiar diretórios ignorados pelo Git (Vendor de produção e assets compilados)
 echo "🚚 Copiando vendor e assets compilados..."
-cp -r vendor temp_build/full-customer/
-cp -r assets/dist temp_build/full-customer/assets/ 
+mkdir -p "$TEMP_DIR/$PLUGIN_NAME/assets"
+cp -r vendor "$TEMP_DIR/$PLUGIN_NAME/"
+cp -r assets/dist "$TEMP_DIR/$PLUGIN_NAME/assets/"
 
-# 6. Gerar o arquivo .zip final 
-echo "🗜️ Gerando full-customer.zip..."
-cd temp_build
-npx bestzip ../full-customer.zip full-customer/
+# 7. Gerar arquivo ZIP final
+echo "🗜️ Gerando $OUTPUT_ZIP..."
+cd "$TEMP_DIR"
+npx bestzip "../$OUTPUT_ZIP" "$PLUGIN_NAME/"
 cd ..
 
-# 7. Limpar a pasta temporária
-rm -rf temp_build
-
-# 8. Restaurar estado de dev do Composer
-echo "🔄 Restaurando ambiente de desenvolvimento PHP..."
-composer install --quiet
-
-echo "✅ Build concluído! Arquivo full-customer.zip gerado com sucesso."
+echo "✅ Build concluído com sucesso! Arquivo $OUTPUT_ZIP gerado."
