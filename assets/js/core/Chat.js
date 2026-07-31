@@ -352,6 +352,10 @@ export const Chat = {
 
       const lastMessage = this.container.lastElementChild;
       if (lastMessage && lastMessage.contains(actionBtn)) {
+        if (actionBtn.tagName === "A" && (actionBtn.hasAttribute("download") || (actionBtn.getAttribute("href") && actionBtn.getAttribute("href") !== "#"))) {
+          return;
+        }
+
         e.preventDefault();
 
         const action = actionBtn.dataset.action;
@@ -366,7 +370,7 @@ export const Chat = {
           return;
         }
 
-        if (action.includes("skill.")) {
+        if (action && action.includes("skill.")) {
           const skillId = action.split(".")[1];
           CopilotManager.trigger(skillId);
           setTimeout(() => {
@@ -375,7 +379,9 @@ export const Chat = {
           return;
         }
 
-        this._emit("fc/chat/action", { action });
+        if (action) {
+          this._emit("fc/chat/action", { action });
+        }
       }
     });
   },
@@ -411,7 +417,10 @@ export const Chat = {
     const oldButtons = this.container.querySelectorAll(
       ".btn-chat-action:not([disabled])",
     );
-    oldButtons.forEach((btn) => (btn.disabled = true));
+    oldButtons.forEach((btn) => {
+      if (btn.tagName === "BUTTON") btn.disabled = true;
+      else btn.classList.add("disabled");
+    });
 
     const actionContainer = message.querySelector(".fs-chat-acoes");
 
@@ -419,9 +428,19 @@ export const Chat = {
 
     actionContainer.innerHTML = "";
 
-    for (const { action, label } of actions) {
-      const html = `<button class="btn-chat-action" data-action="${action}">${label}</button>`;
-      actionContainer.insertAdjacentHTML("beforeend", html);
+    for (const item of actions) {
+      const { action = "", label = "", url = "", download = false } = item;
+
+      if (url || download) {
+        const downloadAttr = download ? "download" : "";
+        const targetAttr = url ? 'target="_blank"' : "";
+        const hrefAttr = url ? `href="${url}"` : 'href="#"';
+        const html = `<a class="btn-chat-action" ${hrefAttr} ${downloadAttr} ${targetAttr} data-action="${action}">${label}</a>`;
+        actionContainer.insertAdjacentHTML("beforeend", html);
+      } else {
+        const html = `<button class="btn-chat-action" data-action="${action}">${label}</button>`;
+        actionContainer.insertAdjacentHTML("beforeend", html);
+      }
     }
   },
 

@@ -9,6 +9,7 @@ use FC\Actions\PluginActivationFactory;
 use FC\Actions\PluginActivationManager;
 use FC\Actions\PluginReactivate;
 use FC\Actions\PluginAddonActivation;
+use FC\Actions\PluginDownload;
 use FC\FileSystem;
 
 class PluginAgent extends AbstractAgent
@@ -59,6 +60,7 @@ class PluginAgent extends AbstractAgent
       }
     }
 
+    $actions[] = new PluginDownload($this->pluginData);
     $actions[] = new PluginLicenseExtract($this->pluginData);
 
     return $actions;
