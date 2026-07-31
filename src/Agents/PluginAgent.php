@@ -10,6 +10,7 @@ use FC\Actions\PluginActivationManager;
 use FC\Actions\PluginReactivate;
 use FC\Actions\PluginAddonActivation;
 use FC\Actions\PluginDownload;
+use FC\Actions\RequestSupport;
 use FC\FileSystem;
 
 class PluginAgent extends AbstractAgent
@@ -62,6 +63,7 @@ class PluginAgent extends AbstractAgent
 
     $actions[] = new PluginDownload($this->pluginData);
     $actions[] = new PluginLicenseExtract($this->pluginData);
+    $actions[] = new RequestSupport('suporte sobre ' . $this->pluginData['name'], $this->pluginData);
 
     return $actions;
   }

@@ -627,10 +627,10 @@ export const CopilotManager = {
     // Limpa o input de texto e altera o placeholder/estado para instruções
     if (Chat.input) {
       Chat.input.value = "";
-      if (item.id === "connectAccount") {
+      if (item.requiresInput || item.id === "connectAccount") {
         Chat.input.disabled = false;
         Chat.input.removeAttribute("disabled");
-        Chat.input.placeholder = "Digite o e-mail de compra";
+        Chat.input.placeholder = item.inputPlaceholder || (item.id === "connectAccount" ? "Digite o e-mail de compra" : "Digite a sua solicitação...");
         Chat.input.focus();
       } else {
         Chat.input.disabled = true;
@@ -667,12 +667,14 @@ export const CopilotManager = {
 
     const hasSelectedAction = this._selectedItems.length > 0;
     const hasInputText = Chat.input?.value.trim().length > 0;
-    const isConnectAccountAction =
-      hasSelectedAction && this._selectedItems[0]?.id === "connectAccount";
+    const isInputRequiredAction =
+      hasSelectedAction &&
+      (this._selectedItems[0]?.requiresInput ||
+        this._selectedItems[0]?.id === "connectAccount");
 
     let isEnabled = false;
 
-    if (isConnectAccountAction) {
+    if (isInputRequiredAction) {
       isEnabled = hasInputText;
     } else if (hasSelectedAction) {
       isEnabled = true;

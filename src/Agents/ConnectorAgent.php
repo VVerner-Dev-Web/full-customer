@@ -6,6 +6,7 @@ use FC\Actions\PluginLicenseExtract;
 use FC\Actions\ConnectAccount;
 use FC\Actions\DisconnectAccount;
 use FC\Actions\PluginRepository;
+use FC\Actions\RequestSupport;
 use FC\Actions\ViewConnectedAccount;
 use FC\FileSystem;
 
@@ -39,6 +40,7 @@ class ConnectorAgent extends AbstractAgent
       new DisconnectAccount(),
       new PluginLicenseExtract(),
       new PluginRepository(),
+      new RequestSupport('suporte sobre conta FULL'),
     ];
   }
 }

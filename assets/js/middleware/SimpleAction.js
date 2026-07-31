@@ -30,6 +30,7 @@ export const SimpleAction = {
             "/" + action.restRoute,
             {
               ...(action.extraProps || {}),
+              message: msg,
               step,
               state,
             }

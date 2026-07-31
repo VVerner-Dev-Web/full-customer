@@ -48,6 +48,16 @@ abstract class AbstractAction
     return sanitize_title(get_class($this));
   }
 
+  public function requiresInput(): bool
+  {
+    return false;
+  }
+
+  public function getInputPlaceholder(): string
+  {
+    return '';
+  }
+
   protected function _defaultPromptArgs(): array
   {
     return [
@@ -60,6 +70,8 @@ abstract class AbstractAction
       'restMethod' => $this->getRestMethod(),
       'simpleRest' => true,
       'showInActionsDropdown' => $this->showInActionsDropdown(),
+      'requiresInput' => $this->requiresInput(),
+      'inputPlaceholder' => $this->getInputPlaceholder(),
     ];
   }
 }
