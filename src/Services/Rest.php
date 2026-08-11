@@ -3,7 +3,6 @@
 namespace FC\Services;
 
 use FC\FileSystem;
-use FC\Fragments\DashboardFullPage;
 use FC\ModelRepository;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -17,6 +16,8 @@ class Rest
     fcRegisterRestRoute('GET', 'skills', [$this, 'skills']);
 
     fcRegisterRestRoute('POST', 'local-license-processor', [$this, 'localLicenseProcessor'], '__return_true');
+
+    fcRegisterRestRoute('GET', 'beacon', [$this, 'beacon'], '__return_true');
   }
 
   public function actions(): void
@@ -123,5 +124,18 @@ class Rest
     return rest_ensure_response([
       'success' => true,
     ]);
+  }
+
+  public function beacon(): WP_REST_Response
+  {
+    $response = rest_ensure_response([
+      'version' => FULL_CUSTOMER_VERSION
+    ]);
+
+    $response->header('Access-Control-Allow-Origin', '*');
+    $response->header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    $response->header('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-WP-Nonce');
+
+    return $response;
   }
 }
