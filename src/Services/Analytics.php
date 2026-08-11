@@ -10,7 +10,7 @@ class Analytics
     register_deactivation_hook(FULL_CUSTOMER_FILE, [$this, 'deactivationAnalyticsHook']);
 
     add_filter('wp_php_error_args', [$this, 'storePluginError'], PHP_INT_MAX, 2);
-    add_action('shutdown', [$this, 'notifyPluginError']);
+    add_action('init', [$this, 'notifyPluginError']);
   }
 
   public function storePluginError(array $args, array $error): array
@@ -30,11 +30,11 @@ class Analytics
       return;
     }
 
+    delete_option('fc/last-error');
+
     fcDashboardAPI('POST', 'analytics/fc-error', [
       'error' => $error
     ]);
-
-    delete_option('fc/last-error');
   }
 
   public function activationAnalyticsHook(): void

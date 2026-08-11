@@ -13,3 +13,4 @@
 4.1.3
 - magic link disponível para sites não conectados
 - beacon de versão
+- corrigido erro que impedia telemetria do fc para o painel
