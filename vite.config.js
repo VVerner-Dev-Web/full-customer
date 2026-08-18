@@ -7,6 +7,9 @@ export default defineConfig({
     manifest: true,
     outDir: "assets/dist",
     rollupOptions: {
+      checks: {
+        pluginTimings: false,
+      },
       input: {
         main: path.resolve(__dirname, "assets/js/app.js"),
         style: path.resolve(__dirname, "assets/scss/main.scss"),
