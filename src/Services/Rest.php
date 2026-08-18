@@ -18,36 +18,6 @@ class Rest
     fcRegisterRestRoute('POST', 'local-license-processor', [$this, 'localLicenseProcessor'], '__return_true');
 
     fcRegisterRestRoute('GET', 'beacon', [$this, 'beacon'], '__return_true');
-
-    add_filter('rest_pre_serve_request', [$this, 'ensureCorsHeaders'], 99, 3);
-  }
-
-  public function ensureCorsHeaders($served, $result, WP_REST_Request $request)
-  {
-    if (strpos($request->get_route(), '/' . FULL_CUSTOMER_REST_NAMESPACE) !== 0) {
-      return $served;
-    }
-
-    if (headers_sent()) {
-      return $served;
-    }
-
-    $hasCorsOrigin = false;
-    foreach (headers_list() as $header) {
-      if (stripos($header, 'Access-Control-Allow-Origin:') === 0) {
-        $hasCorsOrigin = true;
-        break;
-      }
-    }
-
-    if (!$hasCorsOrigin) {
-      $origin = get_http_origin();
-      header('Access-Control-Allow-Origin: ' . ($origin ? esc_url_raw($origin) : '*'));
-      header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-      header('Access-Control-Allow-Headers: Authorization, Content-Type, X-WP-Nonce');
-    }
-
-    return $served;
   }
 
   public function actions(): void
