@@ -14,3 +14,7 @@
 - magic link disponível para sites não conectados
 - beacon de versão
 - corrigido erro que impedia telemetria do fc para o painel
+4.1.4
+- beacon reduzido para mínimo necessário
+- ajustado updates para não ter conflito com Updraft Pro
+- enviado admin_url junto na assinatura do fc
