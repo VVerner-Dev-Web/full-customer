@@ -10,7 +10,7 @@ class Update
   private string $filename = 'fc-updates.json';
   private ?string $cacheFile = null;
 
-  const TIMEOUT = 12 * HOUR_IN_SECONDS;
+  public const TIMEOUT = 12 * HOUR_IN_SECONDS;
 
   public function __construct()
   {
@@ -36,9 +36,9 @@ class Update
     $fs = FileSystem::instance();
 
     foreach ($this->getUpdates() as $update) {
-      if (isset($update['path']) && $update['path'] && $fs->isFile($update['path'])) {
+      if (!empty($update['path']) && $fs->isFile($update['path'])) {
+        remove_all_filters('puc_is_slug_in_use-' . $update['slug']);
         PucFactory::buildUpdateChecker($update['puc'], $update['path'], $update['slug']);
-        add_filter('puc_is_slug_in_use-' . $update['slug'], '__return_false', PHP_INT_MAX);
       }
     }
   }
