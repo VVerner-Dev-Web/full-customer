@@ -18,3 +18,5 @@
 - beacon reduzido para mínimo necessário
 - ajustado updates para não ter conflito com Updraft Pro
 - enviado admin_url junto na assinatura do fc
+4.1.5
+- corrigido função login_url para wp_login_url
