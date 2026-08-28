@@ -99,6 +99,10 @@ class DashboardAPI
 
   private function isCacheable(string $method, string $endpoint): bool
   {
+    if (defined('FULL_CUSTOMER_API_LOGGER') && FULL_CUSTOMER_API_LOGGER === false) {
+      return false;
+    }
+
     return
       $method === 'GET' &&
       strpos($endpoint, self::CACHEABLE_GROUP) === 0 &&
