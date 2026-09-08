@@ -89,6 +89,9 @@ class Connection
     $user = User::instance();
     $anon = fcGetAnonymousUserConnection();
 
+    global $wp_rewrite;
+    $restUrl = !empty($wp_rewrite) ? rest_url() : get_home_url(null, 'wp-json');
+
     $params = [
       'fc_version' => FULL_CUSTOMER_VERSION,
       'fc_mode' => FULL_CUSTOMER_DEV ? 'dev' : 'prod',
@@ -97,7 +100,7 @@ class Connection
       'wp_user_email' => is_user_logged_in() ? $user->wp()->user_email : ($anon ? get_userdata($anon['user_id'])->user_email : null),
       'wp_site_url' => trailingslashit(home_url()),
       'wp_admin_url' => trailingslashit(admin_url()),
-      'wp_rest_url' => trailingslashit(rest_url()),
+      'wp_rest_url' => trailingslashit($restUrl),
     ];
 
     return base64_encode(wp_json_encode(apply_filters('fc/connection/token', $params)));
