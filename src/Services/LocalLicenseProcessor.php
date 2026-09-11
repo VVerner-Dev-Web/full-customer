@@ -26,6 +26,7 @@ class LocalLicenseProcessor
       'essential-addons-elementor' => [$this, 'essentialAddons'],
       'jet-theme-core' => [$this, 'jetThemeCore'],
       'elementor-pro' => [$this, 'elementorPro'],
+      'full-templates' => [$this, 'fullTemplates'],
     ];
   }
 
@@ -38,6 +39,13 @@ class LocalLicenseProcessor
     }
 
     return call_user_func($this->map[$plugin], $license, $step, $state);
+  }
+
+  public function fullTemplates(string $license): array
+  {
+    return [
+      'success' => true,
+    ];
   }
 
   public function wpRocket(string $license): array
