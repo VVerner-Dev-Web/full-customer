@@ -24,3 +24,4 @@
 - em caso de FULL_CUSTOMER_API_LOGGER, sempre ignorar o cache
 - adicionado wp_rest_url na signature enviada para o painel
 - removido wp_login_url da signature
+- ativação do FULL.Templates pelo LocalLicenseProcessor
